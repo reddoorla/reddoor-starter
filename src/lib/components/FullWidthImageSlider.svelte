@@ -1,4 +1,5 @@
 <script lang='ts'>
+  import { onMount } from "svelte";
     import placeholder from "../assets/images/placeholder.svg";
     
     export let imageArray = [placeholder, placeholder, placeholder, placeholder];
@@ -65,29 +66,41 @@
 		console.log(sliderIndex)
 	}
 
+    const setSliderIndex = (index:number) => {
+        sliderIndex=index;
+    }
+
+    onMount(()=>{
+        setInterval(()=>slideLeft(), 5000);
+    });
+
 	const tripledImages = imageArray.concat(imageArray).concat(imageArray)
 </script>
     
 <section>
-    <div class="h-[125vw] sm:h-[70vw] lg:h-[55vw] relative overflow-hidden" >
+    <div class="h-[160vw] sm:h-[90vw] xl:h-[60vw] lg:max-h-screen relative overflow-hidden" >
     <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-500': ''}"
     style= "width:{100*tripledImages.length}vw; transform:translateX({-(sliderIndex+imageArray.length)*100}vw); ">
 		
         
         {#each tripledImages as image }
         <div class="w-screen">
-            <img src={image} alt={altText} class="w-full object-cover {image===placeholder ? "md:h-auto" : ""} -z-10"/>
+            <img src={image} alt={altText} class=" h-full w-full object-cover -z-10"/>
         </div>
         {/each}
         
         
     </div>
     <div class="absolute flex justify-center w-full h-full top-0 left-0">
-        <div class="max-w-[1280px] h-full relative w-full">
+        <div class="max-w-[1280px] h-full relative w-full p-[4%] xl:p-0">
         <slot />
-        <div class="absolute h-10 flex align-middle justify-start left-8 xl:left-0 bottom-10">
+        <div class="absolute h-10 flex align-middle justify-start left-[4%] xl:left-0 translate-x-[2px] bottom-10">
             {#each  imageArray as image, i}
-                <div class="h-[10px] w-[10px] border-2 border-gray-400 rounded-full mr-4"></div>
+                <div class="h-[10px] w-[10px] border-2 border-gray-400 rounded-full transition-all duration-500 cursor-pointer hover:opacity-60 mr-4 {sliderIndex%imageArray.length===i ? "bg-dark border-dark" : ""}"
+                    on:click={()=>setSliderIndex(i)}
+                    aria-label="image {i} of {imageArray.length}"
+                    aria-hidden
+                ></div>
             {/each}
         </div>
         </div>

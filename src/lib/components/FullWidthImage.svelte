@@ -3,11 +3,14 @@ import placeholder from "../assets/images/placeholder.svg";
 
 export let image = placeholder;
 export let altText = "background image"
+export let placeholderSide = "right"
 </script>
 
 <section>
-	<div  class="h-[125vw] sm:h-[70vw] lg:h-[55vw] relative w-full">
-		<img src={image} alt={altText} class="absolute bottom-0 right-0 h-full w-full object-cover {image===placeholder ? "lg:w-1/2 md:h-auto" : ""} -z-10"/>
-        <slot />
+	<div  class="h-[160vw] sm:h-[90vw] xl:h-[60vw] md:max-h-screen relative w-full">
+		<img src={image} alt={altText} class="absolute bottom-0 {placeholderSide}-0 h-full w-full object-cover {image===placeholder ? "lg:w-[45%] md:h-auto" : ""} -z-10"/>
+        <div class='w-full h-full max-w-[1280px] mx-auto p-[4%] xl:p-0'>
+			<slot />
+		</div>
 	</div>
 </section>

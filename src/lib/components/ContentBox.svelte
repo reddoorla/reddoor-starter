@@ -1,5 +1,6 @@
 <script lang='ts'>
     import placeholderIcon from "../assets/icons/logo.svg"
+    import linkArrow from "../assets/icons/wireframe-link-arrow-right.svg"
 
 
 export let icon = placeholderIcon;
@@ -24,7 +25,7 @@ if(float==="right")
     horizontalFloatMargin="ml-auto mr-0"
 </script>
 <!--TODO: force tailwind to load justify classes in configs-->
-<div class="justify-center justify-start justify-end"></div>
+<div class="justify-center justify-start justify-end sm:justify-center sm:justify-start sm:justify-end hidden"></div>
 
 <div class="w-full flex flex-col justify-{justify} text-{float}">
     {#if icon}
@@ -37,14 +38,15 @@ if(float==="right")
         <h1 class="mb-7">{titleText}</h1>
     {/if}
     {#if paragraphText}
-        <p class="mb-7">{paragraphText}</p>
+        <p class="mb-7 max-w-full">{paragraphText}</p>
     {/if}
-    <div class="w-full flex flex-row align-middle justify-{justify}">
+    <div class="w-full flex flex-col sm:flex-row align-middle justify-center sm:justify-{justify}">
         {#if buttonText}
-            <button class="bg-dark text-center text-white">{buttonText}</button>
+            <button class="bg-dark text-center text-white mb-5 sm:mb-0">{buttonText}</button>
         {/if}
         {#if linkText}
-            <a class="text-center" href="#">{linkText}</a>
+                <a class="flex flex-row align-middle justify-center sm:justify-{justify}" href="#"><span class="h-5">{linkText}</span><img src={linkArrow} alt="link arrow" class="h-5 w-5 ml-[10px] -mt-[3px]"></a>
+
         {/if}
     </div>
 
