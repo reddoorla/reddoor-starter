@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body{
+    font-family: "Helvetica Neue LT Std", sans-serif;
+}
+
 a, button{
     transition: opacity 700ms;
     cursor: pointer;
@@ -12,7 +16,10 @@ a:hover, button:hover{
 }
 
 h1{
-    font-size: 4rem;
+    font-size: 66px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 80px; /* 121.212% */
 }
 
 h2{
@@ -35,7 +42,97 @@ h5{
    line-height: 1.5em;
 }
 
-p{
-    line-height: 1.5em;
+h6{
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 24px; /* 171.429% */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
 
+p{
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
+}
+
+button{
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-align: center;
+    border-radius: 3px;
+    padding: 13px 48px;
+}
+
+a{
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    text-decoration-line: underline;
+    padding: 13px 48px;
+}
+
+@media only screen and (max-width:786px) {
+    h1{
+        font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 44px; /* 121.212% */
+    }
+    
+    h2{
+        font-size: 3rem;
+        line-height: 1.3em;
+    }
+    
+    h3{
+       font-size: 2.5rem; 
+       line-height: 1.3em;
+    }
+    
+    h4{
+        font-size: 2rem;
+        line-height: 1.4em;
+    }
+    
+    h5{
+       font-size: 1.5rem; 
+       line-height: 1.5em;
+    }
+    
+    
+    p{
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px; /* 150% */
+    }
+    
+    button{
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-align: center;
+        border-radius: 3px;
+        padding: 13px 48px;
+    }
+    
+    a{
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: normal;
+        text-decoration-line: underline;
+        padding: 13px 48px;
+}
+}
+
+.bg-dark{
+    background-color: #424B5A;
 }

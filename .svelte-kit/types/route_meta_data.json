@@ -5,7 +5,19 @@
 	"/api/preview": [
 		"src/routes/api/preview/+server.js"
 	],
+	"/content-blocks": [
+		"src/routes/+layout.server.js"
+	],
+	"/mastheads": [
+		"src/routes/+layout.server.js"
+	],
+	"/plan-blocks": [
+		"src/routes/+layout.server.js"
+	],
 	"/slice-simulator": [
+		"src/routes/+layout.server.js"
+	],
+	"/value-blocks": [
 		"src/routes/+layout.server.js"
 	],
 	"/[[preview=preview]]": [
