@@ -52,8 +52,8 @@ let isLinkArrowActive=false;
                     on:mouseleave={()=>isLinkArrowActive=false} 
                     class="flex flex-row align-middl no-underline justify-center sm:justify-{justify}" 
                     href="#">
-                        <span class="h-5 uppercase py-1 no-underline">{linkText}</span>
-                        <img src={linkArrow} alt="link arrow" class="h-5 w-5 ml-[10px] transition-transform duration-300 {isLinkArrowActive ? "translate-x-2":""}">
+                        <span class="h-5 uppercase no-underline">{linkText}</span>
+                        <img src={linkArrow} alt="link arrow" class="h-5 w-5 -mt-[5px] ml-[10px] transition-transform duration-300 {isLinkArrowActive ? "translate-x-2":""}">
                 </a>
 
         {/if}
