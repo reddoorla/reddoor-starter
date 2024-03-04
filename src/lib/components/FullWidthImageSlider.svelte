@@ -41,9 +41,9 @@
 	}
 
 	const resetSlider = () => {
-		setTimeout(()=>isSlideAnimated=false, 1000)
-		setTimeout(()=> sliderIndex=sliderIndex%imageArray.length, 1020)
-		setTimeout(()=>isSlideAnimated=true, 1100)
+		setTimeout(()=>isSlideAnimated=false, 2500)
+		setTimeout(()=> sliderIndex=sliderIndex%imageArray.length, 2520)
+		setTimeout(()=>isSlideAnimated=true, 2600)
 	}
 
 	const slideLeft = () => {
@@ -69,13 +69,13 @@
     const setSliderIndex = (index:number) => {
         sliderIndex=index;
 		clearInterval(sliderInterval);
-		sliderInterval = setInterval(()=>slideLeft(), 5000);
+		sliderInterval = setInterval(()=>slideLeft(), 7000);
     }
 
 	let sliderInterval:NodeJS.Timeout;
 
     onMount(()=>{
-       sliderInterval = setInterval(()=>slideLeft(), 5000);
+       sliderInterval = setInterval(()=>slideLeft(), 7000);
     });
 
 	const tripledImages = imageArray.concat(imageArray).concat(imageArray)
@@ -83,7 +83,7 @@
     
 <section>
     <div class="h-[160vw] sm:h-[90vw] xl:h-[60vw] lg:max-h-screen relative overflow-hidden" >
-    <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-1000': ''}"
+    <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-[2500ms] ease-out-expo ': ''}"
     style= "width:{100*tripledImages.length}vw; transform:translateX({-(sliderIndex+imageArray.length)*100}vw); ">
 		
         
