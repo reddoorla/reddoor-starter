@@ -44,16 +44,16 @@ let isLinkArrowActive=false;
     {/if}
     <div class="w-full flex flex-col sm:flex-row align-middle justify-center sm:justify-{justify}">
         {#if buttonText}
-            <button class="bg-dark text-center text-white mb-5 sm:mb-0">{buttonText}</button>
+            <button class="bg-dark text-center text-white mb-5 sm:mb-0 uppercase">{buttonText}</button>
         {/if}
         {#if linkText}
                 <a 
                     on:mouseenter={()=>isLinkArrowActive=true} 
                     on:mouseleave={()=>isLinkArrowActive=false} 
-                    class="flex flex-row align-middle justify-center sm:justify-{justify}" 
+                    class="flex flex-row align-middl no-underline justify-center sm:justify-{justify}" 
                     href="#">
-                        <span class="h-5">{linkText}</span>
-                        <img src={linkArrow} alt="link arrow" class="h-5 w-5 ml-[10px] -mt-[3px] transition-transform duration-300 {isLinkArrowActive ? "translate-x-2":""}">
+                        <span class="h-5 uppercase py-1 no-underline">{linkText}</span>
+                        <img src={linkArrow} alt="link arrow" class="h-5 w-5 ml-[10px] transition-transform duration-300 {isLinkArrowActive ? "translate-x-2":""}">
                 </a>
 
         {/if}
