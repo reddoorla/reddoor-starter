@@ -87,7 +87,7 @@
     
 <section>
     <div class="h-[160vw] sm:h-[90vw] xl:h-[60vw] lg:max-h-screen relative overflow-hidden" >
-    <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-['+SLIDER_TRANSITION_LENGTH_IN_MS+'ms] ease=['+SLIDER_TRANSITION_FUNCTION+']': ''}"
+    <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-[3000ms] ease=[cubic-bezier(.5,0,0,1)]': ''}"
     style= "width:{100*tripledImages.length}vw; transform:translateX({-(sliderIndex+imageArray.length)*100}vw); ">
 		
         
