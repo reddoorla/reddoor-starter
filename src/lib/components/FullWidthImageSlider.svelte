@@ -6,7 +6,7 @@
     export let altText = "background image"
 
 	const SLIDER_TRANSITION_FUNCTION="cubic-bezier(.5,0,0,1)";
-	const SLIDER_TRANSITION_LENGTH_IN_MS=3000;
+	const SLIDER_TRANSITION_LENGTH_IN_MS=2000;
 	const SLIDER_INTERVAL_IN_MS = 5000;
 
     let sliderIndex = 0;
@@ -87,7 +87,7 @@
     
 <section>
     <div class="h-[160vw] sm:h-[90vw] xl:h-[60vw] lg:max-h-screen relative overflow-hidden" >
-    <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-[3000ms] ease=[cubic-bezier(.5,0,0,1)]': ''}"
+    <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-[2000ms] ease=[cubic-bezier(.5,0,0,1)]': ''}"
     style= "width:{100*tripledImages.length}vw; transform:translateX({-(sliderIndex+imageArray.length)*100}vw); ">
 		
         
