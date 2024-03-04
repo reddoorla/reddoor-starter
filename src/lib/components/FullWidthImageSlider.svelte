@@ -41,9 +41,9 @@
 	}
 
 	const resetSlider = () => {
-		setTimeout(()=>isSlideAnimated=false, 500)
-		setTimeout(()=> sliderIndex=sliderIndex%imageArray.length, 520)
-		setTimeout(()=>isSlideAnimated=true, 600)
+		setTimeout(()=>isSlideAnimated=false, 1000)
+		setTimeout(()=> sliderIndex=sliderIndex%imageArray.length, 1020)
+		setTimeout(()=>isSlideAnimated=true, 1100)
 	}
 
 	const slideLeft = () => {
@@ -100,7 +100,7 @@
         <slot />
         <div class="absolute h-10 flex align-middle justify-start left-[4%] xl:left-0 translate-x-[2px] bottom-10">
             {#each  imageArray as image, i}
-                <div class="h-[10px] w-[10px] border-2 border-gray-400 rounded-full transition-all duration-500 cursor-pointer hover:opacity-60 mr-4 {sliderIndex%imageArray.length===i ? "bg-dark border-dark" : ""}"
+                <div class="h-[10px] w-[10px] border-2 border-gray-400 rounded-full transition-all duration-1000 cursor-pointer hover:opacity-60 mr-4 {sliderIndex%imageArray.length===i ? "bg-dark border-dark" : ""}"
                     on:click={()=>setSliderIndex(i)}
                     aria-label="image {i} of {imageArray.length}"
                     aria-hidden
