@@ -4,15 +4,25 @@
 
 body{
     font-family: "Helvetica Neue LT Std", sans-serif;
+    transition-timing-function: ease-in-out;
 }
 
-a, button{
-    transition: opacity 700ms;
+a{
+    transition: opacity 600ms;
     cursor: pointer;
 }
 
-a:hover, button:hover{
+a:hover{
     opacity: 0.6;
+}
+
+button{
+    transition: background-color 600ms;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: black;
 }
 
 h1{

@@ -23,6 +23,8 @@ if(float==="left")
     horizontalFloatMargin="ml-0 mr-auto";
 if(float==="right")
     horizontalFloatMargin="ml-auto mr-0"
+
+let isLinkArrowActive=false;
 </script>
 <!--TODO: force tailwind to load justify classes in configs-->
 <div class="justify-center justify-start justify-end sm:justify-center sm:justify-start sm:justify-end hidden"></div>
@@ -45,7 +47,14 @@ if(float==="right")
             <button class="bg-dark text-center text-white mb-5 sm:mb-0">{buttonText}</button>
         {/if}
         {#if linkText}
-                <a class="flex flex-row align-middle justify-center sm:justify-{justify}" href="#"><span class="h-5">{linkText}</span><img src={linkArrow} alt="link arrow" class="h-5 w-5 ml-[10px] -mt-[3px]"></a>
+                <a 
+                    on:mouseenter={()=>isLinkArrowActive=true} 
+                    on:mouseleave={()=>isLinkArrowActive=false} 
+                    class="flex flex-row align-middle justify-center sm:justify-{justify}" 
+                    href="#">
+                        <span class="h-5">{linkText}</span>
+                        <img src={linkArrow} alt="link arrow" class="h-5 w-5 ml-[10px] -mt-[3px] transition-transform duration-300 {isLinkArrowActive ? "translate-x-2":""}">
+                </a>
 
         {/if}
     </div>
