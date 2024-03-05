@@ -5,11 +5,12 @@
 
 export let icon = placeholderIcon;
 export let iconAltText = "logo"
-export let labelText = "Designing Tomorrow's Success Today"
-export let titleText = "Craft Seamless Experiences with Wireframes"
-export let paragraphText = "Unleash the power of intuitive design with our comprehensive wireframing solutions. Elevate your projects through meticulous planning and user-centric layouts. Join us on a journey of innovation and precision in every pixel. Transform your ideas into extraordinary digital experiences."
-export let buttonText = "BUTTON"
-export let linkText="Learn More"
+export let labelText = ""
+export let titleText = ""
+export let subtitleText = ""
+export let paragraphText = ""
+export let buttonText = ""
+export let linkText=""
 
 export let backgroundColor="transparent"
 export let float = "center"
@@ -41,6 +42,9 @@ let isLinkArrowActive=false;
     {/if}
     {#if titleText}
         <h1 class="mb-7">{titleText}</h1>
+    {/if}
+    {#if subtitleText}
+        <h6 class="mb-7">{subtitleText}</h6>
     {/if}
     {#if paragraphText}
         <p class="mb-7 max-w-full">{paragraphText}</p>

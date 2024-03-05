@@ -100,9 +100,9 @@
         
     </div>
     <div class="absolute flex justify-center w-full h-full top-0 left-0">
-        <div class="max-w-[1280px] h-full relative w-full p-[4%] xl:p-0">
+        <div class="max-w-screen-xl h-full relative w-full p-[4%] xl:p-0">
         <slot />
-        <div class="absolute h-10 flex align-middle justify-start left-[4%] xl:left-0 translate-x-[2px] bottom-10">
+        <div class="absolute h-10 flex align-middle justify-start left-[4%] xl:left-8 translate-x-[2px] bottom-10">
             {#each  imageArray as image, i}
                 <div class="h-[10px] w-[10px] border-2 border-gray-400 rounded-full transition-all duration-1000 cursor-pointer hover:opacity-60 mr-4 {sliderIndex%imageArray.length===i ? "bg-dark border-dark" : ""}"
                     on:click={()=>setSliderIndex(i)}

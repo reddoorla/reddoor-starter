@@ -7,11 +7,10 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 </script>
 <!--Masthead #1-->
 <FullWidthImage>
-    <div class="w-full max-w-80 sm:w-[560px] sm:max-w-full mx-auto mt-20 sm:mt-[125px]">
+    <div class="w-full max-w-80 sm:w-[620px] sm:max-w-full mx-auto mt-20 sm:mt-[125px]">
         <ContentBox 
-            paragraphText=""
-            buttonText=""
-            linkText=""
+            labelText="Designing Tomorrow's Success Today"
+            titleText="Craft Seamless Experiences with Wireframes"
         />
     </div>
 
@@ -22,10 +21,13 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 <!--Masthead #4-->
 
 <FullWidthImageSlider>
-    <div class="w-full max-w-[1280px] h-full flex flex-col justify-end">
-        <div class="w-80 sm:w-[560px] h-fit mx-auto sm:ml-0  mb-28">
+    <div class="w-full max-w-screen-xl h-full flex flex-col justify-end">
+        <div class="w-80 sm:w-[620px] h-fit mx-auto sm:ml-0  mb-28">
             <ContentBox
-                paragraphText=""
+                labelText="Designing Tomorrow's Success Today"
+                titleText="Craft Seamless Experiences with Wireframes"
+                buttonText = "BUTTON"
+                linkText = "LEARN MORE"
                 icon=""
                 float="left"
             />
@@ -38,8 +40,8 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 <!--TODO: center content box on small even if content is left aligned-->
 <!--Masthead #2-->
 <FullWidthImage>
-    <div class="w-full max-w-[1280px] h-full flex flex-col justify-center">
-        <div class="w-80 sm:w-[560px] mx-auto md:ml-0 h-fit">
+    <div class="w-full max-w-screen-xl h-full flex flex-col justify-center">
+        <div class="w-80 sm:w-[620px] mx-auto md:ml-0 h-fit">
             <ContentBox 
              icon=""
              float="left"
@@ -54,8 +56,8 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 <!--Masthead #3-->
 
 <FullWidthImage placeholderSide="left">
-    <div class="w-full max-w-[1280px] h-full flex flex-col justify-center">
-        <div class="w-80 sm:w-[560px] mx-auto md:ml-0 lg:mr-0 lg:ml-auto h-fit">
+    <div class="w-full max-w-screen-xl h-full flex flex-col justify-center">
+        <div class="w-80 sm:w-[620px] mx-auto md:ml-0 lg:mr-0 lg:ml-auto h-fit">
             <ContentBox 
              icon=""
              float="left"
