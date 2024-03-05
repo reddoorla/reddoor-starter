@@ -9,6 +9,10 @@
 
     
 </script>
+<svelte:head>
+    <title>Content Blocks | Reddoor Wireframer</title>
+</svelte:head>
+
 <!--content #1-->
 <div class="max-w-80 sm:w-[560px] sm:max-w-full mx-auto mt-20 sm:mt-[125px] my-14">
     <ContentBox 

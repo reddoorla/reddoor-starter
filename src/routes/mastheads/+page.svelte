@@ -5,6 +5,11 @@ import ContentBox from "$lib/components/ContentBox.svelte"
 import Spacer from "$lib/components/Spacer.svelte";
 import playIcon from "$lib/assets/icons/play-button.svg"
 </script>
+
+<svelte:head>
+    <title>Mastheads | Reddoor Wireframer</title>
+</svelte:head>
+
 <!--Masthead #1-->
 <FullWidthImage>
     <div class="w-full max-w-80 sm:w-[620px] sm:max-w-full mx-auto mt-20 sm:mt-[125px]">
@@ -44,6 +49,11 @@ import playIcon from "$lib/assets/icons/play-button.svg"
         <div class="w-80 sm:w-[620px] mx-auto md:ml-0 h-fit">
             <ContentBox 
              icon=""
+             labelText="Designing Tomorrow's Success Today"
+             titleText="Craft Seamless Experiences with Wireframes"
+             paragraphText="Unleash the power of intuitive design with our comprehensive wireframing solutions. Elevate your projects through meticulous planning and user-centric layouts. Join us on a journey of innovation and precision in every pixel. Transform your ideas into extraordinary digital experiences."
+             buttonText="BUTTON"
+             linkText="LEARN MORE"
              float="left"
             />
         </div>
@@ -60,6 +70,11 @@ import playIcon from "$lib/assets/icons/play-button.svg"
         <div class="w-80 sm:w-[620px] mx-auto md:ml-0 lg:mr-0 lg:ml-auto h-fit">
             <ContentBox 
              icon=""
+             labelText="Designing Tomorrow's Success Today"
+             titleText="Craft Seamless Experiences with Wireframes"
+             paragraphText="Unleash the power of intuitive design with our comprehensive wireframing solutions. Elevate your projects through meticulous planning and user-centric layouts. Join us on a journey of innovation and precision in every pixel. Transform your ideas into extraordinary digital experiences."
+             buttonText="BUTTON"
+             linkText="LEARN MORE"
              float="left"
             />
         </div>
