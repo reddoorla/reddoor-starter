@@ -1,5 +1,6 @@
 <script lang='ts'>
     import ContentBox from "$lib/components/ContentBox.svelte"
+    import TitleBox from "$lib/components/TitleBox.svelte";
     import Spacer from "$lib/components/Spacer.svelte";
     import ContentWidthImage from "$lib/components/ContentWidthImage.svelte";
     import playIcon from "$lib/assets/icons/play-button.svg"
@@ -15,10 +16,7 @@
 
 <!--content #1-->
 <div class="max-w-80 sm:w-[560px] sm:max-w-full mx-auto mt-20 sm:mt-[125px] my-14">
-    <ContentBox 
-        labelText=''
-        buttonText=""
-        linkText=""
+    <TitleBox 
         titleText="Generic Content"
         paragraphText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
     />
@@ -31,10 +29,6 @@
 <div class="max-w-[1280px] flex flew-row flex-wrap mx-auto my-14">
     <div class="w-full md:w-1/2 p-4">
         <ContentBox 
-        labelText=''
-        buttonText=""
-        linkText=""
-        icon=''
         float='left'
         titleText="Generic Content"
         paragraphText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
@@ -62,7 +56,7 @@
 <ContentWidthImage
 >
 
-<div class="w-full lg:w-1/3 absolute bottom-0 right-0">
+<div class="w-full lg:w-[360px] absolute bottom-0 lg:right-8 xl:right-0">
     <ContentBox
         titleText="Generic Text"
         icon=""

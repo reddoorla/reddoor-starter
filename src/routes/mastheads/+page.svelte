@@ -1,7 +1,7 @@
 <script lang='ts'>
 import FullWidthImage from "$lib/components/FullWidthImage.svelte";
 import FullWidthImageSlider from "$lib/components/FullWidthImageSlider.svelte"
-import ContentBox from "$lib/components/ContentBox.svelte"
+import TitleBox from "$lib/components/TitleBox.svelte"
 import Spacer from "$lib/components/Spacer.svelte";
 import playIcon from "$lib/assets/icons/play-button.svg"
 </script>
@@ -13,7 +13,7 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 <!--Masthead #1-->
 <FullWidthImage>
     <div class="w-full max-w-80 sm:w-[620px] sm:max-w-full mx-auto mt-20 sm:mt-[125px]">
-        <ContentBox 
+        <TitleBox 
             labelText="Designing Tomorrow's Success Today"
             titleText="Craft Seamless Experiences with Wireframes"
         />
@@ -28,7 +28,7 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 <FullWidthImageSlider>
     <div class="w-full max-w-screen-xl h-full flex flex-col justify-end">
         <div class="w-80 sm:w-[620px] h-fit mx-auto sm:ml-0  mb-28">
-            <ContentBox
+            <TitleBox
                 labelText="Designing Tomorrow's Success Today"
                 titleText="Craft Seamless Experiences with Wireframes"
                 buttonText = "BUTTON"
@@ -42,12 +42,11 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 
 <Spacer color="#424B5A" />
 
-<!--TODO: center content box on small even if content is left aligned-->
 <!--Masthead #2-->
 <FullWidthImage>
     <div class="w-full max-w-screen-xl h-full flex flex-col justify-center">
         <div class="w-80 sm:w-[620px] mx-auto md:ml-0 h-fit">
-            <ContentBox 
+            <TitleBox 
              icon=""
              labelText="Designing Tomorrow's Success Today"
              titleText="Craft Seamless Experiences with Wireframes"
@@ -68,7 +67,7 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 <FullWidthImage placeholderSide="left">
     <div class="w-full max-w-screen-xl h-full flex flex-col justify-center">
         <div class="w-80 sm:w-[620px] mx-auto md:ml-0 lg:mr-0 lg:ml-auto h-fit">
-            <ContentBox 
+            <TitleBox 
              icon=""
              labelText="Designing Tomorrow's Success Today"
              titleText="Craft Seamless Experiences with Wireframes"
