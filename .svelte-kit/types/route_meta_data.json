@@ -8,6 +8,12 @@
 	"/content-blocks": [
 		"src/routes/+layout.server.js"
 	],
+	"/footers": [
+		"src/routes/+layout.server.js"
+	],
+	"/headers": [
+		"src/routes/+layout.server.js"
+	],
 	"/mastheads": [
 		"src/routes/+layout.server.js"
 	],

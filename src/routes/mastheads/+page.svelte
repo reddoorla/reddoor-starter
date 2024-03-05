@@ -51,6 +51,8 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 
 <Spacer color="#424B5A" />
 
+<!--Masthead #3-->
+
 <FullWidthImage placeholderSide="left">
     <div class="w-full max-w-[1280px] h-full flex flex-col justify-center">
         <div class="w-80 sm:w-[560px] mx-auto md:ml-0 lg:mr-0 lg:ml-auto h-fit">

@@ -11,6 +11,7 @@ export let paragraphText = "Unleash the power of intuitive design with our compr
 export let buttonText = "BUTTON"
 export let linkText="Learn More"
 
+export let backgroundColor="transparent"
 export let float = "center"
 let justify=float;
 if(float==="left")
@@ -29,7 +30,9 @@ let isLinkArrowActive=false;
 <!--TODO: force tailwind to load justify classes in configs-->
 <div class="justify-center justify-start justify-end sm:justify-center sm:justify-start sm:justify-end hidden"></div>
 
-<div class="w-full flex flex-col justify-{justify} text-{float}">
+<div class="w-full flex flex-col p-8 justify-{justify} text-{float}"
+     style="background-color: {backgroundColor}"
+>
     {#if icon}
         <img src={icon} alt={iconAltText} class="w-[70px] h-[70px] mb-7 {horizontalFloatMargin}"/>
     {/if}
