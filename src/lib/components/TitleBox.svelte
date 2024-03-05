@@ -28,8 +28,6 @@ if(float==="right")
 
 let isLinkArrowActive=false;
 </script>
-<!--TODO: force tailwind to load justify classes in configs-->
-<div class="justify-center justify-start justify-end sm:justify-center sm:justify-start sm:justify-end hidden"></div>
 
 <div class="w-full flex flex-col p-8 justify-{justify} text-{float}"
      style="background-color: {backgroundColor}"

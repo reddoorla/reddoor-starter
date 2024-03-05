@@ -7,6 +7,7 @@ export let icon = placeholderIcon;
 export let iconAltText = "logo"
 export let labelText = ""
 export let titleText = ""
+export let titleTag = "h3"
 export let subtitleText = ""
 export let paragraphText = ""
 export let buttonText = ""
@@ -28,8 +29,6 @@ if(float==="right")
 
 let isLinkArrowActive=false;
 </script>
-<!--TODO: force tailwind to load justify classes in configs-->
-<div class="justify-center justify-start justify-end sm:justify-center sm:justify-start sm:justify-end hidden"></div>
 
 <div class="w-full flex flex-col p-8 justify-{justify} text-{float}"
      style="background-color: {backgroundColor}"
@@ -41,7 +40,9 @@ let isLinkArrowActive=false;
         <h6 class="mb-7">{labelText}</h6>
     {/if}
     {#if titleText}
-        <h1 class="mb-7">{titleText}</h1>
+        {#if titleTag="h3"}
+            <h3 class="mb-7">{titleText}</h3>
+        {/if}
     {/if}
     {#if subtitleText}
         <h6 class="mb-7">{subtitleText}</h6>
