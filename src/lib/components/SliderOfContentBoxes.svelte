@@ -24,7 +24,7 @@
     const SLIDER_INTERVAL_IN_MS = 5000;
     let sliderIndex = 0;
     let sliderInterval: NodeJS.Timeout;
-    let sliderWidth = 100 / contentBoxPropsArray.length / 3;
+    let sliderWidth = 100 / contentBoxPropsArray.length / 5;
     let isSlideAnimated = true;
 
   
@@ -41,29 +41,29 @@
 	sliderInterval = setInterval(()=>slideLeft(), SLIDER_INTERVAL_IN_MS);
         if(sliderIndex%contentBoxPropsArray.length==0&&sliderIndex!==0) 
             resetSlider();
-      
     }
   
     const slideRight = () => {
       sliderIndex--;
       clearInterval(sliderInterval);
-      console.log(sliderIndex);
-	sliderInterval = setInterval(()=>slideRight(), SLIDER_INTERVAL_IN_MS);
-    if(sliderIndex%contentBoxPropsArray.length==0&&sliderIndex!==0)
-        resetSlider();
       
+	sliderInterval = setInterval(()=>slideRight(), SLIDER_INTERVAL_IN_MS);
+    if(sliderIndex%contentBoxPropsArray.length==0&&sliderIndex!==0 && sliderIndex<0)
+        resetSlider();
+
+        console.log(sliderIndex);
     }
   
     onMount(() => {
       sliderInterval = setInterval(() => slideLeft(), SLIDER_INTERVAL_IN_MS);
     });
   
-    const tripledPropsArray = [...contentBoxPropsArray, ...contentBoxPropsArray, ...contentBoxPropsArray];
+    const quintupledPropsArray = [...contentBoxPropsArray, ...contentBoxPropsArray, ...contentBoxPropsArray, ...contentBoxPropsArray, ...contentBoxPropsArray];
   </script>
   
   <div class="w-full h-full relative overflow-hidden">
-    <div class="flex flex-row flex-nowrap  {isSlideAnimated ? 'transition-transform duration-500 ease-in-out' : ''}" style="width: {tripledPropsArray.length * 100}%; transform: translateX(-{sliderIndex * sliderWidth}%);">
-      {#each tripledPropsArray as contentBoxProps}
+    <div class="flex flex-row flex-nowrap  {isSlideAnimated ? 'transition-transform duration-500 ease-in-out' : ''}" style="width: {quintupledPropsArray.length * 100}%; transform: translateX(-{(sliderIndex+contentBoxPropsArray.length) * sliderWidth}%);">
+      {#each quintupledPropsArray as contentBoxProps}
         <div class="h-full z-0" style="width: {sliderWidth}%;">
           <ContentBox {...contentBoxProps} />
         </div>

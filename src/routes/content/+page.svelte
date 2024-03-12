@@ -27,34 +27,8 @@
 
 <!--content #7-->
 
-<div class="max-w-[1280px] flex flew-row flex-wrap mx-auto my-14">
+<div class="max-w-screen-xl flex flew-row flex-wrap mx-auto my-14">
     <div class="w-full md:w-1/2 relative overflow-hidden">
-       <!-- <div class="w-[200%] flex flex-row justify-start flex-nowrap">
-            <div class="w-1/2 h-full z-0">
-                <ContentBox 
-                    icon=""
-                    float='left'
-                    titleText="Generic Content"
-                    paragraphText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
-                />
-            </div>
-            <div class="w-1/2 h-full z-0">
-                <ContentBox 
-                    icon=""
-                    float='left'
-                    titleText="Generic Content 2"
-                    paragraphText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
-                />
-            </div>
-        </div>
-        <div class="ml-8 h-6 w-16 flex justify-between z-10 absolute bottom-0 md:bottom-12 xl:bottom-48 left-0">
-            <div class="h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle justify-center cursor-pointer transition-all duration-500 hover:bg-[#424B5A] hover:border-[#424B5A]">
-                <img alt='chevron-left' src={chevronLeft} class='-translate-x-[1px]' />
-            </div>
-            <div class="h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle cursor-pointer transition-all duration-500 justify-center hover:bg-[#424B5A] hover:border-[#424B5A]">
-                <img alt='chevron-right' src={chevronRight} class='translate-x-[1px]' />
-            </div>
-        </div>-->
         <SliderOfContentBoxes />
     </div> 
     <div class="w-full md:w-1/2 p-4">
@@ -85,4 +59,12 @@
     
 </ContentWidthImage>
 </div>
+
+<!-- content #3 -->
+<Spacer color="#424B5A" />
+<!-- content #4 -->
+<Spacer color="#424B5A" />
+<!-- content #5 -->
+<Spacer color="#424B5A" />
+<!-- content #6 -->
 
