@@ -48,7 +48,7 @@
       sliderIndex--;
       clearInterval(sliderInterval);
       console.log(sliderIndex);
-	sliderInterval = setInterval(()=>slideLeft(), SLIDER_INTERVAL_IN_MS);
+	sliderInterval = setInterval(()=>slideRight(), SLIDER_INTERVAL_IN_MS);
     if(sliderIndex%contentBoxPropsArray.length==0&&sliderIndex!==0)
         resetSlider();
       
@@ -70,7 +70,7 @@
       {/each}
     </div>
   
-    <div class="ml-8 h-6 w-16 flex justify-between z-10 absolute bottom-0 md:bottom-12 xl:bottom-48 left-0">
+    <div class="ml-8 h-6 w-16 flex justify-between z-10 absolute bottom-0 lg:bottom-[20%] xl:bottom-[30%] left-0">
       <button on:click={slideLeft} class="h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle justify-center cursor-pointer transition-all duration-500 hover:bg-[#424B5A] hover:border-[#424B5A]">
         <img alt='chevron-left' src={chevronLeft} class='-translate-x-[1px]' />
       </button>
