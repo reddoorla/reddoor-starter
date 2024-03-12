@@ -5,25 +5,52 @@
 	"/api/preview": [
 		"src/routes/api/preview/+server.js"
 	],
-	"/content-blocks": [
+	"/blogs": [
+		"src/routes/+layout.server.js"
+	],
+	"/contacts": [
+		"src/routes/+layout.server.js"
+	],
+	"/content": [
+		"src/routes/+layout.server.js"
+	],
+	"/ctas": [
+		"src/routes/+layout.server.js"
+	],
+	"/faqs": [
 		"src/routes/+layout.server.js"
 	],
 	"/footers": [
 		"src/routes/+layout.server.js"
 	],
-	"/headers": [
+	"/lists": [
 		"src/routes/+layout.server.js"
 	],
 	"/mastheads": [
 		"src/routes/+layout.server.js"
 	],
-	"/plan-blocks": [
+	"/navs": [
+		"src/routes/+layout.server.js"
+	],
+	"/plans": [
+		"src/routes/+layout.server.js"
+	],
+	"/portfolios": [
 		"src/routes/+layout.server.js"
 	],
 	"/slice-simulator": [
 		"src/routes/+layout.server.js"
 	],
-	"/value-blocks": [
+	"/sliders": [
+		"src/routes/+layout.server.js"
+	],
+	"/teams": [
+		"src/routes/+layout.server.js"
+	],
+	"/testimonials": [
+		"src/routes/+layout.server.js"
+	],
+	"/values": [
 		"src/routes/+layout.server.js"
 	],
 	"/[[preview=preview]]": [

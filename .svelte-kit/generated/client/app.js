@@ -11,19 +11,37 @@ export const nodes = [
 	() => import('./nodes/7'),
 	() => import('./nodes/8'),
 	() => import('./nodes/9'),
-	() => import('./nodes/10')
+	() => import('./nodes/10'),
+	() => import('./nodes/11'),
+	() => import('./nodes/12'),
+	() => import('./nodes/13'),
+	() => import('./nodes/14'),
+	() => import('./nodes/15'),
+	() => import('./nodes/16'),
+	() => import('./nodes/17'),
+	() => import('./nodes/18'),
+	() => import('./nodes/19')
 ];
 
 export const server_loads = [0];
 
 export const dictionary = {
-		"/content-blocks": [4],
-		"/footers": [5],
-		"/headers": [6],
-		"/mastheads": [7],
-		"/plan-blocks": [8],
-		"/slice-simulator": [9],
-		"/value-blocks": [10],
+		"/blogs": [4],
+		"/contacts": [5],
+		"/content": [6],
+		"/ctas": [7],
+		"/faqs": [8],
+		"/footers": [9],
+		"/lists": [10],
+		"/mastheads": [11],
+		"/navs": [12],
+		"/plans": [13],
+		"/portfolios": [14],
+		"/slice-simulator": [15],
+		"/sliders": [16],
+		"/teams": [17],
+		"/testimonials": [18],
+		"/values": [19],
 		"/[[preview=preview]]": [~2],
 		"/[[preview=preview]]/[uid]": [~3]
 	};
