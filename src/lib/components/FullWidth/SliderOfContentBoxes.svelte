@@ -2,8 +2,8 @@
     import { onMount } from "svelte";
     import ContentBox from "./ContentBox.svelte";
     import type { ComponentProps } from "svelte";
-    import chevronLeft from "../assets/icons/chevron-left.svg";
-    import chevronRight from "../assets/icons/chevron-right.svg";
+    import chevronLeft from "../../assets/icons/chevron-left.svg";
+    import chevronRight from "../../assets/icons/chevron-right.svg";
   
     export let contentBoxPropsArray: ComponentProps<ContentBox>[] = [
       {

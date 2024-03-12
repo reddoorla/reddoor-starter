@@ -1,7 +1,7 @@
 <script lang='ts'>
-import FullWidthImage from "$lib/components/FullWidthImage.svelte";
-import FullWidthImageSlider from "$lib/components/FullWidthImageSlider.svelte"
-import TitleBox from "$lib/components/TitleBox.svelte"
+import ScreenWidthImage from "$lib/components/ScreenWidth/ScreenWidthImage.svelte";
+import ScreenWidthImageSlider from "$lib/components/ScreenWidth/ScreenWidthImageSlider.svelte"
+import TitleBox from "$lib/components/FullWidth/TitleBox.svelte"
 import Spacer from "$lib/components/Spacer.svelte";
 import playIcon from "$lib/assets/icons/play-button.svg"
 </script>
@@ -11,7 +11,7 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 </svelte:head>
 
 <!--Masthead #1-->
-<FullWidthImage>
+<ScreenWidthImage>
     <div class="w-full max-w-80 sm:w-[620px] sm:max-w-full mx-auto mt-20 sm:mt-[125px]">
         <TitleBox 
             labelText="Designing Tomorrow's Success Today"
@@ -20,12 +20,12 @@ import playIcon from "$lib/assets/icons/play-button.svg"
     </div>
 
     <img src={playIcon} alt="play" class="w-[52.5px] h-[52.5px] mt-0 md:mt-16 mx-auto" />
-</FullWidthImage>
+</ScreenWidthImage>
 
 <Spacer color="#424B5A" />
 <!--Masthead #4-->
 
-<FullWidthImageSlider>
+<ScreenWidthImageSlider>
     <div class="w-full max-w-screen-xl h-full flex flex-col justify-end">
         <div class="w-80 sm:w-[620px] h-fit mx-auto sm:ml-0  mb-28">
             <TitleBox
@@ -38,12 +38,12 @@ import playIcon from "$lib/assets/icons/play-button.svg"
             />
         </div>
     </div>
-</FullWidthImageSlider>
+</ScreenWidthImageSlider>
 
 <Spacer color="#424B5A" />
 
 <!--Masthead #2-->
-<FullWidthImage>
+<ScreenWidthImage>
     <div class="w-full max-w-screen-xl h-full flex flex-col justify-center">
         <div class="w-80 sm:w-[620px] mx-auto md:ml-0 h-fit">
             <TitleBox 
@@ -58,13 +58,13 @@ import playIcon from "$lib/assets/icons/play-button.svg"
         </div>
     </div>
 
-</FullWidthImage>
+</ScreenWidthImage>
 
 <Spacer color="#424B5A" />
 
 <!--Masthead #3-->
 
-<FullWidthImage placeholderSide="left">
+<ScreenWidthImage placeholderSide="left">
     <div class="w-full max-w-screen-xl h-full flex flex-col justify-center">
         <div class="w-80 sm:w-[620px] mx-auto md:ml-0 lg:mr-0 lg:ml-auto h-fit">
             <TitleBox 
@@ -79,4 +79,4 @@ import playIcon from "$lib/assets/icons/play-button.svg"
         </div>
     </div>
 
-</FullWidthImage>
+</ScreenWidthImage>

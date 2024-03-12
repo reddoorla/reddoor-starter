@@ -1,5 +1,6 @@
 <script lang='ts'>
     import Spacer from "$lib/components/Spacer.svelte";
+    import placeholder from "$lib/assets/images/placeholder.svg"
 </script>
 s
 <svelte:head>
@@ -7,6 +8,11 @@ s
 </svelte:head>
 
 <!-- plan #1 -->
+
+<div class="max-w-screen-xl mx-auto">
+    
+</div>
+
 <Spacer color="#424B5A" />
 
 <!-- plan #2 -->

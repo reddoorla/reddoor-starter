@@ -1,13 +1,13 @@
 <script lang='ts'>
-    import ContentBox from "$lib/components/ContentBox.svelte"
-    import TitleBox from "$lib/components/TitleBox.svelte";
+    import ContentBox from "$lib/components/FullWidth/ContentBox.svelte"
+    import TitleBox from "$lib/components/FullWidth/TitleBox.svelte";
     import Spacer from "$lib/components/Spacer.svelte";
-    import ContentWidthImage from "$lib/components/ContentWidthImage.svelte";
+    import ContentWidthImage from "$lib/components/ContentWidth/ContentWidthImage.svelte";
     import playIcon from "$lib/assets/icons/play-button.svg"
     import placeholderImage from "$lib/assets/images/placeholder.svg"
     import chevronLeft from "$lib/assets/icons/chevron-left.svg"
     import chevronRight from "$lib/assets/icons/chevron-right.svg"
-    import SliderOfContentBoxes from "$lib/components/SliderOfContentBoxes.svelte";
+    import SliderOfContentBoxes from "$lib/components/FullWidth/SliderOfContentBoxes.svelte";
 
     
 </script>
