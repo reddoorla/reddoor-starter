@@ -19,6 +19,7 @@
 	{/if}
 </svelte:head>
 <main>
+	<a href="/" class="z-30 font-bold text-white bg-dark fixed bottom-4 right-4 pt-2.5 pb-2 px-4 rounded-full hover:bg-slate-400">Home</a>
 	<slot />
 </main>
 <PrismicPreview {repositoryName} />

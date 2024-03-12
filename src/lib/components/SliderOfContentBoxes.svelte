@@ -1,0 +1,81 @@
+<script lang='ts'>
+    import { onMount } from "svelte";
+    import ContentBox from "./ContentBox.svelte";
+    import type { ComponentProps } from "svelte";
+    import chevronLeft from "../assets/icons/chevron-left.svg";
+    import chevronRight from "../assets/icons/chevron-right.svg";
+  
+    export let contentBoxPropsArray: ComponentProps<ContentBox>[] = [
+      {
+        icon: "",
+        float: "left",
+        titleText: "Generic Content",
+        paragraphText: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
+      },
+      {
+        icon: "",
+        float: "left",
+        titleText: "Generic Content 2",
+        paragraphText: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
+      }
+    ];
+  
+
+    const SLIDER_INTERVAL_IN_MS = 5000;
+    let sliderIndex = 0;
+    let sliderInterval: NodeJS.Timeout;
+    let sliderWidth = 100 / contentBoxPropsArray.length / 3;
+    let isSlideAnimated = true;
+
+  
+    const resetSlider = () => {
+      setTimeout(() => isSlideAnimated = false, 500);
+      setTimeout(() => sliderIndex = contentBoxPropsArray.length, 520);
+      setTimeout(() => isSlideAnimated = true, 540);
+    }
+  
+    const slideLeft = () => {
+        sliderIndex++;
+        clearInterval(sliderInterval);
+      console.log(sliderIndex);
+	sliderInterval = setInterval(()=>slideLeft(), SLIDER_INTERVAL_IN_MS);
+        if(sliderIndex%contentBoxPropsArray.length==0&&sliderIndex!==0) 
+            resetSlider();
+      
+    }
+  
+    const slideRight = () => {
+      sliderIndex--;
+      clearInterval(sliderInterval);
+      console.log(sliderIndex);
+	sliderInterval = setInterval(()=>slideLeft(), SLIDER_INTERVAL_IN_MS);
+    if(sliderIndex%contentBoxPropsArray.length==0&&sliderIndex!==0)
+        resetSlider();
+      
+    }
+  
+    onMount(() => {
+      sliderInterval = setInterval(() => slideLeft(), SLIDER_INTERVAL_IN_MS);
+    });
+  
+    const tripledPropsArray = [...contentBoxPropsArray, ...contentBoxPropsArray, ...contentBoxPropsArray];
+  </script>
+  
+  <div class="w-full h-full relative overflow-hidden">
+    <div class="flex flex-row flex-nowrap  {isSlideAnimated ? 'transition-transform duration-500 ease-in-out' : ''}" style="width: {tripledPropsArray.length * 100}%; transform: translateX(-{sliderIndex * sliderWidth}%);">
+      {#each tripledPropsArray as contentBoxProps}
+        <div class="h-full z-0" style="width: {sliderWidth}%;">
+          <ContentBox {...contentBoxProps} />
+        </div>
+      {/each}
+    </div>
+  
+    <div class="ml-8 h-6 w-16 flex justify-between z-10 absolute bottom-0 md:bottom-12 xl:bottom-48 left-0">
+      <button on:click={slideLeft} class="h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle justify-center cursor-pointer transition-all duration-500 hover:bg-[#424B5A] hover:border-[#424B5A]">
+        <img alt='chevron-left' src={chevronLeft} class='-translate-x-[1px]' />
+      </button>
+      <button on:click={slideRight} class="h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle cursor-pointer transition-all duration-500 justify-center hover:bg-[#424B5A] hover:border-[#424B5A]">
+        <img alt='chevron-right' src={chevronRight} class='translate-x-[1px]' />
+      </button>
+    </div>
+  </div>

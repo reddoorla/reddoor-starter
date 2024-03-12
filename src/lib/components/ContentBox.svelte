@@ -40,9 +40,22 @@ let isLinkArrowActive=false;
         <h6 class="mb-7">{labelText}</h6>
     {/if}
     {#if titleText}
-        {#if titleTag="h3"}
+        {#if titleTag==="h1"}
+            <h1 class="mb-7">{titleText}</h1>
+        {/if}
+        {#if titleTag==="h2"}
+            <h2 class="mb-7">{titleText}</h2>
+        {/if}
+        {#if titleTag==="h3"}
             <h3 class="mb-7">{titleText}</h3>
         {/if}
+        {#if titleTag==="h4"}
+            <h4 class="mb-7">{titleText}</h4>
+        {/if}
+        {#if titleTag==="h5"}
+            <h5 class="mb-7">{titleText}</h5>
+        {/if}
+        
     {/if}
     {#if subtitleText}
         <h6 class="mb-7">{subtitleText}</h6>
@@ -50,7 +63,7 @@ let isLinkArrowActive=false;
     {#if paragraphText}
         <p class="mb-7 max-w-full">{paragraphText}</p>
     {/if}
-    <div class="w-full flex flex-col sm:flex-row align-middle justify-center sm:justify-{justify}">
+    <div class="w-full flex flex-nowrap text-nowrap flex-col sm:flex-row align-middle justify-center sm:justify-{justify}">
         {#if buttonText}
             <button class="bg-dark text-center text-white mb-5 sm:mb-0 uppercase">{buttonText}</button>
         {/if}
@@ -58,7 +71,7 @@ let isLinkArrowActive=false;
                 <a 
                     on:mouseenter={()=>isLinkArrowActive=true} 
                     on:mouseleave={()=>isLinkArrowActive=false} 
-                    class="flex flex-row align-middl no-underline justify-center sm:justify-{justify}" 
+                    class="flex flex-row align-middle no-underline justify-center sm:justify-{justify}" 
                     href="#">
                         <span class="h-5 uppercase no-underline">{linkText}</span>
                         <img src={linkArrow} alt="link arrow" class="h-5 w-5 -mt-[5px] ml-[10px] transition-transform duration-300 {isLinkArrowActive ? "translate-x-2":""}">
