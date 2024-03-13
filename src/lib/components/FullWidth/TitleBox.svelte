@@ -13,9 +13,10 @@ export let paragraphText = ""
 export let buttonText = ""
 export let linkText=""
 export let linkHref=""
-
+export let twProps=""
 export let backgroundColor="transparent"
 export let float = "center"
+
 let justify=float;
 if(float==="left")
     justify="start";
@@ -31,7 +32,7 @@ if(float==="right")
 let isLinkArrowActive=false;
 </script>
 
-<div class="w-full flex flex-col p-8 justify-{justify} text-{float}"
+<div class="w-full flex flex-col p-8 justify-{justify} text-{float} {twProps}"
      style="background-color: {backgroundColor}"
 >
     {#if icon}
@@ -51,10 +52,10 @@ let isLinkArrowActive=false;
     {/if}
     <div class="w-full flex flex-col sm:flex-row align-middle justify-center sm:justify-{justify}">
         {#if buttonText}
-            <DefaultButton text={buttonText}/>
+            <DefaultButton text={buttonText} twProps="mr-12"/>
         {/if}
         {#if linkText}
-            <ArrowButton text={linkText} href={linkHref} />
+            <ArrowButton text={linkText} href={linkHref} twProps="sm:translate-x-0 ml-4 -translate-x-4"/>
         {/if}
     </div>
 

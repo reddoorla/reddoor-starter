@@ -8,6 +8,7 @@
     import chevronLeft from "$lib/assets/icons/chevron-left.svg"
     import chevronRight from "$lib/assets/icons/chevron-right.svg"
     import SliderOfContentBoxes from "$lib/components/FullWidth/SliderOfContentBoxes.svelte";
+  import ContentWidth from "$lib/components/ContentWidth/ContentWidth.svelte";
 
     
 </script>
@@ -27,22 +28,21 @@
 
 <!--content #7-->
 
-<div class="max-w-screen-xl flex flew-row flex-wrap mx-auto my-14">
+<ContentWidth twProps="flex flew-row flex-wrap my-14">
     <div class="w-full md:w-1/2 relative overflow-hidden">
         <SliderOfContentBoxes />
     </div> 
     <div class="w-full md:w-1/2 p-4">
             <img alt='placeholder' src={placeholderImage} class='aspect-[4/3] w-full'/>
     </div>
-</div>
+</ContentWidth>
 
 <Spacer color="#424B5A" />
 
 <!-- content #2 -->
 
 <div class='my-14'>
-<ContentWidthImage
->
+<ContentWidthImage>
 
 <div class="w-full lg:w-[400px] absolute bottom-0 lg:right-8 xl:right-0">
     <ContentBox

@@ -44,7 +44,7 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 
 <!--Masthead #2-->
 <ScreenWidthImage>
-    <div class="w-full max-w-screen-xl h-full flex flex-col justify-center">
+    <div class="w-full h-full flex flex-col justify-center">
         <div class="w-80 sm:w-[620px] mx-auto md:ml-0 h-fit">
             <TitleBox 
              icon=""
@@ -65,7 +65,7 @@ import playIcon from "$lib/assets/icons/play-button.svg"
 <!--Masthead #3-->
 
 <ScreenWidthImage placeholderSide="left">
-    <div class="w-full max-w-screen-xl h-full flex flex-col justify-center">
+    <div class="w-full h-full flex flex-col justify-center">
         <div class="w-80 sm:w-[620px] mx-auto md:ml-0 lg:mr-0 lg:ml-auto h-fit">
             <TitleBox 
              icon=""

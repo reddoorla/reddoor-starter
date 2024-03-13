@@ -21,10 +21,6 @@ button{
     cursor: pointer;
 }
 
-button:hover{
-    background-color: black;
-}
-
 h1{
     font-size: 66px;
     font-style: normal;
@@ -91,7 +87,8 @@ a{
     font-style: normal;
     font-weight: 400;
     line-height:1em;
-    margin: 13px 0px 5px 48px;
+    margin-top: 13px;
+    margin-bottom: 13px;
     color:#424B5A;
 }
 
@@ -150,12 +147,4 @@ a{
         text-decoration-line: underline;
         margin: 13px 0px 8.5px 48px;
 }
-}
-
-.bg-dark{
-    background-color: #424B5A;
-}
-
-.border-dark{
-    border-color:#424B5A;
 }

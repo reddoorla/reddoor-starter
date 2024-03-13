@@ -3,7 +3,8 @@
     import placeholder from "$lib/assets/images/image_placeholder.svg"
     import ArrowButton from "$lib/components/Buttons/ArrowButton.svelte";
     import nextArrow from "$lib/assets/icons/wireframe-link-arrow-right.svg"
-    import ContentBox from "$lib/components/fullWidth/ContentBox.svelte";
+    import ContentBox from "$lib/components/FullWidth/ContentBox.svelte";
+    import HalfWidthImage from "$lib/components/HalfWidth/HalfWidthImage.svelte";
 
     const placeholderParagraph = `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.
 
@@ -64,19 +65,19 @@
         <div class="plan-line absolute top-6 translate-y-[1.5px] left-[50px] -z-10"></div>
         <div class="flex flex-col justify-center items-center">
             <div class="w-12 h-12 bg-black rounded-full text-white flex justify-center items-center mb-5"><p class="translate-y-[1px]">1</p></div>
-            <h6>Test and Iterate</h6>
+            <h6>Sign Up</h6>
         </div>
         <div class="flex flex-col justify-center items-center">
             <div class="w-12 h-12 bg-black rounded-full text-white flex justify-center items-center mb-5"><p class="translate-y-[1px]">2</p></div>
-            <h6>Test and Iterate</h6>
+            <h6>Set Up</h6>
         </div> 
         <div class="flex flex-col justify-center items-center">
             <div class="w-12 h-12 bg-black rounded-full text-white flex justify-center items-center mb-5"><p class="translate-y-[1px]">3</p></div>
-            <h6>Test and Iterate</h6>
+            <h6>Share</h6>
         </div>  
     </div>
-    <div class="w-full flex flex-row justify-between mt-16">
-        <div class="w-1/2 pr-6">
+    <div class="w-full flex flex-col lg:flex-row justify-center items-top mt-16">
+        <div class="w-full lg:w-1/2 pr-6">
             <ContentBox 
                 titleTag="h3"
                 titleText="BLUEPRINT YOUR VISION"
@@ -85,15 +86,10 @@
                 linkText="Learn More"
                 float="left"
                 icon=""
+                twProps=""
             />
         </div>
-        <div class="w-1/2 pl-6 my-8">
-            <div class="w-full aspect-square border-light border-2 rounded-sm bg-light bg-opacity-25 flex items-center justify-center relative">
-                <img src={placeholder} alt="placeholder" class="w-16 z-10"/>
-                <div class="rotate-45 w-[140%] absolute bg-light h-[2px]"></div>
-                <div class="-rotate-45 w-[140%] absolute bg-light h-[2px]"></div>
-            </div>
-        </div>
+       <HalfWidthImage />
     </div>
 </div>
 <Spacer color="#424B5A" />

@@ -1,6 +1,7 @@
 <script lang='ts'>
   import { onMount } from "svelte";
     import placeholder from "../../assets/images/background_placeholder.svg";
+  import ContentWidth from "../ContentWidth/ContentWidth.svelte";
     
     export let imageArray = [placeholder, placeholder, placeholder, placeholder];
     export let altText = "background image"
@@ -100,7 +101,7 @@
         
     </div>
     <div class="absolute flex justify-center w-full h-full top-0 left-0">
-        <div class="max-w-screen-xl h-full relative w-full p-[4%] xl:p-0">
+        <ContentWidth twProps="h-full relative w-full">
         <slot />
         <div class="absolute h-10 flex align-middle justify-start left-[4%] xl:left-8 translate-x-[2px] bottom-10">
             {#each  imageArray as image, i}
@@ -111,7 +112,7 @@
                 ></div>
             {/each}
         </div>
-        </div>
+	</ContentWidth>
         
     </div>
 </div>
