@@ -1,6 +1,6 @@
 <script lang='ts'>
   import { onMount } from "svelte";
-    import placeholder from "../../assets/images/placeholder.svg";
+    import placeholder from "../../assets/images/background_placeholder.svg";
     
     export let imageArray = [placeholder, placeholder, placeholder, placeholder];
     export let altText = "background image"

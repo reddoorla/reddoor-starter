@@ -1,5 +1,5 @@
 <script lang='ts'>
-    import placeholder from "../../assets/images/placeholder.svg";
+    import placeholder from "../../assets/images/background_placeholder.svg";
     
     export let image = placeholder;
     export let altText = "background image"

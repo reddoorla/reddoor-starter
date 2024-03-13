@@ -4,7 +4,7 @@
     import Spacer from "$lib/components/Spacer.svelte";
     import ContentWidthImage from "$lib/components/ContentWidth/ContentWidthImage.svelte";
     import playIcon from "$lib/assets/icons/play-button.svg"
-    import placeholderImage from "$lib/assets/images/placeholder.svg"
+    import placeholderImage from "$lib/assets/images/image_placeholder.svg"
     import chevronLeft from "$lib/assets/icons/chevron-left.svg"
     import chevronRight from "$lib/assets/icons/chevron-right.svg"
     import SliderOfContentBoxes from "$lib/components/FullWidth/SliderOfContentBoxes.svelte";
