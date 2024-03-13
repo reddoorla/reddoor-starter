@@ -5,14 +5,17 @@
   import placeholder from "$lib/assets/images/image_placeholder.svg"
   import HalfWidthImage from "$lib/components/HalfWidth/HalfWidthImage.svelte";
   import DefaultButton from "$lib/components/Buttons/DefaultButton.svelte";
-  import OutlineButton from "$lib/components/Buttons/OutlineButton.svelte";
+  import chevronLeft from "$lib/assets/icons/chevron-left.svg"
+  import chevronRight from "$lib/assets/icons/chevron-right.svg"
 
-  const loremParagraph = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed  do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+
+    let innerWidth:number;    
+    const loremParagraph = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed  do eiusmod tempor incididunt ut labore et dolore magna aliqua.  Ut enim ad minim veniam, quis nostrud exercitation ullamco."
+
     let activeValue = 2;
-
     const setActiveValue = (i:number) => activeValue=i;
 
-    let innerWidth:number;
+   
 </script>
 
 <svelte:head>
@@ -24,27 +27,55 @@
 <!-- values block #1 -->
 <ContentWidth>
     <h2 class="mb-16">Here is our Value Proposition</h2>
-    <div class="w-full flex flex-row justify-between">
+    <div class="w-[300vw] lg:translate-x-0 lg:w-full flex flex-row justify-around lg:justify-between flex-nowrap transition-transform overflow-hidden duration-1000"
+            style="transform:translateX({(2-activeValue)*100}vw)">
+        <div class="w-[360px]">
         <ContentBox 
             icon={placeholder}
             labelText="Strategic Foundation"
             paragraphText={loremParagraph}
-            twProps="w-[360px]"
+            twProps=""
         />
+        </div>
+        <div class="w-[360px]">
         <ContentBox 
             icon={placeholder}
             labelText="User-centric precision"
             paragraphText={loremParagraph}
-            twProps="w-[360px]"
+            twProps=""
         />
+        </div>
+        <div class="w-[360px]">
         <ContentBox 
             icon={placeholder}
             labelText="iterate for excellence"
             paragraphText={loremParagraph}
-            twProps="w-[360px]"
+            twProps=""
         />
+        </div>
     </div>
-
+    <div class="absolute h-10 flex align-middle justify-start xl:left-8 translate-x-[2px] -bottom-2 lg:hidden">
+        
+            <div class="h-[10px] w-[10px] border-[1.5px] rounded-full transition-all duration-1000 cursor-pointer hover:opacity-60 mr-4 {activeValue===1 ? "bg-dark border-dark" : "border-light"}"
+                on:click={()=>setActiveValue(1)}
+                aria-hidden
+            ></div>
+            <div class="h-[10px] w-[10px] border-[1.5px] rounded-full transition-all duration-1000 cursor-pointer hover:opacity-60 mr-4 {activeValue===2 ? "bg-dark border-dark" : "border-light"}"
+                on:click={()=>setActiveValue(2)}
+                aria-hidden
+            ></div>
+            <div class="h-[10px] w-[10px] border-[1.5px] rounded-full transition-all duration-1000 cursor-pointer hover:opacity-60 mr-4 {activeValue===3 ? "bg-dark border-dark" : "border-light"}"
+                on:click={()=>setActiveValue(3)}
+                aria-hidden
+            ></div>
+            
+    </div>
+    <button on:click={()=>activeValue--} class="{activeValue==1||innerWidth>1024 ? "hidden" : ""} absolute left-0 h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle justify-center cursor-pointer transition-all duration-500 hover:bg-[#424B5A] hover:border-[#424B5A]">
+        <img alt='chevron-left' src={chevronLeft} class='-translate-x-[1px]' />
+      </button>
+      <button on:click={()=>activeValue++} class="{activeValue==3||innerWidth>1024 ? "hidden" : ""} absolute right-0 h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle cursor-pointer transition-all duration-500 justify-center hover:bg-[#424B5A] hover:border-[#424B5A]">
+        <img alt='chevron-right' src={chevronRight} class='translate-x-[1px]' />
+      </button>
 </ContentWidth>
 <Spacer color="#424B5A" />
 
@@ -74,14 +105,14 @@
             <ContentBox 
                 icon=""
                 titleTag="h3"
-                titleText="Value 1"
+                titleText="Value {activeValue}"
                 paragraphText={loremParagraph}
                 linkText="Learn More"
                 float="{innerWidth > 1024 ? "left" : "center"}"
-                twProps="p-0 w-[480px] mx-auto lg:w-3/4 lg:ml-0"
+                twProps="p-0 w-[480px] mx-auto lg:w-3/4 lg:-ml-8"
             />
         </div>
-        <HalfWidthImage twProps="pl-6 mt-0"/>
+        <HalfWidthImage twProps="lg:pl-6 mt-0"/>
     </div>
 </ContentWidth>
 <Spacer color="#424B5A" />

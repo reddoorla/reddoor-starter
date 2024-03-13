@@ -19,17 +19,21 @@ export let twProps=""
 export let backgroundColor="transparent"
 export let float = "center"
 let justify=float;
+let horizontalFloatMargin = "mx-auto"
+
+$:{
+    justify=float;
 if(float==="left")
     justify="start";
 if(float==="right")
     justify="end"
 
-let horizontalFloatMargin = "mx-auto"
+horizontalFloatMargin = "mx-auto"
 if(float==="left")
     horizontalFloatMargin="ml-0 mr-auto";
 if(float==="right")
     horizontalFloatMargin="ml-auto mr-0"
-
+}
 
 </script>
 
@@ -66,7 +70,7 @@ if(float==="right")
     {#if paragraphText}
         <p class="mb-7 max-w-full">{paragraphText}</p>
     {/if}
-    <div class="w-full flex flex-nowrap text-nowrap flex-col sm:flex-row align-middle justify-center sm:justify-{justify}">
+    <div class="flex flex-nowrap text-nowrap flex-col sm:flex-row align-middle justify-center sm:justify-{justify}">
         {#if buttonText}
             <DefaultButton text={buttonText} twProps="mr-5"/>
         {/if}

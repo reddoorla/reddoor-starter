@@ -15,7 +15,8 @@ export default {
      "aspect-video",
      "aspect-[16/9]",
      "aspect-[4/3]",
-     "translate-y-1"
+     "translate-y-1",
+     "w-[360px]"
   ],
   theme: {
     screens: {

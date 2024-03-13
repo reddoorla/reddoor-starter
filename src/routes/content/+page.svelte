@@ -54,7 +54,6 @@
         icon=""
         backgroundColor="white"
     />
-
 </div>
     
 </ContentWidthImage>

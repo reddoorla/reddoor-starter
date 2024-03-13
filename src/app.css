@@ -4,7 +4,9 @@
 
 body{
     font-family: "Helvetica Neue LT Std", sans-serif;
-    transition-timing-function: ease-in-out;
+    transition-timing-function: cubic-bezier(.5,0,0,1);
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 a{
@@ -80,6 +82,7 @@ button{
     padding: 13px 48px 9px 48px;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 a{
