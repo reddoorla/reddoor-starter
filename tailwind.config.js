@@ -19,6 +19,14 @@ export default {
       lg: '1024px',
       xl: '1340px',
     },
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      black: '#000',
+      white: '#fff',
+      light:'#C2D1D9',
+      dark: '#424B5A',
+    },
     extend: {
       transitionTimingFunction: {
         'in-expo': 'cubic-bezier(0.95, 0.05, 0.795, 0.035)',
