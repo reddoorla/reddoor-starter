@@ -1,6 +1,7 @@
 <script lang='ts'>
     import placeholderIcon from "../../assets/icons/logo.svg"
-    import linkArrow from "../../assets/icons/wireframe-link-arrow-right.svg"
+    import DefaultButton from "../Buttons/DefaultButton.svelte";
+    import ArrowButton from "../Buttons/ArrowButton.svelte";
 
 
 export let icon = placeholderIcon;
@@ -50,18 +51,10 @@ let isLinkArrowActive=false;
     {/if}
     <div class="w-full flex flex-col sm:flex-row align-middle justify-center sm:justify-{justify}">
         {#if buttonText}
-            <button class="bg-dark text-center text-white mb-5 sm:mb-0 uppercase">{buttonText}</button>
+            <DefaultButton text={buttonText}/>
         {/if}
         {#if linkText}
-                <a 
-                    on:mouseenter={()=>isLinkArrowActive=true} 
-                    on:mouseleave={()=>isLinkArrowActive=false} 
-                    class="flex flex-row align-middl no-underline justify-center sm:justify-{justify}" 
-                    href={linkHref}>
-                        <span class="h-5 uppercase no-underline">{linkText}</span>
-                        <img src={linkArrow} alt="link arrow" class="h-5 w-5 -mt-[5px] ml-[10px] transition-transform duration-300 {isLinkArrowActive ? "translate-x-2":""}">
-                </a>
-
+            <ArrowButton text={linkText} href={linkHref} />
         {/if}
     </div>
 
