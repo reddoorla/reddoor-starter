@@ -5,6 +5,33 @@
     export let filled = true;
 </script>
 
+<style>
+    button{
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1em;
+        text-align: center;
+        border-radius: 3px;
+        display: flex;
+        padding: 13px 48px 9px 48px;
+        justify-content: center;
+        align-items: center;
+    }
+    @media only screen and (max-width:786px) {
+        button{
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 400;
+            text-align: center;
+            border-radius: 3px;
+            padding: 13px 48px 9px 48px;
+        }
+    }
+
+
+</style>
+
 
 <button on:click={click} 
         class="{filled ?

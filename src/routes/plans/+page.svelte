@@ -5,10 +5,14 @@
     import nextArrow from "$lib/assets/icons/wireframe-link-arrow-right.svg"
     import ContentBox from "$lib/components/FullWidth/ContentBox.svelte";
     import HalfWidthImage from "$lib/components/HalfWidth/HalfWidthImage.svelte";
+    import FourByThreeImage from "$lib/components/FullWidth/FourByThreeImage.svelte"
+  import { fade } from "svelte/transition";
 
     const placeholderParagraph = `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.
 
     Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.`;
+
+    let step = 1;
 </script>
 <style>
     .plan-arrow{
@@ -63,21 +67,31 @@
     <h2 class="mb-20">The Plan</h2>
     <div class="w-11/12 h-24 relative flex flex-row justify-between">
         <div class="plan-line absolute top-6 translate-y-[1.5px] left-[50px] -z-10"></div>
-        <div class="flex flex-col justify-center items-center">
-            <div class="w-12 h-12 bg-black rounded-full text-white flex justify-center items-center mb-5"><p class="translate-y-[1px]">1</p></div>
+        <button class="flex flex-col justify-center items-center hover:opacity-95"
+            on:click={()=>step=1}
+        >
+            <div class="w-12 h-12 {step==1 ? "bg-black":"bg-dark"} hover:bg-black transition-all duration-300 rounded-full text-white flex justify-center items-center mb-5"><p class="translate-y-[1px]">1</p></div>
             <h6>Sign Up</h6>
-        </div>
-        <div class="flex flex-col justify-center items-center">
-            <div class="w-12 h-12 bg-black rounded-full text-white flex justify-center items-center mb-5"><p class="translate-y-[1px]">2</p></div>
+        </button>
+        <button class="flex flex-col justify-center items-center hover:bg-opacity-95"
+        on:click={()=>step=2}>
+            <div class="w-12 h-12 {step==2 ? "bg-black":"bg-dark"} transition-all duration-300 hover:bg-black rounded-full text-white flex justify-center items-center mb-5"><p class="translate-y-[1px]">2</p></div>
             <h6>Set Up</h6>
-        </div> 
-        <div class="flex flex-col justify-center items-center">
-            <div class="w-12 h-12 bg-black rounded-full text-white flex justify-center items-center mb-5"><p class="translate-y-[1px]">3</p></div>
+        </button> 
+        <button class="flex flex-col justify-center items-center transition-opacity hover:opacity-95 cursor-pointer"
+             on:click={()=>step=3}
+        >
+            <div class="w-12 h-12 {step==3 ? "bg-black":"bg-dark"} hover:bg-black transition-all duration-300 rounded-full text-white flex justify-center items-center mb-5"><p class="translate-y-[1px]">3</p></div>
             <h6>Share</h6>
-        </div>  
+        </button>  
     </div>
     <div class="w-full flex flex-col lg:flex-row justify-center items-top mt-16">
         <div class="w-full lg:w-1/2 pr-6">
+            {#key step}
+            <div out:fade={{duration:300}} in:fade={{delay:500, duration:300}}>
+            
+            {#if step==1}
+           
             <ContentBox 
                 titleTag="h3"
                 titleText="BLUEPRINT YOUR VISION"
@@ -88,8 +102,53 @@
                 icon=""
                 twProps=""
             />
+           
+            {:else if step==2}
+            
+            <ContentBox 
+                titleTag="h3"
+                titleText="REFINE WITH PRECISION"
+                paragraphText={placeholderParagraph}
+                buttonText="BUTTON"
+                linkText="Learn More"
+                float="left"
+                icon=""
+                twProps=""
+            />
+            
+            {:else if step==3}
+            
+            <ContentBox 
+                titleTag="h3"
+                titleText="TEST AND ITERATE"
+                paragraphText={placeholderParagraph}
+                buttonText="BUTTON"
+                linkText="Learn More"
+                float="left"
+                icon=""
+                twProps=""
+            />
+           
+            {/if}
+            </div>
+            {/key}
+
         </div>
-       <HalfWidthImage />
+        {#key step}
+        <div class="w-full lg:w-1/2 h-full">
+            <div out:fade={{duration:300}} in:fade={{delay:500, duration:300}}>
+            
+            {#if step==1}
+                <FourByThreeImage />
+            {:else if step==2}
+                <FourByThreeImage />
+            {:else if step==3}
+                <FourByThreeImage />
+            {/if}
+            </div>
+            </div>
+            {/key}
+       
     </div>
 </div>
 <Spacer color="#424B5A" />
