@@ -32,7 +32,7 @@ if(float==="right")
 let isLinkArrowActive=false;
 </script>
 
-<div class="w-full flex flex-col p-8 justify-{justify} text-{float} {twProps}"
+<div class="w-full flex flex-col p-2 md:p-8 justify-{justify} text-{float} {twProps}"
      style="background-color: {backgroundColor}"
 >
     {#if icon}

@@ -1,5 +1,6 @@
 <script lang='ts'>
   import { onMount } from "svelte";
+  import { swipe } from "svelte-gestures";
     import placeholder from "../../assets/images/background_placeholder.svg";
   import ContentWidth from "../ContentWidth/ContentWidth.svelte";
     
@@ -79,6 +80,14 @@
 
 	let sliderInterval:NodeJS.Timeout;
 
+	const handleSwipe = (e:CustomEvent<{ direction: "left" | "top" | "right" | "bottom"; target: EventTarget; }>) => {
+      if(e.detail.direction==="left") 
+        slideLeft();
+
+        if(e.detail.direction==="right") 
+        slideRight();
+    }
+
     onMount(()=>{
        sliderInterval = setInterval(()=>slideLeft(), SLIDER_INTERVAL_IN_MS);
     });
@@ -87,7 +96,7 @@
 </script>
     
 <section>
-    <div class="h-[160vw] sm:h-[90vw] xl:h-[60vw] lg:max-h-screen relative overflow-hidden" >
+    <div use:swipe on:swipe={handleSwipe} class="h-[160vw] sm:h-[90vw] xl:h-[60vw] lg:max-h-screen relative overflow-hidden" >
     <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}"
     style= "width:{100*tripledImages.length}vw; transform:translateX({-(sliderIndex+imageArray.length)*100}vw); ">
 		
@@ -105,11 +114,12 @@
         <slot />
         <div class="absolute h-10 flex align-middle justify-start left-[4%] xl:left-8 translate-x-[2px] bottom-10">
             {#each  imageArray as image, i}
-                <div class="h-[10px] w-[10px] border-2 border-gray-400 rounded-full transition-all duration-1000 cursor-pointer hover:opacity-60 mr-4 {sliderIndex%imageArray.length===i ? "bg-dark border-dark" : ""}"
+                <button class="h-[10px] w-[10px] border-2 border-gray-400 rounded-full transition-colors duration-1000 cursor-pointer active:-translate-y-[0.5px] hover:opacity-60 mr-4 
+								{(sliderIndex%imageArray.length>=0&&sliderIndex%imageArray.length===i)|| (sliderIndex%imageArray.length<=0&&imageArray.length+sliderIndex%imageArray.length===i) ? "bg-dark border-dark" : ""}"
                     on:click={()=>setSliderIndex(i)}
                     aria-label="image {i} of {imageArray.length}"
                     aria-hidden
-                ></div>
+                ></button>
             {/each}
         </div>
 	</ContentWidth>

@@ -75,7 +75,7 @@ if(float==="right")
             <DefaultButton text={buttonText} twProps="mr-5"/>
         {/if}
         {#if linkText}
-            <ArrowButton text={linkText} href={linkHref} twProps="sm:translate-x-0 -translate-x-4"/>
+            <ArrowButton text={linkText} href={linkHref} twProps="translate-y-1 md:translate-y-0"/>
         {/if}
     </div>
 

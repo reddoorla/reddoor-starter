@@ -3,12 +3,9 @@
     import TitleBox from "$lib/components/FullWidth/TitleBox.svelte";
     import Spacer from "$lib/components/Spacer.svelte";
     import ContentWidthImage from "$lib/components/ContentWidth/ContentWidthImage.svelte";
-    import playIcon from "$lib/assets/icons/play-button.svg"
-    import placeholderImage from "$lib/assets/images/image_placeholder.svg"
-    import chevronLeft from "$lib/assets/icons/chevron-left.svg"
-    import chevronRight from "$lib/assets/icons/chevron-right.svg"
     import SliderOfContentBoxes from "$lib/components/FullWidth/SliderOfContentBoxes.svelte";
-  import ContentWidth from "$lib/components/ContentWidth/ContentWidth.svelte";
+    import ContentWidth from "$lib/components/ContentWidth/ContentWidth.svelte";
+    import FourByThreeImage from "$lib/components/FullWidth/FourByThreeImage.svelte";
 
     
 </script>
@@ -33,7 +30,7 @@
         <SliderOfContentBoxes />
     </div> 
     <div class="w-full md:w-1/2 p-4">
-            <img alt='placeholder' src={placeholderImage} class='aspect-[4/3] w-full'/>
+            <FourByThreeImage />
     </div>
 </ContentWidth>
 
@@ -44,7 +41,7 @@
 <div class='my-14'>
 <ContentWidthImage>
 
-<div class="w-full lg:w-[400px] absolute bottom-0 lg:right-8 xl:right-0">
+<div class="w-full left-0 lg:left-auto lg:w-[400px] absolute bottom-0 lg:right-8 xl:right-0">
     <ContentBox
         titleText="Generic Text"
         titleTag="h3"
