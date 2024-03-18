@@ -9,6 +9,14 @@ body{
     overflow-x: clip;
 }
 
+.bump{
+    transition: transform 300ms ease-out;
+}
+
+.bump:active{
+    transform: translateY(-8px);
+}
+
 a{
     transition: color 600ms;
     cursor: pointer;

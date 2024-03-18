@@ -1,10 +1,12 @@
 <script lang='ts'>
     import { onMount } from "svelte";
     import { swipe } from "svelte-gestures";
-      import placeholder from "../../assets/images/background_placeholder.svg";
+    import placeholder from "../../assets/images/background_placeholder.svg";
     import ContentWidth from "../ContentWidth/ContentWidth.svelte";
     import FourByThreeImage from "../FullWidth/FourByThreeImage.svelte";
-    import Progressbar from 'flowbite-svelte'
+    import chevronLeft from "$lib/assets/icons/chevron-left.svg"
+    import chevronRight from "$lib/assets/icons/chevron-right.svg"
+
       
       export let imageArray = [placeholder, placeholder, placeholder, placeholder];
       export let altText = "background image"
@@ -14,65 +16,37 @@
       const SLIDER_TRANSITION_LENGTH_IN_MS=2000;
       const SLIDER_INTERVAL_IN_MS = 5000;
   
-      let sliderIndex = 0;
+      let sliderIndex = imageArray.length-1;
       
       let isSlideAnimated = true;
-      let nextSlideIndex = 1;
-      let previousSlideIndex = imageArray.length-1;
-  
-      let getNextSlideIndex = () =>{
-          if(sliderIndex==imageArray.length-1){
-              nextSlideIndex = 0;
-              return;
-          }
-          if(sliderIndex==imageArray.length){
-              nextSlideIndex = 1;
-              return;
-          }
-          if(sliderIndex<-1){
-              nextSlideIndex = imageArray.length+(sliderIndex + 1);
-              return;
-          }
-              nextSlideIndex = sliderIndex + 1;
-      }
-  
-      let getPreviousSlideIndex = () => {
-          if(sliderIndex<1&&sliderIndex>0-imageArray.length){
-              previousSlideIndex = imageArray.length+(sliderIndex-1);
-              return;
-          }
-          if(sliderIndex==0-imageArray.length){
-              previousSlideIndex = imageArray.length-1;
-              return;
-          }
-          
-          previousSlideIndex = sliderIndex - 1;
-      }
-  
-      const resetSlider = () => {
+
+      const resetSliderToStart = () => {
           setTimeout(()=>isSlideAnimated=false, SLIDER_TRANSITION_LENGTH_IN_MS)
-          setTimeout(()=> sliderIndex=sliderIndex%imageArray.length, SLIDER_TRANSITION_LENGTH_IN_MS+20)
+          setTimeout(()=> sliderIndex=0, SLIDER_TRANSITION_LENGTH_IN_MS+20)
+          setTimeout(()=>isSlideAnimated=true,SLIDER_TRANSITION_LENGTH_IN_MS+40)
+      }
+
+      const resetSliderToEnd = () => {
+          setTimeout(()=>isSlideAnimated=false, SLIDER_TRANSITION_LENGTH_IN_MS)
+          setTimeout(()=> sliderIndex=imageArray.length-1, SLIDER_TRANSITION_LENGTH_IN_MS+20)
           setTimeout(()=>isSlideAnimated=true,SLIDER_TRANSITION_LENGTH_IN_MS+40)
       }
   
-      const slideLeft = () => {
+      const slideRight = () => {
           sliderIndex++;
-          getNextSlideIndex();
-          getPreviousSlideIndex();
-          if(sliderIndex%imageArray.length==0&&sliderIndex!==0)
-              resetSlider();
+          clearInterval(sliderInterval);
+	        sliderInterval = setInterval(()=>slideRight(), SLIDER_INTERVAL_IN_MS);
+          if(sliderIndex==imageArray.length)
+              resetSliderToStart();
           
           console.log(sliderIndex)
       }
-      const slideRight = () => {
+      const slideLeft = () => {
           sliderIndex--;
-          getNextSlideIndex();
-          getPreviousSlideIndex();
-          if(sliderIndex%imageArray.length==0&&sliderIndex!==0)
-              resetSlider();
-          
-  
-          console.log(sliderIndex)
+          clearInterval(sliderInterval);
+	    sliderInterval = setInterval(()=>slideLeft(), SLIDER_INTERVAL_IN_MS);
+          if(sliderIndex<0)
+              resetSliderToEnd();
       }
   
       const setSliderIndex = (index:number) => {
@@ -85,10 +59,29 @@
   
       const handleSwipe = (e:CustomEvent<{ direction: "left" | "top" | "right" | "bottom"; target: EventTarget; }>) => {
         if(e.detail.direction==="left") 
-          slideLeft();
+          slideRight();
   
           if(e.detail.direction==="right") 
-          slideRight();
+          slideLeft();
+      }
+
+      let progressPosistion = 0;
+      let progressWrapForwardPosition = -100;
+      let progressWrapBackwardPosition = imageArray.length*100
+
+      $: {
+        progressPosistion= (sliderIndex)*100;
+        if(sliderIndex==imageArray.length)
+            progressWrapForwardPosition=0;
+        else
+        progressWrapForwardPosition = 100;
+        
+        if(sliderIndex==-1)
+            progressWrapBackwardPosition=imageArray.length*100-100;
+        else
+            progressWrapBackwardPosition = imageArray.length*100;
+
+            console.log(sliderIndex)
       }
   
       onMount(()=>{
@@ -112,10 +105,21 @@
           
           
       </div>
-      <div class="absolute flex justify-center w-full h-full top-0 left-0">
-          <ContentWidth twProps="h-full relative w-full">
-          <Progressbar progress={(sliderIndex%imageArray.length)/imageArray.length*100} />
-      </ContentWidth>
+      <div class="absolute flex justify-center w-full bottom-0 left-0">
+        <ContentWidth twProps="h-full relative w-full">
+          <div class="h-2 w-5/6 m-auto bg-light rounded-full relative overflow-hidden translate-y-[16px]">
+            <div class="h-full rounded-full absolute top-0 right-0 bg-dark {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}" style="width:{1/imageArray.length*100}%; transform:translateX({-progressPosistion}%);"></div>
+            <div class="h-full rounded-full absolute top-0 right-0 bg-dark {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}" style="width:{1/imageArray.length*100}%; transform:translateX({progressWrapForwardPosition}%);"></div>
+            <div class="h-full rounded-full absolute top-0 right-0 bg-dark {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}" style="width:{1/imageArray.length*100}%; transform:translateX({-progressWrapBackwardPosition}%);"></div>
+          </div>
+
+          <button on:click={()=>slideRight()} class="absolute -left-2 h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle justify-center cursor-pointer transition-all duration-500 hover:bg-[#424B5A] hover:border-[#424B5A] active:bg-black bump">
+            <img alt='chevron-left' src={chevronLeft} class='-translate-x-[1px]' />
+          </button>
+          <button on:click={()=>slideLeft()} class="absolute -right-2  -translate-y-[0.7px] h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle cursor-pointer transition-all duration-500 justify-center hover:bg-[#424B5A] hover:border-[#424B5A] active:bg-black bump">
+            <img alt='chevron-right' src={chevronRight} class='translate-x-[1px] ' />
+          </button>
+        </ContentWidth>
           
       </div>
   </div>
