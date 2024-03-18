@@ -2,7 +2,7 @@
     import Spacer from "$lib/components/Spacer.svelte";
     import ContentBox from "$lib/components/FullWidth/ContentBox.svelte";
     import ContentWidth from "$lib/components/ContentWidth/ContentWidth.svelte";
-  import ScreenWidthGallerySlider from "$lib/components/ScreenWidth/ScreenWidthGallerySlider.svelte";
+  import ScreenWidthGallerySlider from "$lib/components/ScreenWidth/ScreenWidthGallerySliderSmall.svelte";
   import SquareImage from "$lib/components/FullWidth/SquareImage.svelte";
   import placeholder from '$lib/assets/images/image_placeholder.svg'
   import chevronRight from '$lib/assets/icons/chevron-right.svg'
