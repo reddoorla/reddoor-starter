@@ -4,8 +4,6 @@
     import placeholder from "../../assets/images/background_placeholder.svg";
     import ContentWidth from "../ContentWidth/ContentWidth.svelte";
     import FourByThreeImage from "../FullWidth/FourByThreeImage.svelte";
-    import chevronLeft from "$lib/assets/icons/chevron-left.svg"
-    import chevronRight from "$lib/assets/icons/chevron-right.svg"
 
       
       export let imageArray = [placeholder, placeholder, placeholder, placeholder];
