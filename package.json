@@ -39,6 +39,7 @@
 	"dependencies": {
 		"@prismicio/client": "^7.3.1",
 		"@prismicio/svelte": "^1.0.3",
-		"svelte-gestures": "^4.0.0"
+		"svelte-gestures": "^4.0.0",
+		"svelte-select": "^5.8.3"
 	}
 }

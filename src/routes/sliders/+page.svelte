@@ -62,9 +62,7 @@
             else{
                 sliderInterval = setInterval(()=>slideRight(), SLIDER_INTERVAL_IN_MS);
             }
-          sliderIndex=index;
-          
-          
+          sliderIndex=index;        
       }
 
       const setSliderIndexWithDelay = (index:number) => {
@@ -163,7 +161,7 @@
             float="left"
             icon=""
         />
-        {#if innerWidth<=1024&&innerWidth>768}
+        {#if innerWidth>768}
         <div class="h-10 w-5/6 flex align-middle justify-center mt-6 -ml-8">
             <button class="h-[10px] mr-8" on:click={slideRight}>
                 <img src={chevronLeft} alt="previous slide"/>
