@@ -12,23 +12,23 @@
     const NAV_LINKS=[
         {
             label:"ABOUT",
-            href:"/about"
+            href:"/"
         },
         {
             label:"PORTFOLIO",
-            href:"/portfolio"
+            href:"/"
         },
         {
             label:"RESOURCES",
-            href:"/resources"
+            href:"/"
         },
         {
             label:"BLOG",
-            href:"/blog"
+            href:"/"
         },
         {
             label:"CONTACT",
-            href:"/contact"
+            href:"/"
         },
 
     ];
