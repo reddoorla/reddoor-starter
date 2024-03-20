@@ -3,7 +3,8 @@
     import ContentWidth from "$lib/components/ContentWidth/ContentWidth.svelte";
     import ContentBox from "$lib/components/FullWidth/ContentBox.svelte";
     import profile_placeholder from "$lib/assets/images/profile_placeholder.png"
-  import ContactBox from "$lib/components/FullWidth/ContactBox.svelte";
+  import ContactBox from "$lib/components/FullWidth/SocialsRow.svelte";
+  import TeamBox from "$lib/components/FullWidth/TeamBox.svelte";
 
     const TEAM_LIST = [{
             name:"Josie Wells",
@@ -108,7 +109,7 @@
     <div class="w-full flex flex-row justify-evenly flex-wrap">
         {#each TEAM_LIST as person}
             <div class="w-full md:w-[46%] xl:w-[30%] my-12 aspect-[5/4] flex flex-col items-center justify-center bg-light">
-                <ContactBox 
+                <TeamBox 
                     name={person.name}
                     title={person.title}
                     src={person.profilePicture}

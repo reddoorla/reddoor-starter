@@ -4,7 +4,7 @@
   import ContentWidth from "$lib/components/ContentWidth/ContentWidth.svelte";  
   import ContentBox from "$lib/components/FullWidth/ContentBox.svelte";
   import placeholder from "$lib/assets/images/image_placeholder.svg"
-  import ContactBox from "$lib/components/FullWidth/ContactBox.svelte";
+  import ContactBox from "$lib/components/FullWidth/SocialsRow.svelte";
 
   let innerWidth:number;
   const LOREM = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."

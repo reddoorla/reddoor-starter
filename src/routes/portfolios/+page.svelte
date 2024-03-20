@@ -74,12 +74,6 @@
 
 </script>
 
-<style>
-
-
-
-</style>
-
 <!-- portfolio #1 -->
 <ContentWidth twProps="-mb-12 mt-12">
     <div class="max-w-[564px] mx-auto">

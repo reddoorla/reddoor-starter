@@ -1,5 +1,5 @@
 <script lang='ts'>
-    import placeholderIcon from "../../assets/icons/logo.svg"
+    import placeholderIcon from "../../assets/icons/logos/logo.svg"
     import DefaultButton from "../Buttons/DefaultButton.svelte";
     import ArrowButton from "../Buttons/ArrowButton.svelte";
 
