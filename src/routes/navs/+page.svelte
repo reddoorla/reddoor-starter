@@ -3,7 +3,7 @@
     import Spacer from "$lib/components/Spacer.svelte";
     import DefaultButton from "$lib/components/Buttons/DefaultButton.svelte";
     import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
-    import { faBars, faX } from "@fortawesome/free-solid-svg-icons";
+    import { faBars, faClose} from "@fortawesome/free-solid-svg-icons";
     import logoIcon from "$lib/assets/icons/logos/logo.svg"
     import logoFull from "$lib/assets/icons/logos/logoFull.svg"
 
@@ -49,14 +49,14 @@
 
 <!--overlay-->
 {#if isOverlayVisible}
-<div class="w-screen h-screen bg-dark flex flex-col items-center justify-center gap-12 z-30" transition:fly>
+<div class="w-screen h-screen fixed bg-dark flex flex-col items-center justify-center gap-12 z-30" transition:fly>
     {#each NAV_LINKS as item}
         <a href={item.href} class="text-white text-2xl">{item.label}</a>
     {/each}
 
     <button class="absolute top-5 right-5 opacity-60 hover:opacity-100 transition-all z-40" on:click={toggleOverlayOff}>
-        <div transition:fade class="text-white">
-        <FontAwesomeIcon icon={faX} size="2x" />
+        <div in:fade={{delay: 600}} out:fade class="text-white">
+        <FontAwesomeIcon icon={faClose} size="3x" />
         </div>
       
     </button>
@@ -79,7 +79,7 @@
         <div class="hidden md:flex">   
             <DefaultButton text="BUTTON" click={toggleOverlayOn} />
         </div> 
-        <button class="lg:hidden ml-6 opacity-60 hover:opacity-100 transition-all z-40" on:click={toggleOverlayOn}>
+        <button class="lg:hidden ml-6 opacity-60 hover:opacity-100 transition-all " on:click={toggleOverlayOn}>
            
             <FontAwesomeIcon icon={faBars} size="2x"/>
         
@@ -106,9 +106,10 @@
                 {/each}
             </div>
        
-        <button class="lg:hidden ml-6 opacity-60 hover:opacity-100 transition-all z-40" on:click={toggleOverlayOn}>
-           
+        <button class="lg:hidden ml-6 opacity-60 hover:opacity-100 transition-all" on:click={toggleOverlayOn}>
+           {#if !isOverlayVisible}
             <FontAwesomeIcon icon={faBars} size="2x"/>
+            {/if}
         
         </button>
         </div>
