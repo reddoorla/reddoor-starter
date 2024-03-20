@@ -18,7 +18,7 @@
         justify-content: center;
         align-items: center;
     }
-    @media only screen and (max-width:1200px) {
+    @media only screen and (max-width:1340px) {
         button{
             font-size: 14px;
             font-style: normal;
@@ -38,6 +38,6 @@
          "bg-dark bg-opacity-80 hover:bg-opacity-100 active:bg-black  text-white" 
          : 
          "hover:bg-dark text-dark hover:text-white active:bg-black " 
-         } border-2 border-dark text-center mb-5 sm:mb-0 uppercase cursor-pointer text-nowrap transition-all duration-300 active:-translate-y-2 {twProps}">
+         } border-2 border-dark w-full md:w-auto text-center mb-5 sm:mb-0 uppercase cursor-pointer text-nowrap transition-all duration-300 active:-translate-y-2 {twProps}">
         {text}
 </button>
