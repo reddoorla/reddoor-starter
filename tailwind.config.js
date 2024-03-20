@@ -16,7 +16,9 @@ export default {
      "aspect-[16/9]",
      "aspect-[4/3]",
      "translate-y-1",
-     "w-[360px]"
+     "w-[360px]",
+     "md:w-1/2",
+     "h-[40vw]",
   ],
   theme: {
     screens: {
