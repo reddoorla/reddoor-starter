@@ -91,7 +91,7 @@
 <!-- List 2 -->
 <ContentWidth>
  
-<div class="-ml-16 -mb-8  md:ml-0 w-full flex flex-row flex-wrap">
+<div class="sm:-ml-16 -mb-8  md:ml-0 w-full flex flex-row flex-wrap">
     <ContentBox 
         icon=""
         titleTag="h2"
@@ -104,7 +104,7 @@
         paragraphText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
         float= "left"
         buttonText="BUTTON"
-        twProps="-mt-16 -mb-8 md:my-0 w-full md:w-1/2"
+        twProps="-mt-8 -mb-8 md:my-0 w-full md:w-1/2"
     />
 
 </div>
