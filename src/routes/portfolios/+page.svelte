@@ -75,7 +75,7 @@
 </script>
 
 <!-- portfolio #1 -->
-<ContentWidth twProps="-mb-12 mt-12">
+<ContentWidth class="-mb-12 mt-12">
     <div class="max-w-[564px] mx-auto">
         <ContentBox 
         icon=""
@@ -119,14 +119,14 @@
     <div animate:flip="{{ duration: 500 }}"  class="w-80" transition:scale>
     {#if item.href}
     <a href={item?.href||"#"} class="h-full relative " >
-        <FourByThreeImage  src={item?.featuredImage} label={item?.featuredText||""} alt={item.name} twProps="h-full object-cover -z-10"/>
+        <FourByThreeImage  src={item?.featuredImage} label={item?.featuredText||""} alt={item.name} class="h-full object-cover -z-10"/>
         <div class="absolute w-full aspect-[4/3] top-8 left-0 bg-dark opacity-0 hover:opacity-100 hover:bg-opacity-80 transition-opacity duration-500 flex justify-center items-center">
           <h4 class="text-white">{item.name}</h4>
       </div>
     </a>
     {:else}
     <div class="h-full w-80" >
-      <FourByThreeImage  src={item?.featuredImage}  label={item?.featuredText||""} alt={item.name} twProps="h-full object-cover -z-10"/>
+      <FourByThreeImage  src={item?.featuredImage}  label={item?.featuredText||""} alt={item.name} class="h-full object-cover -z-10"/>
     </div>
     {/if}
     </div>

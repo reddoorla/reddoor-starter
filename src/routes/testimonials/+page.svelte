@@ -103,7 +103,7 @@
                 attributionLabel="Job Title"
                 float="left"
                 backgroundColor="#F3F3F3"
-                twProps="p-6 h-96"
+                class="p-6 h-96"
 
             />
 
@@ -116,7 +116,7 @@
                 attributionLabel="Job Title"
                 float="left"
                 backgroundColor="#F3F3F3"
-                twProps="p-6 h-96"
+                class="p-6 h-96"
         />
 
 </div>
@@ -128,7 +128,7 @@
                 attributionLabel="Job Title"
                 float="left"
                 backgroundColor="#F3F3F3"
-                twProps="p-6 h-96"
+                class="p-6 h-96"
 
             />
 </div>
@@ -157,12 +157,12 @@
 
 <!-- testimonial #2 -->
 
-<ScreenWidthImage twPropsContent="flex flex-col justify-evenly">
+<ScreenWidthImage classContent="flex flex-col justify-evenly">
     <ContentBox
         titleTag="h2"
         titleText="Why People Love Wireframes"
         icon=""
-        twProps="mt-12"
+        class="mt-12"
     />
 
     <div class="w-full md:w-1/2 relative">

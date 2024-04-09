@@ -122,7 +122,7 @@
 <Spacer color="#424B5A" />
 <div class="w-full relative">
     
-<ContentWidth twProps="flex flex-col lg:flex-row relative">
+<ContentWidth class="flex flex-col lg:flex-row relative">
     {#if innerWidth<=768}
         <div use:swipe on:swipe={handleSwipe} class="w-full">
             <div style="width: {tripledImages.length*108}%; margin-left:-112%; transform:translateX({-(sliderIndex)/tripledImages.length*100}%);" class="flex flex-row justify-between flex-nowrap overflow-hidden {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}">

@@ -1,7 +1,7 @@
 <script lang="ts">
     import placeholder from "$lib/assets/images/image_placeholder.svg"
 
-    export let twProps = "";
+  
     export let src = placeholder;
     export let alt = "placeholder"
     export let label = ""
@@ -11,7 +11,7 @@
     let crossLength = "125%";
 </script>
 
-<div class="w-full my-8 relative {twProps}">
+<div class="w-full my-8 relative {$$props.class || ''}">
     <div class="w-full aspect-[4/3] {src===placeholder ? "border-light border-2 bg-light bg-opacity-25":""}  rounded-sm  flex items-center justify-center relative">
         <img {src} {alt} class="z-10 {src==placeholder ? "w-16" : "w-full"}"/>
         <div class="absolute bg-light h-[2px] {src===placeholder ? "":"hidden"}" style="transform: rotate({rotationAngle}deg); width:{crossLength}"></div>

@@ -25,7 +25,7 @@
 
 <!--content #7-->
 
-<ContentWidth twProps="flex flew-row flex-wrap my-14">
+<ContentWidth class="flex flew-row flex-wrap my-14">
     <div class="w-full md:w-1/2 relative overflow-hidden">
         <SliderOfContentBoxes />
     </div> 

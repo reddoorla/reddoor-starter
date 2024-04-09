@@ -23,7 +23,7 @@
         <textarea class="border-[1px] rounded-[3px] text-dark border-light h-48 pl-4 pt-[2.5px]" placeholder="Type something..." />
 
         <div class="w-16">
-            <DefaultButton text="submit" click={()=>SubmitEvent} twProps=""/>
+            <DefaultButton text="submit" click={()=>SubmitEvent} class=""/>
         </div>
         
 </form>

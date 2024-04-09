@@ -65,7 +65,7 @@
 <!-- nav #1 -->
 
 <div class="h-16 w-screen">
-    <ContentWidth twProps="flex flex-row justify-between items-center h-full">
+    <ContentWidth class="flex flex-row justify-between items-center h-full">
         <a href="/" class="hover:opacity-80 transition-all duration-500 bump">
             <img src={logoFull} alt="logo"/>
         </a>
@@ -93,7 +93,7 @@
 <!-- nav #2 -->
 
 <div class="h-16 w-screen">
-    <ContentWidth twProps="flex flex-row justify-between items-center h-full">
+    <ContentWidth class="flex flex-row justify-between items-center h-full">
         <a href="/" class="hover:opacity-80 transition-all duration-500 bump">
             <img src={logoFull} alt="logo"/>
         </a>

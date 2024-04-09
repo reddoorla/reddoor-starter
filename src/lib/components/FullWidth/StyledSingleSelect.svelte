@@ -7,10 +7,11 @@
     export let placeholder="";
 
 
+
     let selectHover=false;
 </script>
 
-<div class="max-w-[720px] w-full mx-auto cursor-pointer relative" role="separator" on:mouseover={()=> selectHover=true} on:focus={()=> selectHover=true} on:mouseout={()=> selectHover=false} on:blur={()=> selectHover=false} >
+<div class="max-w-[720px] w-full mx-auto cursor-pointer relative {$$props.class || ''}" role="separator" on:mouseover={()=> selectHover=true} on:focus={()=> selectHover=true} on:mouseout={()=> selectHover=false} on:blur={()=> selectHover=false} >
     <Select {items} bind:value {placeholder} searchable={false} class="svelte-select" />
     <div class="absolute h-full aspect-square right-0 top-0 flex items-center justify-center pointer-events-none">
         <img src={dropdownArrow} alt="decorative dropdown arrow" aria-hidden class:opacity-55={selectHover}  class=" transition-all pointer-events-none"/>

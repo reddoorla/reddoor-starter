@@ -109,7 +109,7 @@
                 linkText="Learn More"
                 float="left"
                 icon=""
-                twProps=""
+                class=""
             />
            
             {:else if step==2&&showStepBox}
@@ -122,7 +122,7 @@
                 linkText="Learn More"
                 float="left"
                 icon=""
-                twProps=""
+                class=""
             />
             
             {:else if step==3&&showStepBox}
@@ -135,7 +135,7 @@
                 linkText="Learn More"
                 float="left"
                 icon=""
-                twProps=""
+                class=""
             />
            
             {/if}

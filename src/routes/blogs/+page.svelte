@@ -27,13 +27,13 @@
             titleTag="h2"
             titleText="This is a Title "
             float= "left"
-            twProps="w-full md:w-1/2"
+            class="w-full md:w-1/2"
         />
         <ContentBox 
             icon=""
             paragraphText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
             float= "left"
-            twProps="-mt-16 -mb-8 md:my-0 w-full md:w-1/2"
+            class="-mt-16 -mb-8 md:my-0 w-full md:w-1/2"
         />
 
     </div>
@@ -75,7 +75,7 @@
             titleTag="h2"
             titleText="Fresh Blog Content "
             float= "left"
-            twProps="w-full -mb-16"
+            class="w-full -mb-16"
         />
       
 

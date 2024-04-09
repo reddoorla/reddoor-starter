@@ -65,7 +65,7 @@
 
 <!-- team #1 -->
 
-<ContentWidth twProps="my-16">
+<ContentWidth class="my-16">
     <div class="w-full max-w-[500px] mx-auto md:ml-0">
         <ContentBox 
             icon=""

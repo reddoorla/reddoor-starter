@@ -6,7 +6,6 @@ export let attribution = "";
 export let attributionLabel = "";
 export let backgroundColor="transparent"
 export let float = "center"
-export let twProps=""
 let justify=float;
 let horizontalFloatMargin = "mx-auto"
 
@@ -26,7 +25,7 @@ if(float==="right")
 
 </script>
 
-<div class="{twProps} w-full flex flex-col  p-2 sm:p-8 justify-{justify} text-{float}"
+<div class="{$$props.class || ''} w-full flex flex-col  p-2 sm:p-8 justify-{justify} text-{float}"
      style="background-color: {backgroundColor}"
 >
     {#if icon}

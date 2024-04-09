@@ -10,7 +10,7 @@
       
       export let imageArray = [placeholder, placeholder, placeholder, placeholder];
       export let altText = "background image"
-      export let twProps = "";
+
       
   
       const SLIDER_TRANSITION_FUNCTION="cubic-bezier(.5,0,0,1)";
@@ -92,7 +92,7 @@
       const tripledImages = imageArray.concat(imageArray).concat(imageArray)
   </script>
       
-  <section class="pb-32 {twProps}">
+  <section class="pb-32 {$$props.class || ''}">
       <div use:swipe on:swipe={handleSwipe} class="h-[320px] py-2 relative" >
       <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}"
       style= "width:{352*tripledImages.length}px; margin-left:calc(50vw - 176px); transform:translateX({-(sliderIndex+imageArray.length)*352}px); ">
@@ -100,14 +100,14 @@
           
           {#each tripledImages as image }
           <div class="w-[360px] h-full mx-4">
-              <FourByThreeImage alt={altText} twProps="h-full object-cover -z-10"/>
+              <FourByThreeImage alt={altText} class="h-full object-cover -z-10"/>
           </div>
           {/each}
           
           
       </div>
       <div class="absolute flex justify-center w-full bottom-0 left-0">
-        <ContentWidth twProps="h-full relative w-full">
+        <ContentWidth class="h-full relative w-full">
           <div class="h-2 w-5/6 m-auto bg-light rounded-full relative overflow-hidden translate-y-[16px]">
             <div class="h-full rounded-full absolute top-0 right-0 bg-dark {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}" style="width:{1/imageArray.length*100}%; transform:translateX({-progressPosistion}%);"></div>
             <div class="h-full rounded-full absolute top-0 right-0 bg-dark {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}" style="width:{1/imageArray.length*100}%; transform:translateX({progressWrapForwardPosition}%);"></div>

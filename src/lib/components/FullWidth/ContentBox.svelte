@@ -14,7 +14,6 @@ export let paragraphText = ""
 export let buttonText = ""
 export let linkText=""
 export let linkHref=""
-export let twProps=""
 
 export let backgroundColor="transparent"
 export let float = "center"
@@ -37,7 +36,7 @@ if(float==="right")
 
 </script>
 
-<div class="w-full flex flex-col  p-2 sm:p-8 justify-{justify} text-{float} {twProps}"
+<div class="w-full flex flex-col  p-2 sm:p-8 justify-{justify} text-{float} {$$props.class || ''}"
      style="background-color: {backgroundColor}"
 >
     {#if icon}
@@ -72,10 +71,10 @@ if(float==="right")
     {/if}
     <div class="flex flex-nowrap text-nowrap flex-col sm:flex-row align-middle justify-center sm:justify-{justify}">
         {#if buttonText}
-            <DefaultButton text={buttonText} twProps="mr-5"/>
+            <DefaultButton text={buttonText} class="mr-5"/>
         {/if}
         {#if linkText}
-            <ArrowButton text={linkText} href={linkHref} twProps="translate-y-1 md:translate-y-0"/>
+            <ArrowButton text={linkText} href={linkHref} class="translate-y-1 md:translate-y-0"/>
         {/if}
     </div>
 

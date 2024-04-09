@@ -62,7 +62,7 @@
             icon={placeholder}
             labelText="Strategic Foundation"
             paragraphText={loremParagraph}
-            twProps=""
+            class=""
         />
         </div>
         <div class="w-[360px]">
@@ -70,7 +70,7 @@
             icon={placeholder}
             labelText="User-centric precision"
             paragraphText={loremParagraph}
-            twProps=""
+            class=""
         />
         </div>
         <div class="w-[360px]">
@@ -78,7 +78,7 @@
             icon={placeholder}
             labelText="iterate for excellence"
             paragraphText={loremParagraph}
-            twProps=""
+            class=""
         />
         </div>
     </div>
@@ -142,7 +142,7 @@
                 paragraphText={loremParagraph}
                 linkText="Learn More"
                 float="{innerWidth > 1024 ? "left" : "center"}"
-                twProps="p-0 w-[480px] mx-auto lg:w-3/4 lg:-ml-8 mb-16"
+                class="p-0 w-[480px] mx-auto lg:w-3/4 lg:-ml-8 mb-16"
             />
             {/if}
            
@@ -154,7 +154,7 @@
                 paragraphText={loremParagraph}
                 linkText="Learn More"
                 float="{innerWidth > 1024 ? "left" : "center"}"
-                twProps="p-0 w-[480px] mx-auto lg:w-3/4 lg:-ml-8 mb-16"
+                class="p-0 w-[480px] mx-auto lg:w-3/4 lg:-ml-8 mb-16"
             />
             {/if}
             
@@ -168,14 +168,14 @@
                 paragraphText={loremParagraph}
                 linkText="Learn More"
                 float="{innerWidth > 1024 ? "left" : "center"}"
-                twProps="p-0 w-[480px] mx-auto lg:w-3/4 lg:-ml-8 mb-16"
+                class="p-0 w-[480px] mx-auto lg:w-3/4 lg:-ml-8 mb-16"
             />
             {/if}
             </div>
             {/key}
         
         </div>
-        <HalfWidthImage twProps="lg:pl-6 mt-0"/>
+        <HalfWidthImage class="lg:pl-6 mt-0"/>
     </div>
 </ContentWidth>
 <Spacer color="#424B5A" />

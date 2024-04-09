@@ -23,10 +23,10 @@
     <div class="w-[50vw] h-[37.5vw] left-0 -top-8 -bottom-8 absolute">
         <FourByThreeImage />
     </div>
-   <ContentWidth twProps="h-[37.5vw] relative flex items-center justify-end">
+   <ContentWidth class="h-[37.5vw] relative flex items-center justify-end">
         <ContentBox 
             icon=""
-            twProps="sm:w-[45%] float-right"
+            class="sm:w-[45%] float-right"
             titleTag="h5"
             titleText="This is a Title"
             paragraphText={LOREM}
@@ -56,10 +56,10 @@
    <div class="w-[50vw] h-[37.5vw] right-0 -top-8 -bottom-8 absolute">
        <FourByThreeImage />
    </div>
-  <ContentWidth twProps="h-[37.5vw] relative flex items-center justify-start">
+  <ContentWidth class="h-[37.5vw] relative flex items-center justify-start">
        <ContentBox 
            icon=""
-           twProps="sm:w-[45%] float-left"
+           class="sm:w-[45%] float-left"
            titleTag="h5"
            titleText="This is a Title"
            paragraphText={LOREM}
@@ -97,14 +97,14 @@
         titleTag="h2"
         titleText="This is a Title "
         float= "left"
-        twProps="w-full md:w-1/2"
+        class="w-full md:w-1/2"
     />
     <ContentBox 
         icon=""
         paragraphText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
         float= "left"
         buttonText="BUTTON"
-        twProps="-mt-8 -mb-8 md:my-0 w-full md:w-1/2"
+        class="-mt-8 -mb-8 md:my-0 w-full md:w-1/2"
     />
 
 </div>
@@ -114,7 +114,7 @@
         labelText="subtitle here"
         paragraphText={LOREM}
         linkText="Learn More"
-        twProps="w-full sm:w-[48%] mt-8"
+        class="w-full sm:w-[48%] mt-8"
         backgroundColor="#C2D1D950"
     />
     <ContentBox
@@ -122,7 +122,7 @@
     labelText="subtitle here"
     paragraphText={LOREM}
     linkText="Learn More"
-    twProps="w-full sm:w-[48%] mt-8"
+    class="w-full sm:w-[48%] mt-8"
     backgroundColor="#C2D1D950"
 />
 <ContentBox
@@ -130,7 +130,7 @@ icon={placeholder}
 labelText="subtitle here"
 paragraphText={LOREM}
 linkText="Learn More"
-twProps="w-full sm:w-[48%] mt-8"
+class="w-full sm:w-[48%] mt-8"
 backgroundColor="#C2D1D950"
 />
 <ContentBox
@@ -138,7 +138,7 @@ icon={placeholder}
 labelText="subtitle here"
 paragraphText={LOREM}
 linkText="Learn More"
-twProps="w-full sm:w-[48%] mt-8"
+class="w-full sm:w-[48%] mt-8"
 backgroundColor="#C2D1D950"
 />
 

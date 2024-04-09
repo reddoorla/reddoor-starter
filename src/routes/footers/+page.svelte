@@ -33,9 +33,9 @@
 
 
 <!-- footers #1 -->
-<ContentWidth twProps="flex flex-col md:flex-row items-center justify-between flex-wrap my-8">
+<ContentWidth class="flex flex-col md:flex-row items-center justify-between flex-wrap my-8">
     <a href="/" class="w-11 hover:opacity-80 transition-all duration-500 bump">
-        <SquareImage src={logoIcon} twProps="my-0"/>
+        <SquareImage src={logoIcon} class="my-0"/>
     </a>
     <div class="flex flex-col md:flex-row w-auto my-16 md:my-0 md:w-[425px] h-[425px] md:h-11 items-center justify-between">
         <a href="/">HOME</a>
