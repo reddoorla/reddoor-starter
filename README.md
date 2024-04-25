@@ -22,16 +22,34 @@ This library will grow as we require new interactive functions or layouts, and a
 
 ## How to Use
 
-1) Fork this repo
+1) fork this repo
 
-2) Initiate new prismic repo and connect to this
+2) initiate new prismic repo and connect to this
 
-3) Launch site on netlify
+3) launch site on netlify
 
 4) set up prismic previews with netlify site
 
 5) wireframe site using slices of default components
 
 6) after receiving design, convert wireframed components into designed components
+
 //TODO: mirror prismic docs
 
+## Next steps
+
+### design
+
+address markup comments on currently implemented components, test components on all browsers
+
+### wireframer
+
+implement current components as prismic slices so tool is usable as a contentful wireframer that maps one to one with our current figma library
+
+### extending the component library
+
+add other designed components from the figma library, convert other commonly used components or systems into this repo as they are used
+
+## Bugs
+
+- arrow sometimes sticks on bump
