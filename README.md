@@ -22,7 +22,7 @@ This library will grow as we require new interactive functions or layouts, and a
 
 ## How to Use
 
-1) fork this repo
+1) clone this repo
 
 2) initiate new prismic repo and connect to this
 
