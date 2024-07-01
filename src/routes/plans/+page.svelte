@@ -7,6 +7,7 @@
     import HalfWidthImage from "$lib/components/HalfWidth/HalfWidthImage.svelte";
     import FourByThreeImage from "$lib/components/FullWidth/FourByThreeImage.svelte"
   import { fade } from "svelte/transition";
+  import ContentWidth from "$lib/components/ContentWidth/ContentWidth.svelte";
 
     const placeholderParagraph = `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.
 
@@ -165,6 +166,42 @@
 <Spacer color="#424B5A" />
 
 <!-- plan #3 -->
+ <ContentWidth>
+    <h2>The Plan</h2>
+    <div class="w-full flex flex-col lg:flex-row relative gap-6">
+        <FourByThreeImage class="w-full lg:w-2/3" />
+        <div class="w-full h-full lg:w-1/3 flex flex-col sm:flex-row lg:flex-col justify-evenly relative mt-16 gap-16">
+            <div class="w-full sm:w-1/3 lg:w-full flex flex-row justify-between gap-4">
+                <div class="w-12 h-12 rounded-full p-2 bg-[#F2F5F7] flex justify-center items-center">
+                    <img class="w-10 h-10" src={placeholder} alt="placeholder"/>
+                </div>
+                <div class="flex flex-col h-full">
+                    <h6 class="mt-2">STEP 1</h6>
+                    <p>Lorem ipsum dolor sit amet consectetur.</p>
+                </div>
+            </div>
+            <div class="w-full sm:w-1/3 lg:w-full flex flex-row justify-between gap-4">
+                <div class="w-12 h-12 rounded-full p-2 bg-[#F2F5F7] flex justify-center items-center">
+                    <img class="w-10 h-10" src={placeholder} alt="placeholder"/>
+                </div>
+                <div class="flex flex-col h-full">
+                    <h6 class="mt-2">STEP 2</h6>
+                    <p>Lorem ipsum dolor sit amet consectetur.</p>
+                </div>
+            </div>
+            <div class="w-full sm:w-1/3 lg:w-full flex flex-row justify-between gap-4">
+                <div class="w-12 h-12 rounded-full p-2 bg-[#F2F5F7] flex justify-center items-center">
+                    <img class="w-10 h-10" src={placeholder} alt="placeholder"/>
+                </div>
+                <div class="flex flex-col h-full">
+                    <h6 class="mt-2">STEP 3</h6>
+                    <p>Lorem ipsum dolor sit amet consectetur.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ </ContentWidth>
 <Spacer color="#424B5A" />
 
 <!-- plan #4 -->

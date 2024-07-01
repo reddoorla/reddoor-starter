@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body{
-    font-family: "Helvetica Neue LT Std", sans-serif;
+    font-family: "Helvetica Neue LT Std", "helvetica", sans-serif;
     transition-property: all;
     transition-timing-function: cubic-bezier(.5,0,0,1);
     transition-duration: 500ms;
@@ -88,6 +88,14 @@ p{
     font-style: normal;
     font-weight: 400;
     line-height: 24px; /* 150% */
+}
+
+.label{
+    font-family: "helvetica";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px; /* 150% */
 }
 
 button{

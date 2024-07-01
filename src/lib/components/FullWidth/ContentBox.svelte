@@ -4,7 +4,7 @@
     import ArrowButton from "../Buttons/ArrowButton.svelte";
 
 
-export let icon = placeholderIcon;
+export let icon = "";
 export let iconAltText = "logo"
 export let labelText = ""
 export let titleText = ""
@@ -32,6 +32,10 @@ if(float==="left")
     horizontalFloatMargin="ml-0 mr-auto";
 if(float==="right")
     horizontalFloatMargin="ml-auto mr-0"
+}
+
+if(icon==="placeholder"){
+    icon = placeholderIcon;
 }
 
 </script>

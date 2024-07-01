@@ -114,10 +114,10 @@
             <div class="h-full rounded-full absolute top-0 right-0 bg-dark {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}" style="width:{1/imageArray.length*100}%; transform:translateX({-progressWrapBackwardPosition}%);"></div>
           </div>
 
-          <button on:click={()=>slideRight()} class="absolute -left-2 h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle justify-center cursor-pointer transition-all duration-500 hover:bg-[#424B5A] hover:border-[#424B5A] active:bg-black bump">
+          <button on:click={slideLeft} class="absolute -left-2 h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle justify-center cursor-pointer transition-all duration-500 hover:bg-[#424B5A] hover:border-[#424B5A] active:bg-black bump">
             <img alt='chevron-left' src={chevronLeft} class='-translate-x-[1px]' />
           </button>
-          <button on:click={()=>slideLeft()} class="absolute -right-2  -translate-y-[0.7px] h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle cursor-pointer transition-all duration-500 justify-center hover:bg-[#424B5A] hover:border-[#424B5A] active:bg-black bump">
+          <button on:click={slideRight} class="absolute -right-2  -translate-y-[0.7px] h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle cursor-pointer transition-all duration-500 justify-center hover:bg-[#424B5A] hover:border-[#424B5A] active:bg-black bump">
             <img alt='chevron-right' src={chevronRight} class='translate-x-[1px] ' />
           </button>
         </ContentWidth>
