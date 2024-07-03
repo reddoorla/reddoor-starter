@@ -65,6 +65,10 @@ if(icon==="placeholder"){
         {#if titleTag==="h5"}
             <h5 class="mb-7">{titleText}</h5>
         {/if}
+        {#if titleTag==="h6"}
+            <h6 class="mb-7">{titleText}</h6>
+        {/if}
+        
         
     {/if}
     {#if subtitleText}

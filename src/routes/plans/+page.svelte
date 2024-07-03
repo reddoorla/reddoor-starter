@@ -8,6 +8,7 @@
     import FourByThreeImage from "$lib/components/FullWidth/FourByThreeImage.svelte"
   import { fade } from "svelte/transition";
   import ContentWidth from "$lib/components/ContentWidth/ContentWidth.svelte";
+  import SliderOfContentBoxes from "$lib/components/FullWidth/SliderOfContentBoxes.svelte";
 
     const placeholderParagraph = `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi.
 
@@ -23,6 +24,29 @@
             showStepBox = true;
         }, 300);
   }
+
+  const planContentBoxPropsArray = [
+        {
+        float: "left",
+        titleTag:"h6",
+        titleText: "SIGN UP",
+        paragraphText: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
+      },
+      {
+        titleTag:"h6",
+        float: "left",
+        titleText: "SET UP",
+        paragraphText: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
+      },
+      {
+        titleTag:"h6",
+        float: "left",
+        titleText: "SHARE",
+        paragraphText: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
+      }
+    
+    
+  ]
 </script>
 <style>
     .plan-arrow{
@@ -205,4 +229,19 @@
 <Spacer color="#424B5A" />
 
 <!-- plan #4 -->
-<Spacer color="#424B5A" />
+<ContentWidth class="flex flex-col lg:flex-row my-16">
+    <div class="flex flex-col md:flex-row lg:flex-col w-full lg:w-1/3">
+        <ContentBox
+            titleTag="h2"
+            titleText="The Plan"
+            paragraphText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+            float="left"
+        />
+        <SliderOfContentBoxes
+            contentBoxPropsArray={planContentBoxPropsArray}
+            isNumbered
+        />
+    </div>
+    <FourByThreeImage class="w-full lg:w-2/3" />
+
+</ContentWidth>

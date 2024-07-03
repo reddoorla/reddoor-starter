@@ -134,7 +134,7 @@
  
  <!-- content #7 -->
 
- <ContentWidth class="flex flex-col md:flex-row">
+ <ContentWidth class="flex flex-col md:flex-row my-16">
     <div class="w-full md:w-1/2 h-full flex flex-col justify-between">
         <ContentBox
             titleTag="h3"
@@ -150,12 +150,12 @@
             </div>
             <div class="w-full md:w-1/3 flex flex-col gap-4">
                 <img class="w-10" src={placeholderImage} alt="placeholder" />
-                <p>Pretty Big Idea</p>
+                <p>Really Big Idea</p>
                 <div class="label">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.</div>
             </div>
             <div class="w-full md:w-1/3 flex flex-col gap-4">
                 <img class="w-10" src={placeholderImage} alt="placeholder" />
-                <p>Pretty Big Idea</p>
+                <p>Even Bigger Idea</p>
                 <div class="label">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor.</div>
             </div>
         </div>

@@ -181,7 +181,44 @@
 <Spacer color="#424B5A" />
 
 <!-- values block #3 -->
+
+<ContentWidth class="my-16">
+    <h2 class="text-center">Here is Our Value Proposition</h2>
+    <div class="mt-16 flex flex-col lg:flex-row">
+        <HalfWidthImage />
+        <div class="w-full lg:w-1/2 lg:ml-16 flex flex-row flex-wrap -mt-4">
+            {#each {length:6} as _, i (i)}
+            <div class="w-full sm:w-1/2 aspect-video flex flex-col py-6 pr-6">
+                <div class="flex flex-row my-5">
+                    <img src={placeholder} alt="placeholder" class="w-6 mr-5" />
+                    <h6>{"Value "+(i+1)}</h6>
+                </div>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididuntut lab.
+                </p>
+            </div>
+            {/each} 
+        </div>
+
+    </div>
+</ContentWidth>
+
 <Spacer color="#424B5A" />
 
 <!-- values block #4 -->
-<Spacer color="#424B5A" />
+
+<ContentWidth class="my-16">
+    <h2 class="mb-16 text-center">Here is our Value Proposition</h2>
+    <p class="text-center mb-16">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <div class="flex flex-row justify-between flex-wrap">
+        {#each {length:4} as _, i (i)}
+            <ContentBox 
+                icon={placeholder}
+                float="center"
+                subtitleText={"Value "+(i+1)}
+                paragraphText="Lorem ipsum dolor sit amet, consectetur"
+                class="w-full md:w-[45%] lg:w-[20%] h-96"
+            />
+        {/each}
+    </div>
+</ContentWidth>

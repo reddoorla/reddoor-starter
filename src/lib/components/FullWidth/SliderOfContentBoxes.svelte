@@ -20,6 +20,8 @@
         paragraphText: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
       }
     ];
+
+    export let isNumbered = false;
   
 
     const SLIDER_INTERVAL_IN_MS = 5000;
@@ -71,14 +73,17 @@
   
   <div use:swipe on:swipe={handleSwipe} class="w-full h-full relative overflow-hidden">
     <div class="flex flex-row flex-nowrap  {isSlideAnimated ? 'transition-transform duration-500 ease-in-out' : ''}" style="width: {quintupledPropsArray.length * 100}%; transform: translateX(-{(sliderIndex+contentBoxPropsArray.length) * sliderWidth}%);">
-      {#each quintupledPropsArray as contentBoxProps}
+      {#each quintupledPropsArray as contentBoxProps, i (i)}
         <div class="h-full z-0" style="width: {sliderWidth}%;">
+          {#if isNumbered}
+          <div class="ml-2 sm:ml-7 -mb-1 mt-2 sm:-mb-4 w-9 h-9 bg-black rounded-full text-white flex justify-center items-center "><p class="translate-y-[1px]">{i%contentBoxPropsArray.length+1}</p></div>
+          {/if}
           <ContentBox {...contentBoxProps} />
         </div>
       {/each}
     </div>
   
-    <div class="ml-8 h-6 w-16 flex justify-between z-10 absolute bottom-0 lg:bottom-[20%] xl:bottom-[30%] left-0">
+    <div class="ml-8 h-6 w-16 flex justify-between z-10 absolute bottom-0 lg:bottom-[10%] xl:bottom-[20%] left-0">
       <button on:click={slideRight} class="h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle justify-center cursor-pointer transition-all duration-300 active:-translate-y-2  hover:bg-[#424B5A] hover:border-[#424B5A]">
         <img alt='chevron-left' src={chevronLeft} class='-translate-x-[1px]' />
       </button>
