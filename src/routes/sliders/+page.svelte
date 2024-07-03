@@ -3,6 +3,7 @@
     import ContentBox from "$lib/components/FullWidth/ContentBox.svelte";
     import ContentWidth from "$lib/components/ContentWidth/ContentWidth.svelte";
   import ScreenWidthGallerySlider from "$lib/components/ScreenWidth/ScreenWidthGallerySliderSmall.svelte";
+  import ContentWidthGallerySlider from "$lib/components/ContentWidth/ContentWidthGallerySlider.svelte";
   import SquareImage from "$lib/components/FullWidth/SquareImage.svelte";
   import placeholder from '$lib/assets/images/image_placeholder.svg'
   import chevronRight from '$lib/assets/icons/chevron-right.svg'
@@ -212,17 +213,37 @@
 </div>
 
 
-<!-- slider #2 -->
+
 <Spacer color="#424B5A" />
+<!-- slider #2 -->
+ <ContentWidth class="my-16">
+    <h6>Image Gallery</h6>
+    <ContentWidthGallerySlider 
+
+/>
+
+ </ContentWidth>
 
 <!-- slider #3 -->
 <Spacer color="#424B5A" />
+<ContentWidth class="my-16">
+
+</ContentWidth>
 
 <!-- slider #4 -->
 <Spacer color="#424B5A" />
+<ContentWidth class="my-16">
+
+</ContentWidth>
 
 <!-- slider #5 -->
 <Spacer color="#424B5A" />
+<ContentWidth class="my-16">
+
+</ContentWidth>
 
 <!-- slider #6 -->
 <Spacer color="#424B5A" />
+<ContentWidth class="my-16">
+
+</ContentWidth>
