@@ -53,3 +53,4 @@ add other designed components from the figma library, convert other commonly use
 ## Bugs
 
 - arrow sometimes sticks on bump
+- replace font awesome library with `<i>` syntax
