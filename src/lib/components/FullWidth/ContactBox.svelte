@@ -1,21 +1,18 @@
 <script lang="ts">
-    import { FontAwesomeIcon } from "@fortawesome/svelte-fontawesome";
-    import { faLocationDot, faEnvelope, faPhone } from "@fortawesome/free-solid-svg-icons";
-
 
 </script>
 
 <div class="w-full flex flex-col gap-6">
     <div class="w-full h-8 flex justify-start items-center gap-6">
-        <FontAwesomeIcon icon={faLocationDot} />
+        <i class="fa-solid fa-location-dot" />
         <p>385 Noah Place Suite 878</p>
     </div>
     <div class="w-full h-8 flex justify-start items-center gap-6">
-        <FontAwesomeIcon icon={faPhone} />
+        <i class="fa-solid fa-phone" />
         <p>877-255-7945</p>
     </div>
     <div class="w-full h-8 flex justify-start items-center gap-6">
-        <FontAwesomeIcon icon={faEnvelope} />
+        <i class="fa-solid fa-envelope" />
         <p>info@form.com</p>
     </div>
 
