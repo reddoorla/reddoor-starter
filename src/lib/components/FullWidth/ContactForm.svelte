@@ -9,7 +9,7 @@
     let form:HTMLFormElement;
 
 
-    let selectValue:string;
+    let selectValue="";
 
 </script>
 
