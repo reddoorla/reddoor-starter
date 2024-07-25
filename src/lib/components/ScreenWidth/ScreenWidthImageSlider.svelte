@@ -1,11 +1,15 @@
 <script lang='ts'>
-  import { onMount } from "svelte";
-  import { swipe } from "svelte-gestures";
+	import { onMount } from "svelte";
+	import { swipe } from "svelte-gestures";
     import placeholder from "../../assets/images/background_placeholder.svg";
-  import ContentWidth from "../ContentWidth/ContentWidth.svelte";
+	import ContentWidth from "../ContentWidth/ContentWidth.svelte";
+	import chevronLeft from "$lib/assets/icons/chevron-left.svg"
+    import chevronRight from "$lib/assets/icons/chevron-right.svg"
     
     export let imageArray = [placeholder, placeholder, placeholder, placeholder];
     export let altText = "background image"
+	export let dotFloat = "left";
+	export let hasArrows = false;
 
 	const SLIDER_TRANSITION_FUNCTION="cubic-bezier(.5,0,0,1)";
 	const SLIDER_TRANSITION_LENGTH_IN_MS=2000;
@@ -112,7 +116,7 @@
     <div class="absolute flex justify-center w-full h-full top-0 left-0">
         <ContentWidth class="h-full relative w-full">
         <slot />
-        <div class="absolute h-10 flex align-middle justify-start left-[4%] xl:left-8 translate-x-[2px] bottom-10">
+        <div class="absolute h-10 flex align-middle justify-start {dotFloat === "left" ? "left-[4%]  xl:left-8" : ""} {dotFloat === "left" ? "left-[4%]  xl:left-8 translate-x-[2px]" : ""} {dotFloat === "right" ? "right-[4%]  xl:right-8 -translate-x-[2px]" : ""} {dotFloat === "center" ? "left-1/2 -translate-x-1/2" : ""}  bottom-10">
             {#each  imageArray as image, i}
                 <button class="h-[10px] w-[10px] border-2  rounded-full transition-colors duration-1000 cursor-pointer active:-translate-y-[0.5px] hover:opacity-60 mr-4 
 								{(sliderIndex%imageArray.length>=0&&sliderIndex%imageArray.length===i)|| (sliderIndex%imageArray.length<=0&&imageArray.length+sliderIndex%imageArray.length===i) ? "bg-dark border-dark" : "border-light"}"
@@ -122,8 +126,12 @@
                 ></button>
             {/each}
         </div>
+		
 	</ContentWidth>
-        
+		{#if hasArrows}
+			<button on:click={slideRight} class="absolute top-1/2 -translate-y-1/2 left-6"><img src={chevronLeft} class="w-3 md:w-4" /></button>
+			<button on:click={slideLeft} class="absolute top-1/2 -translate-y-1/2 right-6"><img src={chevronRight} class="w-3 md:w-4" /></button>
+		{/if}
     </div>
 </div>
 </section>

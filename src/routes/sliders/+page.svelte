@@ -11,6 +11,7 @@
   import { onMount } from "svelte";
   import { swipe } from "svelte-gestures";
   import { fade } from "svelte/transition";
+  import ScreenWidthImageSlider from "$lib/components/ScreenWidth/ScreenWidthImageSlider.svelte";
   
   let innerWidth:number;  
   
@@ -226,24 +227,24 @@
 
 <!-- slider #3 -->
 <Spacer color="#424B5A" />
+<ScreenWidthImageSlider hasArrows dotFloat="center" />
 <ContentWidth class="my-16">
 
 </ContentWidth>
 
 <!-- slider #4 -->
 <Spacer color="#424B5A" />
-<ContentWidth class="my-16">
+<ScreenWidthImageSlider hasArrows dotFloat="center">
+    <ContentWidth class="my-16 h-full relative">
+        <ContentBox 
+            class="max-w-[768px] mx-auto absolute bottom-1/3 left-1/2 -translate-x-1/2"
+            backgroundColor="white"
+            titleTag="h3"
+            titleText="Image Gallery"
+            paragraphText="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi."
+            buttonText="button"
+        />
+    </ContentWidth>
+</ScreenWidthImageSlider>
 
-</ContentWidth>
 
-<!-- slider #5 -->
-<Spacer color="#424B5A" />
-<ContentWidth class="my-16">
-
-</ContentWidth>
-
-<!-- slider #6 -->
-<Spacer color="#424B5A" />
-<ContentWidth class="my-16">
-
-</ContentWidth>
