@@ -30,9 +30,10 @@
 			{:else}
 				<img src={image} alt={altText} class="absolute bottom-0 {placeholderSide}-0 h-full w-full object-cover {image===placeholder ? "lg:w-[45%] md:h-auto" : ""} -z-10 {$$props.class || ''}"/>
 			{/if}
-			
+			<div class="w-screen h-full">
 			<ContentWidth class='{$$props.class || ''} h-full'>
 				<slot />
 			</ContentWidth>
+			</div>
 		</div>
 	</section>
