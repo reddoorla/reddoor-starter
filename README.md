@@ -24,15 +24,17 @@ This library will grow as we require new interactive functions or layouts, and a
 
 1) clone this repo
 
-2) initiate new prismic repo and connect to this
+2) terminal npm i
 
-3) launch site on netlify
+3) npm audit fix
 
-4) set up prismic previews with netlify site
+4) initiate new prismic repo
 
-5) wireframe site using slices of default components
+5) change slicemachine.config.json to new prismic name
 
-6) after receiving design, convert wireframed components into designed components
+6) start dev server and push changes to prismic
+
+7) build site, using slices if complex cms or custom types if not
 
 //TODO: mirror prismic docs
 
