@@ -51,12 +51,12 @@
 {#if isOverlayVisible}
 <div class="w-screen h-screen fixed bg-dark flex flex-col items-center justify-center gap-12 z-30" transition:fly={{y:"-100%"}}>
     {#each NAV_LINKS as item}
-        <a href={item.href} class="text-white text-2xl">{item.label}</a>
+        <a on:click={()=>isOverlayVisible=false} href={item.href} class="text-white text-2xl">{item.label}</a>
     {/each}
 
     <button class="absolute top-5 right-5 opacity-60 hover:opacity-100 transition-all z-40" on:click={toggleOverlayOff}>
         <div in:fade={{delay: 600}} out:fade class="text-white">
-        <FontAwesomeIcon icon={faClose} size="3x" />
+        <i class="fa-solid fa-close fa-3x" />
         </div>
       
     </button>
