@@ -1,7 +1,9 @@
-<script>
+<script lang='ts'>
 	import { onMount } from 'svelte'
 
-	let isMounted = false
+	let { children } = $props();
+
+	let isMounted = $state(false)
 
 	onMount(() => {
 		isMounted = true
@@ -9,5 +11,7 @@
 </script>
 
 {#if isMounted}
-	<slot />
+
+	{@render children?.()}
+
 {/if}

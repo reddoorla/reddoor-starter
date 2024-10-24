@@ -3,6 +3,13 @@
 	import { page } from '$app/stores';
 	import { repositoryName } from '$lib/prismicio';
 	import "../app.css";
+	/**
+	 * @typedef {Object} Props
+	 * @property {import('svelte').Snippet} [children]
+	 */
+
+	/** @type {Props} */
+	let { children } = $props();
 </script>
 
 <svelte:head>
@@ -21,6 +28,6 @@
 </svelte:head>
 <main>
 	<a href="/" class="z-30 font-bold text-dark bg-light fixed bottom-4 right-4 pt-2.5 pb-2 px-4 rounded-full hover:bg-dark hover:text-white transition-all duration-300 active:-translate-y-2">Home</a>
-	<slot />
+	{@render children?.()}
 </main>
 <PrismicPreview {repositoryName} />

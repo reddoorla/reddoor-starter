@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
   
@@ -43,7 +44,7 @@
   
      
   
-          <div bind:this={el} class="transition ease-fast-slow {isInView ? "opacity-100 translate-y-0":"opacity-0 translate-y-[50%]"} {$$props.class || ''}" style="transition-delay:{transitionDelay}ms; transition-duration:{transitionDuration}ms; {style}">
+          <div bind:this={el} class="transition ease-fast-slow {isInView ? "opacity-100 translate-y-0":"opacity-0 translate-y-[50%]"}" style="transition-delay:{transitionDelay}ms; transition-duration:{transitionDuration}ms; {style}">
               <slot />
           </div>
   
