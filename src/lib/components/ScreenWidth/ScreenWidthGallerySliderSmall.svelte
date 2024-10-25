@@ -35,19 +35,19 @@
           setTimeout(()=>isSlideAnimated=true,SLIDER_TRANSITION_LENGTH_IN_MS+40)
       }
   
-      const slideLeft = () => {
+      const slideRight = () => {
           sliderIndex++;
           clearInterval(sliderInterval);
-	        sliderInterval = setInterval(()=>slideLeft(), SLIDER_INTERVAL_IN_MS);
+	        sliderInterval = setInterval(()=>slideRight(), SLIDER_INTERVAL_IN_MS);
           if(sliderIndex==imageArray.length)
               resetSliderToStart();
           
           console.log(sliderIndex)
       }
-      const slideRight = () => {
+      const slideLeft = () => {
           sliderIndex--;
           clearInterval(sliderInterval);
-	    sliderInterval = setInterval(()=>slideRight(), SLIDER_INTERVAL_IN_MS);
+	    sliderInterval = setInterval(()=>slideLeft(), SLIDER_INTERVAL_IN_MS);
           if(sliderIndex<0)
               resetSliderToEnd();
       }

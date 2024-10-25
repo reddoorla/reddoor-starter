@@ -1,6 +1,5 @@
 <script lang='ts'>
 	import { onMount } from 'svelte'
-	import type { Snippet } from 'svelte';
 
 	let { children } = $props();
 

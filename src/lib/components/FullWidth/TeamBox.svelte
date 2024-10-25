@@ -30,10 +30,8 @@
 </script>
 
 {#if href}
-<div class="w-full h-full relative">
-    <a {href} class="w-full h-full">
-     <img {src} {alt} class="w-full h-full object-cover"/>
-    </a>
+<a {href} class="w-full h-full relative">
+    <img {src} {alt} class="w-full h-full object-cover"/>
     <div class="w-full h-full absolute top-0 left-0 flex flex-col items-center justify-center bg-dark opacity-0 hover:opacity-100 hover:bg-opacity-75 transition-all duration-500 ease-fast-slow">
         <div class="h-2"></div>
         <h5 class="text-white my-3">{name}</h5>
@@ -57,7 +55,7 @@
             {/each}
         </div>
     </div>
-</div>
+</a>
 
  {:else}
 <div class="w-full h-full relative">
