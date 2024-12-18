@@ -83,6 +83,16 @@ export type AllDocumentTypes = PageDocument;
  */
 export interface ContentWidthMediaSliceDefaultPrimary {
   /**
+   * title field in *ContentWidth → Single Col Text → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: content_width_media.default.primary.title
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  title: prismic.RichTextField;
+
+  /**
    * icon field in *ContentWidth → Single Col Text → Primary*
    *
    * - **Field Type**: Image

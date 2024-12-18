@@ -134,6 +134,17 @@
 			"loopvideo": {
 				"__TYPE__": "BooleanContent",
 				"value": false
+			},
+			"title": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Nostrud non ad occaecat proident sit. Velit magna dolore quis consectetur officia anim ut Lorem tempor Lorem irure ipsum irure voluptate. Consequat cupidatat ad laborum duis nulla anim magna culpa eu."
+						}
+					}
+				]
 			}
 		},
 		"items": []
