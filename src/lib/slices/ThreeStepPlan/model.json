@@ -1,0 +1,791 @@
+{
+  "id": "three_step_plan",
+  "type": "SharedSlice",
+  "name": "ThreeStepPlan",
+  "description": "ThreeStepPlan",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "title": {
+          "type": "StructuredText",
+          "config": {
+            "label": "title",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "body": {
+          "type": "StructuredText",
+          "config": {
+            "label": "body",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "label_step_one": {
+          "type": "StructuredText",
+          "config": {
+            "label": "label step one",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "image_step_one": {
+          "type": "Image",
+          "config": {
+            "label": "image step one",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "top_text_step_one": {
+          "type": "StructuredText",
+          "config": {
+            "label": "top text step one",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "bottom_text_step_one": {
+          "type": "StructuredText",
+          "config": {
+            "label": "bottom text step one",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "button_one_text_step_one": {
+          "type": "Text",
+          "config": {
+            "label": "button one text step one",
+            "placeholder": ""
+          }
+        },
+        "button_one_link_step_one": {
+          "type": "Link",
+          "config": {
+            "label": "button one link step one",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text_step_one": {
+          "type": "Text",
+          "config": {
+            "label": "button two text step one",
+            "placeholder": ""
+          }
+        },
+        "button_two_link_step_one": {
+          "type": "Link",
+          "config": {
+            "label": "button two link step one",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "label_step_two": {
+          "type": "StructuredText",
+          "config": {
+            "label": "label step two",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "image_step_two": {
+          "type": "Image",
+          "config": {
+            "label": "image step two",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "top_text_step_two": {
+          "type": "StructuredText",
+          "config": {
+            "label": "top text step two",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "bottom_text_step_two": {
+          "type": "StructuredText",
+          "config": {
+            "label": "bottom text step two",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "button_one_text_step_two": {
+          "type": "Text",
+          "config": {
+            "label": "button one text step two",
+            "placeholder": ""
+          }
+        },
+        "button_one_link_step_two": {
+          "type": "Link",
+          "config": {
+            "label": "button one link step two",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text_step_two": {
+          "type": "Text",
+          "config": {
+            "label": "button two text step two",
+            "placeholder": ""
+          }
+        },
+        "button_two_link_step_two": {
+          "type": "Link",
+          "config": {
+            "label": "button two link step two",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "label_step_three": {
+          "type": "StructuredText",
+          "config": {
+            "label": "label step three",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "image_step_three": {
+          "type": "Image",
+          "config": {
+            "label": "image step three",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "top_text_step_three": {
+          "type": "StructuredText",
+          "config": {
+            "label": "top text step three",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "bottom_text_step_three": {
+          "type": "StructuredText",
+          "config": {
+            "label": "bottom text step three",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "button_one_text_step_three": {
+          "type": "Text",
+          "config": {
+            "label": "button one text step three",
+            "placeholder": ""
+          }
+        },
+        "button_one_link_step_three": {
+          "type": "Link",
+          "config": {
+            "label": "button one link step three",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text_step_three": {
+          "type": "Text",
+          "config": {
+            "label": "button two text step three",
+            "placeholder": ""
+          }
+        },
+        "button_two_link_step_three": {
+          "type": "Link",
+          "config": {
+            "label": "button two link step three",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_one_text": {
+          "type": "Text",
+          "config": {
+            "label": "button one text",
+            "placeholder": ""
+          }
+        },
+        "button_one_link": {
+          "type": "Link",
+          "config": {
+            "label": "button one link",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text": {
+          "type": "Text",
+          "config": {
+            "label": "button two text",
+            "placeholder": ""
+          }
+        },
+        "button_two_link": {
+          "type": "Link",
+          "config": {
+            "label": "button two link",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "background_color": {
+          "type": "Text",
+          "config": {
+            "label": "background color",
+            "placeholder": ""
+          }
+        }
+      },
+      "items": {}
+    },
+    {
+      "id": "clickthrough",
+      "name": "Clickthrough",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "title": {
+          "type": "StructuredText",
+          "config": {
+            "label": "title",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "body": {
+          "type": "StructuredText",
+          "config": {
+            "label": "body",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "label_step_one": {
+          "type": "StructuredText",
+          "config": {
+            "label": "label step one",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "image_step_one": {
+          "type": "Image",
+          "config": {
+            "label": "image step one",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "top_text_step_one": {
+          "type": "StructuredText",
+          "config": {
+            "label": "top text step one",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "bottom_text_step_one": {
+          "type": "StructuredText",
+          "config": {
+            "label": "bottom text step one",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "button_one_text_step_one": {
+          "type": "Text",
+          "config": {
+            "label": "button one text step one",
+            "placeholder": ""
+          }
+        },
+        "button_one_link_step_one": {
+          "type": "Link",
+          "config": {
+            "label": "button one link step one",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text_step_one": {
+          "type": "Text",
+          "config": {
+            "label": "button two text step one",
+            "placeholder": ""
+          }
+        },
+        "button_two_link_step_one": {
+          "type": "Link",
+          "config": {
+            "label": "button two link step one",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "label_step_two": {
+          "type": "StructuredText",
+          "config": {
+            "label": "label step two",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "image_step_two": {
+          "type": "Image",
+          "config": {
+            "label": "image step two",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "top_text_step_two": {
+          "type": "StructuredText",
+          "config": {
+            "label": "top text step two",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "bottom_text_step_two": {
+          "type": "StructuredText",
+          "config": {
+            "label": "bottom text step two",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "button_one_text_step_two": {
+          "type": "Text",
+          "config": {
+            "label": "button one text step two",
+            "placeholder": ""
+          }
+        },
+        "button_one_link_step_two": {
+          "type": "Link",
+          "config": {
+            "label": "button one link step two",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text_step_two": {
+          "type": "Text",
+          "config": {
+            "label": "button two text step two",
+            "placeholder": ""
+          }
+        },
+        "button_two_link_step_two": {
+          "type": "Link",
+          "config": {
+            "label": "button two link step two",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "label_step_three": {
+          "type": "StructuredText",
+          "config": {
+            "label": "label step three",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "image_step_three": {
+          "type": "Image",
+          "config": {
+            "label": "image step three",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "top_text_step_three": {
+          "type": "StructuredText",
+          "config": {
+            "label": "top text step three",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "bottom_text_step_three": {
+          "type": "StructuredText",
+          "config": {
+            "label": "bottom text step three",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "button_one_text_step_three": {
+          "type": "Text",
+          "config": {
+            "label": "button one text step three",
+            "placeholder": ""
+          }
+        },
+        "button_one_link_step_three": {
+          "type": "Link",
+          "config": {
+            "label": "button one link step three",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text_step_three": {
+          "type": "Text",
+          "config": {
+            "label": "button two text step three",
+            "placeholder": ""
+          }
+        },
+        "button_two_link_step_three": {
+          "type": "Link",
+          "config": {
+            "label": "button two link step three",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_one_text": {
+          "type": "Text",
+          "config": {
+            "label": "button one text",
+            "placeholder": ""
+          }
+        },
+        "button_one_link": {
+          "type": "Link",
+          "config": {
+            "label": "button one link",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text": {
+          "type": "Text",
+          "config": {
+            "label": "button two text",
+            "placeholder": ""
+          }
+        },
+        "button_two_link": {
+          "type": "Link",
+          "config": {
+            "label": "button two link",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "background_color": {
+          "type": "Text",
+          "config": {
+            "label": "background color",
+            "placeholder": ""
+          }
+        }
+      },
+      "items": {}
+    },
+    {
+      "id": "slider",
+      "name": "Slider",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "title": {
+          "type": "StructuredText",
+          "config": {
+            "label": "title",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "body": {
+          "type": "StructuredText",
+          "config": {
+            "label": "body",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "label_step_one": {
+          "type": "StructuredText",
+          "config": {
+            "label": "label step one",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "image_step_one": {
+          "type": "Image",
+          "config": {
+            "label": "image step one",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "top_text_step_one": {
+          "type": "StructuredText",
+          "config": {
+            "label": "top text step one",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "bottom_text_step_one": {
+          "type": "StructuredText",
+          "config": {
+            "label": "bottom text step one",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "button_one_text_step_one": {
+          "type": "Text",
+          "config": {
+            "label": "button one text step one",
+            "placeholder": ""
+          }
+        },
+        "button_one_link_step_one": {
+          "type": "Link",
+          "config": {
+            "label": "button one link step one",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text_step_one": {
+          "type": "Text",
+          "config": {
+            "label": "button two text step one",
+            "placeholder": ""
+          }
+        },
+        "button_two_link_step_one": {
+          "type": "Link",
+          "config": {
+            "label": "button two link step one",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "label_step_two": {
+          "type": "StructuredText",
+          "config": {
+            "label": "label step two",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "image_step_two": {
+          "type": "Image",
+          "config": {
+            "label": "image step two",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "top_text_step_two": {
+          "type": "StructuredText",
+          "config": {
+            "label": "top text step two",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "bottom_text_step_two": {
+          "type": "StructuredText",
+          "config": {
+            "label": "bottom text step two",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "button_one_text_step_two": {
+          "type": "Text",
+          "config": {
+            "label": "button one text step two",
+            "placeholder": ""
+          }
+        },
+        "button_one_link_step_two": {
+          "type": "Link",
+          "config": {
+            "label": "button one link step two",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text_step_two": {
+          "type": "Text",
+          "config": {
+            "label": "button two text step two",
+            "placeholder": ""
+          }
+        },
+        "button_two_link_step_two": {
+          "type": "Link",
+          "config": {
+            "label": "button two link step two",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "label_step_three": {
+          "type": "StructuredText",
+          "config": {
+            "label": "label step three",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "image_step_three": {
+          "type": "Image",
+          "config": {
+            "label": "image step three",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "top_text_step_three": {
+          "type": "StructuredText",
+          "config": {
+            "label": "top text step three",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "bottom_text_step_three": {
+          "type": "StructuredText",
+          "config": {
+            "label": "bottom text step three",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,preformatted,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,image,embed,list-item,o-list-item,rtl"
+          }
+        },
+        "button_one_text_step_three": {
+          "type": "Text",
+          "config": {
+            "label": "button one text step three",
+            "placeholder": ""
+          }
+        },
+        "button_one_link_step_three": {
+          "type": "Link",
+          "config": {
+            "label": "button one link step three",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text_step_three": {
+          "type": "Text",
+          "config": {
+            "label": "button two text step three",
+            "placeholder": ""
+          }
+        },
+        "button_two_link_step_three": {
+          "type": "Link",
+          "config": {
+            "label": "button two link step three",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_one_text": {
+          "type": "Text",
+          "config": {
+            "label": "button one text",
+            "placeholder": ""
+          }
+        },
+        "button_one_link": {
+          "type": "Link",
+          "config": {
+            "label": "button one link",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "button_two_text": {
+          "type": "Text",
+          "config": {
+            "label": "button two text",
+            "placeholder": ""
+          }
+        },
+        "button_two_link": {
+          "type": "Link",
+          "config": {
+            "label": "button two link",
+            "placeholder": "",
+            "select": null
+          }
+        },
+        "background_color": {
+          "type": "Text",
+          "config": {
+            "label": "background color",
+            "placeholder": ""
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}
