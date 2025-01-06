@@ -5,9 +5,10 @@
 
     let { PRODUCTS = ["Apples", "Bananas", "Clementines"] } = $props();
 
-    let submit = () => form.submit();
-    let form:HTMLFormElement = $state();
+    
+    let form:HTMLFormElement|undefined = $state();
 
+    let submit = () => {if(form)form.submit()};
 
     let selectValue=$state("");
 

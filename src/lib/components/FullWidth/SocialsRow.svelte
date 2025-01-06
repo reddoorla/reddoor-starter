@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { FontAwesomeIcon} from '@fortawesome/svelte-fontawesome'
-    import { faFacebook, faTwitter, faReddit, faInstagram, faLinkedin} from '@fortawesome/free-brands-svg-icons'
+
     
     let { socials = [{
         platform: "",
@@ -15,16 +14,14 @@
                
                 <a href={social.href} class="mx-6 w-6 h-6 hover:opacity-75 transition-all bump">
                     {#if social.platform==='facebook'}
-                        <FontAwesomeIcon icon={faFacebook} size="2x" />
-                    {:else if social.platform=='twitter'}
-                        <FontAwesomeIcon icon={faTwitter} size="2x"/>
-                    {:else if social.platform=='reddit'}
-                        <FontAwesomeIcon icon={faReddit}  size="2x"/>
-                    {:else if social.platform=='instagram'}
-                        <FontAwesomeIcon icon={faInstagram} size="2x"/>
-                    {:else if social.platform=='linkedin'}
-                        <FontAwesomeIcon icon={faLinkedin} size="2x"/>
-                    {/if}
+                    <i class="fa-brands fa-facebook fa-2xl invert" ></i>
+                {:else if social.platform=='twitter'}
+                <i class="fa-brands fa-x-twitter fa-2xl invert" ></i>
+                {:else if social.platform=='redit'}
+                <i class="fa-brands fa-redit fa-2xl invert" ></i>
+                {:else if social.platform=='instagram'}
+                    <i class="fa-brands fa-instagram fa-2xl invert" ></i>
+                {/if}
 
                 </a>
                
