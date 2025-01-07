@@ -26,7 +26,7 @@
 	<svelte:window bind:innerHeight={viewportHeight} bind:innerWidth={viewportWidth} />
 	
 	<section class="h-screen w-screen overflow-clip {backdrop?"fixed -z-10 top-0 left-0":"relative"}">
-		<div class="right-0 left-0 overflow-clip max-h-screen aspect-video relative {viewportHeight * 16 > viewportWidth * 9 ? 'h-screen min-w-full' : 'w-screen min-h-full'}">
+		<div class="right-0 left-0 overflow-clip aspect-video relative {viewportHeight * 16 > viewportWidth * 9 ? 'h-screen min-w-full' : 'w-screen min-h-full'}">
 			
 				<img src={src} alt={altText} class="absolute bottom-0 {placeholderSide}-0 h-full w-full object-cover {src===placeholder ? "lg:w-[45%] md:h-auto" : ""} -z-10"/>
 			
