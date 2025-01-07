@@ -1,10 +1,14 @@
 <script lang='ts'>
     import { onMount } from "svelte";
     import { swipe } from "svelte-gestures";
+    import type { SwipePointerEventDetail } from "svelte-gestures";
     import ContentBox from "./ContentBox.svelte";
     import type { ComponentProps } from "svelte";
     import chevronLeft from "../../assets/icons/chevron-left.svg";
     import chevronRight from "../../assets/icons/chevron-right.svg";
+
+
+    
   
 
   interface Props {
@@ -60,7 +64,7 @@
         console.log(sliderIndex);
     }
 
-    const handleSwipe = (e:CustomEvent<{ direction: "left" | "top" | "right" | "bottom"; target: EventTarget; }>) => {
+    const handleSwipe = (e:CustomEvent<SwipePointerEventDetail>) => {
       if(e.detail.direction==="left") 
         slideLeft();
 

@@ -1,23 +1,36 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
-    import placeholder from "$lib/assets/images/image_placeholder.svg"
-
-  
+    import placeholder from "$lib/assets/images/image_placeholder.svg";
+    import Img from "@zerodevx/svelte-img"
+    
     export let src = placeholder;
-    export let alt = "placeholder"
-    export let label = ""
-
-
+    export let alt = "placeholder";
+    export let label = "";
     let rotationAngle = "36.8";
     let crossLength = "125%";
-</script>
+    
+    </script>
+    
+    <div class="w-full relative {$$props.class || ''}">
+      <div class="w-full aspect-[4/3] {src===placeholder ? "border-light border-2 bg-light bg-opacity-25":""} rounded-sm flex items-center justify-center relative">
+        {#if typeof src === "object"}
+          <Img 
+            {src}
+            {alt} 
+            class="z-10 object-cover w-full h-full"
+            loading="lazy"
+            decoding="async"
+          />
 
-<div class="w-full my-8 relative {$$props.class || ''}">
-    <div class="w-full aspect-[4/3] {src===placeholder ? "border-light border-2 bg-light bg-opacity-25":""}  rounded-sm  flex items-center justify-center relative">
-        <img {src} {alt} class="z-10 {src==placeholder ? "w-16 bg-[#F2F5F7]" : "w-full"}"/>
-        <div class="absolute bg-light h-[2px] {src===placeholder ? "":"hidden"}" style="transform: rotate({rotationAngle}deg); width:{crossLength}"></div>
-        <div class="absolute bg-light h-[2px] {src===placeholder ? "":"hidden"}" style="transform: rotate(-{rotationAngle}deg); width:{crossLength}"></div>
+        {:else}
+          <img 
+            {src}
+            {alt} 
+            class="z-10 object-cover w-full h-full"
+            loading="lazy"
+            decoding="async"
+          />
+        {/if}
         <h6 class="absolute bottom-4 z-20">{label}</h6>
+      </div>
     </div>
-</div>
+ 
