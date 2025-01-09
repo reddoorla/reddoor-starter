@@ -1,6 +1,7 @@
 <script lang='ts'>
 	import { onMount } from "svelte";
 	import { swipe } from "svelte-gestures";
+	import type { SwipeCustomEvent } from "svelte-gestures"; 
     import placeholder from "../../assets/images/background_placeholder.svg";
 	import ContentWidth from "../ContentWidth/ContentWidth.svelte";
 	import chevronLeft from "$lib/assets/icons/chevron-left.svg"
@@ -95,7 +96,7 @@
 
 	let sliderInterval:NodeJS.Timeout;
 
-	const handleSwipe = (e:CustomEvent<{ direction: "left" | "top" | "right" | "bottom"; target: EventTarget; }>) => {
+	const handleSwipe = (e:SwipeCustomEvent) => {
       if(e.detail.direction==="left") 
         slideLeft();
 
