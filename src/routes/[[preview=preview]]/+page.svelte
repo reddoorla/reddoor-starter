@@ -1,9 +1,16 @@
-<script>
-	import { SliceZone } from '@prismicio/svelte';
-
-	import { components } from '$lib/slices';
+<script lang='ts'>
 
 	let { data } = $props();
+
+	let viewpoortWidth=$state(1024)
+
+	const content = data.page.data;
 </script>
 
-<SliceZone slices={data.page.data.slices} {components} />
+
+<svelte:window bind:innerWidth={viewpoortWidth} />
+
+{#if viewpoortWidth>768}
+
+{:else}
+{/if}
