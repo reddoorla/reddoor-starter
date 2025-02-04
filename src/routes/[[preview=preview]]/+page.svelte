@@ -4,7 +4,7 @@
 
 	let viewpoortWidth=$state(1024)
 
-	const content = data.page.data;
+	let content = data.page.data;
 </script>
 
 
