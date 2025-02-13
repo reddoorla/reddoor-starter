@@ -70,19 +70,11 @@ body::-webkit-scrollbar {
 }
 
 
-a{
-    transition: color 600ms;
+a, button{
     cursor: pointer;
 }
 
-a:hover{
-    color:black;
-}
 
-button{
-    transition: background-color 600ms;
-    cursor: pointer;
-}
 
 h1{
     font-size: 66px;
@@ -92,16 +84,18 @@ h1{
 }
 
 h2{
-    font-size: 50px;
-    font-weight: 700;
-    line-height: 64px; /* 128% */
+    font-size: 56px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 64px; /* 114.286% */
+    letter-spacing: 1px;
 }
 
 h3{
-    font-size: 38px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 48px; 
+    font-size: 28px;
+font-style: normal;
+font-weight: 500;
+line-height: 36px;
 }
 
 h4{
@@ -140,16 +134,52 @@ p{
     line-height: 18px; /* 150% */
 }
 
-button{
-    cursor: pointer;
+span{
+    display: inline-block;
 }
 
-a{
-    font-size: 14px;
+@media only screen and (max-width:1024px) {
+    h1{
+        font-size: 36px;
     font-style: normal;
-    font-weight: 400;
-    line-height:1em;
-    color:#424B5A;
+    font-weight: 700;
+    line-height: 44px; /* 121.212% */
+    }
+    
+    h2{
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 42px;
+    }
+    
+    h3{
+        font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+    }
+    
+    h4{
+        font-size: 2rem;
+        line-height: 1.4em;
+    }
+    
+    h5{
+       font-size: 1.5rem; 
+       line-height: 1.5em;
+    }
+    
+    
+    p{
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px; /* 150% */
+    }
+    
+
+
 }
 
 @media only screen and (max-width:786px) {
@@ -194,13 +224,50 @@ a{
     
 
     
-    a{
-        font-size: 14px;
+}
+
+@media only screen and (max-width:560px) {
+    h1{
+        font-size: 36px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 44px; /* 121.212% */
+    }
+    
+    h2{
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 42px;
+    }
+    
+    h3{
+        font-size: 28px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 40px;
+    }
+    
+    h4{
+        font-size: 2rem;
+        line-height: 1.4em;
+    }
+    
+    h5{
+       font-size: 1.5rem; 
+       line-height: 1.5em;
+    }
+    
+    
+    p{
+        font-size: 16px;
         font-style: normal;
         font-weight: 400;
-        line-height: normal;
-        margin: 0px 0px 8.5px 0px;
-}
+        line-height: 24px; /* 150% */
+    }
+    
+
+    
 }
 
 /* svelte-select stylings*/

@@ -1,7 +1,7 @@
 <script lang="ts">
     let { href = "", onclick, class:passedClasses = '', children, ...others  } = $props();
 
-    const baseClasses = "rounded border-2 border-solid border-dark px-10 pt-4 pb-3 h-fit"
+    const baseClasses = "rounded border-2 border-solid border-dark px-10 pt-4 pb-3 h-fit";
 
 </script>
 
