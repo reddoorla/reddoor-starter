@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { repositoryName } from '$lib/prismicio';
 	import "../app.css";
+  import LandscapeModal from '$lib/components/LandscapeModal.svelte';
 	/**
 	 * @typedef {Object} Props
 	 * @property {import('svelte').Snippet} [children]
@@ -27,7 +28,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 </svelte:head>
 <main>
-	<a href="/" class="z-30 font-bold text-dark bg-light fixed bottom-4 right-4 pt-2.5 pb-2 px-4 rounded-full hover:bg-dark hover:text-white transition-all duration-300 active:-translate-y-2">Home</a>
-	{@render children?.()}
+	
 </main>
+<LandscapeModal />
 <PrismicPreview {repositoryName} />
