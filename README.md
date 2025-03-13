@@ -1,4 +1,4 @@
-# Reddoor Wireframer and Site Scaffold
+# Reddoor Starter and Site Scaffold
 
 ## Purpose
 
