@@ -1,22 +1,26 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
+
 <script lang="ts">
 	import type { ImageField } from "@prismicio/client";
 	import placeholder from "../../assets/images/background_placeholder.svg";
-	import ContentWidth from "../ContentWidth/ContentWidth.svelte";
+
 	import { PrismicImage } from "@prismicio/svelte";
   
-	export let src: string = placeholder;
-	export let field: ImageField | null;
-	export let altText = "background image";
-	export let placeholderSide = "right";
-	export let vimeoId = "";
-	export let darken = false;
-	export let backdrop = false;
-	export let passedClasses = ''
+
+
+	let {
+		src = placeholder,
+		field,
+		altText = "background image",
+		placeholderSide = "right",
+		vimeoId = "",
+		darken = false,
+		backdrop = false,
+		class:passedClasses = '',
+		children
+	} = $props();
   
-	let viewportHeight: number;
-	let viewportWidth: number;
+	let viewportHeight: number = $state(1024);
+	let viewportWidth: number = $state(768);
   </script>
   
   <svelte:window
@@ -69,7 +73,7 @@
 	
 	</div>
 
-		<slot />
+		{@render children?.()}
 	
   </section>
   

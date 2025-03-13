@@ -8,10 +8,8 @@
     import chevronRight from "$lib/assets/icons/chevron-right.svg"
     import type { SwipePointerEventDetail } from "svelte-gestures";
 
-      
-      export let imageArray = [placeholder, placeholder, placeholder, placeholder];
-      export let altText = "background image"
-      export let passedClasses=''
+
+  let { imageArray = [placeholder, placeholder, placeholder, placeholder], altText = "background image", class:passedClasses = '' } = $props();
 
       
   
@@ -19,11 +17,11 @@
       const SLIDER_TRANSITION_LENGTH_IN_MS=2000;
       const SLIDER_INTERVAL_IN_MS = 5000;
 
-      let viewportWidth:number;
+      let viewportWidth:number = $state(1024);
   
-      let sliderIndex = 0;
+      let sliderIndex = $state(0);
       
-      let isSlideAnimated = true;
+      let isSlideAnimated = $state(true);
 
       const resetSliderToStart = () => {
           setTimeout(()=>isSlideAnimated=false, SLIDER_TRANSITION_LENGTH_IN_MS)
