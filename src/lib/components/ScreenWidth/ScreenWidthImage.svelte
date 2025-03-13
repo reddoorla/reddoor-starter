@@ -42,15 +42,13 @@
 		<img
 		  {src}
 		  alt={altText}
-		  class="absolute bottom-0 {placeholderSide}-0 h-full w-full object-cover  -z-10 {src ===
-		  placeholder
-			? 'lg:w-[45%] md:h-auto'
-			: ''}"
+		  class="absolute bottom-0 {placeholderSide}-0 h-full w-full object-cover {passedClasses} -z-10 
+		  	{src === placeholder ? 'lg:w-[45%] md:h-auto' : ''}"
 		/>
 	  {:else}
 		<PrismicImage
 		  {field}
-		  class="absolute  h-full w-full object-cover -z-10"
+		  class="absolute  h-full w-full object-cover -z-10 {passedClasses}"
 		/>
 	  {/if}
   
