@@ -1,9 +1,16 @@
 <script lang="ts">
-	let parent: HTMLElement;
-	let nodes: HTMLElement[] = [];
-	let scale = 1;
+	let parent: HTMLElement | undefined = $state();
+	let nodes: HTMLElement[] = $state([]);
+	let scale = $state(1);
+	
 
-	import { onMount } from 'svelte';
+	import { onMount} from 'svelte';
+	interface Props {
+		children?: import('svelte').Snippet;
+		[key: string]: any
+	}
+
+	let { ...props }: Props = $props();
 
 	function getFontSizeInPixels(element: Element): number {
 		const computedStyle = window.getComputedStyle(element);
@@ -27,7 +34,7 @@
 		}
 	}
 
-	let windowWidth: string;
+	let windowWidth: string = $state('');
 
 	const debounce = (func: Function, delay: number) => {
 		let timer: NodeJS.Timeout;
@@ -51,7 +58,7 @@
 		};
 	});
 
-	$: {
+	$effect(() => {
 		windowWidth;
 		if (parent) {
 			nodes = [...parent?.children] as HTMLElement[];
@@ -66,11 +73,11 @@
 				node.style.fontSize = getFontSizeInPixels(node) * scale + 'px';
 			});
 		}
-	}
+	});
 </script>
 
-<div bind:this={parent} class="parent transition-all {$$props.class || ''}" style="">
-	<slot />
+<div bind:this={parent} class="parent transition-all {props.class || ''}" style="">
+	{@render props.children?.()}
 </div>
 
 <style>

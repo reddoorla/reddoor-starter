@@ -1,28 +1,37 @@
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
-<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
+
 <script lang='ts'>
+
+
     import placeholderIcon from "../../assets/icons/logos/logo.svg"
     import DefaultButton from "../Buttons/DefaultButton.svelte";
     import ArrowButton from "../Buttons/ArrowButton.svelte";
+  import { onMount } from 'svelte';
 
 
-export let icon = "";
-export let iconAltText = "logo"
-export let labelText = ""
-export let titleText = ""
-export let titleTag = "h3"
-export let subtitleText = ""
-export let paragraphText = ""
-export let buttonText = ""
-export let linkText=""
-export let linkHref=""
 
-export let backgroundColor="transparent"
-export let float = "center"
-let justify=float;
-let horizontalFloatMargin = "mx-auto"
 
-$:{
+
+    let {
+        icon = $bindable(""),
+        iconAltText = "logo",
+        labelText = "",
+        titleText = "",
+        titleTag = "h3",
+        subtitleText = "",
+        paragraphText = "",
+        buttonText = "",
+        linkText = "",
+        linkHref = "",
+        class:passedClasses='',
+        backgroundColor = "transparent",
+        float = "center"
+    } = $props();
+
+    
+let justify=$state(float);
+let horizontalFloatMargin = $state("mx-auto")
+
+onMount(() => {
     justify=float;
 if(float==="left")
     justify="start";
@@ -34,7 +43,7 @@ if(float==="left")
     horizontalFloatMargin="ml-0 mr-auto";
 if(float==="right")
     horizontalFloatMargin="ml-auto mr-0"
-}
+});
 
 if(icon==="placeholder"){
     icon = placeholderIcon;
@@ -42,7 +51,7 @@ if(icon==="placeholder"){
 
 </script>
 
-<div class="w-full flex flex-col  p-2 sm:p-8 justify-{justify} text-{float} {$$props.class || ''}"
+<div class="w-full flex flex-col  p-2 sm:p-8 justify-{justify} text-{float} {passedClasses}"
      style="background-color: {backgroundColor}"
 >
     {#if icon}
@@ -81,7 +90,7 @@ if(icon==="placeholder"){
     {/if}
     <div class="flex flex-nowrap text-nowrap flex-col sm:flex-row align-middle justify-center sm:justify-{justify}">
         {#if buttonText}
-            <DefaultButton text={buttonText} class="mr-5"/>
+            <DefaultButton class="mr-5">{buttonText}</DefaultButton>
         {/if}
         {#if linkText}
             <ArrowButton text={linkText} href={linkHref} class="translate-y-1 md:translate-y-0"/>
