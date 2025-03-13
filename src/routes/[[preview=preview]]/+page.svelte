@@ -5,12 +5,10 @@
 	let viewpoortWidth=$state(1024)
 
 	let content = data.page.data;
+
+	$effect(()=> {data; content = data.page.data;})
 </script>
 
 
 <svelte:window bind:innerWidth={viewpoortWidth} />
 
-{#if viewpoortWidth>768}
-
-{:else}
-{/if}
