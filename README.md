@@ -36,23 +36,12 @@ This library will grow as we require new interactive functions or layouts, and a
 
 7) build site, using slices if complex cms or custom types if not
 
-//TODO: mirror prismic docs
 
 ## Next steps
 
-### design
-
-address markup comments on currently implemented components, test components on all browsers
-
-### wireframer
-
-implement current components as prismic slices so tool is usable as a contentful wireframer that maps one to one with our current figma library
-
-### extending the component library
-
-add other designed components from the figma library, convert other commonly used components or systems into this repo as they are used
-
-## Bugs
+## TODO:
 
 - arrow sometimes sticks on bump
 - replace font awesome library with `<i>` syntax
+- rework slider logic into a more flexible component
+- review tailwind defaults
