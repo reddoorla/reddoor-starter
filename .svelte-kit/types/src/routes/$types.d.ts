@@ -11,12 +11,12 @@ type OutputDataShape<T> = MaybeWithVoid<Omit<App.PageData, RequiredKeys<T>> & Pa
 type EnsureDefined<T> = T extends null | undefined ? {} : T;
 type OptionalUnion<U extends Record<string, any>, A extends keyof U = U extends U ? keyof U : never> = U extends unknown ? { [P in Exclude<A, keyof U>]?: never } & U : never;
 export type Snapshot<T = any> = Kit.Snapshot<T>;
-type LayoutRouteId = RouteId | "/[[preview=preview]]" | "/[[preview=preview]]/[uid]" | "/templates/sliders" | "/templates/sliders/plans" | "/templates/teams" | "/templates/teams/contacts" | "/templates/teams/ctas" | "/templates/teams/lists" | "/templates/teams/navs" | "/templates/teams/portfolios" | "/templates/teams/slice-simulator" | "/templates/testimonials" | "/templates/testimonials/blogs" | "/templates/testimonials/content" | "/templates/testimonials/faqs" | "/templates/testimonials/mastheads" | "/templates/values" | "/templates/values/footers" | null
+type LayoutRouteId = RouteId | "/[[preview=preview]]" | "/[[preview=preview]]/[uid]" | null
 type LayoutParams = RouteParams & { preview?: MatcherParam<typeof import('../../../../src/params/preview').match>; uid?: string }
 type LayoutServerParentData = EnsureDefined<{}>;
 type LayoutParentData = EnsureDefined<{}>;
 
-export type LayoutServerLoad<OutputData extends OutputDataShape<LayoutServerParentData> = OutputDataShape<LayoutServerParentData>> = Kit.ServerLoad<LayoutParams, LayoutServerParentData, OutputData, LayoutRouteId>;
+export type LayoutServerLoad<OutputData extends Partial<App.PageData> & Record<string, any> | void = Partial<App.PageData> & Record<string, any> | void> = Kit.ServerLoad<LayoutParams, LayoutServerParentData, OutputData, LayoutRouteId>;
 export type LayoutServerLoadEvent = Parameters<LayoutServerLoad>[0];
 export type LayoutServerData = null;
 export type LayoutData = Expand<LayoutParentData>;

@@ -99,7 +99,7 @@
   </script>
       
   <section class="pb-32 {passedClasses}">
-      <div use:swipe onswipe={handleSwipe} class="h-[320px] py-2 relative" >
+      <div use:swipe={()=>({ timeframe: 300, minSwipeDistance: 60 })}  onswipe={handleSwipe} class="h-[320px] py-2 relative" >
       <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}"
       style= "width:{352*tripledImages.length}px; margin-left:calc(50vw - 176px); transform:translateX({-(sliderIndex+imageArray.length)*352}px); ">
           

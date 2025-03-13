@@ -3,11 +3,10 @@
 import ContentWidth from "./ContentWidth/index.svelte";
 import Hero from "./Hero/index.svelte";
 import RichText from "./RichText/index.svelte";
-import ThreeStepPlan from "./ThreeStepPlan/index.svelte";
+
 
 export const components = {
   content_width_media: ContentWidth,
   hero: Hero,
   rich_text: RichText,
-  three_step_plan: ThreeStepPlan,
 };
