@@ -134,15 +134,15 @@
 								{(sliderIndex%imageArray.length>=0&&sliderIndex%imageArray.length===i)|| (sliderIndex%imageArray.length<=0&&imageArray.length+sliderIndex%imageArray.length===i) ? "bg-dark border-dark" : "border-light"}"
                     onclick={()=>setSliderIndex(i)}
                     aria-label="image {i} of {imageArray.length}"
-                    aria-hidden
+                    aria-hidden = 'true'
                 ></button>
             {/each}
         </div>
 		
 	</ContentWidth>
 		{#if hasArrows}
-			<button onclick={slideRight} class="absolute top-1/2 -translate-y-1/2 left-6"><img src={chevronLeft} class="w-3 md:w-4" /></button>
-			<button onclick={slideLeft} class="absolute top-1/2 -translate-y-1/2 right-6"><img src={chevronRight} class="w-3 md:w-4" /></button>
+			<button onclick={slideRight} class="absolute top-1/2 -translate-y-1/2 left-6"><img src={chevronLeft} alt='left' class="w-3 md:w-4" /></button>
+			<button onclick={slideLeft} class="absolute top-1/2 -translate-y-1/2 right-6"><img src={chevronRight} alt='right' class="w-3 md:w-4" /></button>
 		{/if}
     </div>
 </div>

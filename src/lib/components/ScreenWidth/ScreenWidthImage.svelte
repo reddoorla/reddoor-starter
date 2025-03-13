@@ -1,3 +1,5 @@
+<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
+<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang="ts">
 	import type { ImageField } from "@prismicio/client";
 	import placeholder from "../../assets/images/background_placeholder.svg";
@@ -11,6 +13,7 @@
 	export let vimeoId = "";
 	export let darken = false;
 	export let backdrop = false;
+	export let passedClasses = ''
   
 	let viewportHeight: number;
 	let viewportWidth: number;
@@ -29,9 +32,7 @@
   >
 	<div
 	  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-video  
-		{viewportHeight * 16 > viewportWidth * 9
-		? 'h-screen min-w-full'
-		: 'w-screen min-h-full'}"
+		{viewportHeight * 16 > viewportWidth * 9 ? 'h-screen min-w-full': 'w-screen min-h-full'}"
 	>
 	  {#if !field}
 		<img
@@ -63,18 +64,13 @@
   
 	  {#if darken}
 		<div
-		  class="bg-darken-gradient pointer-events-none absolute w-full h-full top-0 left-0 -z-10"
-		/>
+		  class="bg-darken-gradient pointer-events-none absolute w-full h-full top-0 left-0 -z-10"></div>
 	  {/if}
 	
 	</div>
-	<div class="w-screen h-screen absolute top-0 left-0">
-	  <ContentWidth
-		class="{$$props.class || 'flex items-center justify-center'} h-full"
-	  >
+
 		<slot />
-	  </ContentWidth>
-	</div>
+	
   </section>
   
   <style>

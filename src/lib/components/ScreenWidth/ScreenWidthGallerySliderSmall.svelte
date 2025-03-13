@@ -1,17 +1,21 @@
 <!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
+<!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang='ts'>
+  import { run } from 'svelte/legacy';
+
     import { onMount } from "svelte";
     import { swipe } from "svelte-gestures";
     import placeholder from "../../assets/images/background_placeholder.svg";
     import ContentWidth from "../ContentWidth/ContentWidth.svelte";
-    import FourByThreeImage from "../FullWidth/FourByThreeImage.svelte";
+    import type { SwipePointerEventDetail } from "svelte-gestures";
+
     import chevronLeft from "$lib/assets/icons/chevron-left.svg"
     import chevronRight from "$lib/assets/icons/chevron-right.svg"
 
-      
-      export let imageArray = [placeholder, placeholder, placeholder, placeholder];
-      export let altText = "background image"
+
+
+  let { imageArray = [placeholder, placeholder, placeholder, placeholder], altText = "background image", class:passedClasses='' } = $props();
 
       
   
@@ -19,9 +23,9 @@
       const SLIDER_TRANSITION_LENGTH_IN_MS=2000;
       const SLIDER_INTERVAL_IN_MS = 5000;
   
-      let sliderIndex = imageArray.length-1;
+      let sliderIndex = $state(imageArray.length-1);
       
-      let isSlideAnimated = true;
+      let isSlideAnimated = $state(true);
 
       const resetSliderToStart = () => {
           setTimeout(()=>isSlideAnimated=false, SLIDER_TRANSITION_LENGTH_IN_MS)
@@ -60,7 +64,7 @@
   
       let sliderInterval:NodeJS.Timeout;
   
-      const handleSwipe = (e:CustomEvent<{ direction: "left" | "top" | "right" | "bottom"; target: EventTarget; }>) => {
+      const handleSwipe = (e:CustomEvent<SwipePointerEventDetail>) => {
         if(e.detail.direction==="left") 
           slideRight();
   
@@ -68,11 +72,11 @@
           slideLeft();
       }
 
-      let progressPosistion = 0;
-      let progressWrapForwardPosition = -100;
-      let progressWrapBackwardPosition = imageArray.length*100
+      let progressPosistion = $state(0);
+      let progressWrapForwardPosition = $state(-100);
+      let progressWrapBackwardPosition = $state(imageArray.length*100)
 
-      $: {
+      run(() => {
         progressPosistion= (sliderIndex)*100;
         if(sliderIndex==imageArray.length)
             progressWrapForwardPosition=0;
@@ -85,7 +89,7 @@
             progressWrapBackwardPosition = imageArray.length*100;
 
             console.log(sliderIndex)
-      }
+      });
   
       onMount(()=>{
          sliderInterval = setInterval(()=>slideLeft(), SLIDER_INTERVAL_IN_MS);
@@ -94,15 +98,15 @@
       const tripledImages = imageArray.concat(imageArray).concat(imageArray)
   </script>
       
-  <section class="pb-32 {$$props.class || ''}">
-      <div use:swipe on:swipe={handleSwipe} class="h-[320px] py-2 relative" >
+  <section class="pb-32 {passedClasses}">
+      <div use:swipe onswipe={handleSwipe} class="h-[320px] py-2 relative" >
       <div  class="h-full flex flex-row flex-nowrap {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}"
       style= "width:{352*tripledImages.length}px; margin-left:calc(50vw - 176px); transform:translateX({-(sliderIndex+imageArray.length)*352}px); ">
           
           
           {#each tripledImages as image }
           <div class="w-[360px] h-full mx-4">
-              <FourByThreeImage alt={altText} class="h-full object-cover -z-10"/>
+              <img src='' alt={altText} class="h-full object-cover -z-10"/>
           </div>
           {/each}
           
@@ -116,10 +120,10 @@
             <div class="h-full rounded-full absolute top-0 right-0 bg-dark {isSlideAnimated ? 'transition-transform duration-[2000ms]': ''}" style="width:{1/imageArray.length*100}%; transform:translateX({-progressWrapBackwardPosition}%);"></div>
           </div>
 
-          <button on:click={slideLeft} class="absolute -left-2 h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle justify-center cursor-pointer transition-all duration-500 hover:bg-[#424B5A] hover:border-[#424B5A] active:bg-black bump">
+          <button onclick={slideLeft} class="absolute -left-2 h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle justify-center cursor-pointer transition-all duration-500 hover:bg-[#424B5A] hover:border-[#424B5A] active:bg-black bump">
             <img alt='chevron-left' src={chevronLeft} class='-translate-x-[1px]' />
           </button>
-          <button on:click={slideRight} class="absolute -right-2  -translate-y-[0.7px] h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle cursor-pointer transition-all duration-500 justify-center hover:bg-[#424B5A] hover:border-[#424B5A] active:bg-black bump">
+          <button onclick={slideRight} class="absolute -right-2  -translate-y-[0.7px] h-6 w-6 rounded-full border-[#C2D1D9] border-2 p-1 flex align-middle cursor-pointer transition-all duration-500 justify-center hover:bg-[#424B5A] hover:border-[#424B5A] active:bg-black bump">
             <img alt='chevron-right' src={chevronRight} class='translate-x-[1px] ' />
           </button>
         </ContentWidth>

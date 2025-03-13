@@ -12,6 +12,7 @@
 
     let selectValue=$state("");
 
+//TODO: add hidden form and bind values to make this always work even if it is hidden by default
 </script>
 
 
@@ -30,7 +31,7 @@
         <textarea class="border-[1px] rounded-[3px] text-dark border-light h-48 pl-4 pt-[2.5px]" placeholder="Type something..." name="message"></textarea>
 
         <div class="w-16">
-            <DefaultButton text="submit" click={submit} class=""/>
+            <DefaultButton onclick={submit} class="">Submit</DefaultButton>
         </div>
         
 </form>
