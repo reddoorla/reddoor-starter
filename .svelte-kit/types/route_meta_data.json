@@ -5,52 +5,52 @@
 	"/api/preview": [
 		"src/routes/api/preview/+server.js"
 	],
-	"/blogs": [
+	"/templates/sliders": [
 		"src/routes/+layout.server.js"
 	],
-	"/contacts": [
+	"/templates/sliders/plans": [
 		"src/routes/+layout.server.js"
 	],
-	"/content": [
+	"/templates/teams": [
 		"src/routes/+layout.server.js"
 	],
-	"/ctas": [
+	"/templates/teams/contacts": [
 		"src/routes/+layout.server.js"
 	],
-	"/faqs": [
+	"/templates/teams/ctas": [
 		"src/routes/+layout.server.js"
 	],
-	"/footers": [
+	"/templates/teams/lists": [
 		"src/routes/+layout.server.js"
 	],
-	"/lists": [
+	"/templates/teams/navs": [
 		"src/routes/+layout.server.js"
 	],
-	"/mastheads": [
+	"/templates/teams/portfolios": [
 		"src/routes/+layout.server.js"
 	],
-	"/navs": [
+	"/templates/teams/slice-simulator": [
 		"src/routes/+layout.server.js"
 	],
-	"/plans": [
+	"/templates/testimonials": [
 		"src/routes/+layout.server.js"
 	],
-	"/portfolios": [
+	"/templates/testimonials/blogs": [
 		"src/routes/+layout.server.js"
 	],
-	"/slice-simulator": [
+	"/templates/testimonials/content": [
 		"src/routes/+layout.server.js"
 	],
-	"/sliders": [
+	"/templates/testimonials/faqs": [
 		"src/routes/+layout.server.js"
 	],
-	"/teams": [
+	"/templates/testimonials/mastheads": [
 		"src/routes/+layout.server.js"
 	],
-	"/testimonials": [
+	"/templates/values": [
 		"src/routes/+layout.server.js"
 	],
-	"/values": [
+	"/templates/values/footers": [
 		"src/routes/+layout.server.js"
 	],
 	"/[[preview=preview]]": [
