@@ -2,13 +2,14 @@
 <!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <!-- @migration-task Error while migrating Svelte code: $$props is used together with named props in a way that cannot be automatically migrated. -->
 <script lang='ts'>
-  import { run } from 'svelte/legacy';
+
 
     import { onMount } from "svelte";
     import { swipe } from "svelte-gestures";
     import placeholder from "../../assets/images/image_placeholder.svg";
     import ContentWidth from "../ContentWidth/ContentWidth.svelte";
-    import FourByThreeImage from "../FullWidth/FourByThreeImage.svelte";
+    import type { SwipePointerEventDetail } from "svelte-gestures";
+
 
     type GalleryItem = {
   name: string;
@@ -17,28 +18,27 @@
   featuredImage?: string;
   filters?: string[];
 };
-      
-  interface Props {
-    itemArray?: GalleryItem[];
-  }
+
 
   let { itemArray = [
-        {
-            name: "Item 1",
-            featuredText:"Dev + UX",
-            href:"#",
-            filters:['Dev', 'UX']       
-        },
-        {
-            name: "Item 2",       
-        },
-        {
-            name: "Item 3",
-            featuredText:"UX + UI",
-            href:"#",
-            featuredImage: placeholder,
-            filters:['UI', 'UX']       
-        }] }: Props = $props();
+            {
+                name: "Item 1",
+                featuredText:"Dev + UX",
+                href:"#",
+                filters:['Dev', 'UX']       
+            },
+            {
+                name: "Item 2",       
+            },
+            {
+                name: "Item 3",
+                featuredText:"UX + UI",
+                href:"#",
+                featuredImage: placeholder,
+                filters:['UI', 'UX']       
+            }],
+        class:passedClasses=''
+     } = $props();
 
       
   
@@ -48,11 +48,11 @@
       
   
       let sliderIndex = $state(0);
-      let innerWidth:number = $state();
+      let innerWidth:number = $state(1024);
       let imageWidth = $state(720);
       let isSlideAnimated = $state(true);
 
-      run(() => {
+      $effect(() => {
         if(innerWidth>1040){
             imageWidth = 720;
         } else if(innerWidth>768){
@@ -99,7 +99,7 @@
   
       let sliderInterval:NodeJS.Timeout;
   
-      const handleSwipe = (e:CustomEvent<{ direction: "left" | "top" | "right" | "bottom"; target: EventTarget; }>) => {
+      const handleSwipe = (e:CustomEvent<SwipePointerEventDetail>) => {
         if(e.detail.direction==="left") 
           slideRight();
   
@@ -111,7 +111,7 @@
       let progressWrapForwardPosition = $state(-100);
       let progressWrapBackwardPosition = $state(itemArray.length*100)
 
-      run(() => {
+      $effect(() => {
         progressPosistion= (sliderIndex)*100;
         if(sliderIndex==itemArray.length)
             progressWrapForwardPosition=0;
@@ -141,14 +141,14 @@
           {#each tripledItems as item }
           {#if item.href}
           <a href={item?.href||"#"} class="h-full mx-4 relative" style="width:{imageWidth}px;">
-              <FourByThreeImage  src={item?.featuredImage} label={item?.featuredText||""} alt={item.name} class="h-full object-cover -z-10"/>
+              <img  src={item?.featuredImage} alt={item.name} class="h-full object-cover -z-10"/>
               <div class="absolute w-full aspect-[4/3] top-8 left-0 bg-dark opacity-0 hover:opacity-100 hover:bg-opacity-80 transition-opacity duration-500 flex justify-center items-center">
                 <h4 class="text-white">{item.name}</h4>
             </div>
           </a>
           {:else}
           <div class="h-full mx-4" style="width:{imageWidth}px">
-            <FourByThreeImage  src={item?.featuredImage} label={item?.featuredText||""} alt={item.name} class="h-full object-cover -z-10"/>
+            <img  src={item?.featuredImage} alt={item.name} class="h-full object-cover -z-10"/>
           </div>
           {/if}
           {/each}
@@ -163,7 +163,7 @@
                                     {(sliderIndex%itemArray.length>=0&&sliderIndex%itemArray.length===i)|| (sliderIndex%itemArray.length<=0&&itemArray.length+sliderIndex%itemArray.length===i) ? "bg-dark border-dark" : "border-light"}"
                         onclick={()=>setSliderIndex(i)}
                         aria-label="image {i} of {itemArray.length}"
-                        aria-hidden
+                        aria-hidden="true"
                     ></button>
                 {/each}
             </div>

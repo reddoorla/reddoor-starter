@@ -8,17 +8,14 @@
     import { swipe } from "svelte-gestures";
     import placeholder from "../../assets/images/background_placeholder.svg";
     import ContentWidth from "../ContentWidth/ContentWidth.svelte";
-    import FourByThreeImage from "../FullWidth/FourByThreeImage.svelte";
+    import type { SwipePointerEventDetail } from "svelte-gestures";
+
     import chevronLeft from "$lib/assets/icons/chevron-left.svg"
     import chevronRight from "$lib/assets/icons/chevron-right.svg"
 
-      
-  interface Props {
-    imageArray?: any;
-    altText?: string;
-  }
 
-  let { imageArray = [placeholder, placeholder, placeholder, placeholder], altText = "background image" }: Props = $props();
+
+  let { imageArray = [placeholder, placeholder, placeholder, placeholder], altText = "background image", class:passedClasses='' } = $props();
 
       
   
@@ -67,7 +64,7 @@
   
       let sliderInterval:NodeJS.Timeout;
   
-      const handleSwipe = (e:CustomEvent<{ direction: "left" | "top" | "right" | "bottom"; target: EventTarget; }>) => {
+      const handleSwipe = (e:CustomEvent<SwipePointerEventDetail>) => {
         if(e.detail.direction==="left") 
           slideRight();
   
@@ -109,7 +106,7 @@
           
           {#each tripledImages as image }
           <div class="w-[360px] h-full mx-4">
-              <FourByThreeImage alt={altText} class="h-full object-cover -z-10"/>
+              <img src='' alt={altText} class="h-full object-cover -z-10"/>
           </div>
           {/each}
           

@@ -4,7 +4,6 @@
     import { swipe } from "svelte-gestures";
     import placeholder from "../../assets/images/background_placeholder.svg";
     import ContentWidth from "../ContentWidth/ContentWidth.svelte";
-    import FourByThreeImage from "../FullWidth/FourByThreeImage.svelte";
     import chevronLeft from "$lib/assets/icons/chevron-left.svg"
     import chevronRight from "$lib/assets/icons/chevron-right.svg"
     import type { SwipePointerEventDetail } from "svelte-gestures";
@@ -85,7 +84,7 @@
           
           {#each tripledImages as image }
           <div class="w-[360px] h-full mx-4">
-              <FourByThreeImage alt={altText} class="h-full object-cover -z-10"/>
+              <img alt={altText} class="h-full object-cover -z-10"/>
           </div>
           {/each}
           
