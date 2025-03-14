@@ -13,18 +13,6 @@
 
 </script>
 
-<style>
-    a, button{
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-</style>
-
-
 <div class="bump">
     {#if href}
         <a 
