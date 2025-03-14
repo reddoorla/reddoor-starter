@@ -76,18 +76,6 @@
 	});
 </script>
 
-<div bind:this={parent} class="parent transition-all {props.class || ''}" style="">
+<div bind:this={parent} class="w-full transition-all {props.class || ''}" style="">
 	{@render props.children?.()}
 </div>
-
-<style>
-	.parent {
-		width: 80%;
-	}
-
-	@media screen and (max-width: 1024px) {
-		.parent {
-		width: 100%;
-	}
-	}
-</style>

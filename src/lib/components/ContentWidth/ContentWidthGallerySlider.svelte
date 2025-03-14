@@ -1,6 +1,6 @@
 
 <script lang='ts'>
-    import { onMount } from "svelte";
+
     import { swipe } from "svelte-gestures";
     import placeholder from "../../assets/images/background_placeholder.svg";
     import ContentWidth from "../ContentWidth/ContentWidth.svelte";
