@@ -2,6 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Tailwind CSS v4 configuration */
+@import "tailwindcss";
+
+@theme {
+  --screen-sm: 560px;
+  --screen-md: 768px;
+  --screen-lg: 1024px;
+  --screen-xl: 1340px;
+  
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-black: #000;
+  --color-white: #fff;
+  --color-light: #C2D1D9;
+  --color-dark: #424B5A;
+  
+  --transition-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
+  --transition-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --transition-fast-slow: cubic-bezier(.5, 0, 0, 1);
+  
+  --height-screen-75: 75vh;
+  --height-screen-50: 50vh;
+  --height-screen-25: 25vh;
+  --height-screen-10: 10vh;
+  --height-screen-5: 5vh;
+  --height-112: 28rem;
+  --height-128: 32rem;
+  --height-144: 36rem;
+  --height-160: 40rem;
+  --height-192: 48rem;
+  --height-256: 64rem;
+  --height-384: 96rem;
+  --height-512: 128rem;
+  --height-640: 160rem;
+}
+
+
+
 body{
     font-family: "Helvetica Neue LT Std", "helvetica", sans-serif;
     transition-property: all;
