@@ -15,7 +15,7 @@
 	},
 	"devDependencies": {
 		"@slicemachine/adapter-sveltekit": "^0.3.36",
-		"@sveltejs/adapter-auto": "^4.0.0",
+		"@sveltejs/adapter-auto": "^6.0.0",
 		"@sveltejs/kit": "^2.5.27",
 		"@sveltejs/vite-plugin-svelte": "^5.0.3",
 		"autoprefixer": "^10.4.17",
@@ -38,6 +38,7 @@
 	"dependencies": {
 		"@prismicio/client": "^7.3.1",
 		"@prismicio/svelte": "^1.0.3",
+		"@tailwindcss/vite": "^4.1.4",
 		"@zerodevx/svelte-img": "^2.1.2",
 		"svelte-gestures": "^5.0.7",
 		"svelte-select": "^5.8.3"
