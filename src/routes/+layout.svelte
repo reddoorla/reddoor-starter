@@ -27,7 +27,7 @@
 	{/if}
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 </svelte:head>
-<main>
+<main class="w-screen h-screen bg-black ">
 	
 </main>
 <LandscapeModal />

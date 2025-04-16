@@ -1,5 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-export default {
+import type { Config } from 'tailwindcss'
+
+export default{
   content: ['./src/**/*.{html,js,svelte,ts}'],
   safelist: [
     "justify-center",
@@ -47,24 +48,6 @@ export default {
         'screen-25': '25vh',
         'screen-10': '10vh',
         'screen-5': '5vh',
-        'screen-75': '75vh',
-        'screen-50': '50vh',
-        'screen-25': '25vh',
-        'screen-10': '10vh',
-        'screen-5': '5vh',
-        'screen-75': '75vh',
-        'screen-50': '50vh',
-        'screen-25': '25vh',
-        'screen-10': '10vh',
-        'screen-5': '5vh',
-        'screen-75': '75vh',
-        'screen-50': '50vh',
-        'screen-25': '25vh',
-        'screen-10': '10vh',
-        'screen-5': '5vh',
-        'screen-75': '75vh',
-        'screen-50': '50vh',
-        'screen-25': '25vh',
         '112': '28rem',
         '128': '32rem',
         '144': '36rem',

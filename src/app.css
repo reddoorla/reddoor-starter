@@ -11,6 +11,7 @@ body{
     overflow-x: clip;
     scrollbar-width: none !important;
     overflow-y: auto;
+    margin:0;
 }
 
 body::-webkit-scrollbar { 
