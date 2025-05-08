@@ -1,15 +1,13 @@
-<script>
+<script lang='ts'>
 	import { PrismicPreview } from '@prismicio/svelte/kit';
 	import { page } from '$app/state';
 	import { repositoryName } from '$lib/prismicio';
 	import "../app.css";
-  import LandscapeModal from '$lib/components/LandscapeModal.svelte';
-	/**
-	 * @typedef {Object} Props
-	 * @property {import('svelte').Snippet} [children]
-	 */
+	import LandscapeModal from '$lib/components/LandscapeModal.svelte';
+	import Nav from '$lib/components/Nav.svelte'
+	import Footer from '$lib/components/Footer.svelte'
 
-	/** @type {Props} */
+
 	let { children } = $props();
 </script>
 
@@ -28,7 +26,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no">
 </svelte:head>
 <main>
-	
+	<Nav />
+
+	{@render children?.()}
+
+	<Footer />
 </main>
 <LandscapeModal />
 <PrismicPreview {repositoryName} />
