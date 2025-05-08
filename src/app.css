@@ -12,8 +12,9 @@
   --color-current: currentColor;
   --color-black: #000;
   --color-white: #fff;
-  --color-light: #C2D1D9;
-  --color-dark: #424B5A;
+  --color-light: #7ba0c4;
+  --color-primary: blue;
+  --color-dark: #00263e;
   
   --transition-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
   --transition-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
@@ -38,7 +39,7 @@
 
 
 body{
-    font-family: "Helvetica Neue LT Std", "helvetica", sans-serif;
+    font-family: "helvetica", sans-serif;
     transition-property: all;
     transition-timing-function: cubic-bezier(.5,0,0,1);
     transition-duration: 500ms;
@@ -113,61 +114,46 @@ a, button{
 
 
 h1{
-    font-size: 66px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 80px; /* 121.212% */
+
+font-family: 'museo-sans', sans-serif;
+font-size: 36px;
+font-style: normal;
+font-weight: 250;
+line-height: 150%; /* 54px */
+letter-spacing: 2.88px;
+text-transform: uppercase;
 }
 
 h2{
-    font-size: 56px;
-    font-style: normal;
-    font-weight: 600;
-    line-height: 64px; /* 114.286% */
-    letter-spacing: 1px;
+    
 }
 
 h3{
-    font-size: 28px;
-font-style: normal;
-font-weight: 500;
-line-height: 36px;
+    
 }
 
 h4{
-    font-size: 28px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 38px; /* 135.714% */
+    
 }
 
 h5{
-   font-size: 1.5rem; 
-   line-height: 1.5em;
+   
 }
 
 h6{
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 24px; /* 171.429% */
-    letter-spacing: 1px;
-    text-transform: uppercase;
+    
 }
 
 p{
-    font-size: 16px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 24px; /* 150% */
+    
 }
 
 .label{
-    font-family: "helvetica";
-    font-size: 12px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 18px; /* 150% */
+    
+}
+
+.copyright{
+
 }
 
 span{
@@ -176,42 +162,27 @@ span{
 
 @media only screen and (max-width:1024px) {
     h1{
-        font-size: 36px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 44px; /* 121.212% */
+        
     }
     
     h2{
-        font-size: 32px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 42px;
     }
     
     h3{
-        font-size: 28px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 40px;
+        
     }
     
     h4{
-        font-size: 2rem;
-        line-height: 1.4em;
+        
     }
     
     h5{
-       font-size: 1.5rem; 
-       line-height: 1.5em;
+       
     }
     
     
     p{
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 24px; /* 150% */
+        
     }
     
 
@@ -220,42 +191,28 @@ span{
 
 @media only screen and (max-width:786px) {
     h1{
-        font-size: 36px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 44px; /* 121.212% */
+        
     }
     
     h2{
-        font-size: 32px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 42px;
+        
     }
     
     h3{
-        font-size: 28px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 40px;
+        
     }
     
     h4{
-        font-size: 2rem;
-        line-height: 1.4em;
+        
     }
     
     h5{
-       font-size: 1.5rem; 
-       line-height: 1.5em;
+       
     }
     
     
     p{
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 24px; /* 150% */
+       
     }
     
 
@@ -264,108 +221,30 @@ span{
 
 @media only screen and (max-width:560px) {
     h1{
-        font-size: 36px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 44px; /* 121.212% */
+        
     }
     
     h2{
-        font-size: 32px;
-        font-style: normal;
-        font-weight: 700;
-        line-height: 42px;
+        
     }
     
     h3{
-        font-size: 28px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 40px;
     }
     
     h4{
-        font-size: 2rem;
-        line-height: 1.4em;
+        
     }
     
     h5{
-       font-size: 1.5rem; 
-       line-height: 1.5em;
+       
     }
     
     
     p{
-        font-size: 16px;
-        font-style: normal;
-        font-weight: 400;
-        line-height: 24px; /* 150% */
+        
     }
     
 
     
 }
 
-/* svelte-select stylings*/
-.indicators{
-    display: none !important;
-    opacity: 0 !important;
-}
-
-.svelte-select{
-    border-radius: 3px !important;
-    border: 1px solid #C2D1D9 !important;
-    cursor: pointer !important;
-}
-
-.svelte-select-list{
-    cursor: pointer !important;
-}
-
-.svelte-select input{
-    cursor: pointer !important;
-}
-
-::placeholder{
-    color: #C2D1D9 !important;
-    
-}
-
-input[type='textarea']::placeholder{
-    margin-top:0;
-}
-
-.multi-item-clear{
-    cursor: pointer !important;
-    transform: translateY(-0.5px);
-    color: #424B5A !important;
-    margin-left: 1em !important;
-    filter: invert(25%) sepia(15%) saturate(703%) hue-rotate(178deg) brightness(99%) contrast(85%);
-    transition: all 300ms cubic-bezier(.5,0,0,1);
-}
-
-.multi-item-clear:hover{
-    opacity: .4;
-}
-
-
-
-
-.multi-item{
-    margin-right: 3em !important;
-    background-color: transparent !important;
-    outline-color:#C2D1D9 !important;
-}
-
-.multi-item-text, .svelte-select-list{
-    transform: translateY(1px);
-    color: #424B5A !important;
-    font-size: 14px !important;
-    font-style: normal;
-    font-weight: 700 !important;
-    /* 142.857% */
-}
-
-.filter-to-dark{
-    filter: invert(25%) sepia(15%) saturate(703%) hue-rotate(178deg) brightness(99%) contrast(85%);
-}
