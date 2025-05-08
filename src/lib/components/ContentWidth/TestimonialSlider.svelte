@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
     import profilePlaceholder from '$lib/assets/images/profile_placeholder.png'
     import featuredPlaceholder from '$lib/assets/images/background_placeholder.svg'
-  import ContentWidth from '../ContentWidth/ContentWidth.svelte';
+  import ContentWidth from './ContentWidth.svelte';
   
 	let viewportWidth = $state(1024);
 
