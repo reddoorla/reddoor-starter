@@ -1,14 +1,16 @@
 
 <script lang="ts">
+	import type { ImageField } from "@prismicio/client";
 	import placeholder from "../../assets/images/background_placeholder.svg";
 
 	import { PrismicImage } from "@prismicio/svelte";
+	import Img from "@zerodevx/svelte-img";
   
 
 
 	let {
 		src = placeholder,
-		field,
+		field = undefined,
 		altText = "background image",
 		placeholderSide = "right",
 		vimeoId = "",
@@ -37,8 +39,15 @@
 	  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-video  
 		{viewportHeight * 16 > viewportWidth * 9 ? 'h-screen min-w-full': 'w-screen min-h-full'}"
 	>
-	  {#if !field}
+	  {#if !field && typeof src === 'string'}
 		<img
+		  {src}
+		  alt={altText}
+		  class="absolute bottom-0 {placeholderSide}-0 h-full w-full object-cover {passedClasses} -z-10 
+		  	{src === placeholder ? 'lg:w-[45%] md:h-auto' : ''}"
+		/>
+		{:else if src}
+		<Img
 		  {src}
 		  alt={altText}
 		  class="absolute bottom-0 {placeholderSide}-0 h-full w-full object-cover {passedClasses} -z-10 
