@@ -1,6 +1,5 @@
 
 <script lang="ts">
-	import type { ImageField } from "@prismicio/client";
 	import placeholder from "../../assets/images/background_placeholder.svg";
 
 	import { PrismicImage } from "@prismicio/svelte";
@@ -16,7 +15,7 @@
 		darken = false,
 		backdrop = false,
 		class:passedClasses = '',
-		children
+		children= undefined
 	} = $props();
   
 	let viewportHeight: number = $state(1024);
