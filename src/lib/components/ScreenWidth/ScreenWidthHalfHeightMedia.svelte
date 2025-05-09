@@ -30,14 +30,14 @@
   />
   
   <section
-	class="h-lvh w-screen overflow-clip 
+	class="h-[50lvh] w-screen overflow-clip 
 	  {backdrop
 	  ? 'fixed -z-10 top-0 left-0'
 	  : 'relative'}"
   >
 	<div
 	  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-video  
-		{viewportHeight * 16 > viewportWidth * 9 ? 'h-lvh min-w-full': 'w-screen min-h-lvh'}"
+		{viewportHeight * 16 > viewportWidth * 9 ? 'h-screen min-w-full': 'w-screen min-h-full'}"
 	>
 	  {#if !field && typeof src === 'string'}
 		<img
@@ -65,8 +65,8 @@
 		  title="background video"
 		  src={`https://player.vimeo.com/video/${vimeoId}?background=1&muted=1&loop=1&autoplay=1`}
 		  class="aspect-video absolute {viewportHeight * 16 > viewportWidth * 9
-			? 'h-lvh min-w-full'
-			: 'w-screen min-h-lvh'} contrast-[1.15] -z-10"
+			? 'h-screen min-w-full'
+			: 'w-screen min-h-full'} contrast-[1.15] -z-10"
 		  frameborder="0"
 		  allowfullscreen
 		></iframe>
@@ -85,7 +85,8 @@
   
   <style>
 	.bg-darken-gradient {
-		background: #000;
-		opacity:0.15;
+		background: linear-gradient(0deg, rgba(0, 38, 62, 0.50) 0%, rgba(0, 38, 62, 0.50) 100%), linear-gradient(180deg, rgba(0, 38, 62, 0.75) -3.96%, rgba(0, 38, 62, 0.00) 49.92%);
+		
 	}
-</style>
+  </style>
+  
