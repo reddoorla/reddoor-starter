@@ -5,6 +5,9 @@
 	"/api/preview": [
 		"src/routes/api/preview/+server.js"
 	],
+	"/slice-simulator": [
+		"src/routes/+layout.server.ts"
+	],
 	"/[[preview=preview]]": [
 		"src/routes/[[preview=preview]]/+page.server.ts",
 		"src/routes/+layout.server.ts"
