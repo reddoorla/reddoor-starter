@@ -20,5 +20,5 @@ export type LayoutServerLoad<OutputData extends OutputDataShape<LayoutServerPare
 export type LayoutServerLoadEvent = Parameters<LayoutServerLoad>[0];
 export type LayoutServerData = null;
 export type LayoutData = Expand<LayoutParentData>;
-export type LayoutProps = { data: LayoutData; children: import("svelte").Snippet }
+export type LayoutProps = { params: LayoutParams; data: LayoutData; children: import("svelte").Snippet }
 export type RequestEvent = Kit.RequestEvent<RouteParams, RouteId>;
