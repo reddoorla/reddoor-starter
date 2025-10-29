@@ -22,11 +22,9 @@ This library will grow as we require new interactive functions or layouts, and a
 
 ## How to Use
 
-1) clone this repo
+1) init new repo
 
 2) terminal npm i
-
-3) npm audit fix
 
 4) initiate new prismic repo
 
@@ -41,7 +39,3 @@ This library will grow as we require new interactive functions or layouts, and a
 
 ## TODO:
 
-- arrow sometimes sticks on bump
-- replace font awesome library with `<i>` syntax
-- rework slider logic into a more flexible component
-- review tailwind defaults
