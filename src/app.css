@@ -248,3 +248,21 @@ span{
     
 }
 
+
+	.add-noise::after {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: 
+			radial-gradient(circle at 5% 80%, transparent 70%, rgba(255,255,255,0.15) 100%),
+			radial-gradient(circle at 80% 5%, transparent 70%, rgba(0,0,0,0.05) 100%);
+        background-image: radial-gradient(circle, rgba(255,255,255,0.05) 0.5px, transparent 0.5px);
+    background-size: 1px 1px;
+		opacity: 0.4;
+		pointer-events: none;
+		will-change: transform;
+        filter:blur(0.5px)
+	}
