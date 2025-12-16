@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import AnimateIn from "../Animation/AnimateIn.svelte";
+  import AnimateIn from "./Animation/AnimateIn.svelte";
 
   let {
     animateIn = false,

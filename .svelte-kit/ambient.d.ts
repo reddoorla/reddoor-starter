@@ -35,8 +35,6 @@ declare module '$env/static/private' {
 	export const NVM_BIN: string;
 	export const NVM_CD_FLAGS: string;
 	export const NVM_DIR: string;
-	export const OLDPWD: string;
-	export const ORIGINAL_XDG_CURRENT_DESKTOP: string;
 	export const OSLogRateLimit: string;
 	export const PATH: string;
 	export const PWD: string;
@@ -58,6 +56,12 @@ declare module '$env/static/private' {
 	export const _: string;
 	export const __CFBundleIdentifier: string;
 	export const __CF_USER_TEXT_ENCODING: string;
+	export const APPLICATION_INSIGHTS_NO_STATSBEAT: string;
+	export const VSCODE_L10N_BUNDLE_LOCATION: string;
+	export const VSCODE_DOTNET_INSTALL_TOOL_ORIGINAL_HOME: string;
+	export const APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL: string;
+	export const APPLICATIONINSIGHTS_CONFIGURATION_CONTENT: string;
+	export const __TELEMETRY_CLIENT_ID: string;
 	export const ELECTRON_NO_ASAR: string;
 	export const NODE_ENV: string;
 	export const VIPSHOME: string;
@@ -99,8 +103,6 @@ declare module '$env/dynamic/private' {
 		NVM_BIN: string;
 		NVM_CD_FLAGS: string;
 		NVM_DIR: string;
-		OLDPWD: string;
-		ORIGINAL_XDG_CURRENT_DESKTOP: string;
 		OSLogRateLimit: string;
 		PATH: string;
 		PWD: string;
@@ -122,6 +124,12 @@ declare module '$env/dynamic/private' {
 		_: string;
 		__CFBundleIdentifier: string;
 		__CF_USER_TEXT_ENCODING: string;
+		APPLICATION_INSIGHTS_NO_STATSBEAT: string;
+		VSCODE_L10N_BUNDLE_LOCATION: string;
+		VSCODE_DOTNET_INSTALL_TOOL_ORIGINAL_HOME: string;
+		APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL: string;
+		APPLICATIONINSIGHTS_CONFIGURATION_CONTENT: string;
+		__TELEMETRY_CLIENT_ID: string;
 		ELECTRON_NO_ASAR: string;
 		NODE_ENV: string;
 		VIPSHOME: string;
