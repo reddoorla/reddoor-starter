@@ -36,6 +36,7 @@
   --height-640: 160rem;
 }
 
+@layer base{
 
 html{
     scroll-behavior: smooth;
@@ -266,3 +267,4 @@ span{
 		will-change: transform;
         filter:blur(0.5px)
 	}
+}
