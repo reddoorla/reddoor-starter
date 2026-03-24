@@ -10,12 +10,15 @@
   
   --color-transparent: transparent;
   --color-current: currentColor;
-  --color-black: #000;
-  --color-white: #fff;
+  --color-black: black;
+  --color-white: white;
+  --color-background: white;
   --color-light: #7ba0c4;
   --color-primary: blue;
   --color-dark: #00263e;
-  
+  --color-secondary: red;
+  --color-accent: yellow;
+
   --transition-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
   --transition-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
   --transition-fast-slow: cubic-bezier(.5, 0, 0, 1);
@@ -61,6 +64,7 @@ body{
     scrollbar-width: none !important;
     overflow-y: auto;
     margin:0;
+    background-color: var(--color-background);
 }
 
 body::-webkit-scrollbar {
@@ -114,14 +118,36 @@ a, button{
 
 
 
-h1{
-font-family: var(--font-heading, 'museo-sans', sans-serif);
-font-size: var(--h1-size, 36px);
-font-style: normal;
-font-weight: 250;
-line-height: 150%;
-letter-spacing: 2.88px;
-text-transform: uppercase;
+h1{ 
+    /* */ 
+}
+h2{ 
+    /**/ 
+}
+h3{
+     /* */ 
+    }
+h4{ 
+    /* */ 
+}
+h5{ 
+    /* */ 
+}
+h6{ 
+    /* */ 
+}
+p{ 
+    /* */ 
+}
+
+@media (max-width: 768px) {
+    h1{ /* */ }
+    h2{ /* */ }
+    h3{ /* */ }
+    h4{ /* */ }
+    h5{ /* */ }
+    h6{ /* */ }
+    p{ /* */ }
 }
 
 span{
