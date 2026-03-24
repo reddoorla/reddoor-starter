@@ -2,3 +2,28 @@
     command = "npm run build"
     publish = "build/"
     functions = "functions/"
+
+[[headers]]
+    for = "/favicon.png"
+    [headers.values]
+        Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+    for = "/_app/immutable/*"
+    [headers.values]
+        Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+    for = "/*.js"
+    [headers.values]
+        Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+    for = "/*.css"
+    [headers.values]
+        Cache-Control = "public, max-age=31536000, immutable"
+
+[[redirects]]
+    from = "/api/*"
+    to = "/api/:splat"
+    status = 200

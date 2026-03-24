@@ -22,17 +22,21 @@
   
   onMount(() => {
     if (vimeoId && iframeElement) {
-      // @ts-ignore - Vimeo Player API
-      const player = new window.Vimeo.Player(iframeElement);
-      
-      player.on('error', () => {
-        videoError = true;
-      });
-      
-      // Also check if video loads successfully
-      player.ready().catch(() => {
-        videoError = true;
-      });
+      const script = document.createElement('script');
+      script.src = 'https://player.vimeo.com/api/player.js';
+      script.onload = () => {
+        // @ts-ignore - Vimeo Player API
+        const player = new window.Vimeo.Player(iframeElement);
+
+        player.on('error', () => {
+          videoError = true;
+        });
+
+        player.ready().catch(() => {
+          videoError = true;
+        });
+      };
+      document.head.appendChild(script);
     }
   });
 </script>

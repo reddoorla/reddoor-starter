@@ -26,21 +26,23 @@ export {};
 
 
 declare module "$app/types" {
+	type MatcherParam<M> = M extends (param : string) => param is (infer U extends string) ? U : string;
+
 	export interface AppTypes {
 		RouteId(): "/" | "/api" | "/api/preview" | "/slice-simulator" | "/[[preview=preview]]" | "/[[preview=preview]]/[uid]";
 		RouteParams(): {
-			"/[[preview=preview]]": { preview?: string };
-			"/[[preview=preview]]/[uid]": { preview?: string; uid: string }
+			"/[[preview=preview]]": { preview?: MatcherParam<typeof import('../src/params/preview.js').match> };
+			"/[[preview=preview]]/[uid]": { preview?: MatcherParam<typeof import('../src/params/preview.js').match>; uid: string }
 		};
 		LayoutParams(): {
-			"/": { preview?: string; uid?: string };
+			"/": { preview?: MatcherParam<typeof import('../src/params/preview.js').match>; uid?: string };
 			"/api": Record<string, never>;
 			"/api/preview": Record<string, never>;
 			"/slice-simulator": Record<string, never>;
-			"/[[preview=preview]]": { preview?: string; uid?: string };
-			"/[[preview=preview]]/[uid]": { preview?: string; uid: string }
+			"/[[preview=preview]]": { preview?: MatcherParam<typeof import('../src/params/preview.js').match>; uid?: string };
+			"/[[preview=preview]]/[uid]": { preview?: MatcherParam<typeof import('../src/params/preview.js').match>; uid: string }
 		};
-		Pathname(): "/" | "/api" | "/api/" | "/api/preview" | "/api/preview/" | "/slice-simulator" | "/slice-simulator/" | `${string}` & {} | `${string}/` & {} | `${string}/${string}` & {} | `${string}/${string}/` & {};
+		Pathname(): "/" | "/api/preview" | "/slice-simulator" | `${string}` & {} | `${string}/` & {} | `${string}/${string}` & {} | `${string}/${string}/` & {};
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
 		Asset(): "/favicon.png" | "/robots.txt" | string & {};
 	}
