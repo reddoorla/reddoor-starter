@@ -1,1 +1,0 @@
-import{I as e,X as t,Y as n}from"../chunks/CD8BJFR3.js";import"../chunks/D1hYfEew.js";import{t as r}from"../chunks/jd9ZJ3nT.js";function i(i,a){t(a,!0),a.data.page.data,e(()=>{a.data,a.data.page.data}),r(i,{get slices(){return a.data.page.data.slices}}),n()}export{i as component};

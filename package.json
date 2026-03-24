@@ -22,13 +22,11 @@
 		"@sveltejs/kit": "^2.5.27",
 		"@sveltejs/vite-plugin-svelte": "^7.0.0",
 		"@testing-library/svelte": "^5.3.1",
-		"autoprefixer": "^10.4.17",
 		"concurrently": "^9.1.2",
 		"eslint": "^9.17.0",
 		"eslint-config-prettier": "^10.1.1",
 		"eslint-plugin-svelte": "^3.1.0",
 		"jsdom": "^28.1.0",
-		"postcss": "^8.4.35",
 		"prettier": "^3.1.1",
 		"prettier-plugin-svelte": "^3.2.6",
 		"slice-machine-ui": "^2.11.1",
@@ -46,7 +44,6 @@
 		"@prismicio/svelte": "^2.0.0",
 		"@tailwindcss/vite": "^4.1.4",
 		"@zerodevx/svelte-img": "^2.1.2",
-		"svelte-gestures": "^5.0.7",
-		"svelte-select": "^5.8.3"
+		"svelte-gestures": "^5.0.7"
 	}
 }

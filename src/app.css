@@ -36,6 +36,18 @@
   --height-640: 160rem;
 }
 
+@utility bump {
+  &:active {
+    --tw-translate-y: -1px;
+  }
+}
+
+@utility negative-bump {
+  &:active {
+    --tw-translate-y: 1px;
+  }
+}
+
 @layer base{
 
 html{
@@ -44,9 +56,6 @@ html{
 
 body{
     font-family: "helvetica", sans-serif;
-    transition-property: all;
-    transition-timing-function: cubic-bezier(.5,0,0,1);
-    transition-duration: 500ms;
     max-width: 100vw;
     overflow-x: clip;
     scrollbar-width: none !important;
@@ -54,21 +63,12 @@ body{
     margin:0;
 }
 
-body::-webkit-scrollbar { 
-    display: none !important;  /* Safari and Chrome */
-}
 body::-webkit-scrollbar {
-    width: 0 !important;  /* Remove scrollbar space */  /* Optional: just make scrollbar invisible */
+    display: none !important;
+    width: 0 !important;
 }
 
 
-.bump:active{
-    transform: translateY(-1px);
-}
-
-.negative-bump:active{
-    transform: translateY(1px);
-}
 
 @keyframes pos-y-wiggle {
     0% {
@@ -115,138 +115,17 @@ a, button{
 
 
 h1{
-
-font-family: 'museo-sans', sans-serif;
-font-size: 36px;
+font-family: var(--font-heading, 'museo-sans', sans-serif);
+font-size: var(--h1-size, 36px);
 font-style: normal;
 font-weight: 250;
-line-height: 150%; /* 54px */
+line-height: 150%;
 letter-spacing: 2.88px;
 text-transform: uppercase;
 }
 
-h2{
-    
-}
-
-h3{
-    
-}
-
-h4{
-    
-}
-
-h5{
-   
-}
-
-h6{
-    
-}
-
-p{
-    
-}
-
-.label{
-    
-}
-
-.copyright{
-
-}
-
 span{
     display: inline-block;
-}
-
-@media only screen and (max-width:1024px) {
-    h1{
-        
-    }
-    
-    h2{
-    }
-    
-    h3{
-        
-    }
-    
-    h4{
-        
-    }
-    
-    h5{
-       
-    }
-    
-    
-    p{
-        
-    }
-    
-
-
-}
-
-@media only screen and (max-width:786px) {
-    h1{
-        
-    }
-    
-    h2{
-        
-    }
-    
-    h3{
-        
-    }
-    
-    h4{
-        
-    }
-    
-    h5{
-       
-    }
-    
-    
-    p{
-       
-    }
-    
-
-    
-}
-
-@media only screen and (max-width:560px) {
-    h1{
-        
-    }
-    
-    h2{
-        
-    }
-    
-    h3{
-    }
-    
-    h4{
-        
-    }
-    
-    h5{
-       
-    }
-    
-    
-    p{
-        
-    }
-    
-
-    
 }
 
 
@@ -257,14 +136,11 @@ span{
 		left: 0;
 		right: 0;
 		bottom: 0;
-		background: 
-			radial-gradient(circle at 5% 80%, transparent 70%, rgba(255,255,255,0.15) 100%),
-			radial-gradient(circle at 80% 5%, transparent 70%, rgba(0,0,0,0.05) 100%);
-        background-image: radial-gradient(circle, rgba(255,255,255,0.05) 0.5px, transparent 0.5px);
-    background-size: 1px 1px;
+		background-image: radial-gradient(circle, rgba(255,255,255,0.05) 0.5px, transparent 0.5px);
+		background-size: 1px 1px;
 		opacity: 0.4;
 		pointer-events: none;
 		will-change: transform;
-        filter:blur(0.5px)
+		filter: blur(0.5px);
 	}
 }

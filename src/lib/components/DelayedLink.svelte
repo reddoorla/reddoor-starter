@@ -43,20 +43,16 @@ const isInternalLink = (url: string): boolean => {
 const handleClick: MouseEventHandler<HTMLAnchorElement> = async (event) => {
 	// Only apply delayed navigation to internal links (excluding PDFs)
 	if (isInternalLink(href) && !href.includes('.pdf')) {
-		
-		
+		event.preventDefault();
+
 		if (onclick) {
 			await onclick(event);
-			if (event.defaultPrevented) {
-				return;
-			}
 		}
-		
+
 		if (beforeNavigate) {
 			await beforeNavigate(event);
 		}
-		
-		event.preventDefault();
+
 		setTimeout(() => {
 			goto(href);
 		}, delay);

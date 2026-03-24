@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from "svelte";
   import AnimateIn from "./Animation/AnimateIn.svelte";
 
   let {
@@ -11,28 +10,17 @@
   } = $props();
 
   let viewportWidth = $state(1024);
-  let edgeWidthPx = $state(48);
 
   const baseClasses =
     "max-w-[1220px] xl:max-w-[1440px] xl:mx-auto mx-[4%] w-[92%]";
   const defaultLayouts = "flex flex-col items-center justify-center relative";
 
-  const getMargin = () => {
+  const edgeWidthPx = $derived.by(() => {
     if (viewportWidth < 1060) return viewportWidth * 0.04;
     if (viewportWidth < 1340) return (viewportWidth - 1220) / 2;
-    if (viewportWidth < 1500) return (edgeWidthPx = viewportWidth * 0.04);
-
-    return (edgeWidthPx = (viewportWidth - 1440) / 2);
-  };
-
-  $effect(() => {
-    viewportWidth;
-    edgeWidthPx = getMargin()
+    if (viewportWidth < 1500) return viewportWidth * 0.04;
+    return (viewportWidth - 1440) / 2;
   });
-
-  onMount(()=>{
-    edgeWidthPx = getMargin();
-  })
 </script>
 
 <svelte:window bind:innerWidth={viewportWidth} />
@@ -60,7 +48,7 @@
       style="background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, {edgeFadeColor} 100%);width:{edgeWidthPx}px;"
     ></div>
     <div
-      class="absolute h-full top-0 left-0 z-20 w-[4%]"
+      class="absolute h-full top-0 left-0 z-20"
       style="background: linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, {edgeFadeColor} 100%);width:{edgeWidthPx}px;"
     ></div>
     <div class="w-screen relative">

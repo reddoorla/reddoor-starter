@@ -5,15 +5,14 @@
     const LOREM = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat m dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor inc."
   
   let { labels = ["Is this thing on?", "It could be why don't you check"], contents = [LOREM, LOREM] } = $props();
-  
-    let activeAccordions: boolean[] = $state([]);
-  
-    labels.forEach(() => activeAccordions.push(false));
+
+    // svelte-ignore state_referenced_locally
+    let activeAccordions: boolean[] = $state(labels.map(() => false));
   </script>
   
   <div class="w-full flex flex-col border-light border-b-2 cursor-pointer">
     {#each labels as label, i}
-      <button class="w-full border-t-2 border-light cursor-pointer" onclick={() => activeAccordions[i] = !activeAccordions[i]}>
+      <button class="w-full border-t-2 border-light cursor-pointer" aria-expanded={activeAccordions[i]} onclick={() => activeAccordions[i] = !activeAccordions[i]}>
         <div class="h-20 p-8 w-full flex flex-row justify-between items-center">
           <p class="text-left">{label}</p>
           <img src={chevronRight} alt="chevron right" class="transition-transform duration-300 ease-in-out h-5 opacity-80 hover:opacity-100 {activeAccordions[i] ? 'rotate-90' : ''}"/>

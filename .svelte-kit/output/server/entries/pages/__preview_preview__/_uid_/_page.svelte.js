@@ -4,7 +4,6 @@ import { t as SliceZone } from "../../../../chunks/dist.js";
 function _page($$renderer, $$props) {
 	$$renderer.component(($$renderer) => {
 		let { data } = $$props;
-		data.page.data;
 		SliceZone($$renderer, { slices: data.page.data.slices });
 	});
 }

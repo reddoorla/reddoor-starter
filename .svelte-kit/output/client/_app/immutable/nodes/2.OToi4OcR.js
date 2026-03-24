@@ -1,1 +1,0 @@
-import{I as e,U as t,W as n,X as r,Y as i,c as a}from"../chunks/CD8BJFR3.js";import"../chunks/D1hYfEew.js";function o(o,s){r(s,!0);let c=n(1024);s.data.page.data,e(()=>{s.data,s.data.page.data}),a(`innerWidth`,e=>t(c,e,!0)),i()}export{o as component};

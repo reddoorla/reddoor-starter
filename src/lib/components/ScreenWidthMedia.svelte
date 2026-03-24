@@ -2,7 +2,7 @@
   import { PrismicImage } from "@prismicio/svelte";
   import Img from "@zerodevx/svelte-img";
   import { onMount } from 'svelte';
-  
+
   let {
     src = '',
     field = undefined,
@@ -14,18 +14,21 @@
     class: passedClasses = '',
     children = undefined
   } = $props();
-  
+
   let viewportHeight: number = $state(1024);
   let viewportWidth: number = $state(768);
   let videoError: boolean = $state(false);
   let iframeElement: HTMLIFrameElement | undefined = $state();
-  
+  const coverStyle = $derived(
+    viewportHeight * percentHeight / 100 * 16 > viewportWidth * 9
+      ? `height: ${percentHeight}lvh; min-width: 100%`
+      : `width: 100vw; min-height: ${percentHeight}lvh`
+  );
+
   onMount(() => {
     if (vimeoId && iframeElement) {
-      const script = document.createElement('script');
-      script.src = 'https://player.vimeo.com/api/player.js';
-      script.onload = () => {
-        // @ts-ignore - Vimeo Player API
+      const initPlayer = () => {
+        if (!window.Vimeo?.Player || !iframeElement) return;
         const player = new window.Vimeo.Player(iframeElement);
 
         player.on('error', () => {
@@ -36,7 +39,20 @@
           videoError = true;
         });
       };
-      document.head.appendChild(script);
+
+      if (window.Vimeo?.Player) {
+        initPlayer();
+      } else {
+        const existing = document.querySelector('script[src="https://player.vimeo.com/api/player.js"]');
+        if (existing) {
+          existing.addEventListener('load', initPlayer);
+        } else {
+          const script = document.createElement('script');
+          script.src = 'https://player.vimeo.com/api/player.js';
+          script.onload = initPlayer;
+          document.head.appendChild(script);
+        }
+      }
     }
   });
 </script>
@@ -52,9 +68,7 @@
 >
   <div
     class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aspect-video"
-    style="{viewportHeight * percentHeight/100 * 16 > viewportWidth * 9 
-      ? `height: ${percentHeight}lvh; min-width: 100%` 
-      : `width: 100vw; min-height: ${percentHeight}lvh`}"
+    style={coverStyle}
   >
     {#if !field && typeof src === 'string' && src}
       <img
@@ -74,21 +88,18 @@
         class="absolute h-full w-full object-cover -z-10 {passedClasses}"
       />
     {/if}
-    
+
     {#if vimeoId && !videoError}
       <iframe
         bind:this={iframeElement}
         title="background video"
         src="https://player.vimeo.com/video/{vimeoId}?background=1&muted=1&loop=1&autoplay=1"
-        class="aspect-video absolute contrast-[1.15] -z-10"
-        style="{viewportHeight* percentHeight/100 * 16 > viewportWidth * 9
-          ? `height: ${percentHeight}lvh; min-width: 100%`
-          : `width: 100vw; min-height: ${percentHeight}lvh`}"
-        frameborder="0"
-        allowfullscreen
+        class="aspect-video absolute contrast-[1.15] -z-10 border-0"
+        style={coverStyle}
+        allow="autoplay; fullscreen"
       ></iframe>
     {/if}
-    
+
     {#if darken}
       <div
         class="bg-darken-gradient pointer-events-none absolute w-full h-full top-0 left-0 -z-10"

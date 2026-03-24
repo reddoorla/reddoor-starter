@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
-  
+    import { onMount } from "svelte";
+
       let isInView = $state(false);
       let el:HTMLElement | undefined = $state();
       let transitionDelay = $state(0);
-  
+
 
   let {
     style = "",
@@ -13,36 +13,23 @@
     class:passedClasses = "",
     children
   } = $props();
-  
-      const checkViewport = () => {
-          if(window&&el){
-                  let rect = el.getBoundingClientRect();
-                  isInView = rect.bottom <= window.innerHeight + rect.height
-                  transitionDelay= transitionDelayMax * (rect.left/window.innerWidth)
-              }
-      }
-      let checking:NodeJS.Timeout;
-  
+
       onMount(()=>{
-          checkViewport()
-  
-          checking = setInterval(()=>{
-              checkViewport()
-          }
-      ,4000)
-         
-  
-          window.addEventListener('scroll', checkViewport)
+          if (!el) return;
+
+          transitionDelay = transitionDelayMax * (el.getBoundingClientRect().left / window.innerWidth);
+
+          const observer = new IntersectionObserver(([entry]) => {
+              if (entry.isIntersecting) {
+                  isInView = true;
+                  observer.disconnect();
+              }
+          }, { threshold: 0 });
+
+          observer.observe(el);
+
+          return () => observer.disconnect();
       })
-  
-      onDestroy(()=>{
-          if(typeof window !== 'undefined'){
-          window.removeEventListener('scroll', checkViewport)
-         
-          if(checking)
-              clearInterval(checking);
-          }}
-      )
   </script>
   
   

@@ -1,16 +1,18 @@
 <script lang="ts">
-	let parent: HTMLElement | undefined = $state();
-	let nodes: HTMLElement[] = $state([]);
-	let scale = $state(1);
-	
+	import type { Snippet } from 'svelte';
+	import { onMount } from 'svelte';
 
-	import { onMount} from 'svelte';
 	interface Props {
-		children?: import('svelte').Snippet;
-		[key: string]: any
+		children?: Snippet;
+		class?: string;
 	}
 
-	let { ...props }: Props = $props();
+	let { children, class: passedClasses = '' }: Props = $props();
+
+	let parent: HTMLElement | undefined = $state();
+	let originalFontSizes: Map<HTMLElement, number> = new Map();
+	let mounted = $state(false);
+	let windowWidth = $state(0);
 
 	function getFontSizeInPixels(element: Element): number {
 		const computedStyle = window.getComputedStyle(element);
@@ -27,55 +29,70 @@
 			const parentFontSize = parseFloat(
 				getComputedStyle(element.parentElement as Element).fontSize
 			);
-			return (fontSizeValue / 100) * parentFontSize; 
+			return (fontSizeValue / 100) * parentFontSize;
 		} else {
-			// Handle other units or fallback to a default value
-			return 16; // Default font size in pixels
+			return 16;
 		}
 	}
 
-	let windowWidth: string = $state('');
-
-	const debounce = (func: Function, delay: number) => {
-		let timer: NodeJS.Timeout;
-		return function (this: any, ...args: any[]) {
-			const context = this;
-			clearTimeout(timer);
-			timer = setTimeout(() => func.apply(context, args), delay);
-		};
-	};
-
-	const setWindowWidth = () => {
-		windowWidth = `${window.innerWidth}px`;
-	};
-
-	const debouncedSetWindowWidth = debounce(setWindowWidth, 100);
-
 	onMount(() => {
-		window.addEventListener('resize', debouncedSetWindowWidth);
+		mounted = true;
+		windowWidth = window.innerWidth;
+
+		// Capture original font sizes once
+		if (parent) {
+			const nodes = [...parent.children] as HTMLElement[];
+			nodes.forEach((node) => {
+				originalFontSizes.set(node, getFontSizeInPixels(node));
+			});
+		}
+
+		let timer: ReturnType<typeof setTimeout>;
+		const handleResize = () => {
+			clearTimeout(timer);
+			timer = setTimeout(() => {
+				windowWidth = window.innerWidth;
+			}, 100);
+		};
+
+		window.addEventListener('resize', handleResize);
 		return () => {
-			window.removeEventListener('resize', debouncedSetWindowWidth);
+			window.removeEventListener('resize', handleResize);
 		};
 	});
 
 	$effect(() => {
 		windowWidth;
-		if (parent) {
-			nodes = [...parent?.children] as HTMLElement[];
-			console.log(nodes);
+		if (mounted && parent) {
+			const nodes = [...parent.children] as HTMLElement[];
 			const parentWidth = parent.offsetWidth;
+
+			// Reset font sizes to originals before measuring
+			nodes.forEach((node) => {
+				const original = originalFontSizes.get(node);
+				if (original) {
+					node.style.fontSize = original + 'px';
+				}
+			});
+
 			let largestChildWidth = 1;
 			nodes.forEach((node) => {
 				if (node.offsetWidth > largestChildWidth) largestChildWidth = node.offsetWidth;
 			});
-			scale = parentWidth / largestChildWidth;
-			nodes.forEach((node) => {
-				node.style.fontSize = getFontSizeInPixels(node) * scale + 'px';
-			});
+
+			const scale = parentWidth / largestChildWidth;
+			if (scale < 1) {
+				nodes.forEach((node) => {
+					const original = originalFontSizes.get(node);
+					if (original) {
+						node.style.fontSize = original * scale + 'px';
+					}
+				});
+			}
 		}
 	});
 </script>
 
-<div bind:this={parent} class="w-full transition-all {props.class || ''}" style="">
-	{@render props.children?.()}
+<div bind:this={parent} class="w-full transition-all {passedClasses}">
+	{@render children?.()}
 </div>

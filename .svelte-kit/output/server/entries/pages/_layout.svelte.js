@@ -28,26 +28,26 @@ function _layout($$renderer, $$props) {
 		let { children } = $$props;
 		head("12qhfyh", $$renderer, ($$renderer) => {
 			$$renderer.title(($$renderer) => {
-				$$renderer.push(`<title>${escape_html(page.data.title)}</title>`);
+				$$renderer.push(`<title>${escape_html(page.data.title ?? "Reddoor")}</title>`);
 			});
-			$$renderer.push(`<link rel="canonical"${attr("href", page.url.href)}/> `);
+			$$renderer.push(`<link rel="canonical"${attr("href", page.url.href)}/> <meta property="og:url"${attr("content", page.url.href)}/> <meta property="og:type" content="website"/> `);
 			if (page.data.meta_description) {
 				$$renderer.push("<!--[0-->");
-				$$renderer.push(`<meta name="description"${attr("content", page.data.meta_description)}/>`);
+				$$renderer.push(`<meta name="description"${attr("content", page.data.meta_description)}/> <meta name="twitter:description"${attr("content", page.data.meta_description)}/>`);
 			} else $$renderer.push("<!--[-1-->");
 			$$renderer.push(`<!--]--> `);
 			if (page.data.meta_title) {
 				$$renderer.push("<!--[0-->");
-				$$renderer.push(`<meta property="og:title"${attr("content", page.data.meta_title)}/>`);
+				$$renderer.push(`<meta property="og:title"${attr("content", page.data.meta_title)}/> <meta name="twitter:title"${attr("content", page.data.meta_title)}/>`);
 			} else $$renderer.push("<!--[-1-->");
 			$$renderer.push(`<!--]--> `);
 			if (page.data.meta_image) {
 				$$renderer.push("<!--[0-->");
-				$$renderer.push(`<meta property="og:image"${attr("content", page.data.meta_image)}/> <meta name="twitter:card" content="summary_large_image"/>`);
+				$$renderer.push(`<meta property="og:image"${attr("content", page.data.meta_image)}/> <meta name="twitter:card" content="summary_large_image"/> <meta name="twitter:image"${attr("content", page.data.meta_image)}/>`);
 			} else $$renderer.push("<!--[-1-->");
 			$$renderer.push(`<!--]-->`);
 		});
-		$$renderer.push(`<main>`);
+		$$renderer.push(`<main class="flex flex-col min-h-screen">`);
 		Nav($$renderer, {});
 		$$renderer.push(`<!----> `);
 		children?.($$renderer);

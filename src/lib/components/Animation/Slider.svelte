@@ -24,26 +24,13 @@
   let sliderContainer: HTMLDivElement | undefined = $state();
   let viewportWidth = $state(0);
 
-  $effect(() => {
-    if (typeof window !== 'undefined') {
-      viewportWidth = window.innerWidth;
-      const handleResize = () => {
-        viewportWidth = window.innerWidth;
-      };
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
-    }
-  });
-
   const responsiveCardsPerView = $derived(
     viewportWidth >= 768 ? cardsPerView : 1
   );
-  
+
   const maxSlide = $derived(Math.max(0, itemCount - responsiveCardsPerView));
   const currentGap = $derived(viewportWidth > 768 ? gap : mobileGap);
 
-  // Calculate the percentage shift per slide, accounting for gaps
-  // Each slide moves by: (100% / cardsPerView) + (gap-per-item in %)
   const translateValue = $derived.by(() => {
     const baseShift = 100 / responsiveCardsPerView;
     return `translateX(calc(-${currentSlide * baseShift}% - ${currentSlide} * ${currentGap}))`;
@@ -74,6 +61,8 @@
     if (e.detail.direction === 'right') prevSlide();
   };
 </script>
+
+<svelte:window bind:innerWidth={viewportWidth} />
 
 <div class="relative w-full">
   <div

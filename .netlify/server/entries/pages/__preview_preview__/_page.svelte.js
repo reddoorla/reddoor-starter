@@ -1,9 +1,9 @@
-import "../../../chunks/server.js";
+import { i as derived } from "../../../chunks/server.js";
 //#region src/routes/[[preview=preview]]/+page.svelte
 function _page($$renderer, $$props) {
 	$$renderer.component(($$renderer) => {
 		let { data } = $$props;
-		data.page.data;
+		derived(() => data.page.data);
 	});
 }
 //#endregion
