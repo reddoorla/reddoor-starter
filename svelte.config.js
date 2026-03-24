@@ -3,6 +3,9 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
+	compilerOptions: {
+		warningFilter: (warning) => warning.code !== 'element_invalid_self_closing_tag'
+	},
 	kit: {
 		adapter: adapter()
 	},

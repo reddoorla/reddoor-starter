@@ -2,40 +2,71 @@
 
 ## Purpose
 
-To provide a forkable starting point for all SvelteKit, Tailwind + Prismic sites developed at Reddoor.
+A forkable starting point for all SvelteKit, Tailwind + Prismic sites developed at Reddoor.
 
-## Contents
+## Stack
 
-### Base configuration and boilerplate for a SvelteKit app integrated with Tailwind
+- **[SvelteKit](https://kit.svelte.dev/)** — Frontend framework with excellent DX and component-driven design
+- **[Tailwind CSS v4](https://tailwindcss.com/)** — Utility-first CSS
+- **[Prismic CMS](https://prismic.io/)** — Headless CMS with Slice Machine for flexible content modeling
+- **[Netlify](https://www.netlify.com/)** — Deployment and hosting
+- **[Vitest](https://vitest.dev/)** — Unit testing
 
-SvelteKit has one of the best developer experiences of any framework, and is especially friendly to component-driven design. We combine it with Tailwind for implementation of CSS to pave the path to quickly devolping reactive, extensible, and data-driven frontends.
+## Components
 
-### Base configuration and boilerplate necessary to integrate SvelteKit with Prismic CMS
+A library of responsive, reusable components designed to be used within Prismic Slices or standalone:
 
-Prismic CMS allows flexible entry of data by content managers without exposing code, and can be integrated into any frontend design as necessary.
+- **Animation** — `AnimateIn`, `AnimateInTriggered`, `AnimateOutTriggered`, `Slider`, `TriggerTransitionOnMount`
+- **Layout** — `ContentWidth`, `ScreenWidthMedia`, `TransitionOverlay`
+- **UI** — `Accordion`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
 
-### Designed and extensible components to be used within Prismic Slices or as Prismic Slices
+This library grows as new interactive functions or layouts are needed, allowing work from different projects to carry over rather than rebuilding from scratch.
 
-We've designed and implemented a library of responsive, functioning components to use first in the wireframing stage, and then to be customized for each site. Delivering these components as slices will allow both us and clients to quickly prototype and push new pages that remain within the design space originally conceived for the site.
+## Getting Started
 
-This library will grow as we require new interactive functions or layouts, and allow programmatic work from different projects to be easily accessible and carry over, rather than rebuilding components anew for each project.
+1. Fork/clone this repo and init a new project
+2. Install dependencies:
 
-## How to Use
+   ```bash
+   yarn install
+   ```
 
-1) init new repo
+3. Create a new Prismic repository
+4. Update `slicemachine.config.json` with your new Prismic repo name
+5. Start the dev server (runs Vite + Slice Machine concurrently):
 
-2) terminal npm i
+   ```bash
+   yarn dev
+   ```
 
-4) initiate new prismic repo
+6. Push your custom types/slices to Prismic
+7. Build your site using slices for complex CMS needs, or custom types for simpler setups
 
-5) change slicemachine.config.json to new prismic name
+## Scripts
 
-6) start dev server and push changes to prismic
+| Command | Description |
+| --- | --- |
+| `yarn dev` | Start dev server + Slice Machine |
+| `yarn build` | Production build |
+| `yarn preview` | Preview production build |
+| `yarn check` | Svelte type checking |
+| `yarn lint` | Lint with ESLint + Prettier |
+| `yarn format` | Auto-format with Prettier |
+| `yarn test` | Run tests with Vitest |
+| `yarn slicemachine` | Start Slice Machine UI |
 
-7) build site, using slices if complex cms or custom types if not
+## Project Structure
 
-
-## Next steps
-
-## TODO:
-
+```text
+src/
+├── lib/
+│   ├── assets/          # Icons, images, placeholders
+│   ├── components/      # Reusable Svelte components
+│   ├── utils/           # Utility functions
+│   └── prismicio.js     # Prismic client config
+├── routes/              # SvelteKit routes + Prismic preview
+├── params/              # Route param matchers
+└── app.css              # Global styles (Tailwind)
+customtypes/             # Prismic custom type definitions
+static/                  # Static assets (favicon, robots.txt)
+```
