@@ -1,3 +1,3 @@
 export const createUniqueId = () => {
-    return crypto.randomUUID();
-}
+  return crypto.randomUUID();
+};

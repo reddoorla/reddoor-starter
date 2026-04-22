@@ -44,16 +44,16 @@ This library grows as new interactive functions or layouts are needed, allowing 
 
 ## Scripts
 
-| Command | Description |
-| --- | --- |
-| `yarn dev` | Start dev server + Slice Machine |
-| `yarn build` | Production build |
-| `yarn preview` | Preview production build |
-| `yarn check` | Svelte type checking |
-| `yarn lint` | Lint with ESLint + Prettier |
-| `yarn format` | Auto-format with Prettier |
-| `yarn test` | Run tests with Vitest |
-| `yarn slicemachine` | Start Slice Machine UI |
+| Command             | Description                      |
+| ------------------- | -------------------------------- |
+| `yarn dev`          | Start dev server + Slice Machine |
+| `yarn build`        | Production build                 |
+| `yarn preview`      | Preview production build         |
+| `yarn check`        | Svelte type checking             |
+| `yarn lint`         | Lint with ESLint + Prettier      |
+| `yarn format`       | Auto-format with Prettier        |
+| `yarn test`         | Run tests with Vitest            |
+| `yarn slicemachine` | Start Slice Machine UI           |
 
 ## Project Structure
 

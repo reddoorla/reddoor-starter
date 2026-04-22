@@ -1,26 +1,60 @@
-<script lang='ts'>
-    import { slide } from 'svelte/transition';
-  
-    const LOREM = "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat m dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor inc."
-  
-  let { labels = ["Is this thing on?", "It could be why don't you check"], contents = [LOREM, LOREM] } = $props();
+<script lang="ts">
+  import { slide } from "svelte/transition";
+  import { ChevronRight } from "@lucide/svelte";
+  import { SvelteSet } from "svelte/reactivity";
 
-    // svelte-ignore state_referenced_locally
-    let activeAccordions: boolean[] = $state(labels.map(() => false));
-  </script>
-  
-  <div class="w-full flex flex-col border-light border-b-2 cursor-pointer">
-    {#each labels as label, i}
-      <button class="w-full border-t-2 border-light cursor-pointer" aria-expanded={activeAccordions[i]} onclick={() => activeAccordions[i] = !activeAccordions[i]}>
-        <div class="h-20 p-8 w-full flex flex-row justify-between items-center">
-          <p class="text-left">{label}</p>
-          <i class="fa-solid fa-chevron-right transition-transform duration-300 ease-in-out text-sm opacity-80 hover:opacity-100 {activeAccordions[i] ? 'rotate-90' : ''}"></i>
+  interface AccordionItem {
+    label: string;
+    content: string;
+  }
+
+  interface Props {
+    items?: AccordionItem[];
+    allowMultiple?: boolean;
+    class?: string;
+  }
+
+  let {
+    items = [],
+    allowMultiple = true,
+    class: passedClasses = "",
+  }: Props = $props();
+
+  const openIndexes = new SvelteSet<number>();
+
+  function toggle(i: number) {
+    if (openIndexes.has(i)) {
+      openIndexes.delete(i);
+    } else {
+      if (!allowMultiple) openIndexes.clear();
+      openIndexes.add(i);
+    }
+  }
+</script>
+
+<div class="w-full flex flex-col border-light border-b-2 {passedClasses}">
+  {#each items as item, i (i)}
+    {@const isOpen = openIndexes.has(i)}
+    <button
+      type="button"
+      class="w-full border-t-2 border-light cursor-pointer text-left"
+      aria-expanded={isOpen}
+      onclick={() => toggle(i)}
+    >
+      <div class="h-20 p-8 w-full flex flex-row justify-between items-center">
+        <p>{item.label}</p>
+        <ChevronRight
+          class="transition-transform duration-300 ease-in-out opacity-80 {isOpen
+            ? 'rotate-90'
+            : ''}"
+          size={16}
+        />
+      </div>
+      {#if isOpen}
+        <div transition:slide={{ duration: 500 }}>
+          <p class="p-8 pt-0">{item.content}</p>
         </div>
-        {#if activeAccordions[i]}
-          <div transition:slide="{{ duration: 500 }}">
-            <p class="text-left p-8 pt-0">{contents[i]}</p>
-          </div>
-        {/if}
-      </button>
-    {/each}
-  </div>
+      {/if}
+    </button>
+  {/each}
+</div>

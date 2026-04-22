@@ -1,57 +1,74 @@
-<script lang='ts'>
-    import { fade, fly } from "svelte/transition";
-    import type { Snippet } from "svelte";
+<script lang="ts">
+  import { X } from "@lucide/svelte";
+  import type { Snippet } from "svelte";
 
-    interface ModalProps {
-        open: boolean;
-        onclose?: () => void;
-        class?: string;
-        children?: Snippet;
+  interface ModalProps {
+    open: boolean;
+    onclose?: () => void;
+    class?: string;
+    children?: Snippet;
+  }
+
+  let {
+    open = $bindable(false),
+    onclose,
+    class: passedClasses = "",
+    children,
+  }: ModalProps = $props();
+
+  let dialogEl: HTMLDialogElement | undefined = $state();
+
+  $effect(() => {
+    if (!dialogEl) return;
+    if (open && !dialogEl.open) {
+      dialogEl.showModal();
+    } else if (!open && dialogEl.open) {
+      dialogEl.close();
     }
+  });
 
-    let { open = $bindable(false), onclose, class: passedClasses = '', children }: ModalProps = $props();
+  function close() {
+    open = false;
+    onclose?.();
+  }
 
-    function close() {
-        open = false;
-        onclose?.();
-    }
-
-    function handleKeydown(e: KeyboardEvent) {
-        if (e.key === "Escape") close();
-    }
-
-    function handleBackdropClick(e: MouseEvent) {
-        if (e.target === e.currentTarget) close();
-    }
+  function handleBackdropClick(e: MouseEvent) {
+    if (e.target === dialogEl) close();
+  }
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
-
-{#if open}
-    <div
-        role="button"
-        tabindex="-1"
-        transition:fade={{ duration: 200 }}
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 cursor-default"
-        onclick={handleBackdropClick}
-        onkeydown={handleKeydown}
+<dialog
+  bind:this={dialogEl}
+  onclose={close}
+  onclick={handleBackdropClick}
+  class="bg-transparent p-0 max-w-lg w-full mx-4 backdrop:bg-black/50 backdrop:backdrop-blur-sm open:animate-[fade-in_200ms_ease-out]"
+>
+  <div
+    class="relative bg-white rounded-lg shadow-xl w-full max-h-[90vh] overflow-y-auto {passedClasses}"
+  >
+    <button
+      type="button"
+      onclick={close}
+      class="absolute top-4 right-4 text-dark/60 hover:text-dark transition cursor-pointer"
+      aria-label="Close"
     >
-        <div
-            transition:fly={{ y: 20, duration: 300 }}
-            role="dialog"
-            aria-modal="true"
-            class="relative bg-white rounded-lg shadow-xl max-w-lg w-full mx-4 max-h-[90vh] overflow-y-auto {passedClasses}"
-        >
-            <button
-                onclick={close}
-                class="absolute top-4 right-4 text-dark/60 hover:text-dark transition cursor-pointer"
-                aria-label="Close"
-            >
-                <i class="fa-solid fa-xmark text-xl"></i>
-            </button>
-            <div class="p-8">
-                {@render children?.()}
-            </div>
-        </div>
+      <X size={20} />
+    </button>
+    <div class="p-8">
+      {@render children?.()}
     </div>
-{/if}
+  </div>
+</dialog>
+
+<style>
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

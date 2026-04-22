@@ -1,23 +1,32 @@
 <script lang="ts">
-    import { afterNavigate, beforeNavigate } from "$app/navigation";
-    import { fade } from "svelte/transition";
+  import { afterNavigate, beforeNavigate } from "$app/navigation";
+  import { fade } from "svelte/transition";
 
-    const OVERLAY_VISIBLE_DURATION = 1050;
-    const FADE_OUT_DURATION = 700;
+  interface Props {
+    visibleDuration?: number;
+    fadeOutDuration?: number;
+    class?: string;
+  }
 
-    let isTransitioning = $state(false);
+  let {
+    visibleDuration = 1050,
+    fadeOutDuration = 700,
+    class: passedClasses = "h-screen w-screen fixed z-50 bg-black top-0 left-0",
+  }: Props = $props();
 
-    beforeNavigate(()=>{
-        isTransitioning = true;
-    })
+  let isTransitioning = $state(false);
 
-    afterNavigate(()=>{
-        setTimeout(()=>{
-            isTransitioning=false
-        }, OVERLAY_VISIBLE_DURATION)
-    })
+  beforeNavigate(() => {
+    isTransitioning = true;
+  });
 
+  afterNavigate(() => {
+    setTimeout(() => {
+      isTransitioning = false;
+    }, visibleDuration);
+  });
 </script>
+
 {#if isTransitioning}
-    <div class="h-screen w-screen fixed z-50 bg-black top-0 left-0" out:fade={{duration:FADE_OUT_DURATION}}></div>
+  <div class={passedClasses} out:fade={{ duration: fadeOutDuration }}></div>
 {/if}

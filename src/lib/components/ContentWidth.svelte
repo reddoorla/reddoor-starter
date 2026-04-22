@@ -1,5 +1,7 @@
 <script lang="ts">
   import AnimateIn from "./Animation/AnimateIn.svelte";
+  import { viewport } from "$stores/viewport.svelte";
+  import { onMount } from "svelte";
 
   let {
     animateIn = false,
@@ -9,24 +11,26 @@
     edgeFadeColor = "",
   } = $props();
 
-  let viewportWidth = $state(1024);
+  onMount(() => viewport.subscribe());
 
   const baseClasses =
     "max-w-[1220px] xl:max-w-[1440px] xl:mx-auto mx-[4%] w-[92%]";
   const defaultLayouts = "flex flex-col items-center justify-center relative";
 
   const edgeWidthPx = $derived.by(() => {
-    if (viewportWidth < 1060) return viewportWidth * 0.04;
-    if (viewportWidth < 1340) return (viewportWidth - 1220) / 2;
-    if (viewportWidth < 1500) return viewportWidth * 0.04;
-    return (viewportWidth - 1440) / 2;
+    const w = viewport.width;
+    if (w < 1060) return w * 0.04;
+    if (w < 1340) return (w - 1220) / 2;
+    if (w < 1500) return w * 0.04;
+    return (w - 1440) / 2;
   });
 </script>
 
-<svelte:window bind:innerWidth={viewportWidth} />
-
 {#snippet content()}
-  <div class="{baseClasses} {passedClasses || defaultLayouts}" style={passedStyle}>
+  <div
+    class="{baseClasses} {passedClasses || defaultLayouts}"
+    style={passedStyle}
+  >
     {@render children?.()}
   </div>
 {/snippet}

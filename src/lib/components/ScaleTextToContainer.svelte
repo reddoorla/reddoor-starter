@@ -1,98 +1,63 @@
 <script lang="ts">
-	import type { Snippet } from 'svelte';
-	import { onMount } from 'svelte';
+  import type { Snippet } from "svelte";
+  import { onMount } from "svelte";
+  import { SvelteMap } from "svelte/reactivity";
 
-	interface Props {
-		children?: Snippet;
-		class?: string;
-	}
+  interface Props {
+    children?: Snippet;
+    class?: string;
+  }
 
-	let { children, class: passedClasses = '' }: Props = $props();
+  let { children, class: passedClasses = "" }: Props = $props();
 
-	let parent: HTMLElement | undefined = $state();
-	let originalFontSizes: Map<HTMLElement, number> = new Map();
-	let mounted = $state(false);
-	let windowWidth = $state(0);
+  let parent: HTMLElement | undefined = $state();
 
-	function getFontSizeInPixels(element: Element): number {
-		const computedStyle = window.getComputedStyle(element);
-		const fontSize = computedStyle.fontSize;
-		const fontSizeValue = parseFloat(fontSize);
-		const fontSizeUnit = fontSize.slice(fontSizeValue.toString().length);
+  function getFontSizeInPixels(element: Element): number {
+    const computedStyle = window.getComputedStyle(element);
+    return parseFloat(computedStyle.fontSize) || 16;
+  }
 
-		if (fontSizeUnit === 'px') {
-			return fontSizeValue;
-		} else if (fontSizeUnit === 'em' || fontSizeUnit === 'rem') {
-			const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-			return fontSizeValue * rootFontSize;
-		} else if (fontSizeUnit === '%') {
-			const parentFontSize = parseFloat(
-				getComputedStyle(element.parentElement as Element).fontSize
-			);
-			return (fontSizeValue / 100) * parentFontSize;
-		} else {
-			return 16;
-		}
-	}
+  onMount(() => {
+    if (!parent) return;
 
-	onMount(() => {
-		mounted = true;
-		windowWidth = window.innerWidth;
+    const originals = new SvelteMap<HTMLElement, number>();
+    const nodes = [...parent.children] as HTMLElement[];
+    nodes.forEach((node) => {
+      originals.set(node, getFontSizeInPixels(node));
+    });
 
-		// Capture original font sizes once
-		if (parent) {
-			const nodes = [...parent.children] as HTMLElement[];
-			nodes.forEach((node) => {
-				originalFontSizes.set(node, getFontSizeInPixels(node));
-			});
-		}
+    function rescale() {
+      if (!parent) return;
+      const parentWidth = parent.offsetWidth;
 
-		let timer: ReturnType<typeof setTimeout>;
-		const handleResize = () => {
-			clearTimeout(timer);
-			timer = setTimeout(() => {
-				windowWidth = window.innerWidth;
-			}, 100);
-		};
+      nodes.forEach((node) => {
+        const original = originals.get(node);
+        if (original) node.style.fontSize = `${original}px`;
+      });
 
-		window.addEventListener('resize', handleResize);
-		return () => {
-			window.removeEventListener('resize', handleResize);
-		};
-	});
+      let largest = 1;
+      nodes.forEach((node) => {
+        if (node.offsetWidth > largest) largest = node.offsetWidth;
+      });
 
-	$effect(() => {
-		windowWidth;
-		if (mounted && parent) {
-			const nodes = [...parent.children] as HTMLElement[];
-			const parentWidth = parent.offsetWidth;
+      const scale = parentWidth / largest;
+      if (scale < 1) {
+        nodes.forEach((node) => {
+          const original = originals.get(node);
+          if (original) node.style.fontSize = `${original * scale}px`;
+        });
+      }
+    }
 
-			// Reset font sizes to originals before measuring
-			nodes.forEach((node) => {
-				const original = originalFontSizes.get(node);
-				if (original) {
-					node.style.fontSize = original + 'px';
-				}
-			});
+    rescale();
 
-			let largestChildWidth = 1;
-			nodes.forEach((node) => {
-				if (node.offsetWidth > largestChildWidth) largestChildWidth = node.offsetWidth;
-			});
+    const observer = new ResizeObserver(() => rescale());
+    observer.observe(parent);
 
-			const scale = parentWidth / largestChildWidth;
-			if (scale < 1) {
-				nodes.forEach((node) => {
-					const original = originalFontSizes.get(node);
-					if (original) {
-						node.style.fontSize = original * scale + 'px';
-					}
-				});
-			}
-		}
-	});
+    return () => observer.disconnect();
+  });
 </script>
 
 <div bind:this={parent} class="w-full transition-all {passedClasses}">
-	{@render children?.()}
+  {@render children?.()}
 </div>
