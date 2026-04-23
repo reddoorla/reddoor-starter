@@ -23,7 +23,12 @@ class FakeIntersectionObserver {
   // Test helper — trigger an intersection event.
   trigger(isIntersecting: boolean) {
     this.callback(
-      [{ isIntersecting, target: this.observed[0] } as IntersectionObserverEntry],
+      [
+        {
+          isIntersecting,
+          target: this.observed[0],
+        } as IntersectionObserverEntry,
+      ],
       this as unknown as IntersectionObserver,
     );
   }
@@ -31,7 +36,8 @@ class FakeIntersectionObserver {
 
 function mockMatchMedia(reducedMotion: boolean) {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches: query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
+    matches:
+      query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
     media: query,
     addEventListener: () => {},
     removeEventListener: () => {},
@@ -47,7 +53,10 @@ beforeEach(() => {
   // @ts-expect-error — replacing global for test
   window.IntersectionObserver = FakeIntersectionObserver;
   mockMatchMedia(false);
-  Object.defineProperty(window, "innerWidth", { value: 1024, configurable: true });
+  Object.defineProperty(window, "innerWidth", {
+    value: 1024,
+    configurable: true,
+  });
 });
 
 describe("animateIn — viewport mode", () => {
@@ -59,8 +68,12 @@ describe("animateIn — viewport mode", () => {
 
     expect(el.style.opacity).toBe("0");
     expect(el.style.transform).toBe("translateY(50%)");
-    expect(el.style.transition).toContain("opacity 2400ms var(--transition-fast-slow)");
-    expect(el.style.transition).toContain("transform 2400ms var(--transition-fast-slow)");
+    expect(el.style.transition).toContain(
+      "opacity 2400ms var(--transition-fast-slow)",
+    );
+    expect(el.style.transition).toContain(
+      "transform 2400ms var(--transition-fast-slow)",
+    );
   });
 
   it("reveals on intersection and disconnects the observer", () => {
@@ -105,9 +118,22 @@ describe("animateIn — viewport mode", () => {
     const el = document.createElement("div");
     document.body.appendChild(el);
     // Element 25% across a 1000px viewport, delayMax 400 → 100ms delay.
-    Object.defineProperty(window, "innerWidth", { value: 1000, configurable: true });
+    Object.defineProperty(window, "innerWidth", {
+      value: 1000,
+      configurable: true,
+    });
     el.getBoundingClientRect = () =>
-      ({ left: 250, top: 0, right: 0, bottom: 0, width: 0, height: 0, x: 0, y: 0, toJSON: () => ({}) }) as DOMRect;
+      ({
+        left: 250,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }) as DOMRect;
 
     animateIn(el);
 
@@ -117,9 +143,22 @@ describe("animateIn — viewport mode", () => {
   it("honors a custom delayMax", () => {
     const el = document.createElement("div");
     document.body.appendChild(el);
-    Object.defineProperty(window, "innerWidth", { value: 1000, configurable: true });
+    Object.defineProperty(window, "innerWidth", {
+      value: 1000,
+      configurable: true,
+    });
     el.getBoundingClientRect = () =>
-      ({ left: 500, top: 0, right: 0, bottom: 0, width: 0, height: 0, x: 0, y: 0, toJSON: () => ({}) }) as DOMRect;
+      ({
+        left: 500,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }) as DOMRect;
 
     animateIn(el, { delayMax: 800 });
 
@@ -211,8 +250,12 @@ describe("animateIn — options overrides", () => {
 
     animateIn(el, { duration: 1200 });
 
-    expect(el.style.transition).toContain("opacity 1200ms var(--transition-fast-slow)");
-    expect(el.style.transition).toContain("transform 1200ms var(--transition-fast-slow)");
+    expect(el.style.transition).toContain(
+      "opacity 1200ms var(--transition-fast-slow)",
+    );
+    expect(el.style.transition).toContain(
+      "transform 1200ms var(--transition-fast-slow)",
+    );
   });
 
   it("applies a custom translateY on the hidden transform", () => {

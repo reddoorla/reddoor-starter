@@ -22,7 +22,7 @@ function resolveConfig(param: AnimateInParam): ResolvedConfig {
 
   const opts: AnimateInOptions =
     typeof param === "object" && param !== null ? param : {};
-  const trigger = typeof param === "boolean" ? param : opts.trigger ?? false;
+  const trigger = typeof param === "boolean" ? param : (opts.trigger ?? false);
 
   return {
     mode: isTriggered ? "triggered" : "viewport",
@@ -67,7 +67,8 @@ export function animateIn(node: HTMLElement, param?: AnimateInParam) {
     }
   } else {
     applyHidden(node, cfg);
-    const delay = cfg.delayMax * (node.getBoundingClientRect().left / window.innerWidth);
+    const delay =
+      cfg.delayMax * (node.getBoundingClientRect().left / window.innerWidth);
     node.style.transitionDelay = `${delay}ms`;
 
     observer = new IntersectionObserver(
