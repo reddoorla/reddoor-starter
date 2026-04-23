@@ -75,7 +75,15 @@ export function animateIn(node: HTMLElement, param?: AnimateInParam) {
   }
 
   return {
-    update(_next?: AnimateInParam) {},
+    update(next?: AnimateInParam) {
+      if (cfg.mode !== "triggered") return;
+      const nextCfg = resolveConfig(next);
+      if (nextCfg.trigger) {
+        reveal(node);
+      } else {
+        applyHidden(node, cfg);
+      }
+    },
     destroy() {
       observer?.disconnect();
     },

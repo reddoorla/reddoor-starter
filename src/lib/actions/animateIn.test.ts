@@ -168,4 +168,38 @@ describe("animateIn — triggered mode", () => {
 
     expect(el.style.transitionDelay).toBe("");
   });
+
+  it("flips to visible when update passes trigger: true", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    const ret = animateIn(el, false);
+    expect(el.style.opacity).toBe("0");
+
+    ret.update(true);
+    expect(el.style.opacity).toBe("1");
+    expect(el.style.transform).toBe("translateY(0)");
+  });
+
+  it("flips back to hidden when update passes trigger: false", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    const ret = animateIn(el, true);
+    ret.update(false);
+
+    expect(el.style.opacity).toBe("0");
+    expect(el.style.transform).toBe("translateY(50%)");
+  });
+
+  it("update is a no-op in viewport mode", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    const ret = animateIn(el);
+    ret.update({ duration: 500 });
+
+    // Still the default duration — viewport mode ignores updates.
+    expect(el.style.transition).toContain("2400ms");
+  });
 });
