@@ -47,6 +47,14 @@ function reveal(node: HTMLElement) {
 }
 
 export function animateIn(node: HTMLElement, param?: AnimateInParam) {
+  if (
+    typeof window !== "undefined" &&
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  ) {
+    return { update() {}, destroy() {} };
+  }
+
   const cfg = resolveConfig(param);
   let observer: IntersectionObserver | undefined;
 

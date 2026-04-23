@@ -233,3 +233,29 @@ describe("animateIn — options overrides", () => {
     expect(el.style.transition).toContain("800ms");
   });
 });
+
+describe("animateIn — prefers-reduced-motion", () => {
+  it("skips animation when reduced motion is preferred (viewport mode)", () => {
+    mockMatchMedia(true);
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el);
+
+    expect(el.style.opacity).toBe("");
+    expect(el.style.transform).toBe("");
+    expect(el.style.transition).toBe("");
+    expect(FakeIntersectionObserver.instances.length).toBe(0);
+  });
+
+  it("skips animation when reduced motion is preferred (triggered mode)", () => {
+    mockMatchMedia(true);
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, false);
+
+    expect(el.style.opacity).toBe("");
+    expect(el.style.transition).toBe("");
+  });
+});
