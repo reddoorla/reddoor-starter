@@ -203,3 +203,33 @@ describe("animateIn — triggered mode", () => {
     expect(el.style.transition).toContain("2400ms");
   });
 });
+
+describe("animateIn — options overrides", () => {
+  it("applies a custom duration in the transition", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, { duration: 1200 });
+
+    expect(el.style.transition).toContain("opacity 1200ms var(--transition-fast-slow)");
+    expect(el.style.transition).toContain("transform 1200ms var(--transition-fast-slow)");
+  });
+
+  it("applies a custom translateY on the hidden transform", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, { translateY: "24px" });
+
+    expect(el.style.transform).toBe("translateY(24px)");
+  });
+
+  it("passes duration through in triggered mode too", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, { trigger: false, duration: 800 });
+
+    expect(el.style.transition).toContain("800ms");
+  });
+});

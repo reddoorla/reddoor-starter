@@ -75,6 +75,7 @@ export function animateIn(node: HTMLElement, param?: AnimateInParam) {
   }
 
   return {
+    /** In triggered mode, only the `trigger` field of `next` is read — other options are locked at mount. */
     update(next?: AnimateInParam) {
       if (cfg.mode !== "triggered") return;
       const nextCfg = resolveConfig(next);
