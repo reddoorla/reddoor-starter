@@ -41,12 +41,37 @@ function applyHidden(node: HTMLElement, cfg: ResolvedConfig) {
     `transform ${cfg.duration}ms var(--transition-fast-slow)`;
 }
 
-export function animateIn(node: HTMLElement, param?: AnimateInParam) {
+function reveal(node: HTMLElement) {
+  node.style.opacity = "1";
+  node.style.transform = "translateY(0)";
+}
+
+export function animateIn(
+  node: HTMLElement,
+  param?: AnimateInParam,
+) {
   const cfg = resolveConfig(param);
   applyHidden(node, cfg);
 
+  let observer: IntersectionObserver | undefined;
+
+  if (cfg.mode === "viewport") {
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          reveal(node);
+          observer?.disconnect();
+        }
+      },
+      { threshold: 0 },
+    );
+    observer.observe(node);
+  }
+
   return {
     update(_next?: AnimateInParam) {},
-    destroy() {},
+    destroy() {
+      observer?.disconnect();
+    },
   };
 }
