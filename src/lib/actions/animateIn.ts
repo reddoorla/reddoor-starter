@@ -46,16 +46,19 @@ function reveal(node: HTMLElement) {
   node.style.transform = "translateY(0)";
 }
 
-export function animateIn(
-  node: HTMLElement,
-  param?: AnimateInParam,
-) {
+export function animateIn(node: HTMLElement, param?: AnimateInParam) {
   const cfg = resolveConfig(param);
-  applyHidden(node, cfg);
-
   let observer: IntersectionObserver | undefined;
 
-  if (cfg.mode === "viewport") {
+  if (cfg.mode === "triggered") {
+    if (cfg.trigger) {
+      applyHidden(node, cfg);
+      reveal(node);
+    } else {
+      applyHidden(node, cfg);
+    }
+  } else {
+    applyHidden(node, cfg);
     const delay = cfg.delayMax * (node.getBoundingClientRect().left / window.innerWidth);
     node.style.transitionDelay = `${delay}ms`;
 

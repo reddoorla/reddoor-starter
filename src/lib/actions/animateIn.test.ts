@@ -47,6 +47,7 @@ beforeEach(() => {
   // @ts-expect-error — replacing global for test
   window.IntersectionObserver = FakeIntersectionObserver;
   mockMatchMedia(false);
+  Object.defineProperty(window, "innerWidth", { value: 1024, configurable: true });
 });
 
 describe("animateIn — viewport mode", () => {
@@ -123,5 +124,48 @@ describe("animateIn — viewport mode", () => {
     animateIn(el, { delayMax: 800 });
 
     expect(el.style.transitionDelay).toBe("400ms");
+  });
+});
+
+describe("animateIn — triggered mode", () => {
+  it("mounts hidden when trigger is false (boolean shorthand)", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, false);
+
+    expect(el.style.opacity).toBe("0");
+    expect(el.style.transform).toBe("translateY(50%)");
+    expect(FakeIntersectionObserver.instances.length).toBe(0);
+  });
+
+  it("mounts visible when trigger is true (boolean shorthand)", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, true);
+
+    expect(el.style.opacity).toBe("1");
+    expect(el.style.transform).toBe("translateY(0)");
+    expect(FakeIntersectionObserver.instances.length).toBe(0);
+  });
+
+  it("mounts visible when options have trigger: true", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, { trigger: true });
+
+    expect(el.style.opacity).toBe("1");
+    expect(FakeIntersectionObserver.instances.length).toBe(0);
+  });
+
+  it("does not set transition-delay in triggered mode", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, false);
+
+    expect(el.style.transitionDelay).toBe("");
   });
 });
