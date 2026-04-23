@@ -1,5 +1,5 @@
 <script lang="ts">
-  import AnimateIn from "./Animation/AnimateIn.svelte";
+  import { animateIn as animateInAction } from "$lib/actions/animateIn";
   import { viewport } from "$stores/viewport.svelte";
   import { onMount } from "svelte";
 
@@ -27,21 +27,21 @@
 </script>
 
 {#snippet content()}
-  <div
-    class="{baseClasses} {passedClasses || defaultLayouts}"
-    style={passedStyle}
-  >
-    {@render children?.()}
-  </div>
-{/snippet}
-
-{#snippet animatableContent()}
   {#if animateIn}
-    <AnimateIn>
-      {@render content()}
-    </AnimateIn>
+    <div
+      use:animateInAction
+      class="{baseClasses} {passedClasses || defaultLayouts}"
+      style={passedStyle}
+    >
+      {@render children?.()}
+    </div>
   {:else}
-    {@render content()}
+    <div
+      class="{baseClasses} {passedClasses || defaultLayouts}"
+      style={passedStyle}
+    >
+      {@render children?.()}
+    </div>
   {/if}
 {/snippet}
 
@@ -56,9 +56,9 @@
       style="background: linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, {edgeFadeColor} 100%);width:{edgeWidthPx}px;"
     ></div>
     <div class="w-screen relative">
-      {@render animatableContent()}
+      {@render content()}
     </div>
   </div>
 {:else}
-  {@render animatableContent()}
+  {@render content()}
 {/if}
