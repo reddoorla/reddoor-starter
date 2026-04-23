@@ -19,6 +19,38 @@ const config = {
       $assets: "src/lib/assets",
       "$assets/*": "src/lib/assets/*",
     },
+    // Baseline CSP for Prismic + Vimeo. Extend per project — any new CDN or
+    // analytics host must be added to the relevant directive. SvelteKit
+    // automatically adds nonces/hashes for inline scripts and styles it emits.
+    csp: {
+      mode: "auto",
+      directives: {
+        "default-src": ["self"],
+        "script-src": [
+          "self",
+          "https://static.cdn.prismic.io",
+          "https://player.vimeo.com",
+        ],
+        "style-src": ["self", "unsafe-inline"],
+        "img-src": [
+          "self",
+          "data:",
+          "https://images.prismic.io",
+          "https://*.prismic.io",
+        ],
+        "media-src": ["self", "https://*.vimeocdn.com"],
+        "frame-src": ["self", "https://player.vimeo.com"],
+        "connect-src": [
+          "self",
+          "https://*.prismic.io",
+          "https://static.cdn.prismic.io",
+        ],
+        "font-src": ["self", "data:"],
+        "base-uri": ["self"],
+        "form-action": ["self"],
+        "frame-ancestors": ["self"],
+      },
+    },
   },
   preprocess: vitePreprocess(),
 };

@@ -43,6 +43,9 @@
   },
   "type": "module",
   "packageManager": "pnpm@10.33.1",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@lucide/svelte": "^1.8.0",
     "@prismicio/client": "^7.3.1",

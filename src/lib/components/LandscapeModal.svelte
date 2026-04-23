@@ -3,21 +3,26 @@
   import { fade } from "svelte/transition";
 
   let showLandscapeModal = $state(false);
-  let isTouchDevice = $state(false);
-
-  function checkOrientation() {
-    const isLandscape = window.innerWidth > window.innerHeight;
-    const isSmallScreen = window.innerWidth < 1024;
-    showLandscapeModal = isTouchDevice && isLandscape && isSmallScreen;
-  }
 
   onMount(() => {
-    isTouchDevice = navigator.maxTouchPoints > 0;
-    if (isTouchDevice) {
-      checkOrientation();
-      window.addEventListener("resize", checkOrientation);
-      return () => window.removeEventListener("resize", checkOrientation);
-    }
+    // `pointer: coarse` avoids the false positives on touchscreen laptops that
+    // a `maxTouchPoints > 0` check would produce.
+    const coarse = window.matchMedia("(pointer: coarse)");
+    const landscape = window.matchMedia(
+      "(orientation: landscape) and (max-width: 1023px)",
+    );
+
+    const update = () => {
+      showLandscapeModal = coarse.matches && landscape.matches;
+    };
+
+    update();
+    coarse.addEventListener("change", update);
+    landscape.addEventListener("change", update);
+    return () => {
+      coarse.removeEventListener("change", update);
+      landscape.removeEventListener("change", update);
+    };
   });
 </script>
 

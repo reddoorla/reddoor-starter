@@ -49,8 +49,16 @@
     }
   };
 
+  // Let the browser handle new-tab / new-window / download intents natively.
+  const isModifiedClick = (event: MouseEvent): boolean =>
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey;
+
   const handleClick: MouseEventHandler<HTMLAnchorElement> = async (event) => {
-    if (isInternalLink(href) && !isPdfLink(href)) {
+    if (isInternalLink(href) && !isPdfLink(href) && !isModifiedClick(event)) {
       event.preventDefault();
 
       if (onclick) {

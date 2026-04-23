@@ -82,4 +82,21 @@ describe("DelayedLink", () => {
     vi.advanceTimersByTime(100);
     expect(gotoMock).toHaveBeenCalledWith("/not-a-pdf/page");
   });
+
+  it.each([
+    ["metaKey", { metaKey: true }],
+    ["ctrlKey", { ctrlKey: true }],
+    ["shiftKey", { shiftKey: true }],
+    ["middle click", { button: 1 }],
+  ])("does not intercept when %s is set (native nav)", async (_, init) => {
+    const { getByText } = render(DelayedLink, {
+      href: "/about",
+      delay: 100,
+      children: label(),
+    });
+
+    await fireEvent.click(getByText("click me"), init);
+    vi.advanceTimersByTime(1000);
+    expect(gotoMock).not.toHaveBeenCalled();
+  });
 });

@@ -1,9 +1,11 @@
 import { asText } from "@prismicio/client";
-import { error } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 
 import { createClient } from "$lib/prismicio";
 
 export async function load({ params, fetch, cookies }) {
+  if (params.uid === "home") redirect(308, "/");
+
   const client = createClient({ fetch, cookies });
 
   try {
@@ -26,7 +28,8 @@ export async function entries() {
 
   const pages = await client.getAllByType("page");
 
-  return pages.map((page) => {
-    return { uid: page.uid };
-  });
+  // "home" is rendered by the root route — exclude so /home isn't duplicated.
+  return pages
+    .filter((page) => page.uid !== "home")
+    .map((page) => ({ uid: page.uid }));
 }

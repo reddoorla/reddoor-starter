@@ -2,6 +2,11 @@
   import { page } from "$app/state";
 </script>
 
+<svelte:head>
+  <title>{page.status} — {page.error?.message ?? "Error"}</title>
+  <meta name="robots" content="noindex" />
+</svelte:head>
+
 <div
   class="flex flex-col items-center justify-center min-h-[60vh] text-center px-8"
 >

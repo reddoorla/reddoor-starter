@@ -25,9 +25,6 @@ ${urls.join("\n")}
 </urlset>`;
 
   return new Response(xml, {
-    headers: {
-      "Content-Type": "application/xml",
-      "Cache-Control": "public, max-age=3600",
-    },
+    headers: { "Content-Type": "application/xml" },
   });
 };

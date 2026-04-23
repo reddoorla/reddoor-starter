@@ -61,9 +61,26 @@
     if (e.detail.direction === "left") nextSlide();
     if (e.detail.direction === "right") prevSlide();
   };
+
+  // Arrow-key nav when one of the carousel's own controls has focus — avoids
+  // needing a tabindex on a non-interactive wrapper.
+  const handleKeydown = (e: KeyboardEvent) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      prevSlide();
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      nextSlide();
+    }
+  };
 </script>
 
-<div class="relative w-full">
+<div
+  class="relative w-full"
+  role="region"
+  aria-roledescription="carousel"
+  aria-label="Slider"
+>
   <div
     class="relative overflow-hidden w-full"
     {...useSwipe(handleSwipe, () => ({
@@ -94,6 +111,7 @@
       {#if maxSlide > 1}
         <button
           onclick={prevSlide}
+          onkeydown={handleKeydown}
           class="w-8 h-8 rounded-full text-gray-700 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center"
           aria-label="Previous slide"
         >
@@ -117,17 +135,20 @@
         {#each Array(maxSlide + 1) as _, i (i)}
           <button
             onclick={() => goToSlide(i)}
+            onkeydown={handleKeydown}
             class="h-3 rounded-full active:-translate-y-1 transition-all duration-200 {currentSlide ===
             i
               ? 'bg-gray-800 cursor-default w-8'
               : 'w-3 bg-gray-300 hover:bg-gray-400 active:bg-gray-600'}"
             aria-label="Go to slide {i + 1}"
+            aria-current={currentSlide === i ? "true" : undefined}
           ></button>
         {/each}
       </div>
       {#if maxSlide > 1}
         <button
           onclick={nextSlide}
+          onkeydown={handleKeydown}
           class="w-8 h-8 rounded-full text-gray-700 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center"
           aria-label="Next slide"
         >
