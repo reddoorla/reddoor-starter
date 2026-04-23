@@ -56,6 +56,9 @@ export function animateIn(
   let observer: IntersectionObserver | undefined;
 
   if (cfg.mode === "viewport") {
+    const delay = cfg.delayMax * (node.getBoundingClientRect().left / window.innerWidth);
+    node.style.transitionDelay = `${delay}ms`;
+
     observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
