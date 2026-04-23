@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { animateIn as animateInAction } from "$lib/actions/animateIn";
+  import { animateIn } from "$lib/actions/animateIn";
   import { viewport } from "$stores/viewport.svelte";
   import { onMount } from "svelte";
 
   let {
-    animateIn = false,
+    /** When true, reveals the content block on scroll into view via `use:animateIn`. Viewport-triggered only. */
+    animateInOnScroll = false,
     class: passedClasses = "",
     style: passedStyle = "",
     children = undefined,
@@ -27,9 +28,9 @@
 </script>
 
 {#snippet content()}
-  {#if animateIn}
+  {#if animateInOnScroll}
     <div
-      use:animateInAction
+      use:animateIn
       class="{baseClasses} {passedClasses || defaultLayouts}"
       style={passedStyle}
     >
