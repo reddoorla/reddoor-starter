@@ -16,11 +16,33 @@ A forkable starting point for all SvelteKit, Tailwind + Prismic sites developed 
 
 A library of responsive, reusable components designed to be used within Prismic Slices or standalone:
 
-- **Animation** — `AnimateIn`, `AnimateInTriggered`, `AnimateOutTriggered`, `Slider`, `TriggerTransitionOnMount`
+- **Animation** — `AnimateInTriggered`, `AnimateOutTriggered`, `Slider`, `TriggerTransitionOnMount`
 - **Layout** — `ContentWidth`, `ScreenWidthMedia`, `TransitionOverlay`
 - **UI** — `Accordion`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
 
 This library grows as new interactive functions or layouts are needed, allowing work from different projects to carry over rather than rebuilding from scratch.
+
+### Animation action — `use:animateIn`
+
+A Svelte action that attaches fade-up reveal behavior to any element. Defaults to viewport-triggered (via `IntersectionObserver` — reveals on first scroll into view); pass a boolean or `{ trigger }` option to drive it from state instead. Applies inline styles only, so it composes with whatever `class` / `style` the host already has. Respects `prefers-reduced-motion`.
+
+```svelte
+<script>
+  import { animateIn } from "$lib/actions/animateIn";
+  let isOpen = $state(false);
+</script>
+
+<!-- Viewport-triggered -->
+<div use:animateIn>…</div>
+
+<!-- State-triggered -->
+<div use:animateIn={isOpen}>…</div>
+
+<!-- With overrides -->
+<div use:animateIn={{ duration: 1200, delayMax: 0 }}>…</div>
+```
+
+**Options:** `trigger?: boolean` · `duration?: number` (ms, default `2400`) · `delayMax?: number` (ms, default `400`; viewport mode only — position-based stagger) · `translateY?: string` (default `"50%"`).
 
 ## Getting Started
 
