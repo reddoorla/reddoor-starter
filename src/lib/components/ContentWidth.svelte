@@ -1,10 +1,11 @@
 <script lang="ts">
-  import AnimateIn from "./Animation/AnimateIn.svelte";
+  import { animateIn } from "$lib/actions/animateIn";
   import { viewport } from "$stores/viewport.svelte";
   import { onMount } from "svelte";
 
   let {
-    animateIn = false,
+    /** When true, reveals the content block on scroll into view via `use:animateIn`. Viewport-triggered only. */
+    animateInOnScroll = false,
     class: passedClasses = "",
     style: passedStyle = "",
     children = undefined,
@@ -27,21 +28,21 @@
 </script>
 
 {#snippet content()}
-  <div
-    class="{baseClasses} {passedClasses || defaultLayouts}"
-    style={passedStyle}
-  >
-    {@render children?.()}
-  </div>
-{/snippet}
-
-{#snippet animatableContent()}
-  {#if animateIn}
-    <AnimateIn>
-      {@render content()}
-    </AnimateIn>
+  {#if animateInOnScroll}
+    <div
+      use:animateIn
+      class="{baseClasses} {passedClasses || defaultLayouts}"
+      style={passedStyle}
+    >
+      {@render children?.()}
+    </div>
   {:else}
-    {@render content()}
+    <div
+      class="{baseClasses} {passedClasses || defaultLayouts}"
+      style={passedStyle}
+    >
+      {@render children?.()}
+    </div>
   {/if}
 {/snippet}
 
@@ -56,9 +57,9 @@
       style="background: linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, {edgeFadeColor} 100%);width:{edgeWidthPx}px;"
     ></div>
     <div class="w-screen relative">
-      {@render animatableContent()}
+      {@render content()}
     </div>
   </div>
 {:else}
-  {@render animatableContent()}
+  {@render content()}
 {/if}

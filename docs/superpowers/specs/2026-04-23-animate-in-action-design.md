@@ -37,9 +37,9 @@ README.md                # new "Animation action" subsection under Components
 
 ```ts
 type AnimateInOptions = {
-  trigger?: boolean;   // present → triggered mode; absent → viewport mode
-  duration?: number;   // default 2400 (ms)
-  delayMax?: number;   // default 400 (ms); viewport mode only — position-based stagger
+  trigger?: boolean; // present → triggered mode; absent → viewport mode
+  duration?: number; // default 2400 (ms)
+  delayMax?: number; // default 400 (ms); viewport mode only — position-based stagger
   translateY?: string; // default "50%"
 };
 

@@ -14,13 +14,13 @@
 
 ## File Structure
 
-| File                                                    | Action   | Responsibility                                                     |
-| ------------------------------------------------------- | -------- | ------------------------------------------------------------------ |
-| `src/lib/actions/animateIn.ts`                          | Create   | The action — mode selection, styles, observer, update, destroy.    |
-| `src/lib/actions/animateIn.test.ts`                     | Create   | Unit tests for both modes, options overrides, reduced-motion.      |
-| `src/lib/components/ContentWidth.svelte`                | Modify   | Drop `AnimateIn` wrapper; apply `use:animateIn` on inner `<div>`.  |
-| `src/lib/components/Animation/AnimateIn.svelte`         | Delete   | No longer needed after `ContentWidth` refactor.                    |
-| `README.md`                                             | Modify   | Add `use:animateIn` docs; remove `AnimateIn` from components list. |
+| File                                            | Action | Responsibility                                                     |
+| ----------------------------------------------- | ------ | ------------------------------------------------------------------ |
+| `src/lib/actions/animateIn.ts`                  | Create | The action — mode selection, styles, observer, update, destroy.    |
+| `src/lib/actions/animateIn.test.ts`             | Create | Unit tests for both modes, options overrides, reduced-motion.      |
+| `src/lib/components/ContentWidth.svelte`        | Modify | Drop `AnimateIn` wrapper; apply `use:animateIn` on inner `<div>`.  |
+| `src/lib/components/Animation/AnimateIn.svelte` | Delete | No longer needed after `ContentWidth` refactor.                    |
+| `README.md`                                     | Modify | Add `use:animateIn` docs; remove `AnimateIn` from components list. |
 
 Each task ends with a commit. Commits are small and focused so any single task can be reverted cleanly.
 
@@ -29,6 +29,7 @@ Each task ends with a commit. Commits are small and focused so any single task c
 ## Task 1: Scaffold the action + viewport mode initial hidden styles
 
 **Files:**
+
 - Create: `src/lib/actions/animateIn.ts`
 - Create: `src/lib/actions/animateIn.test.ts`
 
@@ -64,7 +65,12 @@ class FakeIntersectionObserver {
   // Test helper — trigger an intersection event.
   trigger(isIntersecting: boolean) {
     this.callback(
-      [{ isIntersecting, target: this.observed[0] } as IntersectionObserverEntry],
+      [
+        {
+          isIntersecting,
+          target: this.observed[0],
+        } as IntersectionObserverEntry,
+      ],
       this as unknown as IntersectionObserver,
     );
   }
@@ -72,7 +78,8 @@ class FakeIntersectionObserver {
 
 function mockMatchMedia(reducedMotion: boolean) {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
-    matches: query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
+    matches:
+      query === "(prefers-reduced-motion: reduce)" ? reducedMotion : false,
     media: query,
     addEventListener: () => {},
     removeEventListener: () => {},
@@ -99,8 +106,12 @@ describe("animateIn — viewport mode", () => {
 
     expect(el.style.opacity).toBe("0");
     expect(el.style.transform).toBe("translateY(50%)");
-    expect(el.style.transition).toContain("opacity 2400ms var(--transition-fast-slow)");
-    expect(el.style.transition).toContain("transform 2400ms var(--transition-fast-slow)");
+    expect(el.style.transition).toContain(
+      "opacity 2400ms var(--transition-fast-slow)",
+    );
+    expect(el.style.transition).toContain(
+      "transform 2400ms var(--transition-fast-slow)",
+    );
   });
 });
 ```
@@ -139,7 +150,7 @@ function resolveConfig(param: AnimateInParam): ResolvedConfig {
 
   const opts: AnimateInOptions =
     typeof param === "object" && param !== null ? param : {};
-  const trigger = typeof param === "boolean" ? param : opts.trigger ?? false;
+  const trigger = typeof param === "boolean" ? param : (opts.trigger ?? false);
 
   return {
     mode: isTriggered ? "triggered" : "viewport",
@@ -186,6 +197,7 @@ git commit -m "feat(actions): scaffold animateIn action with viewport initial st
 ## Task 2: Viewport mode — intersection reveal and destroy cleanup
 
 **Files:**
+
 - Modify: `src/lib/actions/animateIn.ts`
 - Modify: `src/lib/actions/animateIn.test.ts`
 
@@ -194,43 +206,43 @@ git commit -m "feat(actions): scaffold animateIn action with viewport initial st
 Append to `src/lib/actions/animateIn.test.ts` inside the `describe("animateIn — viewport mode", ...)` block:
 
 ```ts
-  it("reveals on intersection and disconnects the observer", () => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
+it("reveals on intersection and disconnects the observer", () => {
+  const el = document.createElement("div");
+  document.body.appendChild(el);
 
-    animateIn(el);
-    const observer = FakeIntersectionObserver.instances[0];
-    expect(observer).toBeDefined();
-    expect(observer.observed[0]).toBe(el);
+  animateIn(el);
+  const observer = FakeIntersectionObserver.instances[0];
+  expect(observer).toBeDefined();
+  expect(observer.observed[0]).toBe(el);
 
-    observer.trigger(true);
+  observer.trigger(true);
 
-    expect(el.style.opacity).toBe("1");
-    expect(el.style.transform).toBe("translateY(0)");
-    expect(observer.disconnected).toBe(true);
-  });
+  expect(el.style.opacity).toBe("1");
+  expect(el.style.transform).toBe("translateY(0)");
+  expect(observer.disconnected).toBe(true);
+});
 
-  it("does not reveal when not intersecting", () => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
+it("does not reveal when not intersecting", () => {
+  const el = document.createElement("div");
+  document.body.appendChild(el);
 
-    animateIn(el);
-    FakeIntersectionObserver.instances[0].trigger(false);
+  animateIn(el);
+  FakeIntersectionObserver.instances[0].trigger(false);
 
-    expect(el.style.opacity).toBe("0");
-    expect(FakeIntersectionObserver.instances[0].disconnected).toBe(false);
-  });
+  expect(el.style.opacity).toBe("0");
+  expect(FakeIntersectionObserver.instances[0].disconnected).toBe(false);
+});
 
-  it("disconnects the observer on destroy", () => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
+it("disconnects the observer on destroy", () => {
+  const el = document.createElement("div");
+  document.body.appendChild(el);
 
-    const ret = animateIn(el);
-    const observer = FakeIntersectionObserver.instances[0];
-    ret.destroy();
+  const ret = animateIn(el);
+  const observer = FakeIntersectionObserver.instances[0];
+  ret.destroy();
 
-    expect(observer.disconnected).toBe(true);
-  });
+  expect(observer.disconnected).toBe(true);
+});
 ```
 
 - [ ] **Step 2: Run tests — confirm they fail**
@@ -297,6 +309,7 @@ git commit -m "feat(actions): viewport-mode intersection reveal and destroy clea
 ## Task 3: Viewport mode — position-based stagger delay
 
 **Files:**
+
 - Modify: `src/lib/actions/animateIn.ts`
 - Modify: `src/lib/actions/animateIn.test.ts`
 
@@ -307,30 +320,56 @@ git commit -m "feat(actions): viewport-mode intersection reveal and destroy clea
 Append to `src/lib/actions/animateIn.test.ts` inside the viewport describe block:
 
 ```ts
-  it("sets transition-delay based on horizontal position", () => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
-    // Element 25% across a 1000px viewport, delayMax 400 → 100ms delay.
-    Object.defineProperty(window, "innerWidth", { value: 1000, configurable: true });
-    el.getBoundingClientRect = () =>
-      ({ left: 250, top: 0, right: 0, bottom: 0, width: 0, height: 0, x: 0, y: 0, toJSON: () => ({}) }) as DOMRect;
-
-    animateIn(el);
-
-    expect(el.style.transitionDelay).toBe("100ms");
+it("sets transition-delay based on horizontal position", () => {
+  const el = document.createElement("div");
+  document.body.appendChild(el);
+  // Element 25% across a 1000px viewport, delayMax 400 → 100ms delay.
+  Object.defineProperty(window, "innerWidth", {
+    value: 1000,
+    configurable: true,
   });
+  el.getBoundingClientRect = () =>
+    ({
+      left: 250,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      width: 0,
+      height: 0,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    }) as DOMRect;
 
-  it("honors a custom delayMax", () => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
-    Object.defineProperty(window, "innerWidth", { value: 1000, configurable: true });
-    el.getBoundingClientRect = () =>
-      ({ left: 500, top: 0, right: 0, bottom: 0, width: 0, height: 0, x: 0, y: 0, toJSON: () => ({}) }) as DOMRect;
+  animateIn(el);
 
-    animateIn(el, { delayMax: 800 });
+  expect(el.style.transitionDelay).toBe("100ms");
+});
 
-    expect(el.style.transitionDelay).toBe("400ms");
+it("honors a custom delayMax", () => {
+  const el = document.createElement("div");
+  document.body.appendChild(el);
+  Object.defineProperty(window, "innerWidth", {
+    value: 1000,
+    configurable: true,
   });
+  el.getBoundingClientRect = () =>
+    ({
+      left: 500,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      width: 0,
+      height: 0,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    }) as DOMRect;
+
+  animateIn(el, { delayMax: 800 });
+
+  expect(el.style.transitionDelay).toBe("400ms");
+});
 ```
 
 - [ ] **Step 2: Run — confirm they fail**
@@ -343,8 +382,9 @@ Expected: FAIL — `transitionDelay` is empty string.
 In `src/lib/actions/animateIn.ts`, inside the `if (cfg.mode === "viewport")` block, BEFORE the observer is created, add:
 
 ```ts
-    const delay = cfg.delayMax * (node.getBoundingClientRect().left / window.innerWidth);
-    node.style.transitionDelay = `${delay}ms`;
+const delay =
+  cfg.delayMax * (node.getBoundingClientRect().left / window.innerWidth);
+node.style.transitionDelay = `${delay}ms`;
 ```
 
 - [ ] **Step 4: Run — confirm both tests pass**
@@ -364,6 +404,7 @@ git commit -m "feat(actions): position-based stagger delay in viewport mode"
 ## Task 4: Triggered mode — initial state from boolean or options
 
 **Files:**
+
 - Modify: `src/lib/actions/animateIn.ts`
 - Modify: `src/lib/actions/animateIn.test.ts`
 
@@ -441,7 +482,8 @@ export function animateIn(node: HTMLElement, param?: AnimateInParam) {
     }
   } else {
     applyHidden(node, cfg);
-    const delay = cfg.delayMax * (node.getBoundingClientRect().left / window.innerWidth);
+    const delay =
+      cfg.delayMax * (node.getBoundingClientRect().left / window.innerWidth);
     node.style.transitionDelay = `${delay}ms`;
 
     observer = new IntersectionObserver(
@@ -482,6 +524,7 @@ git commit -m "feat(actions): triggered mode with boolean and options params"
 ## Task 5: Triggered mode — `update` flips styles on reactive change
 
 **Files:**
+
 - Modify: `src/lib/actions/animateIn.ts`
 - Modify: `src/lib/actions/animateIn.test.ts`
 
@@ -492,39 +535,39 @@ git commit -m "feat(actions): triggered mode with boolean and options params"
 Append to the triggered describe block in `src/lib/actions/animateIn.test.ts`:
 
 ```ts
-  it("flips to visible when update passes trigger: true", () => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
+it("flips to visible when update passes trigger: true", () => {
+  const el = document.createElement("div");
+  document.body.appendChild(el);
 
-    const ret = animateIn(el, false);
-    expect(el.style.opacity).toBe("0");
+  const ret = animateIn(el, false);
+  expect(el.style.opacity).toBe("0");
 
-    ret.update(true);
-    expect(el.style.opacity).toBe("1");
-    expect(el.style.transform).toBe("translateY(0)");
-  });
+  ret.update(true);
+  expect(el.style.opacity).toBe("1");
+  expect(el.style.transform).toBe("translateY(0)");
+});
 
-  it("flips back to hidden when update passes trigger: false", () => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
+it("flips back to hidden when update passes trigger: false", () => {
+  const el = document.createElement("div");
+  document.body.appendChild(el);
 
-    const ret = animateIn(el, true);
-    ret.update(false);
+  const ret = animateIn(el, true);
+  ret.update(false);
 
-    expect(el.style.opacity).toBe("0");
-    expect(el.style.transform).toBe("translateY(50%)");
-  });
+  expect(el.style.opacity).toBe("0");
+  expect(el.style.transform).toBe("translateY(50%)");
+});
 
-  it("update is a no-op in viewport mode", () => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
+it("update is a no-op in viewport mode", () => {
+  const el = document.createElement("div");
+  document.body.appendChild(el);
 
-    const ret = animateIn(el);
-    ret.update({ duration: 500 });
+  const ret = animateIn(el);
+  ret.update({ duration: 500 });
 
-    // Still the default duration — viewport mode ignores updates.
-    expect(el.style.transition).toContain("2400ms");
-  });
+  // Still the default duration — viewport mode ignores updates.
+  expect(el.style.transition).toContain("2400ms");
+});
 ```
 
 - [ ] **Step 2: Run — confirm they fail**
@@ -537,20 +580,20 @@ Expected: FAIL — `update` currently does nothing.
 In `src/lib/actions/animateIn.ts`, replace the return statement of `animateIn` with:
 
 ```ts
-  return {
-    update(next?: AnimateInParam) {
-      if (cfg.mode !== "triggered") return;
-      const nextCfg = resolveConfig(next);
-      if (nextCfg.trigger) {
-        reveal(node);
-      } else {
-        applyHidden(node, cfg);
-      }
-    },
-    destroy() {
-      observer?.disconnect();
-    },
-  };
+return {
+  update(next?: AnimateInParam) {
+    if (cfg.mode !== "triggered") return;
+    const nextCfg = resolveConfig(next);
+    if (nextCfg.trigger) {
+      reveal(node);
+    } else {
+      applyHidden(node, cfg);
+    }
+  },
+  destroy() {
+    observer?.disconnect();
+  },
+};
 ```
 
 - [ ] **Step 4: Run — confirm all tests pass**
@@ -570,6 +613,7 @@ git commit -m "feat(actions): update flips styles when trigger changes"
 ## Task 6: Options overrides — `duration` and `translateY`
 
 **Files:**
+
 - Modify: `src/lib/actions/animateIn.test.ts`
 
 **Context:** `duration` and `translateY` defaults flow through `resolveConfig` already. This task is a regression guard to confirm the overrides reach the DOM. No implementation change expected.
@@ -586,8 +630,12 @@ describe("animateIn — options overrides", () => {
 
     animateIn(el, { duration: 1200 });
 
-    expect(el.style.transition).toContain("opacity 1200ms var(--transition-fast-slow)");
-    expect(el.style.transition).toContain("transform 1200ms var(--transition-fast-slow)");
+    expect(el.style.transition).toContain(
+      "opacity 1200ms var(--transition-fast-slow)",
+    );
+    expect(el.style.transition).toContain(
+      "transform 1200ms var(--transition-fast-slow)",
+    );
   });
 
   it("applies a custom translateY on the hidden transform", () => {
@@ -627,6 +675,7 @@ git commit -m "test(actions): regression coverage for duration and translateY ov
 ## Task 7: `prefers-reduced-motion` short-circuit
 
 **Files:**
+
 - Modify: `src/lib/actions/animateIn.ts`
 - Modify: `src/lib/actions/animateIn.test.ts`
 
@@ -674,13 +723,13 @@ Expected: FAIL — styles still applied regardless of `matchMedia`.
 In `src/lib/actions/animateIn.ts`, add this check as the first statement inside `animateIn`, BEFORE `const cfg = resolveConfig(param)`:
 
 ```ts
-  if (
-    typeof window !== "undefined" &&
-    window.matchMedia &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  ) {
-    return { update() {}, destroy() {} };
-  }
+if (
+  typeof window !== "undefined" &&
+  window.matchMedia &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches
+) {
+  return { update() {}, destroy() {} };
+}
 ```
 
 - [ ] **Step 4: Run — confirm all tests pass**
@@ -700,6 +749,7 @@ git commit -m "feat(actions): skip animation when prefers-reduced-motion is set"
 ## Task 8: Refactor `ContentWidth.svelte` and delete the wrapper component
 
 **Files:**
+
 - Modify: `src/lib/components/ContentWidth.svelte`
 - Delete: `src/lib/components/Animation/AnimateIn.svelte`
 
@@ -812,6 +862,7 @@ git commit -m "refactor(content-width): use animateIn action, delete wrapper com
 ## Task 9: README update
 
 **Files:**
+
 - Modify: `README.md`
 
 **Context:** Add documentation for the new action and remove `AnimateIn` from the listed components.
@@ -875,6 +926,7 @@ git commit -m "docs(readme): document use:animateIn action"
 ## Self-Review
 
 **Spec coverage:**
+
 - API surface (`AnimateInOptions`, `AnimateInParam`, mode selection table) → Tasks 1, 4, 6 ✓
 - Inline styles on host, no class mutation → Task 1 ✓
 - Viewport mode: IntersectionObserver, reveal on first intersect, disconnect → Task 2 ✓
