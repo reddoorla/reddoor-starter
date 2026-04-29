@@ -24,6 +24,10 @@ const config = {
     // automatically adds nonces/hashes for inline scripts and styles it emits.
     csp: {
       mode: "auto",
+      // Violations POST to /api/csp-report. To stage a stricter policy without
+      // blocking, copy `directives` below into a sibling `reportOnly: { ... }`
+      // block — SvelteKit will then emit a Content-Security-Policy-Report-Only
+      // header alongside the enforced one.
       directives: {
         "default-src": ["self"],
         "script-src": [
@@ -49,6 +53,7 @@ const config = {
         "base-uri": ["self"],
         "form-action": ["self"],
         "frame-ancestors": ["self"],
+        "report-uri": ["/api/csp-report"],
       },
     },
   },

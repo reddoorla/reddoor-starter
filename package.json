@@ -13,10 +13,16 @@
     "format": "prettier --write . --plugin prettier-plugin-svelte .",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:a11y": "playwright test",
+    "test:lhci": "lhci autorun",
+    "export:rfp-pdf": "npx --yes md-to-pdf --config-file pdf.config.cjs docs/rfp-handbook.md",
     "slicemachine": "start-slicemachine"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.2",
     "@eslint/js": "^10.0.1",
+    "@lhci/cli": "^0.15.1",
+    "@playwright/test": "^1.59.1",
     "@slicemachine/adapter-sveltekit": "^0.3.36",
     "@sveltejs/adapter-auto": "^7.0.0",
     "@sveltejs/adapter-netlify": "^6.0.4",
