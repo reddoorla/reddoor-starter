@@ -96,6 +96,7 @@ Verify: `pnpm install` clean, `pnpm vite:dev` boots, `curl /` returns 200. Tailw
 Touch `src/app.css` and delete `tailwind.config.js`.
 
 The new `src/app.css` shape is:
+
 1. `@import "tailwindcss";` at top (no more `@tailwind` directives)
 2. `@theme {}` block with breakpoints, color palette, easing tokens, custom heights
 3. `@source inline("...")` directives replacing the v3 `safelist` array
@@ -120,7 +121,7 @@ The codemod prompts three times — `Continue?` (default No, hit ↑ then Enter)
 
 What the codemod does: `export let` → `$props()`, `on:click` → `onclick`, `<slot />` → `{@render children?.()}`, mutable locals → `$state(...)`, `$:` → `run(() => ...)` from `svelte/legacy` (conservative — the next commit promotes these to `$derived`/`$effect`).
 
-What it can't do: components using `$$props.class` for arbitrary class spread will get a `<!-- @migration-task -->` comment. In those files, *other* migrations also stop — they retain Svelte 4 event syntax until you hand-fix.
+What it can't do: components using `$$props.class` for arbitrary class spread will get a `<!-- @migration-task -->` comment. In those files, _other_ migrations also stop — they retain Svelte 4 event syntax until you hand-fix.
 
 ### Commit 4 — Hand-clean
 
@@ -136,8 +137,14 @@ This is the bulk of the work — touch every component once. Bucket the work:
     class?: string;
     children?: Snippet;
   }
-  let { foo = "default", class: klass = "", children, ...rest }: Props = $props();
+  let {
+    foo = "default",
+    class: klass = "",
+    children,
+    ...rest
+  }: Props = $props();
 </script>
+
 <a class="...{klass}">{@render children?.()}</a>
 ```
 
@@ -153,7 +160,9 @@ let viewportWidth: number = $state();
 let main: HTMLElement | null = $state();
 
 // Fixed:
-let viewportWidth: number = $state(typeof window !== 'undefined' ? window.innerWidth : 1920);
+let viewportWidth: number = $state(
+  typeof window !== "undefined" ? window.innerWidth : 1920,
+);
 let main: HTMLElement | undefined = $state();
 ```
 
@@ -201,6 +210,7 @@ Each slider component then becomes:
     if (e.detail.direction === "right") slideLeft();
   });
 </script>
+
 <div use:swipe>...</div>
 ```
 
@@ -208,19 +218,20 @@ Each slider component then becomes:
 
 FA size → Lucide pixel mapping: `fa-xl` ≈ 24, `fa-2xl` ≈ 32, `fa-3x` ≈ 48. FA stroke weight → Lucide `strokeWidth`: `fa-thin` ≈ 1, `fa-light` ≈ 1.5, default ≈ 2.
 
-| FA | Lucide | Notes |
-|---|---|---|
-| `faEnvelope` / `fa-envelope` | `Mail` | |
-| `fa-close fa-3x` / `fa-xmark fa-3x` | `<X size={48} strokeWidth={1} />` | with `fa-thin` |
-| `fa-bars fa-3x` | `<Menu size={48} strokeWidth={1.5} />` | hamburger |
-| `fa-plus fa-2xl` | `<Plus size={36} strokeWidth={1} />` | rotates to X via `class:rotate-45` |
-| `fa-chevron-left/right fa-xl` | `ChevronLeft/Right size={24}` | |
-| `fa-download fa-xl` | `<Download size={24} strokeWidth={1.5} />` | with `fa-light` |
-| Brand icons (Reddit, etc.) | not in core Lucide | hand-roll an inline SVG. **Don't pull `@lucide/lab` for one icon.** |
+| FA                                  | Lucide                                     | Notes                                                               |
+| ----------------------------------- | ------------------------------------------ | ------------------------------------------------------------------- |
+| `faEnvelope` / `fa-envelope`        | `Mail`                                     |                                                                     |
+| `fa-close fa-3x` / `fa-xmark fa-3x` | `<X size={48} strokeWidth={1} />`          | with `fa-thin`                                                      |
+| `fa-bars fa-3x`                     | `<Menu size={48} strokeWidth={1.5} />`     | hamburger                                                           |
+| `fa-plus fa-2xl`                    | `<Plus size={36} strokeWidth={1} />`       | rotates to X via `class:rotate-45`                                  |
+| `fa-chevron-left/right fa-xl`       | `ChevronLeft/Right size={24}`              |                                                                     |
+| `fa-download fa-xl`                 | `<Download size={24} strokeWidth={1.5} />` | with `fa-light`                                                     |
+| Brand icons (Reddit, etc.)          | not in core Lucide                         | hand-roll an inline SVG. **Don't pull `@lucide/lab` for one icon.** |
 
 **Visual gotcha**: FA `<i>` glyphs anchor to the text baseline. Lucide SVGs anchor to top-left. `<i class="absolute top-10">` and `<Plus class="absolute top-10">` render at visibly different vertical offsets. **Fix by dropping absolute positioning** and letting flexbox center the icon as a sibling of the text it accompanies — this is the cleanest pattern, survives layout changes, and matches the starter's style.
 
 After all swaps:
+
 - Drop `<script src="https://kit.fontawesome.com/...">` from `app.html` — last consumer is gone.
 - `pnpm install` again. **Manually `rm -rf node_modules/@fortawesome`** if pre-pnpm npm install left dirs there. `pnpm install` doesn't auto-prune them.
 - Delete any unused-and-unimported components (medical-solutions-of-texas dropped `SocialsRow.svelte` and `TeamBox.svelte`).
@@ -236,9 +247,9 @@ Then `pnpm lint`. Expect a handful of fixups:
 - **`NodeJS.Timeout`** isn't globally typed — replace with `ReturnType<typeof setInterval>` (or `setTimeout`).
 - **`@typescript-eslint/no-explicit-any`** — tighten to concrete types or `unknown`. For SvelteKit page data: `import type { PageProps } from "./$types"; let { data }: PageProps = $props()`. For Prismic SliceZone in slice-simulator: `ComponentProps<typeof SliceZone>["slices"]`.
 - **`no-irregular-whitespace`** flags zero-width spaces (U+200B) and non-breaking spaces (U+00A0) from CMS-pasted copy. Strip with:
-    ```bash
-    perl -i -pe 's/\xe2\x80\x8b//g; s/\xc2\xa0/ /g' path/to/file.svelte
-    ```
+  ```bash
+  perl -i -pe 's/\xe2\x80\x8b//g; s/\xc2\xa0/ /g' path/to/file.svelte
+  ```
 - **Unused imports / dead vars** — drop them.
 
 Verify: `pnpm lint` clean, `pnpm check` 0 errors, `pnpm vite:dev` boots, all routes 200, `pnpm build` clean via adapter-netlify.
@@ -246,6 +257,7 @@ Verify: `pnpm lint` clean, `pnpm check` 0 errors, `pnpm vite:dev` boots, all rou
 ### Commit 7 — `docs/UPGRADE_NOTES.md`
 
 Author a retrospective in the project capturing:
+
 - Final stack table (before/after)
 - Commit-by-commit summary
 - **Gotchas actually hit** (distinguish from planned)
@@ -271,7 +283,7 @@ The medical-solutions-of-texas `docs/UPGRADE_NOTES.md` is the prototype.
 
 ## Out of scope (deferred to follow-up)
 
-These are deliberately *not* in the upgrade:
+These are deliberately _not_ in the upgrade:
 
 - Convert `.js` source files to `.ts` (incrementally as files get touched).
 - Add tests (this starter ships vitest + playwright + a11y harness — port the harness in a separate pass).
