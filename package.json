@@ -53,10 +53,10 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@lucide/svelte": "^1.8.0",
+    "@lucide/svelte": "^1.14.0",
     "@prismicio/client": "^7.3.1",
     "@prismicio/svelte": "^2.0.0",
-    "@tailwindcss/vite": "^4.1.4",
+    "@tailwindcss/vite": "^4.3.0",
     "@zerodevx/svelte-img": "^2.1.2",
     "svelte-gestures": "^5.0.7"
   }
