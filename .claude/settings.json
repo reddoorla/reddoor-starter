@@ -2,7 +2,13 @@
   "permissions": {
     "allow": [
       "Bash(gh run *)",
-      "Bash(awk '/Run pnpm lint/,/ELIFECYCLE/')"
+      "Bash(awk '/Run pnpm lint/,/ELIFECYCLE/')",
+      "Skill(superpowers:brainstorming)",
+      "Skill(superpowers:brainstorming:*)",
+      "Bash(cp /Users/tuckerlemos/Documents/GitHub/reddoor-starter/docs/superpowers/specs/2026-05-20-reddoor-maintenance-package-design.md /Users/tuckerlemos/Documents/GitHub/reddoor-maintenance/docs/specs/2026-05-20-package-design.md && ls /Users/tuckerlemos/Documents/GitHub/reddoor-maintenance/docs/specs/)"
+    ],
+    "additionalDirectories": [
+      "/Users/tuckerlemos/Documents/GitHub/reddoor-maintenance/docs/specs"
     ]
   }
 }
