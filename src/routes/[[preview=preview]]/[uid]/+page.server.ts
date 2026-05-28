@@ -1,7 +1,7 @@
 import { asText } from "@prismicio/client";
 import { error, redirect } from "@sveltejs/kit";
 
-import { createClient } from "$lib/prismicio";
+import { createClient, isPlaceholderRepo } from "$lib/prismicio";
 
 export async function load({ params, fetch, cookies }) {
   if (params.uid === "home") redirect(308, "/");
@@ -24,6 +24,8 @@ export async function load({ params, fetch, cookies }) {
 }
 
 export async function entries() {
+  if (isPlaceholderRepo) return [];
+
   const client = createClient();
 
   const pages = await client.getAllByType("page");

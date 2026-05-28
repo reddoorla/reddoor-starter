@@ -1,11 +1,11 @@
-import { createClient } from "$lib/prismicio";
+import { createClient, isPlaceholderRepo } from "$lib/prismicio";
 import type { RequestHandler } from "./$types";
 
 export const prerender = true;
 
 export const GET: RequestHandler = async ({ fetch, url }) => {
   const client = createClient({ fetch });
-  const pages = await client.getAllByType("page");
+  const pages = isPlaceholderRepo ? [] : await client.getAllByType("page");
   const origin = url.origin;
 
   const urls = pages.map((page) => {
