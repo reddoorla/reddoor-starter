@@ -1,5 +1,13 @@
+import { readFileSync } from "node:fs";
 import adapter from "@sveltejs/adapter-netlify";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+
+const slicemachine = JSON.parse(
+  readFileSync(new URL("./slicemachine.config.json", import.meta.url), "utf-8"),
+);
+const isPlaceholderRepo =
+  (process.env.VITE_PRISMIC_ENVIRONMENT || slicemachine.repositoryName) ===
+  "your-prismic-repo-name";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -9,6 +17,20 @@ const config = {
   },
   kit: {
     adapter: adapter(),
+    // Until a clone is wired to a real Prismic repo, every Prismic-backed
+    // route returns 404 during prerender. Tolerate that on the placeholder
+    // so `pnpm build` (and Netlify CI) succeed; real sites still fail loudly
+    // because `repositoryName` no longer matches the sentinel.
+    prerender: {
+      handleHttpError: ({ path, status, message, referrer }) => {
+        if (isPlaceholderRepo && status === 404) {
+          return;
+        }
+        throw new Error(
+          `${status} ${path}${referrer ? ` (linked from ${referrer})` : ""}: ${message}`,
+        );
+      },
+    },
     alias: {
       $components: "src/lib/components",
       "$components/*": "src/lib/components/*",

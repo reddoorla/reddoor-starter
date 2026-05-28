@@ -8,6 +8,13 @@ import config from "../../slicemachine.config.json";
 export const repositoryName =
   import.meta.env.VITE_PRISMIC_ENVIRONMENT || config.repositoryName;
 
+/**
+ * True when the starter has not yet been wired to a real Prismic repository.
+ * Prerender entry points (sitemap, dynamic [uid]) short-circuit to empty
+ * results in that case so `pnpm build` succeeds on an unconfigured clone.
+ */
+export const isPlaceholderRepo = repositoryName === "your-prismic-repo-name";
+
 const routes: prismic.ClientConfig["routes"] = [
   {
     type: "page",
