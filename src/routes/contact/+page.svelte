@@ -12,6 +12,16 @@
   let submitting = $state(false);
 </script>
 
+<!--
+  Canonical contact form (clone skeleton). EDIT PER SITE:
+  - the page <title>, <h1>, and subhead copy below
+  - the success-message copy
+  - the field set (add/remove <Field>s + matching keys in +page.server.ts buildPayload)
+  Forwards to the central dashboard ingest via createIngestAction; spam is handled
+  by the hidden honeypot + a 2s fill-timing screen (no Netlify Forms / CAPTCHA).
+  Requires FORMS_INGEST_URL + FORMS_INGEST_TOKEN in the deployed site's env (see .env.example).
+-->
+
 <svelte:head>
   <title>Contact</title>
 </svelte:head>
@@ -22,6 +32,7 @@
     <p class="text-secondary">Send us a message and we'll get back to you.</p>
   </header>
 
+  <!-- One-and-done: on success the form unmounts. To allow another submission, keep the form mounted and reset the field state instead. -->
   {#if form?.success}
     <p
       role="status"
@@ -41,6 +52,7 @@
         };
       }}
     >
+      <!-- Single top-level error; for multi-field validation summaries see $lib/components/Form.svelte. -->
       {#if form?.error}
         <p
           role="alert"
@@ -88,6 +100,7 @@
         name="message"
         label="Message"
         type="textarea"
+        maxlength={5000}
         required
         bind:value={message}
       />

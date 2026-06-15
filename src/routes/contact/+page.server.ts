@@ -22,7 +22,8 @@ export const actions: Actions = {
       email: form.get("email")?.toString(),
       phone: form.get("phone")?.toString(),
       message: form.get("message")?.toString(),
-      sourceUrl: `${event.url.origin}${event.url.pathname}`,
+      // Full URL incl. query string so UTM/campaign params (?utm_source=…) are captured.
+      sourceUrl: event.url.href,
     }),
   }),
 };
