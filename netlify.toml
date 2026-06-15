@@ -2,6 +2,9 @@
     command = "pnpm run build"
     publish = "build/"
 
+[build.environment]
+    NODE_VERSION = "24"
+
 # Baseline security headers for all responses. CSP is emitted per-response by
 # SvelteKit (see `kit.csp` in svelte.config.js) so it is intentionally omitted
 # here to avoid conflicting duplicates.
