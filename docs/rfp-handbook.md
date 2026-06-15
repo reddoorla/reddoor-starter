@@ -17,7 +17,7 @@ RFPs often quote standards they find on google or from an AI written for the max
 Unless we say otherwise, this handbook describes a project where:
 
 - The site is **informational or marketing** — homepage, services, case studies, blog, contact.
-- The only **end-user interactivity is forms** going to email or Netlify Forms; no database.
+- The only **end-user interactivity is forms** routed through our central dashboard ingest; no database.
 - **No logins, no payments, no personal-data storage** beyond form submissions.
 - **Editors are trusted client staff** working in Prismic (which handles their auth, roles, and version history).
 - **Fewer than ~1,000 pages.**
@@ -139,7 +139,11 @@ The OWASP Top 10 is a list of common web application security risks. RFPs often 
 
 ### Quote-ready answer
 
-Contact forms use Netlify Forms (or similar). Submissions are protected in transit by TLS, stored encrypted at rest by the form provider, forwarded to designated client email addresses, and retained only as long as the client needs them. Spam is mitigated with honeypot fields and, where appropriate, hCaptcha. By default the site collects no analytics-grade visitor identifiers; when site analytics are required we recommend Plausible (privacy-respecting, no cookie banner needed) over Google Analytics, and when clients prefer GA we implement a basic cookie-consent banner alongside it.
+Every new site ships with a working contact form at `/contact` out of the box. The form posts to a SvelteKit server action — built with `createIngestAction` from `@reddoorla/maintenance/forms` — that forwards each submission to our central operator dashboard. Submissions land in the dashboard and a shared Airtable, trigger a notification to the designated point of contact, and send an automatic acknowledgement back to the visitor. Everything is protected in transit by TLS and retained only as long as the client needs it. Spam is handled by a built-in honeypot plus a two-second timing screen — no Netlify Forms, no CAPTCHA, nothing for the visitor to solve. By default the site collects no analytics-grade visitor identifiers; when site analytics are required we recommend Plausible (privacy-respecting, no cookie banner needed) over Google Analytics, and when clients prefer GA we implement a basic cookie-consent banner alongside it.
+
+### Deploying the form (internal)
+
+The `/contact` route works the moment a site is cloned, but it only reaches the dashboard once two env vars are set in Netlify (plural names): `FORMS_INGEST_URL` (the ingest endpoint ending in this site's slug, e.g. `https://reddoor-maintenance.netlify.app/api/forms/acme`) and `FORMS_INGEST_TOKEN` (the same shared value as the dashboard's `FORMS_INGEST_TOKEN`). See `.env.example` for both. The route also sets `export const prerender = false`, because the root layout prerenders by default and a form action cannot run on a prerendered page.
 
 ### Plain-English version
 
