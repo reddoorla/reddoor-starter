@@ -23,7 +23,6 @@
     "@eslint/js": "^10.0.1",
     "@lhci/cli": "^0.15.1",
     "@playwright/test": "^1.60.0",
-    "@reddoorla/maintenance": "^0.28.0",
     "@slicemachine/adapter-sveltekit": "^0.3.96",
     "@sveltejs/adapter-netlify": "^6.0.4",
     "@sveltejs/kit": "^2.61.1",
@@ -62,6 +61,7 @@
   "dependencies": {
     "@lucide/svelte": "^1.17.0",
     "@prismicio/client": "^7.21.8",
+    "@reddoorla/maintenance": "^0.35.0",
     "@prismicio/svelte": "^2.2.1",
     "@tailwindcss/vite": "^4.3.0",
     "@zerodevx/svelte-img": "^2.1.2",
