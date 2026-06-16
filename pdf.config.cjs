@@ -34,7 +34,7 @@ module.exports = {
     `,
   },
   css: `
-    @import url('https://use.typekit.net/alh8out.css');
+    @import url('https://use.typekit.net/noj4tji.css');
     @import url('https://fonts.googleapis.com/css2?family=Besley:wght@300;400;600&display=swap');
 
     body {
