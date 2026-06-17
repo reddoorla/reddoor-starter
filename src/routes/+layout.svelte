@@ -8,7 +8,7 @@
   import Nav from "$lib/components/Nav.svelte";
   import Footer from "$lib/components/Footer.svelte";
 
-  let { children } = $props();
+  let { data, children } = $props();
 </script>
 
 <svelte:head>
@@ -50,4 +50,6 @@
 </div>
 <TransitionOverlay />
 <LandscapeModal />
-<PrismicPreview {repositoryName} />
+{#if data.isPreviewSession}
+  <PrismicPreview {repositoryName} />
+{/if}

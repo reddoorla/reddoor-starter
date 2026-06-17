@@ -93,7 +93,7 @@
       <iframe
         bind:this={iframeElement}
         title="background video"
-        src="https://player.vimeo.com/video/{vimeoId}?background=1&muted=1&loop=1&autoplay=1"
+        src="https://player.vimeo.com/video/{vimeoId}?background=1&muted=1&loop=1&autoplay=1&dnt=1"
         class="aspect-video absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 contrast-[1.15] -z-10 border-0"
         style="width: max(100%, 1000px)"
         allow="autoplay; fullscreen"
