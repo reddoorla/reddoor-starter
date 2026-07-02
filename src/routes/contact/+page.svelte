@@ -2,16 +2,49 @@
   import { enhance } from "$app/forms";
   import { env } from "$env/dynamic/public";
   import Field from "$lib/components/Field.svelte";
+  import { loadTurnstile } from "$lib/turnstile";
   import type { ActionData, PageData } from "./$types";
 
   let { data, form }: { data: PageData; form: ActionData } = $props();
 
-  // Optional Cloudflare Turnstile. Dark until a site sets PUBLIC_TURNSTILE_SITE_KEY;
-  // when set, the widget renders and injects a hidden `cf-turnstile-response` input
-  // that createIngestAction forwards to the central ingest for verification.
-  // Trimmed so a stray-whitespace value stays dark instead of rendering a widget
-  // with an invalid `data-sitekey=" "` (this fleet has hit trailing-space config before).
+  // Optional Cloudflare Turnstile. Dark until a site sets PUBLIC_TURNSTILE_SITE_KEY.
+  // Trimmed so a stray-whitespace value stays dark (this fleet has hit trailing-space
+  // config before). When set, the widget is rendered explicitly by the effect below.
   const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY?.trim();
+
+  // The element the Turnstile widget renders into; bound only when configured.
+  let turnstileEl = $state<HTMLDivElement>();
+
+  // Render Turnstile explicitly whenever the container is mounted. This fires on a
+  // full page load AND on client-side (SPA) navigation into this form — unlike an
+  // auto-render <svelte:head> script, whose scan only runs on api.js's first load
+  // and silently no-ops on later SPA nav, leaving a tokenless submit. The cleanup
+  // removes the widget so it re-renders fresh on the next mount. See $lib/turnstile.
+  $effect(() => {
+    const el = turnstileEl;
+    if (!turnstileSiteKey || !el) return;
+    let widgetId: string | undefined;
+    let cancelled = false;
+    loadTurnstile()
+      .then((turnstile) => {
+        if (cancelled || !el.isConnected) return;
+        widgetId = turnstile.render(el, { sitekey: turnstileSiteKey });
+      })
+      .catch(() => {
+        // Offline / blocked / CSP: central ingest is fail-open, so a missing token
+        // degrades to the honeypot + timing + heuristic screen, never a dropped lead.
+      });
+    return () => {
+      cancelled = true;
+      if (widgetId !== undefined) {
+        try {
+          window.turnstile?.remove(widgetId);
+        } catch {
+          // Widget already torn down (e.g. by navigation) — nothing to clean up.
+        }
+      }
+    };
+  });
 
   let name = $state("");
   let email = $state("");
@@ -33,13 +66,6 @@
 
 <svelte:head>
   <title>Contact</title>
-  {#if turnstileSiteKey}
-    <script
-      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-      async
-      defer
-    ></script>
-  {/if}
 </svelte:head>
 
 <main class="max-w-2xl mx-auto px-8 py-16 space-y-8">
@@ -122,11 +148,12 @@
       />
 
       {#if turnstileSiteKey}
-        <!-- Cloudflare Turnstile: the api.js script auto-renders this element and
-             injects a hidden `cf-turnstile-response` input inside the form, which
-             createIngestAction reads and forwards. Verification is central (the
-             dashboard holds TURNSTILE_SECRET_KEY; sites carry only the public key). -->
-        <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+        <!-- Cloudflare Turnstile mount point. The effect above renders the widget
+             here explicitly; it injects a hidden `cf-turnstile-response` input inside
+             the form, which createIngestAction reads and forwards. Verification is
+             central (the dashboard holds TURNSTILE_SECRET_KEY; sites carry only the
+             public key). -->
+        <div class="cf-turnstile" bind:this={turnstileEl}></div>
       {/if}
 
       <button
