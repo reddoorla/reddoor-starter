@@ -1,9 +1,15 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
+  import { env } from "$env/dynamic/public";
   import Field from "$lib/components/Field.svelte";
   import type { ActionData, PageData } from "./$types";
 
   let { data, form }: { data: PageData; form: ActionData } = $props();
+
+  // Optional Cloudflare Turnstile. Dark until a site sets PUBLIC_TURNSTILE_SITE_KEY;
+  // when set, the widget renders and injects a hidden `cf-turnstile-response` input
+  // that createIngestAction forwards to the central ingest for verification.
+  const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY;
 
   let name = $state("");
   let email = $state("");
@@ -18,12 +24,20 @@
   - the success-message copy
   - the field set (add/remove <Field>s + matching keys in +page.server.ts buildPayload)
   Forwards to the central dashboard ingest via createIngestAction; spam is handled
-  by the hidden honeypot + a 2s fill-timing screen (no Netlify Forms / CAPTCHA).
+  by the hidden honeypot + a 2s fill-timing screen, plus optional Cloudflare Turnstile
+  (set PUBLIC_TURNSTILE_SITE_KEY to enable — verified centrally by the dashboard).
   Requires FORMS_INGEST_URL + FORMS_INGEST_TOKEN in the deployed site's env (see .env.example).
 -->
 
 <svelte:head>
   <title>Contact</title>
+  {#if turnstileSiteKey}
+    <script
+      src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+      async
+      defer
+    ></script>
+  {/if}
 </svelte:head>
 
 <main class="max-w-2xl mx-auto px-8 py-16 space-y-8">
@@ -104,6 +118,14 @@
         required
         bind:value={message}
       />
+
+      {#if turnstileSiteKey}
+        <!-- Cloudflare Turnstile: the api.js script auto-renders this element and
+             injects a hidden `cf-turnstile-response` input inside the form, which
+             createIngestAction reads and forwards. Verification is central (the
+             dashboard holds TURNSTILE_SECRET_KEY; sites carry only the public key). -->
+        <div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div>
+      {/if}
 
       <button
         type="submit"
