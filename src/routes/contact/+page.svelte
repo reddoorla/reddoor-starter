@@ -9,7 +9,9 @@
   // Optional Cloudflare Turnstile. Dark until a site sets PUBLIC_TURNSTILE_SITE_KEY;
   // when set, the widget renders and injects a hidden `cf-turnstile-response` input
   // that createIngestAction forwards to the central ingest for verification.
-  const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY;
+  // Trimmed so a stray-whitespace value stays dark instead of rendering a widget
+  // with an invalid `data-sitekey=" "` (this fleet has hit trailing-space config before).
+  const turnstileSiteKey = env.PUBLIC_TURNSTILE_SITE_KEY?.trim();
 
   let name = $state("");
   let email = $state("");
