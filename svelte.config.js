@@ -56,6 +56,8 @@ const config = {
           "self",
           "https://static.cdn.prismic.io",
           "https://player.vimeo.com",
+          // Cloudflare Turnstile contact-form widget (enable via PUBLIC_TURNSTILE_SITE_KEY).
+          "https://challenges.cloudflare.com",
         ],
         "style-src": ["self", "unsafe-inline"],
         "img-src": [
@@ -65,7 +67,12 @@ const config = {
           "https://*.prismic.io",
         ],
         "media-src": ["self", "https://*.vimeocdn.com"],
-        "frame-src": ["self", "https://player.vimeo.com"],
+        "frame-src": [
+          "self",
+          "https://player.vimeo.com",
+          // Cloudflare Turnstile renders its challenge in an iframe from this host.
+          "https://challenges.cloudflare.com",
+        ],
         "connect-src": [
           "self",
           "https://*.prismic.io",
