@@ -18,10 +18,12 @@
 
 /** The slice of Cloudflare's global `turnstile` API we use. */
 export type TurnstileApi = {
+  // `render` can return undefined (e.g. the container already has a widget, or an
+  // internal failure) — hence the `!== undefined` guard before `remove` at the call site.
   render: (
     el: HTMLElement,
     opts: { sitekey: string; callback?: (token: string) => void },
-  ) => string;
+  ) => string | undefined;
   remove: (widgetId: string) => void;
   reset: (widgetId?: string) => void;
 };
@@ -64,6 +66,7 @@ export function loadTurnstile(): Promise<TurnstileApi> {
     };
     script.onerror = () => {
       loader = undefined; // allow a later mount to retry
+      script.remove(); // don't accumulate dead <script> tags in <head> on repeated failures
       reject(new Error("turnstile: api.js failed to load"));
     };
     document.head.appendChild(script);

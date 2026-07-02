@@ -30,9 +30,12 @@
         if (cancelled || !el.isConnected) return;
         widgetId = turnstile.render(el, { sitekey: turnstileSiteKey });
       })
-      .catch(() => {
-        // Offline / blocked / CSP: central ingest is fail-open, so a missing token
-        // degrades to the honeypot + timing + heuristic screen, never a dropped lead.
+      .catch((err) => {
+        // Offline / blocked / CSP / misconfigured sitekey: central ingest is
+        // fail-open, so a missing token degrades to the honeypot + timing +
+        // heuristic screen, never a dropped lead. Warn so an operator can still
+        // triage "the widget isn't showing" instead of failing silently.
+        console.warn("[turnstile] widget did not render:", err);
       });
     return () => {
       cancelled = true;
