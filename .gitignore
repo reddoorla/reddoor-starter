@@ -8,6 +8,9 @@ build
 .env.*
 !.env.example
 
+# Local agent config — operator-specific, must not ship with the template
+.claude/
+
 # OS / editor / test output
 .DS_Store
 *.log
