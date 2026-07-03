@@ -18,7 +18,10 @@ A library of responsive, reusable components designed to be used within Prismic 
 
 - **Animation** — `AnimateInTriggered`, `AnimateOutTriggered`, `Slider`, `TriggerTransitionOnMount`
 - **Layout** — `ContentWidth`, `ScreenWidthMedia`, `TransitionOverlay`
-- **UI** — `Accordion`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
+- **UI** — `Accordion`, `BrandIcon`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
+- **Forms** — `TurnstileWidget` (optional Cloudflare Turnstile challenge; dark until `PUBLIC_TURNSTILE_SITE_KEY` is set), plus `Field`/`Form` primitives used by the contact form
+
+`BrandIcon` renders CC0 [simple-icons](https://simpleicons.org/) social glyphs (`facebook`, `x`/`twitter`, `reddit`, `instagram`, `linkedin`) in `currentColor`; it is decorative, so put the accessible name on the wrapping link.
 
 This library grows as new interactive functions or layouts are needed, allowing work from different projects to carry over rather than rebuilding from scratch.
 
