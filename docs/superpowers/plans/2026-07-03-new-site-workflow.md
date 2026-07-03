@@ -25,7 +25,10 @@
 // tests/reports/airtable/ensure-site.test.ts
 import { describe, it, expect } from "vitest";
 import { ensureSite } from "../../../src/reports/airtable/ensure-site.js";
-import { makeFakeBase, type FakeRecord } from "../_helpers/fake-airtable-base.js";
+import {
+  makeFakeBase,
+  type FakeRecord,
+} from "../_helpers/fake-airtable-base.js";
 
 function existingSite(over: Partial<FakeRecord["fields"]> = {}): FakeRecord {
   return {
@@ -48,10 +51,13 @@ describe("ensureSite", () => {
       pointOfContact: "owner@roalson.com",
     });
     expect(result.status).toBe("created");
-    const create = base.__calls.find((c) => c.kind === "create" && c.table === "Websites");
+    const create = base.__calls.find(
+      (c) => c.kind === "create" && c.table === "Websites",
+    );
     expect(create).toBeDefined();
-    const fields = (create as { records: Array<{ fields: Record<string, unknown> }> })
-      .records[0]!.fields;
+    const fields = (
+      create as { records: Array<{ fields: Record<string, unknown> }> }
+    ).records[0]!.fields;
     expect(fields).toMatchObject({
       Name: "roalson",
       Status: "in development",
@@ -70,7 +76,9 @@ describe("ensureSite", () => {
 
   it("fills ONLY blank fields on an existing row — never overwrites operator data", async () => {
     const base = makeFakeBase({
-      Websites: [existingSite({ url: undefined, "point of contact": "kept@client.com" })],
+      Websites: [
+        existingSite({ url: undefined, "point of contact": "kept@client.com" }),
+      ],
     });
     const result = await ensureSite(base, {
       slug: "acme-co",
@@ -81,14 +89,20 @@ describe("ensureSite", () => {
     expect(result.updatedFields).toEqual(["url"]);
     const update = base.__calls.find((c) => c.kind === "update");
     expect(update).toBeDefined();
-    const fields = (update as { records: Array<{ fields: Record<string, unknown> }> })
-      .records[0]!.fields;
+    const fields = (
+      update as { records: Array<{ fields: Record<string, unknown> }> }
+    ).records[0]!.fields;
     expect(fields).toEqual({ url: "https://acme.example.com" });
   });
 
   it("is a no-op update when nothing is blank", async () => {
     const base = makeFakeBase({
-      Websites: [existingSite({ "point of contact": "kept@client.com", "Git repo": "reddoorla/acme-co" })],
+      Websites: [
+        existingSite({
+          "point of contact": "kept@client.com",
+          "Git repo": "reddoorla/acme-co",
+        }),
+      ],
     });
     const result = await ensureSite(base, {
       slug: "acme-co",
@@ -157,9 +171,14 @@ export async function ensureSite(
   input: EnsureSiteInput,
 ): Promise<EnsureSiteResult> {
   const slug = siteSlug(input.slug);
-  if (!slug) throw new Error(`ensure-site: '${input.slug}' does not slugify to a usable slug`);
+  if (!slug)
+    throw new Error(
+      `ensure-site: '${input.slug}' does not slugify to a usable slug`,
+    );
 
-  const existing = (await listWebsites(base)).find((w) => siteSlug(w.name) === slug);
+  const existing = (await listWebsites(base)).find(
+    (w) => siteSlug(w.name) === slug,
+  );
 
   if (!existing) {
     const fields: Record<string, unknown> = {
@@ -168,8 +187,11 @@ export async function ensureSite(
       [COLS.gitRepo]: input.gitRepo ?? `reddoorla/${slug}`,
     };
     if (input.url) fields[COLS.url] = input.url;
-    if (input.pointOfContact) fields[COLS.pointOfContact] = input.pointOfContact;
-    const created = (await base(WEBSITES_TABLE).create([{ fields }])) as Array<{ id: string }>;
+    if (input.pointOfContact)
+      fields[COLS.pointOfContact] = input.pointOfContact;
+    const created = (await base(WEBSITES_TABLE).create([{ fields }])) as Array<{
+      id: string;
+    }>;
     return { status: "created", siteId: created[0]!.id, updatedFields: [] };
   }
 
@@ -178,7 +200,8 @@ export async function ensureSite(
   if (input.url && blank(existing.url || null)) updates[COLS.url] = input.url;
   if (input.pointOfContact && blank(existing.pointOfContact))
     updates[COLS.pointOfContact] = input.pointOfContact;
-  if (input.gitRepo && blank(existing.gitRepo)) updates[COLS.gitRepo] = input.gitRepo;
+  if (input.gitRepo && blank(existing.gitRepo))
+    updates[COLS.gitRepo] = input.gitRepo;
 
   const updatedFields = Object.keys(updates);
   if (updatedFields.length > 0) {
@@ -218,7 +241,9 @@ git commit -m "feat(airtable): ensureSite — find-or-create Websites row, fill-
 // tests/cli/ensure-site-command.test.ts
 import { describe, it, expect, vi } from "vitest";
 
-vi.mock("../../src/reports/airtable/ensure-site.js", () => ({ ensureSite: vi.fn() }));
+vi.mock("../../src/reports/airtable/ensure-site.js", () => ({
+  ensureSite: vi.fn(),
+}));
 vi.mock("../../src/reports/airtable/client.js", () => ({
   openBase: vi.fn(() => "FAKE_BASE"),
   readAirtableConfig: vi.fn(() => ({ apiKey: "k", baseId: "b" })),
@@ -303,7 +328,11 @@ export async function runEnsureSiteCommand(
   slug: string | undefined,
   opts: EnsureSiteCommandOptions,
 ): Promise<{ output: string; code: number }> {
-  if (!slug) return { output: "Provide a <slug> (e.g. `ensure-site roalson`).", code: 2 };
+  if (!slug)
+    return {
+      output: "Provide a <slug> (e.g. `ensure-site roalson`).",
+      code: 2,
+    };
   try {
     const base = openBase(readAirtableConfig());
     const result = await ensureSite(base, {
@@ -331,17 +360,36 @@ export async function runEnsureSiteCommand(
 
 ```ts
 cli
-  .command("ensure-site <slug>", "Create/verify the Airtable Websites row for a new site.")
+  .command(
+    "ensure-site <slug>",
+    "Create/verify the Airtable Websites row for a new site.",
+  )
   .option("--url <url>", "Deployed URL (e.g. the Netlify site URL).")
-  .option("--contact <email>", "point of contact — the client address reports resolve to.")
-  .option("--git-repo <owner/repo>", "GitHub identity. Default on create: reddoorla/<slug>.")
+  .option(
+    "--contact <email>",
+    "point of contact — the client address reports resolve to.",
+  )
+  .option(
+    "--git-repo <owner/repo>",
+    "GitHub identity. Default on create: reddoorla/<slug>.",
+  )
   .action(
     async (
       slug: string,
-      opts: { url?: string; contact?: string; gitRepo?: string; cwd?: string; verbose?: boolean },
+      opts: {
+        url?: string;
+        contact?: string;
+        gitRepo?: string;
+        cwd?: string;
+        verbose?: boolean;
+      },
     ) =>
       runOrExit(
-        async () => (await import("./commands/ensure-site.js")).runEnsureSiteCommand(slug, opts),
+        async () =>
+          (await import("./commands/ensure-site.js")).runEnsureSiteCommand(
+            slug,
+            opts,
+          ),
         opts,
       ),
   );
@@ -387,7 +435,7 @@ git add -A && git commit -m "feat(cli): ensure-site command"
 
 - [ ] **Step 1: Write SKILL.md** — complete content:
 
-````markdown
+```markdown
 ---
 name: new-site
 description: Bootstrap a new Reddoor client site from the reddoor-starter template — repo, CI + branch protection, Airtable fleet row, Prismic/Netlify setup prompts, verification. Use when a new client project starts ("new site", "bootstrap <client>", "spin up the repo for <client>"). Idempotent — re-run to resume a partial bootstrap.
@@ -448,7 +496,7 @@ around a missing operator step.
 
 Next: `/figma-slices <figma-url>` for the build phase (see the workflow spec in
 reddoor-starter `docs/superpowers/specs/2026-07-03-new-site-workflow-design.md`).
-````
+```
 
 - [ ] **Step 2: Self-review against spec Phase 1** — every numbered spec step must appear; check the ask-tier note matches the operator's live settings (gh api PUT is in `ask`).
 
@@ -462,7 +510,7 @@ reddoor-starter `docs/superpowers/specs/2026-07-03-new-site-workflow-design.md`)
 
 - [ ] **Step 1: Write SKILL.md** — complete content:
 
-````markdown
+```markdown
 ---
 name: figma-slices
 description: Implement a client site's design from Figma as Prismic slices — inventory pass (one approval), then per-slice full implementation with tests, a11y, and deploy-preview review. Use when a Figma file is ready for a site build ("implement the figma", "build the slices", "figma to slices"). Requires the Figma MCP connection.
@@ -511,7 +559,7 @@ Every inventory slice merged; content-author walkthrough possible in Prismic
 green with all new components exercised; upstream twins PR'd. Hand off to the
 launch phase (`reddoor-maint launch <slug>` after content + pre-launch
 checklist — see the workflow spec).
-````
+```
 
 - [ ] **Step 2: Self-review against spec Phase 2** — Stage A/B contract, the upstream-twin rule, and the conventions list must match the spec and the Wave-1 component names actually on main.
 
