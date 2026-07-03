@@ -134,6 +134,18 @@ describe("PreNavTransition", () => {
     expect(gotoMock.mock.calls[0][0].href).toBe("https://example.com/second");
   });
 
+  it("cancels the deferred goto when Back interrupts the fade (no forward yank)", async () => {
+    render(PreNavTransition, { duration: 400 });
+    // Click a link: intercepted, goto deferred by `duration`.
+    beforeNavigateCb!(makeNav("/about"));
+    // User presses Back mid-fade: popstate proceeds natively...
+    beforeNavigateCb!(makeNav("/", { type: "popstate" }));
+    afterNavigateCb!();
+    // ...and the stale deferred goto must never fire.
+    await vi.advanceTimersByTimeAsync(5_000);
+    expect(gotoMock).not.toHaveBeenCalled();
+  });
+
   it("does not intercept popstate (back/forward stays native)", async () => {
     render(PreNavTransition, { duration: 400 });
 

@@ -12,8 +12,8 @@
   Interception rules live in $lib/utils/preNavIntercept — back/forward,
   external URLs, hash/query-only navs and reduced-motion users all navigate
   immediately with no overlay and no delay. Rapid clicks mid-fade re-defer to
-  the newest target. Scroll reset is the root layout's job (see
-  scrollToTopOnNavigate), not this component's.
+  the newest target. Scroll behavior around navigation is the root
+  layout's job (see instantNavScroll), not this component's.
 -->
 <script lang="ts">
   import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
@@ -56,6 +56,12 @@
         reducedMotion: prefersReducedMotion(),
       })
     ) {
+      // Some OTHER navigation is proceeding natively (popstate/back, external,
+      // hash, our own re-issued goto). A still-pending deferred goto must not
+      // fire after it — pressing Back mid-fade would otherwise be yanked
+      // forward to the stale target `duration` ms later.
+      clearTimeout(navTimer);
+      pendingHref = undefined;
       return;
     }
 
