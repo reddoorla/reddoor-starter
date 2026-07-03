@@ -50,3 +50,10 @@ describe("BrandIcon", () => {
     );
   });
 });
+it("renders nothing for prototype-chain member names fed from content", () => {
+  for (const platform of ["constructor", "toString", "valueOf", "__proto__"]) {
+    const { container, unmount } = render(BrandIcon, { platform });
+    expect(container.querySelector("svg")).toBeNull();
+    unmount();
+  }
+});
