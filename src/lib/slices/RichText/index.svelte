@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { PrismicRichText } from "@prismicio/svelte";
+  import RichTextBody from "$lib/components/RichTextBody.svelte";
   import type { Content } from "@prismicio/client";
 
   interface Props {
@@ -14,5 +14,5 @@
   data-slice-variation={slice.variation}
   class="prose mx-auto px-6 py-12"
 >
-  <PrismicRichText field={slice.primary.content} />
+  <RichTextBody field={slice.primary.content} />
 </section>

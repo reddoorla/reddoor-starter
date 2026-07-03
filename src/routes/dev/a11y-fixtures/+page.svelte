@@ -3,8 +3,12 @@
   import Modal from "$lib/components/Modal.svelte";
   import Form from "$lib/components/Form.svelte";
   import Field from "$lib/components/Field.svelte";
+  import RichTextBody from "$lib/components/RichTextBody.svelte";
+  import { trapFocus } from "$lib/actions/trapFocus";
+  import type { RichTextField } from "@prismicio/client";
 
   let modalOpen = $state(false);
+  let trapDemoOpen = $state(false);
   let email = $state("");
   let message = $state("");
 
@@ -16,9 +20,27 @@
     },
     {
       label: "What does it cover?",
-      content: "Accordion (disclosure), Modal (dialog), Form, and Field.",
+      content:
+        "Focus trap (custom dialog overlay), Accordion (disclosure), Modal (dialog), Form, Field, and rich-text heading normalization.",
     },
   ];
+
+  // An editor-authored body that starts deep and skips a level (h3 → h5);
+  // RichTextBody compresses the announced levels to 2 and 3.
+  const richTextField = [
+    { type: "heading3", text: "Editor heading (h3 tag)", spans: [] },
+    {
+      type: "paragraph",
+      text: "The h3 above is announced as level 2 via aria-level.",
+      spans: [],
+    },
+    { type: "heading5", text: "Skipped to h5 (h5 tag)", spans: [] },
+    {
+      type: "paragraph",
+      text: "The h5 above is announced as level 3 — no gap in the outline.",
+      spans: [],
+    },
+  ] as unknown as RichTextField;
 </script>
 
 <main class="max-w-3xl mx-auto px-8 py-16 space-y-12">
@@ -29,6 +51,48 @@
       expected to pass WCAG 2.2 AA.
     </p>
   </header>
+
+  <section aria-labelledby="focus-trap-heading" class="space-y-4">
+    <h2 id="focus-trap-heading" class="text-xl font-semibold">Focus trap</h2>
+    <button
+      type="button"
+      onclick={() => (trapDemoOpen = true)}
+      class="px-4 py-2 border-2 border-primary rounded bump"
+    >
+      Open focus-trap demo
+    </button>
+    {#if trapDemoOpen}
+      <!-- In-flow stand-in for a custom (non-<dialog>) overlay, like Nav's
+           mobile menu: exercises use:trapFocus + dialog semantics under axe
+           without stacking a second fixed navbar and duplicate landmarks on
+           top of the app Nav the root layout already mounts. -->
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Focus trap demo"
+        class="border-2 border-primary rounded p-6 space-y-4"
+        use:trapFocus={{ onEscape: () => (trapDemoOpen = false) }}
+      >
+        <p>Tab and Shift+Tab cycle within this region; Escape closes it.</p>
+        <a href="#accordion-heading" class="block underline">Accordion</a>
+        <a href="#form-heading" class="block underline">Form</a>
+        <button
+          type="button"
+          onclick={() => (trapDemoOpen = false)}
+          class="px-4 py-2 border-2 border-primary rounded bump"
+        >
+          Close demo
+        </button>
+      </div>
+    {/if}
+  </section>
+
+  <section aria-labelledby="rich-text-heading" class="space-y-4">
+    <h2 id="rich-text-heading" class="text-xl font-semibold">
+      Rich text heading levels
+    </h2>
+    <RichTextBody field={richTextField} />
+  </section>
 
   <section aria-labelledby="accordion-heading" class="space-y-4">
     <h2 id="accordion-heading" class="text-xl font-semibold">Accordion</h2>

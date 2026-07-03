@@ -1,6 +1,6 @@
 <script lang="ts">
   import { afterNavigate, beforeNavigate } from "$app/navigation";
-  import { fade } from "svelte/transition";
+  import { fade } from "$lib/transitions";
 
   interface Props {
     visibleDuration?: number;
