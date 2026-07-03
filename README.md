@@ -17,8 +17,10 @@ A forkable starting point for all SvelteKit, Tailwind + Prismic sites developed 
 A library of responsive, reusable components designed to be used within Prismic Slices or standalone:
 
 - **Animation** — `AnimateInTriggered`, `AnimateOutTriggered`, `Slider`, `TriggerTransitionOnMount`
-- **Layout** — `ContentWidth`, `ScreenWidthMedia`, `TransitionOverlay`
+- **Layout** — `ContentWidth`, `ScreenWidthMedia` (poster-first background video: idle-deferred iframe, quality-ramp reveal, reduced-motion poster only), `TransitionOverlay`
+- **Media** — `HeroBackgroundImage` (LCP-preloaded, imgix-srcset hero image), `Img` (progressive blur-up wrapper for `?as=run` imports), `VimeoBanner` (interaction-gated background video with playback heartbeat)
 - **UI** — `Accordion`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
+- **Utils** — `$lib/utils/image` (`imgix()` / `srcset()` responsive Prismic image helpers), `$lib/utils/vimeo` (`checkVimeoVideo()` server-side oEmbed existence check)
 
 This library grows as new interactive functions or layouts are needed, allowing work from different projects to carry over rather than rebuilding from scratch.
 

@@ -1,12 +1,27 @@
 <script lang="ts">
+  import type { ImageField } from "@prismicio/client";
   import Accordion from "$lib/components/Accordion.svelte";
   import Modal from "$lib/components/Modal.svelte";
   import Form from "$lib/components/Form.svelte";
   import Field from "$lib/components/Field.svelte";
+  import HeroBackgroundImage from "$lib/components/HeroBackgroundImage.svelte";
+  import Img from "$lib/components/Img.svelte";
+  import ScreenWidthMedia from "$lib/components/ScreenWidthMedia.svelte";
+  import VimeoBanner from "$lib/components/VimeoBanner.svelte";
 
   let modalOpen = $state(false);
   let email = $state("");
   let message = $state("");
+
+  // Inline pixel so media fixtures stay hermetic — the axe run must not
+  // depend on external hosts (Prismic, Vimeo).
+  const pixel = "data:image/gif;base64,R0lGODlhAQABAAAAACw=";
+  const heroImage = {
+    url: pixel,
+    alt: "Placeholder hero image",
+    dimensions: { width: 1920, height: 1080 },
+  } as unknown as ImageField;
+  const runImport = { img: { src: pixel, w: 1920, h: 1080 }, sources: {} };
 
   const items = [
     {
@@ -110,5 +125,40 @@
         Send
       </button>
     </Form>
+  </section>
+
+  <section aria-labelledby="hero-image-heading" class="space-y-4">
+    <h2 id="hero-image-heading" class="text-xl font-semibold">
+      Hero background image
+    </h2>
+    <div class="relative h-40 overflow-hidden">
+      <HeroBackgroundImage image={heroImage} altFallback="Placeholder hero" />
+    </div>
+  </section>
+
+  <section aria-labelledby="img-heading" class="space-y-4">
+    <h2 id="img-heading" class="text-xl font-semibold">Progressive image</h2>
+    <Img src={runImport} alt="Placeholder progressive image" />
+  </section>
+
+  <section aria-labelledby="vimeo-banner-heading" class="space-y-4">
+    <h2 id="vimeo-banner-heading" class="text-xl font-semibold">
+      Vimeo banner
+    </h2>
+    <!-- No real video plays in CI: the iframe mounts only after genuine input,
+         so axe sees the poster-only state. -->
+    <VimeoBanner vimeoId="1" poster={runImport} alt="Placeholder banner reel" />
+  </section>
+
+  <section aria-labelledby="screen-width-media-heading" class="space-y-4">
+    <h2 id="screen-width-media-heading" class="text-xl font-semibold">
+      Screen-width media
+    </h2>
+    <!-- Poster-only (no vimeoId) so the fixture makes no external requests. -->
+    <ScreenWidthMedia
+      src={pixel}
+      altText="Placeholder background"
+      percentHeight={30}
+    />
   </section>
 </main>

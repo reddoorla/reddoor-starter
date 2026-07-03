@@ -50,6 +50,24 @@
   }
 }
 
+/* Blur-up companion to $lib/components/Img.svelte. Outside @layer base so it
+   wins over utility resets without needing !important. */
+.progressive-img {
+  filter: blur(40px);
+  transition: filter 1500ms cubic-bezier(0.5, 0, 0, 1);
+}
+
+.progressive-img.progressive-img--loaded {
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressive-img {
+    filter: none;
+    transition: none;
+  }
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
