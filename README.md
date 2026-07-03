@@ -17,6 +17,12 @@ A forkable starting point for all SvelteKit, Tailwind + Prismic sites developed 
 A library of responsive, reusable components designed to be used within Prismic Slices or standalone:
 
 - **Animation** — `AnimateInTriggered`, `AnimateOutTriggered`, `Slider`, `TriggerTransitionOnMount`
+- **Layout** — `ContentWidth`, `ScreenWidthMedia`, `TransitionOverlay`
+- **UI** — `Accordion`, `BrandIcon`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
+- **Forms** — `TurnstileWidget` (optional Cloudflare Turnstile challenge; dark until `PUBLIC_TURNSTILE_SITE_KEY` is set), plus `Field`/`Form` primitives used by the contact form
+
+`BrandIcon` renders CC0 [simple-icons](https://simpleicons.org/) social glyphs (`facebook`, `x`/`twitter`, `reddit`, `instagram`, `linkedin`) in `currentColor`; it is decorative, so put the accessible name on the wrapping link.
+
 - **Layout** — `ContentWidth`, `ScreenWidthMedia` (poster-first background video: idle-deferred iframe, quality-ramp reveal, reduced-motion poster only), `TransitionOverlay`
 - **Media** — `HeroBackgroundImage` (LCP-preloaded, imgix-srcset hero image), `Img` (progressive blur-up wrapper for `?as=run` imports), `VimeoBanner` (interaction-gated background video with playback heartbeat)
 - **UI** — `Accordion`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`

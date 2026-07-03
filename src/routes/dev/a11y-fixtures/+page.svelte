@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { ImageField } from "@prismicio/client";
   import Accordion from "$lib/components/Accordion.svelte";
+  import BrandIcon from "$lib/components/BrandIcon.svelte";
   import Modal from "$lib/components/Modal.svelte";
   import Form from "$lib/components/Form.svelte";
   import Field from "$lib/components/Field.svelte";
@@ -112,6 +113,25 @@
   <section aria-labelledby="accordion-heading" class="space-y-4">
     <h2 id="accordion-heading" class="text-xl font-semibold">Accordion</h2>
     <Accordion {items} />
+  </section>
+
+  <section aria-labelledby="brand-icons-heading" class="space-y-4">
+    <h2 id="brand-icons-heading" class="text-xl font-semibold">Brand icons</h2>
+    <!-- BrandIcon is decorative (aria-hidden), so the accessible name must live
+         on the wrapping link — exactly how sites are expected to use it. -->
+    <ul class="flex flex-row gap-4">
+      {#each ["facebook", "x", "reddit", "instagram", "linkedin"] as platform (platform)}
+        <li>
+          <a
+            href="https://example.com/{platform}"
+            aria-label="Reddoor on {platform}"
+            class="block h-6 w-6 hover:opacity-75 transition-opacity"
+          >
+            <BrandIcon {platform} />
+          </a>
+        </li>
+      {/each}
+    </ul>
   </section>
 
   <section aria-labelledby="modal-heading" class="space-y-4">
