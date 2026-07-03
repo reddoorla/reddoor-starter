@@ -7,12 +7,20 @@
 // close it restores focus to whatever was focused before — usually the control
 // that opened the overlay.
 //
+// Listeners attach to `document`, not the overlay node: if focus ever escapes
+// the overlay (e.g. a click on a non-focusable area drops focus on <body>), a
+// node-scoped keydown listener would never see another keystroke and Tab would
+// walk the page behind the overlay with no way back. From the document we still
+// see every key, and a `focusin` listener pulls focus straight back into the
+// overlay the moment it lands outside.
+//
 // Degenerate case: an overlay with no focusable children (e.g. an informational
-// "rotate your device" modal) gets focus moved to the container but NO Tab trap,
-// because trapping with no focusable target and no Escape would itself be a
-// keyboard trap (2.1.2). Pass `onEscape` for overlays that should close on Escape;
-// omit it where the host component already handles Escape. Not for `<dialog>`
-// opened via `showModal()` — the browser already provides all of this natively.
+// "rotate your device" modal) gets focus moved to the container but NO Tab trap
+// and NO focusin recovery, because trapping with no focusable target and no
+// Escape would itself be a keyboard trap (2.1.2). Pass `onEscape` for overlays
+// that should close on Escape; omit it where the host component already handles
+// Escape. Not for `<dialog>` opened via `showModal()` — the browser already
+// provides all of this natively.
 
 export type TrapFocusOptions = {
   /** Called when Escape is pressed inside the overlay. Omit if the host handles it. */
@@ -80,6 +88,8 @@ export function trapFocus(node: HTMLElement, options: TrapFocusOptions = {}) {
     const last = items[items.length - 1];
     const activeEl = document.activeElement;
 
+    // Wrap decisions stay scoped to the node: a Tab from outside the overlay
+    // (escaped focus) is intercepted and sent back in.
     if (e.shiftKey) {
       if (activeEl === first || !node.contains(activeEl)) {
         e.preventDefault();
@@ -91,6 +101,15 @@ export function trapFocus(node: HTMLElement, options: TrapFocusOptions = {}) {
     }
   };
 
+  // Focus landed outside the overlay (click on a focusable element behind it,
+  // programmatic focus, …) — pull it back in. Skipped when the overlay has no
+  // focusable children, for the same 2.1.2 reason the Tab trap is (see header).
+  const onFocusin = (e: FocusEvent) => {
+    if (node.contains(e.target as Node)) return;
+    if (focusable(node).length === 0) return;
+    moveFocusIn();
+  };
+
   const activate = () => {
     if (active) return;
     active = true;
@@ -99,20 +118,34 @@ export function trapFocus(node: HTMLElement, options: TrapFocusOptions = {}) {
     requestAnimationFrame(() => {
       if (active) moveFocusIn();
     });
-    node.addEventListener("keydown", onKeydown);
+    // Document-level so the trap still sees events after focus has escaped the
+    // overlay — a node-scoped listener would be unreachable from outside it.
+    document.addEventListener("keydown", onKeydown);
+    document.addEventListener("focusin", onFocusin);
   };
 
   const deactivate = () => {
     if (!active) return;
     active = false;
-    node.removeEventListener("keydown", onKeydown);
+    document.removeEventListener("keydown", onKeydown);
+    document.removeEventListener("focusin", onFocusin);
     // Defer a frame so a trigger that re-mounts on close exists before we focus
-    // it. Queued before any successor trap's own rAF, so a newly opened overlay
-    // still wins the focus race.
+    // it.
     const captured = previouslyFocused;
     requestAnimationFrame(() => {
       const target = opts.restoreFocus?.() ?? captured;
-      if (target?.isConnected && typeof target.focus === "function") {
+      if (!target?.isConnected || typeof target.focus !== "function") return;
+      // With an outro transition, destroy() — and so this frame — can run long
+      // after the overlay visually closed. Restore only while focus is still
+      // unclaimed (lost to <body> or stranded inside the closing overlay);
+      // never steal it from a successor overlay's trap or from anything the
+      // user has focused in the meantime.
+      const current = document.activeElement;
+      if (
+        current === null ||
+        current === document.body ||
+        node.contains(current)
+      ) {
         target.focus();
       }
     });

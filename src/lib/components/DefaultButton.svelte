@@ -15,8 +15,11 @@
     children = undefined,
   }: ButtonProps = $props();
 
+  // `bump` supplies the transition (transform + hover colors) itself — do not
+  // add Tailwind's `transition` utility alongside it: it emits later in the
+  // built CSS and its longhands would override bump's timings.
   const baseClasses =
-    "bump rounded border-2 border-solid border-dark px-10 pt-4 pb-3 h-fit hover:bg-dark hover:text-white transition";
+    "bump rounded border-2 border-solid border-dark px-10 pt-4 pb-3 h-fit hover:bg-dark hover:text-white";
 </script>
 
 {#if href}

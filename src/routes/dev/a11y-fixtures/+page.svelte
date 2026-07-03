@@ -3,11 +3,12 @@
   import Modal from "$lib/components/Modal.svelte";
   import Form from "$lib/components/Form.svelte";
   import Field from "$lib/components/Field.svelte";
-  import Nav from "$lib/components/Nav.svelte";
   import RichTextBody from "$lib/components/RichTextBody.svelte";
+  import { trapFocus } from "$lib/actions/trapFocus";
   import type { RichTextField } from "@prismicio/client";
 
   let modalOpen = $state(false);
+  let trapDemoOpen = $state(false);
   let email = $state("");
   let message = $state("");
 
@@ -20,14 +21,8 @@
     {
       label: "What does it cover?",
       content:
-        "Nav (focus-trapped menu), Accordion (disclosure), Modal (dialog), Form, Field, and rich-text heading normalization.",
+        "Focus trap (custom dialog overlay), Accordion (disclosure), Modal (dialog), Form, Field, and rich-text heading normalization.",
     },
-  ];
-
-  const navLinks = [
-    { text: "Accordion", href: "#accordion-heading" },
-    { text: "Modal", href: "#modal-heading" },
-    { text: "Form", href: "#form-heading" },
   ];
 
   // An editor-authored body that starts deep and skips a level (h3 → h5);
@@ -48,9 +43,7 @@
   ] as unknown as RichTextField;
 </script>
 
-<Nav {navLinks} />
-
-<main class="max-w-3xl mx-auto px-8 pt-28 pb-16 space-y-12">
+<main class="max-w-3xl mx-auto px-8 py-16 space-y-12">
   <header class="space-y-2">
     <h1 class="text-3xl font-bold">Accessibility fixtures</h1>
     <p class="text-secondary">
@@ -58,6 +51,41 @@
       expected to pass WCAG 2.2 AA.
     </p>
   </header>
+
+  <section aria-labelledby="focus-trap-heading" class="space-y-4">
+    <h2 id="focus-trap-heading" class="text-xl font-semibold">Focus trap</h2>
+    <button
+      type="button"
+      onclick={() => (trapDemoOpen = true)}
+      class="px-4 py-2 border-2 border-primary rounded bump"
+    >
+      Open focus-trap demo
+    </button>
+    {#if trapDemoOpen}
+      <!-- In-flow stand-in for a custom (non-<dialog>) overlay, like Nav's
+           mobile menu: exercises use:trapFocus + dialog semantics under axe
+           without stacking a second fixed navbar and duplicate landmarks on
+           top of the app Nav the root layout already mounts. -->
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Focus trap demo"
+        class="border-2 border-primary rounded p-6 space-y-4"
+        use:trapFocus={{ onEscape: () => (trapDemoOpen = false) }}
+      >
+        <p>Tab and Shift+Tab cycle within this region; Escape closes it.</p>
+        <a href="#accordion-heading" class="block underline">Accordion</a>
+        <a href="#form-heading" class="block underline">Form</a>
+        <button
+          type="button"
+          onclick={() => (trapDemoOpen = false)}
+          class="px-4 py-2 border-2 border-primary rounded bump"
+        >
+          Close demo
+        </button>
+      </div>
+    {/if}
+  </section>
 
   <section aria-labelledby="rich-text-heading" class="space-y-4">
     <h2 id="rich-text-heading" class="text-xl font-semibold">
