@@ -38,15 +38,118 @@
   --height-384: 96rem;
 }
 
+/* Micro-interaction utilities — press/hover/idle nudges shared across sites.
+   All movement is gated behind `prefers-reduced-motion: no-preference`, so
+   reduced-motion users get a plain, static control. */
+
+@keyframes pos-y-wiggle {
+  0% {
+    transform: translateY(1px);
+  }
+  50% {
+    transform: translateY(-1px);
+  }
+  100% {
+    transform: translateY(1px);
+  }
+}
+
+@keyframes pulse-scale {
+  0% {
+    transform: scale(1.01);
+  }
+  50% {
+    transform: scale(0.99);
+  }
+  100% {
+    transform: scale(1.01);
+  }
+}
+
+@keyframes boop {
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(-15deg);
+  }
+  40% {
+    transform: rotate(15deg);
+  }
+  60% {
+    transform: rotate(-7deg);
+  }
+  80% {
+    transform: rotate(7deg);
+  }
+  90% {
+    transform: rotate(-3deg);
+  }
+  95% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Press feedback: the element hops up (or down) while held. The shorthand
+   replaces Tailwind's `transition` utility on the same element, so it also
+   covers the hover properties commonly animated alongside it. */
 @utility bump {
-  &:active {
-    --tw-translate-y: -1px;
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      transform 300ms ease-out,
+      color 400ms ease,
+      background-color 400ms ease,
+      filter 400ms ease,
+      gap 100ms ease;
+    &:active {
+      transform: translateY(-8px);
+    }
   }
 }
 
 @utility negative-bump {
-  &:active {
-    --tw-translate-y: 1px;
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      transform 300ms ease-out,
+      color 400ms ease,
+      background-color 400ms ease,
+      filter 400ms ease,
+      gap 100ms ease;
+    &:active {
+      transform: translateY(8px);
+    }
+  }
+}
+
+/* Gentle vertical wiggle — on hover only, or continuously. */
+@utility bob-on-hover {
+  @media (prefers-reduced-motion: no-preference) {
+    &:hover {
+      animation: 1s infinite pos-y-wiggle ease-out;
+    }
+  }
+}
+
+@utility bob-always {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: 1s infinite pos-y-wiggle ease-out;
+  }
+}
+
+/* Subtle continuous scale breathing — for standout CTAs. */
+@utility pulse-always {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: 1.5s infinite pulse-scale ease-out;
+  }
+}
+
+/* One-shot rotational wiggle; re-apply the class to replay. */
+@utility boop {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: boop 1s;
   }
 }
 
@@ -80,40 +183,18 @@
 
   /* Type scale — define per project (h1–h6, p, responsive variants). */
 
-  @keyframes pos-y-wiggle {
-    0% {
-      transform: translateY(1px);
+  /* Respect users who ask for less motion: neutralize CSS transitions/animations
+     and smooth scrolling. Svelte's JS-driven transitions don't see this reset —
+     import fade/fly/slide from $lib/transitions instead of svelte/transition. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
-    50% {
-      transform: translateY(-1px);
-    }
-    100% {
-      transform: translateY(1px);
-    }
-  }
-  .bob-on-hover:hover {
-    animation-name: pos-y-wiggle;
-    animation-play-state: running;
-  }
-
-  .bob-always {
-    animation: 1s infinite forwards pos-y-wiggle ease-out;
-  }
-
-  @keyframes pulse-scale {
-    0% {
-      transform: scale(1.01);
-    }
-    50% {
-      transform: scale(0.99);
-    }
-    100% {
-      transform: scale(1.01);
-    }
-  }
-
-  .pulse-always {
-    animation: 1.5s infinite forwards pulse-scale ease-out;
   }
 
   a,

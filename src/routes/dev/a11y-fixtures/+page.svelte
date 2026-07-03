@@ -3,6 +3,9 @@
   import Modal from "$lib/components/Modal.svelte";
   import Form from "$lib/components/Form.svelte";
   import Field from "$lib/components/Field.svelte";
+  import Nav from "$lib/components/Nav.svelte";
+  import RichTextBody from "$lib/components/RichTextBody.svelte";
+  import type { RichTextField } from "@prismicio/client";
 
   let modalOpen = $state(false);
   let email = $state("");
@@ -16,12 +19,38 @@
     },
     {
       label: "What does it cover?",
-      content: "Accordion (disclosure), Modal (dialog), Form, and Field.",
+      content:
+        "Nav (focus-trapped menu), Accordion (disclosure), Modal (dialog), Form, Field, and rich-text heading normalization.",
     },
   ];
+
+  const navLinks = [
+    { text: "Accordion", href: "#accordion-heading" },
+    { text: "Modal", href: "#modal-heading" },
+    { text: "Form", href: "#form-heading" },
+  ];
+
+  // An editor-authored body that starts deep and skips a level (h3 → h5);
+  // RichTextBody compresses the announced levels to 2 and 3.
+  const richTextField = [
+    { type: "heading3", text: "Editor heading (h3 tag)", spans: [] },
+    {
+      type: "paragraph",
+      text: "The h3 above is announced as level 2 via aria-level.",
+      spans: [],
+    },
+    { type: "heading5", text: "Skipped to h5 (h5 tag)", spans: [] },
+    {
+      type: "paragraph",
+      text: "The h5 above is announced as level 3 — no gap in the outline.",
+      spans: [],
+    },
+  ] as unknown as RichTextField;
 </script>
 
-<main class="max-w-3xl mx-auto px-8 py-16 space-y-12">
+<Nav {navLinks} />
+
+<main class="max-w-3xl mx-auto px-8 pt-28 pb-16 space-y-12">
   <header class="space-y-2">
     <h1 class="text-3xl font-bold">Accessibility fixtures</h1>
     <p class="text-secondary">
@@ -29,6 +58,13 @@
       expected to pass WCAG 2.2 AA.
     </p>
   </header>
+
+  <section aria-labelledby="rich-text-heading" class="space-y-4">
+    <h2 id="rich-text-heading" class="text-xl font-semibold">
+      Rich text heading levels
+    </h2>
+    <RichTextBody field={richTextField} />
+  </section>
 
   <section aria-labelledby="accordion-heading" class="space-y-4">
     <h2 id="accordion-heading" class="text-xl font-semibold">Accordion</h2>
