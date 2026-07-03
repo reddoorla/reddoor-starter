@@ -82,6 +82,17 @@ describe("ScreenWidthMedia video deferral", () => {
     );
   });
 
+  // Asserted here rather than on the a11y fixtures page: the iframe only
+  // renders with a live player.vimeo.com src (+ SDK script), so the fixture
+  // route can't exercise it without network.
+  it("hides the decorative background iframe from keyboard and AT users", async () => {
+    const { container } = render(ScreenWidthMedia, props);
+    await advancePastDefer();
+    const iframe = container.querySelector("iframe")!;
+    expect(iframe.getAttribute("tabindex")).toBe("-1");
+    expect(iframe.getAttribute("aria-hidden")).toBe("true");
+  });
+
   it("prefers requestIdleCallback and cancels it on destroy", () => {
     const ric = vi.fn(() => 42);
     const cancel = vi.fn();

@@ -11,19 +11,21 @@
     [key: string]: unknown;
   };
 
-  let { src, class: className = "", ...rest }: Props = $props();
+  let { src, class: passedClasses = "", ...rest }: Props = $props();
 
   let imgEl: HTMLImageElement | undefined = $state();
   let loaded = $state(false);
 
-  // A cached image can be `complete` before this effect attaches listeners —
-  // its load event already fired, so waiting for one would leave the blur
-  // stuck. `naturalWidth > 0` excludes the broken-image case, which still
-  // fires `error` below.
+  // An image can be `complete` before this effect attaches listeners (cache
+  // hit, or a pre-hydration failure). `complete` is terminal either way: the
+  // load OR error event already fired and will never refire, so listening now
+  // would leave the blur stuck forever. naturalWidth doesn't matter — a
+  // failed image (complete, naturalWidth === 0) is just as done as a decoded
+  // one, and we unblur on error anyway (see the error listener below).
   $effect(() => {
     const el = imgEl;
     if (!el) return;
-    if (el.complete && el.naturalWidth > 0) {
+    if (el.complete) {
       loaded = true;
       return;
     }
@@ -41,5 +43,5 @@
   {src}
   {...rest}
   bind:ref={imgEl}
-  class={`progressive-img${loaded ? " progressive-img--loaded" : ""}${className ? " " + className : ""}`}
+  class={`progressive-img${loaded ? " progressive-img--loaded" : ""}${passedClasses ? " " + passedClasses : ""}`}
 />

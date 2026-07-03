@@ -102,6 +102,11 @@
       // Strict equality — a suffix regex would also accept lookalike hosts,
       // and parsing `e.origin` throws on opaque ("null") origins.
       if (e.origin !== "https://player.vimeo.com") return;
+      // Origin alone isn't enough: another player.vimeo.com iframe on the
+      // same page (a second banner, a ScreenWidthMedia embed) posts from the
+      // same origin, and its beats would feed THIS banner's watchdog and
+      // reveal it prematurely. Only trust our own iframe's window.
+      if (e.source !== iframeEl?.contentWindow) return;
       let data: { event?: string } | null;
       try {
         data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;

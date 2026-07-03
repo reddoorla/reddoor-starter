@@ -171,6 +171,9 @@
     {/if}
 
     {#if vimeoId && videoSrc && !videoError}
+      <!-- Decorative background player: tabindex="-1" + aria-hidden keep
+           keyboard/AT users from landing inside a -z-10 iframe they can't
+           even see (the chrome-less ?background=1 embed has no controls). -->
       <iframe
         bind:this={iframeElement}
         title="background video"
@@ -180,6 +183,8 @@
           : 'opacity-0'}"
         style="width: max(100%, 1000px)"
         allow="autoplay; fullscreen"
+        tabindex="-1"
+        aria-hidden="true"
       ></iframe>
     {/if}
 

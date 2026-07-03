@@ -77,11 +77,30 @@ async function engageAndIntersect() {
   await tick();
 }
 
-function vimeoMessage(event: string, origin = "https://player.vimeo.com") {
+/**
+ * A heartbeat as the component's own iframe would post it. The component
+ * checks `e.source` against its iframe's contentWindow (same-origin sibling
+ * embeds must not feed its watchdog), so a passing beat must carry the real
+ * source — tests override `origin`/`source` to probe each rejection path.
+ */
+function vimeoMessage(
+  event: string,
+  {
+    source,
+    origin = "https://player.vimeo.com",
+  }: { source: MessageEventSource | null; origin?: string },
+) {
   return new MessageEvent("message", {
     origin,
+    source,
     data: JSON.stringify({ event }),
   });
+}
+
+/** The component iframe's contentWindow, typed for MessageEvent init. */
+function sourceOf(container: HTMLElement): MessageEventSource {
+  return container.querySelector("iframe")!
+    .contentWindow as unknown as MessageEventSource;
 }
 
 describe("VimeoBanner", () => {
@@ -116,13 +135,15 @@ describe("VimeoBanner", () => {
     expect(container.querySelector("img")).toBeTruthy();
   });
 
-  it("keeps the iframe hidden until a heartbeat arrives from player.vimeo.com", async () => {
+  it("keeps the iframe hidden until a heartbeat arrives from its own player iframe", async () => {
     const { container } = render(VimeoBanner, props);
     await engageAndIntersect();
     const wrapper = container.querySelector("iframe")!.parentElement!;
     expect(wrapper.className).toContain("opacity-0");
 
-    window.dispatchEvent(vimeoMessage("playProgress"));
+    window.dispatchEvent(
+      vimeoMessage("playProgress", { source: sourceOf(container) }),
+    );
     await tick();
     expect(wrapper.className).toContain("opacity-100");
   });
@@ -132,35 +153,71 @@ describe("VimeoBanner", () => {
     await engageAndIntersect();
     const wrapper = container.querySelector("iframe")!.parentElement!;
 
+    // Correct source on both, so origin is the check under test.
+    const source = sourceOf(container);
     window.dispatchEvent(
-      vimeoMessage("playProgress", "https://evil.example.com"),
+      vimeoMessage("playProgress", {
+        source,
+        origin: "https://evil.example.com",
+      }),
     );
     // Lookalike suffix host — must not pass a strict-equality check.
     window.dispatchEvent(
-      vimeoMessage("playProgress", "https://notplayer.vimeo.com"),
+      vimeoMessage("playProgress", {
+        source,
+        origin: "https://notplayer.vimeo.com",
+      }),
     );
     await tick();
     expect(wrapper.className).toContain("opacity-0");
+  });
+
+  it("ignores heartbeats from a sibling player.vimeo.com iframe (wrong source)", async () => {
+    const { container } = render(VimeoBanner, props);
+    await engageAndIntersect();
+    const wrapper = container.querySelector("iframe")!.parentElement!;
+
+    // Same origin as a genuine beat, but posted by a DIFFERENT embed on the
+    // page (e.g. a ScreenWidthMedia background video) — must not reveal.
+    const sibling = document.createElement("iframe");
+    document.body.appendChild(sibling);
+    try {
+      window.dispatchEvent(
+        vimeoMessage("playProgress", {
+          source: sibling.contentWindow as unknown as MessageEventSource,
+        }),
+      );
+      window.dispatchEvent(vimeoMessage("playProgress", { source: null }));
+      await tick();
+      expect(wrapper.className).toContain("opacity-0");
+    } finally {
+      sibling.remove();
+    }
   });
 
   it("survives opaque origins and junk payloads without throwing", async () => {
     const { container } = render(VimeoBanner, props);
     await engageAndIntersect();
     const wrapper = container.querySelector("iframe")!.parentElement!;
+    // Junk payloads carry the correct source so the parse guards (not the
+    // source check) are what these messages exercise.
+    const source = sourceOf(container);
 
     // `new URL("null")` throws — a sandboxed-iframe message must not crash the handler.
     window.dispatchEvent(
-      new MessageEvent("message", { origin: "null", data: "{}" }),
+      new MessageEvent("message", { origin: "null", source, data: "{}" }),
     );
     window.dispatchEvent(
       new MessageEvent("message", {
         origin: "https://player.vimeo.com",
+        source,
         data: "not json",
       }),
     );
     window.dispatchEvent(
       new MessageEvent("message", {
         origin: "https://player.vimeo.com",
+        source,
         data: "null", // parses to null — must not TypeError on .event
       }),
     );
@@ -182,7 +239,9 @@ describe("VimeoBanner", () => {
     await engageAndIntersect();
     const wrapper = container.querySelector("iframe")!.parentElement!;
 
-    window.dispatchEvent(vimeoMessage("playProgress"));
+    window.dispatchEvent(
+      vimeoMessage("playProgress", { source: sourceOf(container) }),
+    );
     await tick();
     expect(wrapper.className).toContain("opacity-100");
 

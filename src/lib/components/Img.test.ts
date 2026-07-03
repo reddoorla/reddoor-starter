@@ -33,8 +33,8 @@ describe("Img", () => {
     expect(img.className).toContain("progressive-img--loaded");
   });
 
-  it("marks an already-complete (cached) image loaded without a load event", async () => {
-    // jsdom images are never complete; simulate a cache hit at mount time.
+  /** Shim complete/naturalWidth on the prototype for one render (jsdom images are never complete). */
+  async function renderAlreadyComplete(naturalWidth: number) {
     const desc = {
       complete: Object.getOwnPropertyDescriptor(
         HTMLImageElement.prototype,
@@ -50,15 +50,14 @@ describe("Img", () => {
       configurable: true,
     });
     Object.defineProperty(HTMLImageElement.prototype, "naturalWidth", {
-      get: () => 3,
+      get: () => naturalWidth,
       configurable: true,
     });
 
     try {
       const { container } = render(Img, { src: runImport, alt: "test" });
       await tick();
-      const img = container.querySelector("img")!;
-      expect(img.className).toContain("progressive-img--loaded");
+      return container.querySelector("img")!;
     } finally {
       Object.defineProperty(
         HTMLImageElement.prototype,
@@ -71,6 +70,18 @@ describe("Img", () => {
         desc.naturalWidth!,
       );
     }
+  }
+
+  it("marks an already-complete (cached) image loaded without a load event", async () => {
+    const img = await renderAlreadyComplete(3);
+    expect(img.className).toContain("progressive-img--loaded");
+  });
+
+  it("unblurs an image that already FAILED before hydration (complete, naturalWidth 0)", async () => {
+    // The error event fired pre-hydration and never refires — treating this
+    // as "still loading" would leave the blur stuck forever.
+    const img = await renderAlreadyComplete(0);
+    expect(img.className).toContain("progressive-img--loaded");
   });
 
   it("appends the passed class after the progressive classes", () => {

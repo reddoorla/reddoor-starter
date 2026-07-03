@@ -41,6 +41,13 @@ export function imgix(
   if (!isPrismicImageUrl(url)) return url;
   const u = new URL(url);
   u.searchParams.set("auto", "format,compress");
+  // Prismic crop URLs ship `rect` + `w` + `h` together. Overriding only `w`
+  // would leave the stale `h` behind, and imgix's default `fit=clip` then caps
+  // the real output width to preserve that (now wrong) box — so the srcset
+  // width descriptor would lie about the delivered pixels. Setting one
+  // dimension drops the other unless the caller supplies both.
+  if ("w" in params && !("h" in params)) u.searchParams.delete("h");
+  if ("h" in params && !("w" in params)) u.searchParams.delete("w");
   for (const [key, value] of Object.entries(params)) {
     u.searchParams.set(key, String(value));
   }

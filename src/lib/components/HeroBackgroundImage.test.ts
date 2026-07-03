@@ -47,6 +47,19 @@ describe("HeroBackgroundImage", () => {
     expect(link.getAttribute("fetchpriority")).toBe("high");
   });
 
+  it("skips the preload link (but still renders the image) with preload={false}", () => {
+    // Two hero-ish slices on one page must not both claim fetchpriority=high
+    // preloads — every instance after the real LCP hero opts out.
+    const { container } = render(HeroBackgroundImage, {
+      image: prismicImage(),
+      preload: false,
+    });
+    expect(document.head.querySelector("link[rel='preload']")).toBeNull();
+    const img = container.querySelector("img")!;
+    expect(img.src).toContain("w=1920");
+    expect(img.getAttribute("fetchpriority")).toBe("high");
+  });
+
   it("passes non-Prismic URLs through untouched, with no srcset", () => {
     const { container } = render(HeroBackgroundImage, {
       image: prismicImage({ url: "https://example.com/hero.jpg" }),

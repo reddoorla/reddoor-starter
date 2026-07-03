@@ -154,7 +154,10 @@
     <h2 id="screen-width-media-heading" class="text-xl font-semibold">
       Screen-width media
     </h2>
-    <!-- Poster-only (no vimeoId) so the fixture makes no external requests. -->
+    <!-- Poster-only (no vimeoId) so the fixture makes no external requests:
+         the video iframe needs a live player.vimeo.com src, so its a11y
+         attributes (tabindex="-1", aria-hidden) are asserted in
+         ScreenWidthMedia.test.ts instead. -->
     <ScreenWidthMedia
       src={pixel}
       altText="Placeholder background"
