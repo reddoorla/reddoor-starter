@@ -1,14 +1,24 @@
 <script lang="ts">
   import { PrismicPreview } from "@prismicio/svelte/kit";
   import { page } from "$app/state";
+  import { afterNavigate, beforeNavigate } from "$app/navigation";
   import { repositoryName } from "$lib/prismicio";
   import "../app.css";
   import LandscapeModal from "$lib/components/LandscapeModal.svelte";
   import TransitionOverlay from "$lib/components/TransitionOverlay.svelte";
   import Nav from "$lib/components/Nav.svelte";
   import Footer from "$lib/components/Footer.svelte";
+  import {
+    disableSmoothScroll,
+    restoreSmoothScroll,
+  } from "$lib/utils/instantNavScroll";
 
   let { data, children } = $props();
+
+  // Kit's own post-nav scroll (top / hash anchor / popstate restore) runs
+  // instantly instead of gliding under app.css's smooth-scroll. See the util.
+  beforeNavigate(disableSmoothScroll);
+  afterNavigate(restoreSmoothScroll);
 </script>
 
 <svelte:head>

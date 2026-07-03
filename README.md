@@ -17,6 +17,7 @@ A forkable starting point for all SvelteKit, Tailwind + Prismic sites developed 
 A library of responsive, reusable components designed to be used within Prismic Slices or standalone:
 
 - **Animation** — `AnimateInTriggered`, `AnimateOutTriggered`, `Slider`, `TriggerTransitionOnMount`
+- **Layout** — `ContentWidth`, `PreNavTransition` (opt-in fade-to-black _before_ navigation; alternative to `TransitionOverlay`), `ScreenWidthMedia`, `TransitionOverlay`
 - **Layout** — `ContentWidth`, `ScreenWidthMedia`, `TransitionOverlay`
 - **UI** — `Accordion`, `BrandIcon`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
 - **Forms** — `TurnstileWidget` (optional Cloudflare Turnstile challenge; dark until `PUBLIC_TURNSTILE_SITE_KEY` is set), plus `Field`/`Form` primitives used by the contact form
@@ -52,6 +53,14 @@ A Svelte action that attaches fade-up reveal behavior to any element. Defaults t
 ```
 
 **Options:** `trigger?: boolean` · `duration?: number` (ms, default `2400`) · `delayMax?: number` (ms, default `400`; viewport mode only — position-based stagger) · `translateY?: string` (default `"50%"`).
+
+## Recipes
+
+Opt-in patterns that need an extra dependency live in [`docs/recipes/`](docs/recipes/) — currently the [flatpickr datepicker action](docs/recipes/datepicker.md) (`pnpm add flatpickr` to activate).
+
+## SEO routes
+
+`robots.txt` and `sitemap.xml` are prerendered server routes (not static files) so both can emit absolute URLs on the deploy origin — Netlify's `URL` build env feeds `kit.prerender.origin` in `svelte.config.js`.
 
 ### Focus trap action — `use:trapFocus`
 
@@ -111,5 +120,6 @@ src/
 ├── params/              # Route param matchers
 └── app.css              # Global styles (Tailwind)
 customtypes/             # Prismic custom type definitions
-static/                  # Static assets (favicon, robots.txt)
+docs/recipes/            # Opt-in patterns needing extra dependencies
+static/                  # Static assets (favicon; robots.txt is a prerendered route)
 ```

@@ -249,3 +249,6 @@
     />
   </section>
 </main>
+
+<!-- Renders nothing at rest (overlay only appears mid-navigation, aria-hidden);
+     mounted so the axe gate covers its resting state. -->

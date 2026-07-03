@@ -18,7 +18,10 @@ import type {
 //
 // Checked per transition run (not at module load), so an OS-level toggle takes
 // effect on the next open/close. `matchMedia` is guarded for SSR and jsdom.
-const prefersReducedMotion = (): boolean =>
+/** Live reduced-motion query, exported for components whose BEHAVIOR (not just
+ *  animation) changes under reduced motion — e.g. PreNavTransition skips its
+ *  artificial pre-navigation delay entirely. */
+export const prefersReducedMotion = (): boolean =>
   typeof window !== "undefined" &&
   typeof window.matchMedia === "function" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
