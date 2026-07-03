@@ -18,7 +18,17 @@ A library of responsive, reusable components designed to be used within Prismic 
 
 - **Animation** — `AnimateInTriggered`, `AnimateOutTriggered`, `Slider`, `TriggerTransitionOnMount`
 - **Layout** — `ContentWidth`, `PreNavTransition` (opt-in fade-to-black _before_ navigation; alternative to `TransitionOverlay`), `ScreenWidthMedia`, `TransitionOverlay`
+- **Layout** — `ContentWidth`, `ScreenWidthMedia`, `TransitionOverlay`
+- **UI** — `Accordion`, `BrandIcon`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
+- **Forms** — `TurnstileWidget` (optional Cloudflare Turnstile challenge; dark until `PUBLIC_TURNSTILE_SITE_KEY` is set), plus `Field`/`Form` primitives used by the contact form
+
+`BrandIcon` renders CC0 [simple-icons](https://simpleicons.org/) social glyphs (`facebook`, `x`/`twitter`, `reddit`, `instagram`, `linkedin`) in `currentColor`; it is decorative, so put the accessible name on the wrapping link.
+
+- **Layout** — `ContentWidth`, `ScreenWidthMedia` (poster-first background video: idle-deferred iframe, quality-ramp reveal, reduced-motion poster only), `TransitionOverlay`
+- **Media** — `HeroBackgroundImage` (LCP-preloaded, imgix-srcset hero image), `Img` (progressive blur-up wrapper for `?as=run` imports), `VimeoBanner` (interaction-gated background video with playback heartbeat)
 - **UI** — `Accordion`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
+- **Utils** — `$lib/utils/image` (`imgix()` / `srcset()` responsive Prismic image helpers), `$lib/utils/vimeo` (`checkVimeoVideo()` server-side oEmbed existence check)
+- **Content** — `RichTextBody` (drop-in `PrismicRichText` replacement that rank-compresses editor-authored heading levels into a gap-free `aria-level` outline without changing visuals)
 
 This library grows as new interactive functions or layouts are needed, allowing work from different projects to carry over rather than rebuilding from scratch.
 
@@ -51,6 +61,18 @@ Opt-in patterns that need an extra dependency live in [`docs/recipes/`](docs/rec
 ## SEO routes
 
 `robots.txt` and `sitemap.xml` are prerendered server routes (not static files) so both can emit absolute URLs on the deploy origin — Netlify's `URL` build env feeds `kit.prerender.origin` in `svelte.config.js`.
+
+### Focus trap action — `use:trapFocus`
+
+Apply to an overlay gated by an `{#if}` block: moves focus in on open (or to `[data-autofocus]`), cycles Tab/Shift+Tab within the overlay, and restores focus on close. **Options:** `onEscape?: () => void` · `enabled?: boolean` · `restoreFocus?: () => HTMLElement | null | undefined` (for triggers that unmount while the overlay is open). Not for `<dialog>` + `showModal()`, which traps natively.
+
+### Motion-aware transitions — `$lib/transitions`
+
+Import `fade`/`fly`/`slide` from `$lib/transitions` instead of `svelte/transition` — identical API, but durations collapse to 0 under `prefers-reduced-motion` (the CSS reset in `app.css` can't reach Svelte's JS-driven transitions).
+
+### Micro-interaction utilities
+
+`bump` / `negative-bump` (press feedback), `bob-on-hover` / `bob-always` (vertical wiggle), `pulse-always` (scale breathing), `boop` (one-shot rotate wiggle) — Tailwind `@utility` entries in `app.css`, all inert under `prefers-reduced-motion`.
 
 ## Getting Started
 

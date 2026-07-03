@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { slide } from "svelte/transition";
+  import { slide } from "$lib/transitions";
   import { ChevronRight } from "@lucide/svelte";
   import { SvelteSet } from "svelte/reactivity";
 

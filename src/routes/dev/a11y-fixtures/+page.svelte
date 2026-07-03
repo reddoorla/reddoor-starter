@@ -1,12 +1,32 @@
 <script lang="ts">
+  import type { ImageField } from "@prismicio/client";
   import Accordion from "$lib/components/Accordion.svelte";
+  import BrandIcon from "$lib/components/BrandIcon.svelte";
   import Modal from "$lib/components/Modal.svelte";
   import Form from "$lib/components/Form.svelte";
   import Field from "$lib/components/Field.svelte";
+  import HeroBackgroundImage from "$lib/components/HeroBackgroundImage.svelte";
+  import Img from "$lib/components/Img.svelte";
+  import ScreenWidthMedia from "$lib/components/ScreenWidthMedia.svelte";
+  import VimeoBanner from "$lib/components/VimeoBanner.svelte";
+  import RichTextBody from "$lib/components/RichTextBody.svelte";
+  import { trapFocus } from "$lib/actions/trapFocus";
+  import type { RichTextField } from "@prismicio/client";
 
   let modalOpen = $state(false);
+  let trapDemoOpen = $state(false);
   let email = $state("");
   let message = $state("");
+
+  // Inline pixel so media fixtures stay hermetic — the axe run must not
+  // depend on external hosts (Prismic, Vimeo).
+  const pixel = "data:image/gif;base64,R0lGODlhAQABAAAAACw=";
+  const heroImage = {
+    url: pixel,
+    alt: "Placeholder hero image",
+    dimensions: { width: 1920, height: 1080 },
+  } as unknown as ImageField;
+  const runImport = { img: { src: pixel, w: 1920, h: 1080 }, sources: {} };
 
   const items = [
     {
@@ -16,9 +36,27 @@
     },
     {
       label: "What does it cover?",
-      content: "Accordion (disclosure), Modal (dialog), Form, and Field.",
+      content:
+        "Focus trap (custom dialog overlay), Accordion (disclosure), Modal (dialog), Form, Field, and rich-text heading normalization.",
     },
   ];
+
+  // An editor-authored body that starts deep and skips a level (h3 → h5);
+  // RichTextBody compresses the announced levels to 2 and 3.
+  const richTextField = [
+    { type: "heading3", text: "Editor heading (h3 tag)", spans: [] },
+    {
+      type: "paragraph",
+      text: "The h3 above is announced as level 2 via aria-level.",
+      spans: [],
+    },
+    { type: "heading5", text: "Skipped to h5 (h5 tag)", spans: [] },
+    {
+      type: "paragraph",
+      text: "The h5 above is announced as level 3 — no gap in the outline.",
+      spans: [],
+    },
+  ] as unknown as RichTextField;
 </script>
 
 <main class="max-w-3xl mx-auto px-8 py-16 space-y-12">
@@ -30,9 +68,70 @@
     </p>
   </header>
 
+  <section aria-labelledby="focus-trap-heading" class="space-y-4">
+    <h2 id="focus-trap-heading" class="text-xl font-semibold">Focus trap</h2>
+    <button
+      type="button"
+      onclick={() => (trapDemoOpen = true)}
+      class="px-4 py-2 border-2 border-primary rounded bump"
+    >
+      Open focus-trap demo
+    </button>
+    {#if trapDemoOpen}
+      <!-- In-flow stand-in for a custom (non-<dialog>) overlay, like Nav's
+           mobile menu: exercises use:trapFocus + dialog semantics under axe
+           without stacking a second fixed navbar and duplicate landmarks on
+           top of the app Nav the root layout already mounts. -->
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label="Focus trap demo"
+        class="border-2 border-primary rounded p-6 space-y-4"
+        use:trapFocus={{ onEscape: () => (trapDemoOpen = false) }}
+      >
+        <p>Tab and Shift+Tab cycle within this region; Escape closes it.</p>
+        <a href="#accordion-heading" class="block underline">Accordion</a>
+        <a href="#form-heading" class="block underline">Form</a>
+        <button
+          type="button"
+          onclick={() => (trapDemoOpen = false)}
+          class="px-4 py-2 border-2 border-primary rounded bump"
+        >
+          Close demo
+        </button>
+      </div>
+    {/if}
+  </section>
+
+  <section aria-labelledby="rich-text-heading" class="space-y-4">
+    <h2 id="rich-text-heading" class="text-xl font-semibold">
+      Rich text heading levels
+    </h2>
+    <RichTextBody field={richTextField} />
+  </section>
+
   <section aria-labelledby="accordion-heading" class="space-y-4">
     <h2 id="accordion-heading" class="text-xl font-semibold">Accordion</h2>
     <Accordion {items} />
+  </section>
+
+  <section aria-labelledby="brand-icons-heading" class="space-y-4">
+    <h2 id="brand-icons-heading" class="text-xl font-semibold">Brand icons</h2>
+    <!-- BrandIcon is decorative (aria-hidden), so the accessible name must live
+         on the wrapping link — exactly how sites are expected to use it. -->
+    <ul class="flex flex-row gap-4">
+      {#each ["facebook", "x", "reddit", "instagram", "linkedin"] as platform (platform)}
+        <li>
+          <a
+            href="https://example.com/{platform}"
+            aria-label="Reddoor on {platform}"
+            class="block h-6 w-6 hover:opacity-75 transition-opacity"
+          >
+            <BrandIcon {platform} />
+          </a>
+        </li>
+      {/each}
+    </ul>
   </section>
 
   <section aria-labelledby="modal-heading" class="space-y-4">
@@ -110,6 +209,44 @@
         Send
       </button>
     </Form>
+  </section>
+
+  <section aria-labelledby="hero-image-heading" class="space-y-4">
+    <h2 id="hero-image-heading" class="text-xl font-semibold">
+      Hero background image
+    </h2>
+    <div class="relative h-40 overflow-hidden">
+      <HeroBackgroundImage image={heroImage} altFallback="Placeholder hero" />
+    </div>
+  </section>
+
+  <section aria-labelledby="img-heading" class="space-y-4">
+    <h2 id="img-heading" class="text-xl font-semibold">Progressive image</h2>
+    <Img src={runImport} alt="Placeholder progressive image" />
+  </section>
+
+  <section aria-labelledby="vimeo-banner-heading" class="space-y-4">
+    <h2 id="vimeo-banner-heading" class="text-xl font-semibold">
+      Vimeo banner
+    </h2>
+    <!-- No real video plays in CI: the iframe mounts only after genuine input,
+         so axe sees the poster-only state. -->
+    <VimeoBanner vimeoId="1" poster={runImport} alt="Placeholder banner reel" />
+  </section>
+
+  <section aria-labelledby="screen-width-media-heading" class="space-y-4">
+    <h2 id="screen-width-media-heading" class="text-xl font-semibold">
+      Screen-width media
+    </h2>
+    <!-- Poster-only (no vimeoId) so the fixture makes no external requests:
+         the video iframe needs a live player.vimeo.com src, so its a11y
+         attributes (tabindex="-1", aria-hidden) are asserted in
+         ScreenWidthMedia.test.ts instead. -->
+    <ScreenWidthMedia
+      src={pixel}
+      altText="Placeholder background"
+      percentHeight={30}
+    />
   </section>
 </main>
 

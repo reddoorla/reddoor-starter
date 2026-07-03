@@ -17,7 +17,7 @@
 -->
 <script lang="ts">
   import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
-  import { fade } from "svelte/transition";
+  import { fade, prefersReducedMotion } from "$lib/transitions";
   import { shouldIntercept } from "$lib/utils/preNavIntercept";
 
   interface Props {
@@ -38,14 +38,6 @@
   let pendingHref: string | undefined;
   let navTimer: ReturnType<typeof setTimeout> | undefined;
   let clearTimer: ReturnType<typeof setTimeout> | undefined;
-
-  // Svelte's JS-driven transitions don't honor CSS reduced-motion resets, and
-  // the artificial delay is worse than the missing fade — skip the intercept
-  // entirely. Queried per-navigation so OS-level changes apply immediately.
-  const prefersReducedMotion = () =>
-    typeof window !== "undefined" &&
-    typeof window.matchMedia === "function" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   beforeNavigate((nav) => {
     const to = nav.to;

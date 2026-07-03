@@ -18,6 +18,8 @@
 
   let dialogEl: HTMLDialogElement | undefined = $state();
 
+  // No use:trapFocus here: showModal() already gives native focus containment,
+  // Escape handling, and focus restore — adding the action would double-trap.
   $effect(() => {
     if (!dialogEl) return;
     if (open && !dialogEl.open) {
