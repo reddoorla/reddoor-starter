@@ -1,14 +1,20 @@
 <script lang="ts">
   import { PrismicPreview } from "@prismicio/svelte/kit";
   import { page } from "$app/state";
+  import { afterNavigate } from "$app/navigation";
   import { repositoryName } from "$lib/prismicio";
   import "../app.css";
   import LandscapeModal from "$lib/components/LandscapeModal.svelte";
   import TransitionOverlay from "$lib/components/TransitionOverlay.svelte";
   import Nav from "$lib/components/Nav.svelte";
   import Footer from "$lib/components/Footer.svelte";
+  import { scrollToTopOnNavigate } from "$lib/utils/scrollToTopOnNavigate";
 
   let { data, children } = $props();
+
+  // Instant scroll-to-top on route change; skips popstate (back/forward keeps
+  // SvelteKit's restored position) and hash/query-only navs. See the util for details.
+  afterNavigate(scrollToTopOnNavigate);
 </script>
 
 <svelte:head>

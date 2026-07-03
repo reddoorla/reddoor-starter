@@ -3,6 +3,7 @@
   import Modal from "$lib/components/Modal.svelte";
   import Form from "$lib/components/Form.svelte";
   import Field from "$lib/components/Field.svelte";
+  import PreNavTransition from "$lib/components/PreNavTransition.svelte";
 
   let modalOpen = $state(false);
   let email = $state("");
@@ -112,3 +113,7 @@
     </Form>
   </section>
 </main>
+
+<!-- Renders nothing at rest (overlay only appears mid-navigation, aria-hidden);
+     mounted so the axe gate covers its resting state. -->
+<PreNavTransition />
