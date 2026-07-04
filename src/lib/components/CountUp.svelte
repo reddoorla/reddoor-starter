@@ -10,7 +10,9 @@
     value: number;
     /** Where the count starts (default 0). */
     startValue?: number;
-    /** Tween length in ms (default 2000); ignored under reduced motion. */
+    /** Tween length in ms (default 2000); ignored under reduced motion. Keep
+     *  it ≤5000: a longer auto-animation with no pause control risks WCAG
+     *  2.2.2 (dev builds warn past that). */
     duration?: number;
     /** Start when scrolled into view (default). false = start on mount. */
     startOnVisible?: boolean;
@@ -56,6 +58,16 @@
 
   let el: HTMLElement | undefined = $state();
 
+  // A count that auto-animates past 5s with no pause control risks WCAG 2.2.2.
+  // Warn in dev rather than clamp (clamping would silently override intent).
+  // svelte-ignore state_referenced_locally
+  const initialDuration = duration;
+  if (import.meta.env.DEV && initialDuration > 5000) {
+    console.warn(
+      `<CountUp> duration ${initialDuration}ms exceeds 5s — a long auto-animation with no pause control risks WCAG 2.2.2 (Pause, Stop, Hide). Consider ≤5000ms.`,
+    );
+  }
+
   // Checked live at call time so an OS reduced-motion toggle is honored:
   // jump straight to the final value with no animation.
   function run() {
@@ -89,5 +101,7 @@
 
 <span bind:this={el} class={passedClasses}>
   <span aria-hidden="true">{liveText}</span>
-  <span class="sr-only">{label ?? finalText}</span>
+  <!-- select-none so copying the visible number doesn't also pull this
+       screen-reader duplicate ("1,234+1,234+"). -->
+  <span class="sr-only select-none">{label ?? finalText}</span>
 </span>

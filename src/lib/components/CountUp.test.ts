@@ -146,3 +146,19 @@ describe("CountUp trigger + reduced motion", () => {
     expect(visible(container)).toBe("1,234");
   });
 });
+
+describe("CountUp WCAG 2.2.2 duration guard", () => {
+  it("warns in dev when the animation would run past 5s", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    render(CountUp, { ...base, duration: 10000 });
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("exceeds 5s"));
+    warn.mockRestore();
+  });
+
+  it("stays quiet at a compliant duration", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    render(CountUp, { ...base, duration: 2000 });
+    expect(warn).not.toHaveBeenCalled();
+    warn.mockRestore();
+  });
+});
