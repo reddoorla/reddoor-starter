@@ -116,21 +116,33 @@ describe("Slider navigation", () => {
     );
   });
 
-  it("disables the arrows at the bounds when loop is off", async () => {
-    // Arrows only render with 3+ positions (2 positions get dots alone).
-    const { getByLabelText } = renderSlider({ itemCount: 3, loop: false });
+  it("marks the arrows aria-disabled at the bounds when loop is off", async () => {
+    // aria-disabled instead of disabled: the bound arrow keeps keyboard
+    // focus instead of dumping it to <body>, and activating it is a no-op.
+    const { container, getByLabelText } = renderSlider({
+      itemCount: 3,
+      loop: false,
+    });
     const prev = getByLabelText("Previous slide") as HTMLButtonElement;
     const next = getByLabelText("Next slide") as HTMLButtonElement;
 
-    expect(prev.disabled).toBe(true);
-    expect(next.disabled).toBe(false);
-
-    await fireEvent.click(next);
+    expect(prev.getAttribute("aria-disabled")).toBe("true");
     expect(prev.disabled).toBe(false);
-    expect(next.disabled).toBe(false);
+    await fireEvent.click(prev); // no-op at the start bound
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
+      "Go to slide 1",
+    );
 
     await fireEvent.click(next);
-    expect(next.disabled).toBe(true);
+    expect(prev.getAttribute("aria-disabled")).toBeNull();
+    expect(next.getAttribute("aria-disabled")).toBeNull();
+
+    await fireEvent.click(next);
+    expect(next.getAttribute("aria-disabled")).toBe("true");
+    await fireEvent.click(next); // no-op at the end bound
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
+      "Go to slide 3",
+    );
   });
 
   it("jumps directly via the dots", async () => {
@@ -161,6 +173,17 @@ describe("Slider navigation", () => {
     expect(queryByLabelText("Next slide")).toBeNull();
     expect(queryByLabelText("Previous slide")).toBeNull();
     expect(queryByLabelText("Go to slide 1")).toBeNull();
+  });
+
+  it("keeps the dots when arrows are hidden, even with showDots off", () => {
+    // A carousel must keep a non-swipe control: dots are forced on
+    // whenever the arrows are absent.
+    const { getByLabelText, queryByLabelText } = renderSlider({
+      showArrows: false,
+      showDots: false,
+    });
+    expect(queryByLabelText("Next slide")).toBeNull();
+    expect(getByLabelText("Go to slide 2")).toBeTruthy();
   });
 
   it("counts positions, not items, with multiple cards per view", () => {
@@ -227,6 +250,8 @@ describe("Slider autoplay", () => {
   });
 
   it("restarts the full delay after manual navigation", async () => {
+    // Models swipe-style nav: jsdom clicks don't move focus, so the sticky
+    // focus pause doesn't engage — same as a real touch swipe.
     vi.useFakeTimers();
     const { container, getByLabelText } = renderSlider({ autoplay: 1000 });
 
@@ -260,25 +285,30 @@ describe("Slider autoplay", () => {
     );
   });
 
-  it("pauses while focus is inside the carousel", async () => {
+  it("focus stops rotation for good — only the play control resumes it (APG)", async () => {
     vi.useFakeTimers();
     const { container, getByRole, getByLabelText } = renderSlider({
       autoplay: 1000,
     });
     const region = getByRole("region");
-    const next = getByLabelText("Next slide");
 
-    next.focus();
     await fireEvent(region, new FocusEvent("focusin", { bubbles: true }));
     await advance(3000);
     expect(activeDot(container)?.getAttribute("aria-label")).toBe(
       "Go to slide 1",
     );
 
+    // Leaving does NOT resume — the pause is sticky, not focus-tracked.
     await fireEvent(
       region,
       new FocusEvent("focusout", { bubbles: true, relatedTarget: null }),
     );
+    await advance(3000);
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
+      "Go to slide 1",
+    );
+
+    await fireEvent.click(getByLabelText("Play slides"));
     await advance(1000);
     expect(activeDot(container)?.getAttribute("aria-label")).toBe(
       "Go to slide 2",
@@ -321,6 +351,22 @@ describe("Slider autoplay", () => {
       "Go to slide 1",
     );
     expect(queryByLabelText("Pause slides")).toBeNull();
+  });
+
+  it("parks at the last position instead of wrapping when loop is off", async () => {
+    vi.useFakeTimers();
+    const { container, getByLabelText } = renderSlider({
+      itemCount: 3,
+      autoplay: 1000,
+      loop: false,
+    });
+
+    await advance(5000);
+    expect(activeDot(container)?.getAttribute("aria-label")).toBe(
+      "Go to slide 3",
+    );
+    const next = getByLabelText("Next slide") as HTMLButtonElement;
+    expect(next.getAttribute("aria-disabled")).toBe("true");
   });
 
   it("stops rotating when the tab is hidden", async () => {
