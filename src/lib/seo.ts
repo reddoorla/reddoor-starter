@@ -11,10 +11,30 @@ export const SITE_LOCALE = "en_US";
  *  search engines then synthesize a snippet from the page copy instead. */
 export const DEFAULT_DESCRIPTION = "";
 
+/** Fallback social-share card for pages with no `meta_image`. Empty = no
+ *  card (Twitter downgrades to a small summary). Set this to a shipped asset
+ *  (e.g. "/og-default.png") per site so shares are never imageless — a
+ *  Reddoor-branded default is deliberately NOT shipped, since every cloned
+ *  site would then leak the Reddoor card until the owner replaced it. */
+export const DEFAULT_OG_IMAGE = "";
+
 /** Social-card canvas. Prismic og images are cropped to this exact box so a
  *  card never ships a multi-MB original, and width/height can be advertised. */
 export const OG_IMAGE_WIDTH = 1200;
 export const OG_IMAGE_HEIGHT = 630;
+
+/**
+ * Compose a page's <title>: append "| SITE_NAME" for brand recall, unless the
+ * title is empty, is the site name itself (the home page), or already contains
+ * it (an editor-authored meta_title that mentions the brand). Falls back to the
+ * bare site name when there is no page title.
+ */
+export function composeTitle(title: string | null | undefined): string {
+  const t = title?.trim();
+  if (!t) return SITE_NAME;
+  if (t === SITE_NAME || t.includes(SITE_NAME)) return t;
+  return `${t} | ${SITE_NAME}`;
+}
 
 /**
  * Serialize structured data for a JSON-LD script tag rendered with {@html}.
@@ -77,8 +97,13 @@ export function resolveOgImage(
     };
   }
   try {
-    // Already absolute (http/https or any parseable URL).
-    return { url: new URL(src).toString() };
+    const parsed = new URL(src);
+    // Only http(s) belongs in og:image — reject a CMS value that parses as
+    // javascript:/data:/etc. rather than emitting it as a card URL.
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return undefined;
+    }
+    return { url: parsed.toString() };
   } catch {
     // Root-relative static asset, e.g. /og-default.png.
     return { url: `${origin}${src.startsWith("/") ? "" : "/"}${src}` };

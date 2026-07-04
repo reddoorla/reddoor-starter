@@ -4,11 +4,29 @@ import {
   canonicalUrl,
   resolveOgImage,
   organizationJsonLd,
+  composeTitle,
   OG_IMAGE_WIDTH,
   OG_IMAGE_HEIGHT,
 } from "./seo";
 
 const PRISMIC = "https://images.prismic.io/acme/abc.png?auto=compress";
+
+describe("composeTitle", () => {
+  it("appends the site name for brand recall", () => {
+    expect(composeTitle("Contact")).toBe("Contact | Reddoor");
+  });
+
+  it("returns the bare site name for the home page (no page title)", () => {
+    expect(composeTitle(undefined)).toBe("Reddoor");
+    expect(composeTitle("")).toBe("Reddoor");
+    expect(composeTitle("   ")).toBe("Reddoor");
+  });
+
+  it("does not double the brand when the title already contains it", () => {
+    expect(composeTitle("Reddoor")).toBe("Reddoor");
+    expect(composeTitle("Reddoor Studio — Work")).toBe("Reddoor Studio — Work");
+  });
+});
 
 describe("jsonLdScript", () => {
   it("wraps data in an ld+json script tag", () => {
@@ -91,6 +109,15 @@ describe("resolveOgImage", () => {
     expect(resolveOgImage("/og-default.png", "https://acme.com")).toEqual({
       url: "https://acme.com/og-default.png",
     });
+  });
+
+  it("rejects a non-http(s) scheme instead of emitting it as a card", () => {
+    expect(
+      resolveOgImage("javascript:alert(1)", "https://acme.com"),
+    ).toBeUndefined();
+    expect(
+      resolveOgImage("data:image/png;base64,AAAA", "https://acme.com"),
+    ).toBeUndefined();
   });
 });
 

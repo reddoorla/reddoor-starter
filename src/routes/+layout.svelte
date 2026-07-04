@@ -5,7 +5,7 @@
   import { repositoryName } from "$lib/prismicio";
   import "../app.css";
   import Seo from "$lib/components/Seo.svelte";
-  import { SITE_NAME } from "$lib/seo";
+  import { composeTitle, DEFAULT_OG_IMAGE } from "$lib/seo";
   import LandscapeModal from "$lib/components/LandscapeModal.svelte";
   import TransitionOverlay from "$lib/components/TransitionOverlay.svelte";
   import Nav from "$lib/components/Nav.svelte";
@@ -27,9 +27,10 @@
      (and optional description/image) through `page.data`; per-page <svelte:head>
      title overrides would desync og:title, so pages set data, not tags. -->
 <Seo
-  title={page.data.meta_title || page.data.title || SITE_NAME}
+  title={composeTitle(page.data.meta_title || page.data.title)}
   description={page.data.meta_description}
-  image={page.data.meta_image}
+  image={page.data.meta_image || DEFAULT_OG_IMAGE || undefined}
+  imageAlt={page.data.meta_image_alt}
   url={page.url}
 />
 <a

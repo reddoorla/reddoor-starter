@@ -9,8 +9,13 @@ export const prerender = true;
 // SvelteKit's placeholder origin, which is fine — robots.txt only matters
 // on the deployed site.
 export const GET: RequestHandler = ({ url }) => {
+  // Fence crawlers off the dev/tooling routes (which `prerender = "auto"`
+  // still emits as public static HTML) and Prismic preview URLs (which
+  // canonicalize to the real page anyway). Content routes stay open.
   const body = `User-agent: *
-Disallow:
+Disallow: /dev/
+Disallow: /slice-simulator
+Disallow: /preview/
 
 Sitemap: ${url.origin}/sitemap.xml
 `;

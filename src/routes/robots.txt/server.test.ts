@@ -8,12 +8,15 @@ function get(origin: string) {
 }
 
 describe("GET /robots.txt", () => {
-  it("allows all agents", async () => {
+  it("targets all agents", async () => {
     const body = await (await get("https://example.com")).text();
     expect(body).toContain("User-agent: *");
-    expect(body).toContain("Disallow:\n");
-    // "Disallow:" with no path = allow everything; make sure no path snuck in.
-    expect(body).not.toMatch(/Disallow: \S/);
+  });
+
+  it("fences off the dev/tooling and preview routes, nothing else", async () => {
+    const body = await (await get("https://example.com")).text();
+    const disallowed = [...body.matchAll(/Disallow: (\S+)/g)].map((m) => m[1]);
+    expect(disallowed).toEqual(["/dev/", "/slice-simulator", "/preview/"]);
   });
 
   it("points at the sitemap with an absolute URL on the request origin", async () => {
