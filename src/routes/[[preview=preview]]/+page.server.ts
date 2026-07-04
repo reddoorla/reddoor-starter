@@ -15,6 +15,7 @@ export async function load({ fetch, cookies }) {
       meta_description: page.data.meta_description,
       meta_title: page.data.meta_title,
       meta_image: page.data.meta_image?.url,
+      meta_image_alt: page.data.meta_image?.alt ?? undefined,
     };
   } catch {
     error(404, { message: "Page not found" });
