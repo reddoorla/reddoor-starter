@@ -11,6 +11,7 @@
   import VimeoBanner from "$lib/components/VimeoBanner.svelte";
   import RichTextBody from "$lib/components/RichTextBody.svelte";
   import Slider from "$lib/components/Slider.svelte";
+  import CountUp from "$lib/components/CountUp.svelte";
   import { trapFocus } from "$lib/actions/trapFocus";
   import type { RichTextField } from "@prismicio/client";
 
@@ -275,6 +276,16 @@
         </div>
       {/snippet}
     </Slider>
+  </section>
+
+  <section aria-labelledby="countup-heading" class="space-y-4">
+    <h2 id="countup-heading" class="text-xl font-semibold">Count up</h2>
+    <!-- The animating digits live in an aria-hidden layer; a visually-hidden
+         sibling carries the final value for assistive tech, so axe audits the
+         two-layer structure. -->
+    <p class="text-3xl font-bold">
+      <CountUp value={1284} suffix="+" /> projects delivered
+    </p>
   </section>
 </main>
 
