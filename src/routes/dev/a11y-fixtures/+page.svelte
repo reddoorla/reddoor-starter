@@ -10,6 +10,7 @@
   import ScreenWidthMedia from "$lib/components/ScreenWidthMedia.svelte";
   import VimeoBanner from "$lib/components/VimeoBanner.svelte";
   import RichTextBody from "$lib/components/RichTextBody.svelte";
+  import Slider from "$lib/components/Slider.svelte";
   import { trapFocus } from "$lib/actions/trapFocus";
   import type { RichTextField } from "@prismicio/client";
 
@@ -247,6 +248,33 @@
       altText="Placeholder background"
       percentHeight={30}
     />
+  </section>
+
+  <section aria-labelledby="slider-heading" class="space-y-4">
+    <h2 id="slider-heading" class="text-xl font-semibold">Slider</h2>
+    <Slider itemCount={3} label="Example slides">
+      {#snippet children({ index }: { index: number })}
+        <div class="border-2 border-primary rounded p-6">
+          <p>Slide body {index + 1}</p>
+        </div>
+      {/snippet}
+    </Slider>
+  </section>
+
+  <section aria-labelledby="slider-autoplay-heading" class="space-y-4">
+    <h2 id="slider-autoplay-heading" class="text-xl font-semibold">
+      Slider (autoplay)
+    </h2>
+    <!-- Rotation is live during the axe run so the pause/play control and the
+         muted live region are what get audited — the moving state is the one
+         users hit. -->
+    <Slider itemCount={3} label="Autoplaying slides" autoplay={5000}>
+      {#snippet children({ index }: { index: number })}
+        <div class="border-2 border-primary rounded p-6">
+          <p>Autoplay slide body {index + 1}</p>
+        </div>
+      {/snippet}
+    </Slider>
   </section>
 </main>
 
