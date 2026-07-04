@@ -86,6 +86,26 @@
 
   <div>
     <h2 class="text-xl font-semibold mb-3">
+      Index-based stagger (<code>stagger</code> + <code>index</code>)
+    </h2>
+    <p class="text-secondary text-sm mb-3">
+      A clean sequential reveal for grids/columns, where the horizontal-position
+      heuristic doesn't sequence rows.
+    </p>
+    <div class="grid grid-cols-2 gap-4">
+      {#each ["First", "Second", "Third", "Fourth"] as cell, i (cell)}
+        <div
+          use:animateIn={{ stagger: 120, index: i }}
+          class="p-6 bg-light rounded text-center text-sm"
+        >
+          {cell} (index {i} → {i * 120}ms)
+        </div>
+      {/each}
+    </div>
+  </div>
+
+  <div>
+    <h2 class="text-xl font-semibold mb-3">
       Through <code>&lt;ContentWidth animateInOnScroll&gt;</code>
     </h2>
     <ContentWidth animateInOnScroll>

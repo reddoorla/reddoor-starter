@@ -3,6 +3,13 @@ export type AnimateInOptions = {
   duration?: number;
   delayMax?: number;
   translateY?: string;
+  /** Fixed per-step reveal delay (ms). When set, the element waits
+   *  `index * stagger` before revealing instead of the default delay derived
+   *  from its horizontal position — use it for grids and columns, where the
+   *  position heuristic doesn't produce a clean sequence. Viewport mode only. */
+  stagger?: number;
+  /** This element's position in its group; pairs with `stagger`. Default 0. */
+  index?: number;
 };
 
 export type AnimateInParam = boolean | AnimateInOptions | undefined;
@@ -13,6 +20,8 @@ type ResolvedConfig = {
   duration: number;
   delayMax: number;
   translateY: string;
+  stagger: number | null;
+  index: number;
 };
 
 function resolveConfig(param: AnimateInParam): ResolvedConfig {
@@ -30,6 +39,8 @@ function resolveConfig(param: AnimateInParam): ResolvedConfig {
     duration: opts.duration ?? 2400,
     delayMax: opts.delayMax ?? 400,
     translateY: opts.translateY ?? "50%",
+    stagger: opts.stagger ?? null,
+    index: opts.index ?? 0,
   };
 }
 
@@ -67,8 +78,13 @@ export function animateIn(node: HTMLElement, param?: AnimateInParam) {
     }
   } else {
     applyHidden(node, cfg);
+    // Explicit index-based stagger (grids/columns) overrides the default
+    // horizontal-position heuristic (which only sequences a left-to-right row).
     const delay =
-      cfg.delayMax * (node.getBoundingClientRect().left / window.innerWidth);
+      cfg.stagger !== null
+        ? cfg.index * cfg.stagger
+        : cfg.delayMax *
+          (node.getBoundingClientRect().left / window.innerWidth);
     node.style.transitionDelay = `${delay}ms`;
 
     observer = new IntersectionObserver(
