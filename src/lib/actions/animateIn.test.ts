@@ -164,6 +164,62 @@ describe("animateIn — viewport mode", () => {
 
     expect(el.style.transitionDelay).toBe("400ms");
   });
+
+  it("staggers by index x step when `stagger` is set", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, { stagger: 120, index: 3 });
+
+    expect(el.style.transitionDelay).toBe("360ms");
+  });
+
+  it("treats a missing index as 0 (no delay) when staggering", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, { stagger: 120 });
+
+    expect(el.style.transitionDelay).toBe("0ms");
+  });
+
+  it("index-based stagger overrides the position-based delay", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+    Object.defineProperty(window, "innerWidth", {
+      value: 1000,
+      configurable: true,
+    });
+    // Positioned where the horizontal heuristic would give 200ms...
+    el.getBoundingClientRect = () =>
+      ({
+        left: 500,
+        top: 0,
+        right: 0,
+        bottom: 0,
+        width: 0,
+        height: 0,
+        x: 0,
+        y: 0,
+        toJSON: () => ({}),
+      }) as DOMRect;
+
+    // ...but an explicit index/stagger wins.
+    animateIn(el, { stagger: 100, index: 4 });
+
+    expect(el.style.transitionDelay).toBe("400ms");
+  });
+
+  it("still reveals a staggered element on intersection", () => {
+    const el = document.createElement("div");
+    document.body.appendChild(el);
+
+    animateIn(el, { stagger: 100, index: 2 });
+    FakeIntersectionObserver.instances[0].trigger(true);
+
+    expect(el.style.opacity).toBe("1");
+    expect(el.style.transitionDelay).toBe("200ms");
+  });
 });
 
 describe("animateIn — triggered mode", () => {
