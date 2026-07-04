@@ -15,7 +15,8 @@
 
 <!--
   Canonical contact form (clone skeleton). EDIT PER SITE:
-  - the page <title>, <h1>, and subhead copy below
+  - the page title (in +page.server.ts's load → flows to the layout <Seo>),
+    <h1>, and subhead copy below
   - the success-message copy
   - the field set (add/remove <Field>s + matching keys in +page.server.ts buildPayload)
   Forwards to the central dashboard ingest via createIngestAction; spam is handled
@@ -23,10 +24,6 @@
   (set PUBLIC_TURNSTILE_SITE_KEY to enable — verified centrally by the dashboard).
   Requires FORMS_INGEST_URL + FORMS_INGEST_TOKEN in the deployed site's env (see .env.example).
 -->
-
-<svelte:head>
-  <title>Contact</title>
-</svelte:head>
 
 <main class="max-w-2xl mx-auto px-8 py-16 space-y-8">
   <header class="space-y-2">
