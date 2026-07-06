@@ -1,26 +1,11 @@
-import { defineConfig, devices } from "@playwright/test";
+import { defineConfig } from "@playwright/test";
+import base from "@reddoorla/maintenance/configs/playwright-a11y";
 
+// Emulate reduced motion in tests: instant scrollIntoView (no long animated
+// smooth-scroll that flakes Playwright's actionability checks under parallel
+// load) and view transitions fall back to instant. Pairs with the
+// prefers-reduced-motion gate on scroll-behavior in src/app.css.
 export default defineConfig({
-  testDir: "tests",
-  testMatch: /.*\.spec\.ts$/,
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  reporter: process.env.CI ? "github" : "list",
-  use: {
-    baseURL: "http://localhost:5173",
-    trace: "on-first-retry",
-  },
-  projects: [
-    {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-    },
-  ],
-  webServer: {
-    command: "pnpm vite:dev",
-    url: "http://localhost:5173/dev/a11y-fixtures",
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  ...base,
+  use: { ...base.use, reducedMotion: "reduce" },
 });
