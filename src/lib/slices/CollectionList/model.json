@@ -12,9 +12,18 @@
       "description": "Grid of linked collection documents",
       "imageUrl": "",
       "primary": {
-        "heading": { "type": "StructuredText", "config": { "label": "heading", "single": "heading2,heading3" } },
-        "collection_type": { "type": "Text", "config": { "label": "collection_type" } },
-        "max_items": { "type": "Number", "config": { "label": "max_items", "placeholder": "12" } }
+        "heading": {
+          "type": "StructuredText",
+          "config": { "label": "heading", "single": "heading2,heading3" }
+        },
+        "collection_type": {
+          "type": "Text",
+          "config": { "label": "collection_type" }
+        },
+        "max_items": {
+          "type": "Number",
+          "config": { "label": "max_items", "placeholder": "12" }
+        }
       },
       "items": {}
     },
@@ -26,9 +35,18 @@
       "description": "Vertical list of linked collection documents",
       "imageUrl": "",
       "primary": {
-        "heading": { "type": "StructuredText", "config": { "label": "heading", "single": "heading2,heading3" } },
-        "collection_type": { "type": "Text", "config": { "label": "collection_type" } },
-        "max_items": { "type": "Number", "config": { "label": "max_items", "placeholder": "12" } }
+        "heading": {
+          "type": "StructuredText",
+          "config": { "label": "heading", "single": "heading2,heading3" }
+        },
+        "collection_type": {
+          "type": "Text",
+          "config": { "label": "collection_type" }
+        },
+        "max_items": {
+          "type": "Number",
+          "config": { "label": "max_items", "placeholder": "12" }
+        }
       },
       "items": {}
     }

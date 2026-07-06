@@ -1,6 +1,10 @@
 <script lang="ts">
   import RichTextBody from "$lib/components/RichTextBody.svelte";
-  import { PrismicImage, PrismicLink, PrismicRichText } from "@prismicio/svelte";
+  import {
+    PrismicImage,
+    PrismicLink,
+    PrismicRichText,
+  } from "@prismicio/svelte";
   import type { Content } from "@prismicio/client";
 
   interface Props {
@@ -29,7 +33,10 @@
     {#each slice.items as item (item)}
       <PrismicLink field={item.item_link} class="block">
         {#if item.item_media?.url}
-          <PrismicImage field={item.item_media} class="mb-3 h-auto w-full rounded" />
+          <PrismicImage
+            field={item.item_media}
+            class="mb-3 h-auto w-full rounded"
+          />
         {/if}
         <PrismicRichText field={item.item_heading} />
         <RichTextBody field={item.item_body} />

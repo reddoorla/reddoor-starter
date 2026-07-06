@@ -4,7 +4,12 @@ import type * as prismic from "@prismicio/client";
 
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 
-type PageDocumentDataSlicesSlice = RichTextSlice;
+type PageDocumentDataSlicesSlice =
+  | HeroSlice
+  | MediaTextSlice
+  | SectionGridSlice
+  | CollectionListSlice
+  | RichTextSlice;
 
 /**
  * Content for Page documents
@@ -76,6 +81,136 @@ export type RichTextSlice = prismic.SharedSlice<
   RichTextSliceVariation
 >;
 
+/**
+ * Primary content in *Hero → Default → Primary*
+ */
+export interface HeroSliceDefaultPrimary {
+  heading: prismic.RichTextField;
+  body: prismic.RichTextField;
+  background_image: prismic.ImageField<never>;
+  cta_label: prismic.KeyTextField;
+  cta_link: prismic.LinkField;
+}
+
+export type HeroSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<HeroSliceDefaultPrimary>,
+  never
+>;
+
+type HeroSliceVariation = HeroSliceDefault;
+
+export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
+
+/**
+ * Primary content in *MediaText → Image Right → Primary*
+ */
+export interface MediaTextSliceImageRightPrimary {
+  heading: prismic.RichTextField;
+  body: prismic.RichTextField;
+  media: prismic.ImageField<never>;
+}
+
+export type MediaTextSliceImageRight = prismic.SharedSliceVariation<
+  "imageRight",
+  Simplify<MediaTextSliceImageRightPrimary>,
+  never
+>;
+
+/**
+ * Primary content in *MediaText → Image Left → Primary*
+ */
+export interface MediaTextSliceImageLeftPrimary {
+  heading: prismic.RichTextField;
+  body: prismic.RichTextField;
+  media: prismic.ImageField<never>;
+}
+
+export type MediaTextSliceImageLeft = prismic.SharedSliceVariation<
+  "imageLeft",
+  Simplify<MediaTextSliceImageLeftPrimary>,
+  never
+>;
+
+type MediaTextSliceVariation =
+  | MediaTextSliceImageRight
+  | MediaTextSliceImageLeft;
+
+export type MediaTextSlice = prismic.SharedSlice<
+  "media_text",
+  MediaTextSliceVariation
+>;
+
+/**
+ * Primary content in *SectionGrid → Default → Primary*
+ */
+export interface SectionGridSliceDefaultPrimary {
+  heading: prismic.RichTextField;
+  columns: prismic.NumberField;
+}
+
+/**
+ * Item in *SectionGrid → Default → Items*
+ */
+export interface SectionGridSliceDefaultItem {
+  item_heading: prismic.RichTextField;
+  item_body: prismic.RichTextField;
+  item_media: prismic.ImageField<never>;
+  item_link: prismic.LinkField;
+}
+
+export type SectionGridSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<SectionGridSliceDefaultPrimary>,
+  Simplify<SectionGridSliceDefaultItem>
+>;
+
+type SectionGridSliceVariation = SectionGridSliceDefault;
+
+export type SectionGridSlice = prismic.SharedSlice<
+  "section_grid",
+  SectionGridSliceVariation
+>;
+
+/**
+ * Primary content in *CollectionList → Grid → Primary*
+ */
+export interface CollectionListSliceGridPrimary {
+  heading: prismic.RichTextField;
+  collection_type: prismic.KeyTextField;
+  max_items: prismic.NumberField;
+}
+
+export type CollectionListSliceGrid = prismic.SharedSliceVariation<
+  "grid",
+  Simplify<CollectionListSliceGridPrimary>,
+  never
+>;
+
+/**
+ * Primary content in *CollectionList → List → Primary*
+ */
+export interface CollectionListSliceListPrimary {
+  heading: prismic.RichTextField;
+  collection_type: prismic.KeyTextField;
+  max_items: prismic.NumberField;
+}
+
+export type CollectionListSliceList = prismic.SharedSliceVariation<
+  "list",
+  Simplify<CollectionListSliceListPrimary>,
+  never
+>;
+
+type CollectionListSliceVariation =
+  | CollectionListSliceGrid
+  | CollectionListSliceList;
+
+export type CollectionListSlice = prismic.SharedSlice<
+  "collection_list",
+  CollectionListSliceVariation
+>;
+
 declare module "@prismicio/client" {
   interface CreateClient {
     (
@@ -105,6 +240,27 @@ declare module "@prismicio/client" {
       RichTextSliceDefaultPrimary,
       RichTextSliceVariation,
       RichTextSliceDefault,
+      HeroSlice,
+      HeroSliceDefaultPrimary,
+      HeroSliceVariation,
+      HeroSliceDefault,
+      MediaTextSlice,
+      MediaTextSliceImageRightPrimary,
+      MediaTextSliceImageLeftPrimary,
+      MediaTextSliceVariation,
+      MediaTextSliceImageRight,
+      MediaTextSliceImageLeft,
+      SectionGridSlice,
+      SectionGridSliceDefaultPrimary,
+      SectionGridSliceDefaultItem,
+      SectionGridSliceVariation,
+      SectionGridSliceDefault,
+      CollectionListSlice,
+      CollectionListSliceGridPrimary,
+      CollectionListSliceListPrimary,
+      CollectionListSliceVariation,
+      CollectionListSliceGrid,
+      CollectionListSliceList,
     };
   }
 }

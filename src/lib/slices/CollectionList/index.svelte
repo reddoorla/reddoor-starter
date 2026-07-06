@@ -1,8 +1,11 @@
 <script lang="ts">
   import { PrismicImage, PrismicRichText } from "@prismicio/svelte";
-  import type { Content } from "@prismicio/client";
+  import type { Content, ImageField, RichTextField } from "@prismicio/client";
 
-  type CollectionDoc = { uid: string; data: { title: unknown; media?: { url?: string; alt?: string | null } } };
+  type CollectionDoc = {
+    uid: string;
+    data: { title: unknown; media?: { url?: string; alt?: string | null } };
+  };
 
   interface Props {
     slice: Content.CollectionListSlice;
@@ -11,10 +14,15 @@
 
   let { slice, context }: Props = $props();
   let docs = $derived(
-    (context?.collections?.[slice.primary.collection_type] ?? []).slice(0, slice.primary.max_items ?? 24),
+    (context?.collections?.[slice.primary.collection_type ?? ""] ?? []).slice(
+      0,
+      slice.primary.max_items ?? 24,
+    ),
   );
   let listClass = $derived(
-    slice.variation === "list" ? "flex flex-col gap-6" : "grid grid-cols-1 gap-8 md:grid-cols-3",
+    slice.variation === "list"
+      ? "flex flex-col gap-6"
+      : "grid grid-cols-1 gap-8 md:grid-cols-3",
   );
 </script>
 
@@ -28,9 +36,12 @@
     {#each docs as doc (doc.uid)}
       <article>
         {#if doc.data.media?.url}
-          <PrismicImage field={doc.data.media as any} class="mb-3 h-auto w-full rounded" />
+          <PrismicImage
+            field={doc.data.media as unknown as ImageField}
+            class="mb-3 h-auto w-full rounded"
+          />
         {/if}
-        <PrismicRichText field={doc.data.title as any} />
+        <PrismicRichText field={doc.data.title as RichTextField} />
       </article>
     {/each}
   </div>
