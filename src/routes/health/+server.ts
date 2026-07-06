@@ -14,13 +14,18 @@ type PrismicHealth = "ok" | "error" | "skipped";
 // endpoint (getRepository — no token), time-boxed, and returns ONLY a status
 // string. The repository body is never included: /health is public and
 // unauthenticated, so it exposes booleans and status strings, nothing more.
-async function probePrismic(fetch: typeof globalThis.fetch): Promise<PrismicHealth> {
+async function probePrismic(
+  fetch: typeof globalThis.fetch,
+): Promise<PrismicHealth> {
   if (isPlaceholderRepo) return "skipped";
   const client = createClient({ fetch });
   let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     const timeout = new Promise<never>((_, reject) => {
-      timer = setTimeout(() => reject(new Error("prismic health probe timed out")), 5000);
+      timer = setTimeout(
+        () => reject(new Error("prismic health probe timed out")),
+        5000,
+      );
     });
     await Promise.race([client.getRepository(), timeout]);
     return "ok";
@@ -36,12 +41,13 @@ export const GET: RequestHandler = async ({ fetch }) => {
   const forms = {
     ingestUrl: !!privateEnv.FORMS_INGEST_URL,
     ingestToken: !!privateEnv.FORMS_INGEST_TOKEN,
-    turnstile: !!publicEnv.PUBLIC_TURNSTILE_SITE_KEY,
+    // Trimmed to match the widget's own check (see TurnstileWidget.svelte) so a
+    // stray-whitespace value reports dark here too, not falsely present.
+    turnstile: !!publicEnv.PUBLIC_TURNSTILE_SITE_KEY?.trim(),
   };
-  // We are inside the handler, so the function ran. The downstream function-health
-  // audit treats an unreachable endpoint as "not present"; ok is false only when
-  // the Prismic probe actively errored.
-  const functionRan = true;
-  const ok = functionRan && prismic !== "error";
+  // The downstream function-health audit treats an unreachable endpoint as "not
+  // present"; since we are inside the handler, the function ran, so ok is false
+  // only when the Prismic probe actively errored.
+  const ok = prismic !== "error";
   return json({ ok, prismic, forms });
 };
