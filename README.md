@@ -28,6 +28,7 @@ A library of responsive, reusable components designed to be used within Prismic 
 - **Media** — `HeroBackgroundImage` (LCP-preloaded, imgix-srcset hero image), `Img` (progressive blur-up wrapper for `?as=run` imports), `VimeoBanner` (interaction-gated background video with playback heartbeat)
 - **UI** — `Accordion`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
 - **Utils** — `$lib/utils/image` (`imgix()` / `srcset()` responsive Prismic image helpers), `$lib/utils/vimeo` (`checkVimeoVideo()` server-side oEmbed existence check)
+- **Utils (from `@reddoorla/maintenance/client`)** — `whenPageReady()` (readiness floor/ceiling around eager-image settlement) and `prefersReducedMotion()` for load-aware splash/intro gating; the starter ships no splash, but the MSOT, espada, and reddoor-website layouts show the pattern
 - **Content** — `RichTextBody` (drop-in `PrismicRichText` replacement that rank-compresses editor-authored heading levels into a gap-free `aria-level` outline without changing visuals)
 
 This library grows as new interactive functions or layouts are needed, allowing work from different projects to carry over rather than rebuilding from scratch.
