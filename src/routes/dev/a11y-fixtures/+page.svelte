@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ImageField } from "@prismicio/client";
+  import type { Content, ImageField } from "@prismicio/client";
   import Accordion from "$lib/components/Accordion.svelte";
   import BrandIcon from "$lib/components/BrandIcon.svelte";
   import Modal from "$lib/components/Modal.svelte";
@@ -12,6 +12,10 @@
   import RichTextBody from "$lib/components/RichTextBody.svelte";
   import Slider from "$lib/components/Slider.svelte";
   import CountUp from "$lib/components/CountUp.svelte";
+  import Hero from "$lib/slices/Hero/index.svelte";
+  import MediaText from "$lib/slices/MediaText/index.svelte";
+  import SectionGrid from "$lib/slices/SectionGrid/index.svelte";
+  import CollectionList from "$lib/slices/CollectionList/index.svelte";
   import { trapFocus } from "$lib/actions/trapFocus";
   import type { RichTextField } from "@prismicio/client";
 
@@ -59,6 +63,81 @@
       spans: [],
     },
   ] as unknown as RichTextField;
+
+  // Blux-conversion slice fixtures. Images use the inline pixel (hermetic — no
+  // external hosts). Headings are h2 (slice sections) / h3 (items) so the page
+  // outline stays valid beneath the page <h1>.
+  const heroSliceFixture = {
+    slice_type: "hero",
+    variation: "default",
+    primary: {
+      heading: [{ type: "heading2", text: "Hero slice", spans: [] }],
+      body: [
+        {
+          type: "paragraph",
+          text: "Hero body copy over a dark backdrop.",
+          spans: [],
+        },
+      ],
+      background_image: heroImage,
+      cta_label: "Explore",
+      cta_link: { link_type: "Web", url: "https://example.com" },
+    },
+    items: [],
+  } as unknown as Content.HeroSlice;
+  const mediaTextFixture = {
+    slice_type: "media_text",
+    variation: "imageRight",
+    primary: {
+      heading: [{ type: "heading2", text: "MediaText slice", spans: [] }],
+      body: [{ type: "paragraph", text: "Copy beside an image.", spans: [] }],
+      media: heroImage,
+    },
+    items: [],
+  } as unknown as Content.MediaTextSlice;
+  const sectionGridFixture = {
+    slice_type: "section_grid",
+    variation: "default",
+    primary: {
+      heading: [{ type: "heading2", text: "SectionGrid slice", spans: [] }],
+      columns: 3,
+    },
+    items: [
+      {
+        item_heading: [{ type: "heading3", text: "Card one", spans: [] }],
+        item_body: [{ type: "paragraph", text: "Card body.", spans: [] }],
+        item_media: heroImage,
+        item_link: { link_type: "Web", url: "https://example.com" },
+      },
+    ],
+  } as unknown as Content.SectionGridSlice;
+  const collectionListFixture = {
+    slice_type: "collection_list",
+    variation: "grid",
+    primary: {
+      heading: [{ type: "heading2", text: "CollectionList slice", spans: [] }],
+      collection_type: "product",
+      max_items: 12,
+    },
+    items: [],
+  } as unknown as Content.CollectionListSlice;
+  const collectionCtx = {
+    collections: {
+      product: [
+        {
+          uid: "aero-sofa",
+          data: {
+            title: [{ type: "heading3", text: "Aero Sofa", spans: [] }],
+            media: {
+              url: pixel,
+              alt: "Aero Sofa",
+              dimensions: { width: 1920, height: 1080 },
+            },
+          },
+        },
+      ],
+    },
+  };
 </script>
 
 <main class="max-w-3xl mx-auto px-8 py-16 space-y-12">
@@ -287,6 +366,13 @@
       <CountUp value={1284} suffix="+" /> projects delivered
     </p>
   </section>
+
+  <!-- Blux-conversion slices — each renders its own <section> + heading; axe
+       audits the produced markup (contrast, alt text, heading order). -->
+  <Hero slice={heroSliceFixture} />
+  <MediaText slice={mediaTextFixture} />
+  <SectionGrid slice={sectionGridFixture} />
+  <CollectionList slice={collectionListFixture} context={collectionCtx} />
 </main>
 
 <!-- Renders nothing at rest (overlay only appears mid-navigation, aria-hidden);
