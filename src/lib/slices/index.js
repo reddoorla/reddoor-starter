@@ -3,9 +3,11 @@
 import Hero from "./Hero/index.svelte";
 import MediaText from "./MediaText/index.svelte";
 import RichText from "./RichText/index.svelte";
+import SectionGrid from "./SectionGrid/index.svelte";
 
 export const components = {
   hero: Hero,
   media_text: MediaText,
   rich_text: RichText,
+  section_grid: SectionGrid,
 };
