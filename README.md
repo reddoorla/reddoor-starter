@@ -105,7 +105,8 @@ Import `fade`/`fly`/`slide` from `$lib/transitions` instead of `svelte/transitio
 | `pnpm check`        | Svelte type checking             |
 | `pnpm lint`         | Lint with ESLint + Prettier      |
 | `pnpm format`       | Auto-format with Prettier        |
-| `pnpm test`         | Run tests with Vitest            |
+| `pnpm test:unit`    | Run unit tests with Vitest       |
+| `pnpm test:smoke`   | Run Playwright + axe a11y checks |
 | `pnpm slicemachine` | Start Slice Machine UI           |
 
 ## Project Structure

@@ -21,14 +21,14 @@ This starter targets **WCAG 2.2 Level AA**. Accessibility is treated as a defaul
 | `axe-core` via Playwright | Zero WCAG 2 A/AA, 2.1 A/AA, 2.2 AA violations on `/dev/a11y-fixtures` and `/dev/animate-in` | [tests/a11y.spec.ts](../tests/a11y.spec.ts), runs on every PR |
 | Lighthouse CI             | Accessibility ≥ 0.95                                                                        | [lighthouserc.json](../lighthouserc.json), runs on every PR   |
 | Svelte compiler           | Native a11y rule set                                                                        | `pnpm lint`                                                   |
-| Vitest unit tests         | ARIA attributes on Accordion, Modal, Field, Form                                            | `pnpm test`                                                   |
+| Vitest unit tests         | ARIA attributes on Accordion, Modal, Field, Form                                            | `pnpm test:unit`                                              |
 
 Run locally:
 
 ```bash
-pnpm test            # vitest unit tests
-pnpm test:a11y       # Playwright + axe (boots vite dev)
-pnpm test:lhci       # Lighthouse CI (boots vite dev)
+pnpm test:unit        # vitest unit tests
+pnpm test:smoke       # Playwright + axe (boots vite dev)
+pnpm test:lhci        # Lighthouse CI (boots vite dev)
 ```
 
 ## Manual testing reference
