@@ -29,6 +29,18 @@
           "choices": {
             "rich_text": {
               "type": "SharedSlice"
+            },
+            "hero": {
+              "type": "SharedSlice"
+            },
+            "media_text": {
+              "type": "SharedSlice"
+            },
+            "section_grid": {
+              "type": "SharedSlice"
+            },
+            "collection_list": {
+              "type": "SharedSlice"
             }
           }
         }
