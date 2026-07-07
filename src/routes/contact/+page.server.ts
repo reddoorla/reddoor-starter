@@ -32,7 +32,7 @@ export const actions: Actions = {
       // ONLY when the submitted form carries testMode=true — a real visitor never
       // sets it. Rides through as an extraField (no schema change); central ingest
       // recognizes it and routes the submission away from every real sink.
-      ...(form.get("testMode")?.toString() === "true" ? { testMode: true } : {}),
+      testMode: form.get("testMode")?.toString() === "true" || undefined,
     }),
   }),
 };
