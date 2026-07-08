@@ -16,12 +16,12 @@ This starter targets **WCAG 2.2 Level AA**. Accessibility is treated as a defaul
 
 ## Automated testing
 
-| Tool                      | What it gates                                                                               | Where                                                         |
-| ------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| `axe-core` via Playwright | Zero WCAG 2 A/AA, 2.1 A/AA, 2.2 AA violations on `/dev/a11y-fixtures` and `/dev/animate-in` | [tests/a11y.spec.ts](../tests/a11y.spec.ts), runs on every PR |
-| Lighthouse CI             | Accessibility ≥ 0.95                                                                        | [lighthouserc.json](../lighthouserc.json), runs on every PR   |
-| Svelte compiler           | Native a11y rule set                                                                        | `pnpm lint`                                                   |
-| Vitest unit tests         | ARIA attributes on Accordion, Modal, Field, Form                                            | `pnpm test:unit`                                              |
+| Tool                      | What it gates                                                                               | Where                                                                           |
+| ------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `axe-core` via Playwright | Zero WCAG 2 A/AA, 2.1 A/AA, 2.2 AA violations on `/dev/a11y-fixtures` and `/dev/animate-in` | [tests/a11y/fixtures.spec.ts](../tests/a11y/fixtures.spec.ts), runs on every PR |
+| Lighthouse CI             | Accessibility ≥ 0.95                                                                        | [lighthouserc.json](../lighthouserc.json), runs on every PR                     |
+| Svelte compiler           | Native a11y rule set                                                                        | `pnpm lint`                                                                     |
+| Vitest unit tests         | ARIA attributes on Accordion, Modal, Field, Form                                            | `pnpm test:unit`                                                                |
 
 Run locally:
 
