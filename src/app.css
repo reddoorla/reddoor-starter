@@ -1,6 +1,12 @@
 /* Tailwind CSS v4 configuration */
 @import "tailwindcss";
 
+/* The converted site's Blux theme — its @theme text/colour tokens plus the
+   `.txt-role-textN` utilities the slice components apply. A fresh starter ships
+   an empty placeholder; running `blux emit` and dropping its `theme.css` here
+   activates the site's real type roles. */
+@import "./blux-theme.css";
+
 @theme {
   --screen-sm: 560px;
   --screen-md: 768px;
@@ -152,6 +158,30 @@
   @media (prefers-reduced-motion: no-preference) {
     animation: boop 1s;
   }
+}
+
+/* Generic Blux slice layout — support rules the manifest-driven slice
+   components rely on (the `.mt-media`/`.mt-copy`/`.hero-band`/`.richtext-block`
+   hooks they emit). Site-neutral, so they live in the starter unchanged;
+   per-slice type + band styling comes from the styles manifest, not here. */
+
+/* Editorial media_text rows alternate the image side down the page —
+   `nth-child(… of S)` counts only media_text sections among the slice zone's
+   children. Outside @layer base so it wins over the component's grid order. */
+main :nth-child(even of section[data-slice-type="media_text"]) .mt-media {
+  order: -1;
+}
+
+/* The opening hero gets the full-viewport treatment; interstitial heroes are
+   short bands. The manifest also sets this when it captures height: 100vh, so
+   this is a floor for the first hero when a site ships without a manifest. */
+main > section.hero-band:first-child {
+  min-height: 100vh;
+}
+
+/* Multi-paragraph rich_text wants vertical rhythm between paragraphs. */
+.richtext-block p + p {
+  margin-top: 1em;
 }
 
 /* Blur-up companion to $lib/components/Img.svelte. Outside @layer base so it
