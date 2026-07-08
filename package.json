@@ -12,8 +12,9 @@
     "lint": "prettier --check . --plugin prettier-plugin-svelte . && eslint .",
     "format": "prettier --write . --plugin prettier-plugin-svelte .",
     "test": "vitest run",
-    "test:watch": "vitest",
-    "test:a11y": "playwright test",
+    "test:unit": "vitest run",
+    "test:unit:watch": "vitest",
+    "test:smoke": "playwright install chromium && playwright test",
     "export:rfp-pdf": "npx --yes md-to-pdf --config-file pdf.config.cjs docs/rfp-handbook.md",
     "slicemachine": "start-slicemachine"
   },
