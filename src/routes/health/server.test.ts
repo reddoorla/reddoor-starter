@@ -25,7 +25,12 @@ import { GET } from "./+server";
 type HealthBody = {
   ok: boolean;
   prismic: "ok" | "error" | "skipped";
-  forms: { ingestUrl: boolean; ingestToken: boolean; turnstile: boolean };
+  forms: {
+    ingestUrl: boolean;
+    ingestToken: boolean;
+    turnstile: boolean;
+    testMode: boolean;
+  };
 };
 
 // Spy fetch handed to the handler. The endpoint passes it to createClient (which
@@ -73,7 +78,7 @@ describe("/health GET", () => {
     expect(mocks.getRepository).not.toHaveBeenCalled();
   });
 
-  it("maps forms env presence to booleans", async () => {
+  it("maps forms env presence to booleans and always declares testMode forwarding", async () => {
     mocks.getRepository.mockResolvedValue({});
     mocks.privateEnv.FORMS_INGEST_URL = "https://ingest.example/submit";
     // FORMS_INGEST_TOKEN intentionally left unset.
@@ -83,6 +88,10 @@ describe("/health GET", () => {
       ingestUrl: true,
       ingestToken: false,
       turnstile: true,
+      // Not env-derived: this deploy's contact buildPayload forwards the
+      // marker, so the declaration is unconditional. The fleet form-e2e probe
+      // refuses to submit to any site whose /health omits it.
+      testMode: true,
     });
   });
 
