@@ -4,6 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 const pages = [
   { path: "/dev/a11y-fixtures", name: "a11y fixtures" },
   { path: "/dev/animate-in", name: "animate-in demo" },
+  { path: "/dev/blux-page", name: "blux band fixture" },
 ];
 
 for (const { path, name } of pages) {
