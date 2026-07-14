@@ -41,6 +41,27 @@
             },
             "collection_list": {
               "type": "SharedSlice"
+            },
+            "grid_band": {
+              "type": "SharedSlice"
+            },
+            "title_band": {
+              "type": "SharedSlice"
+            },
+            "split_feature": {
+              "type": "SharedSlice"
+            },
+            "gallery": {
+              "type": "SharedSlice"
+            },
+            "media_full": {
+              "type": "SharedSlice"
+            },
+            "location_map": {
+              "type": "SharedSlice"
+            },
+            "carousel": {
+              "type": "SharedSlice"
             }
           }
         }
