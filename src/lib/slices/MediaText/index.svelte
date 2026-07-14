@@ -1,50 +1,31 @@
 <script lang="ts">
   import RichTextBody from "$lib/components/RichTextBody.svelte";
-  import SectionBand from "$lib/components/SectionBand.svelte";
+  import ContentBand from "$lib/components/ContentBand.svelte";
   import { PrismicImage, PrismicRichText } from "@prismicio/svelte";
   import { isFilled, type Content } from "@prismicio/client";
-  import { roleClass, type SliceContext } from "$lib/presentation";
 
-  let {
-    slice,
-    index,
-    context,
-  }: {
-    slice: Content.MediaTextSlice;
-    index?: number;
-    context?: SliceContext;
-  } = $props();
+  let { slice }: { slice: Content.MediaTextSlice } = $props();
   let reverse = $derived(slice.variation === "imageLeft");
   let hasHeading = $derived(isFilled.richText(slice.primary.heading));
   let hasBody = $derived(isFilled.richText(slice.primary.body));
   let hasMedia = $derived(isFilled.image(slice.primary.media));
   let mediaOnly = $derived(hasMedia && !hasHeading && !hasBody);
-
-  let entry = $derived(
-    index != null ? context?.presentation?.get(index) : undefined,
-  );
-  let headingRole = $derived(entry?.presentation?.headingRole);
-  let bodyRole = $derived(entry?.presentation?.bodyRole);
 </script>
 
 {#if mediaOnly}
   <!-- A row with only an image is a full-bleed feature photo, centered — not an
        editorial split with an empty copy column beside it. -->
-  <SectionBand
-    block={entry?.presentation?.block}
+  <ContentBand
     sliceType={slice.slice_type}
     variation={slice.variation}
     contentClass="max-w-5xl px-6 py-16"
   >
     <PrismicImage field={slice.primary.media} class="mx-auto h-auto w-full" />
-  </SectionBand>
+  </ContentBand>
 {:else}
   <!-- Photo-dominant editorial row: copy ~1/3, image ~2/3, alternating sides
-       down the page (see app.css `nth-child(even of …)` rule). The heading and
-       body each carry the text role the export assigned them (a heading-less
-       row's body is typically the text14 serif blurb). -->
-  <SectionBand
-    block={entry?.presentation?.block}
+       down the page (see app.css `nth-child(even of …)` rule). -->
+  <ContentBand
     sliceType={slice.slice_type}
     variation={slice.variation}
     contentClass="grid max-w-6xl grid-cols-1 items-center gap-10 px-6 py-16 lg:grid-cols-12"
@@ -57,20 +38,16 @@
         : ''}"
     >
       {#if hasHeading}
-        <div class={roleClass(headingRole)}>
-          <PrismicRichText field={slice.primary.heading} />
-        </div>
+        <PrismicRichText field={slice.primary.heading} />
       {/if}
-      <div class={roleClass(bodyRole)}>
-        <RichTextBody field={slice.primary.body} />
-      </div>
+      <RichTextBody field={slice.primary.body} />
     </div>
     {#if hasMedia}
       <div class="mt-media lg:col-span-8 {reverse ? 'lg:order-1' : ''}">
         <PrismicImage field={slice.primary.media} class="h-auto w-full" />
       </div>
     {/if}
-  </SectionBand>
+  </ContentBand>
 {/if}
 
 <!-- The .serif-blurb text14 treatment lives in app.css (always loaded). -->

@@ -62,15 +62,4 @@ describe("RichText band wrap", () => {
     expect(sections).toHaveLength(1);
     expect(sections[0].getAttribute("data-slice-type")).toBe("rich_text");
   });
-
-  it("keeps working with the legacy Map-shaped context", () => {
-    const { container } = render(RichText, {
-      props: {
-        slice: slice({ content, band: 3 }),
-        context: { presentation: new Map() },
-      },
-    });
-    // Old context shape carries no band entries — single section, no wrap.
-    expect(container.querySelectorAll("section")).toHaveLength(1);
-  });
 });

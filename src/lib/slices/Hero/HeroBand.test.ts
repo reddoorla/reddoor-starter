@@ -41,7 +41,7 @@ describe("Hero band variation", () => {
     expect(container.querySelector("section")?.style.minHeight).toBe("80vh");
   });
 
-  it("tolerates the legacy Map-shaped context (old manifest layer)", () => {
+  it("tolerates an absent presentation (unconverted site)", () => {
     const slice = {
       slice_type: "hero",
       variation: "band",
@@ -49,9 +49,9 @@ describe("Hero band variation", () => {
       items: [],
     } as never;
     const { container } = render(Hero, {
-      props: { slice, context: { presentation: new Map() } },
+      props: { slice, context: {} },
     });
-    // No band entry resolvable from the old shape — still renders the text.
+    // No band entry resolvable — still renders the text.
     expect(container.querySelector("h2")?.textContent).toBe("fresh air");
     expect(container.querySelector("img")).toBeNull();
   });
