@@ -1,10 +1,9 @@
 <script lang="ts">
   import HeroBackgroundImage from "$lib/components/HeroBackgroundImage.svelte";
   import RichTextBody from "$lib/components/RichTextBody.svelte";
-  import SectionBand from "$lib/components/SectionBand.svelte";
+  import ContentBand from "$lib/components/ContentBand.svelte";
   import { PrismicLink, PrismicRichText } from "@prismicio/svelte";
   import type { Content } from "@prismicio/client";
-  import { roleClass, type SliceContext } from "$lib/presentation";
   import { bandFor, type Presentation } from "$lib/blux/presentation";
   import BluxSectionBand from "$lib/blux/SectionBand.svelte";
   import BandContent from "$lib/blux/BandContent.svelte";
@@ -26,35 +25,21 @@
 
   let {
     slice,
-    index,
     context,
   }: {
     slice: Content.HeroSlice | HeroBandSlice;
-    index?: number;
-    // Two manifest generations meet here: the legacy index-keyed styles map
-    // (SliceContext) and the Blux band presentation. Each branch reads only
-    // its own shape and tolerates the other.
-    context?: SliceContext | { presentation?: Presentation };
+    context?: { presentation?: Presentation };
   } = $props();
 
-  let entry = $derived(
-    index != null && context?.presentation instanceof Map
-      ? context.presentation.get(index)
-      : undefined,
-  );
-  let headingRole = $derived(entry?.presentation?.headingRole);
-  let bodyRole = $derived(entry?.presentation?.bodyRole);
   let hasImage = $derived(
     slice.variation === "default" && !!slice.primary.background_image?.url,
   );
 
   const band = $derived(
-    context && !(context.presentation instanceof Map)
-      ? bandFor(
-          context.presentation,
-          (slice.primary as { band?: number | null }).band ?? null,
-        )
-      : null,
+    bandFor(
+      context?.presentation,
+      (slice.primary as { band?: number | null }).band ?? null,
+    ),
   );
 </script>
 
@@ -81,14 +66,10 @@
     </BandContent>
   </BluxSectionBand>
 {:else}
-  <!-- Full-bleed image band. Height / vertical-align / text-align come from the
-     export (SectionBand); when the block gives no height we still stand a
-     background-image hero 45vh tall so the photo shows. Overlay copy uses
-     whatever role the export assigns the hero title (text2 "Page Title" on
-     thePointe), applied via .txt-role-*; white comes from the section class,
-     which the role class doesn't touch. -->
-  <SectionBand
-    block={entry?.presentation?.block}
+  <!-- Full-bleed image band. When the slice carries a background image we
+     stand the band 45vh tall so the photo shows; white overlay copy comes
+     from the section class. -->
+  <ContentBand
     sliceType={slice.slice_type}
     variation={slice.variation}
     fallbackHeight={hasImage ? "45vh" : undefined}
@@ -103,12 +84,8 @@
         />
       {/if}
     {/snippet}
-    <div class={roleClass(headingRole)}>
-      <PrismicRichText field={slice.primary.heading} />
-    </div>
-    <div class={roleClass(bodyRole)}>
-      <RichTextBody field={slice.primary.body} />
-    </div>
+    <PrismicRichText field={slice.primary.heading} />
+    <RichTextBody field={slice.primary.body} />
     {#if slice.primary.cta_label && slice.primary.cta_link}
       <PrismicLink
         field={slice.primary.cta_link}
@@ -117,5 +94,5 @@
         {slice.primary.cta_label}
       </PrismicLink>
     {/if}
-  </SectionBand>
+  </ContentBand>
 {/if}
