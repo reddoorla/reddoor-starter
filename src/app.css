@@ -274,3 +274,33 @@ main > section.hero-band:first-child {
     filter: blur(0.5px);
   }
 }
+
+/* ── Blux text-role scale (convention) ──────────────────────────────────────
+   The Blux render (src/lib/blux/ — Grid.svelte, BandTitle, carousel captions)
+   tags every text run with `txt-role-text{N}`, the role id from the Blux
+   export. Each rule reproduces the source's typography for one role — font
+   family, size, leading, tracking, weight, case. The export carries NO font
+   data, so the values are measured per-site from the rendered ORIGINAL's
+   computed styles when converting. Keep the rules UNLAYERED so they win over
+   the base h1..h6/body defaults for whichever element a run lands on, while
+   staying at class specificity (a band's own inline color/align still
+   applies); put mobile overrides behind the source's own breakpoint. Example,
+   measured from a live original:
+
+   .txt-role-text5 {
+     font-family: var(--font-body);
+     font-weight: 500;
+     font-size: 15px;
+     line-height: 26px;
+     letter-spacing: 1.5px;
+     text-transform: uppercase;
+   }
+
+   The starter's placeholders below are empty on purpose — an unconverted site
+   keeps its base type. */
+.txt-role-text1,
+.txt-role-text5,
+.txt-role-text11,
+.txt-role-text12 {
+  /* Per-site values measured from the live original go here. */
+}
