@@ -19,12 +19,15 @@ export const presentation: Presentation = {
         "vertical-align": "middle",
         "text-align": "center",
         _contentPadding: "80px 4% 80px 4%",
+        // Exercises BandContent's `.band-pad` mobile-override path (≤700px).
+        _contentPaddingMobile: "40px 4%",
       },
       background: { kind: "image", url: rect("#e8e4dc"), fit: "cover" },
       text: { headingRole: "text5", headingLevel: 2, subtitleRole: "text12" },
     },
     "1": {
-      style: { "background-color": "#ffffff", "text-align": "left" },
+      // Dark band so the export-carried white text below stays a11y-legible.
+      style: { "background-color": "#111827", "text-align": "left" },
       tree: {
         kind: "stack",
         children: [
@@ -33,6 +36,8 @@ export const presentation: Presentation = {
             level: 2,
             html: "The <em>space</em>",
             role: "text11",
+            // Export-carried inline color deviation (exercises Grid's textStyle).
+            style: { color: "rgb(255, 255, 255)" },
           },
           {
             kind: "row",
@@ -43,6 +48,8 @@ export const presentation: Presentation = {
                   kind: "body",
                   html: "<p>Generous floor plans pair with considered finishes; every corner of the fixture is measured against the original.</p>",
                   role: "text1",
+                  // Light copy keeps AA contrast on the dark band.
+                  style: { color: "rgb(229, 231, 235)" },
                 },
               },
               {
