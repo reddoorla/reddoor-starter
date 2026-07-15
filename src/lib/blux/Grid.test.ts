@@ -93,6 +93,84 @@ describe("Grid (recursive fallback)", () => {
     expect(container.querySelector("h9")).toBeNull();
   });
 
+  it("wraps media in a full-width block with an inline-block image, never mx-auto", () => {
+    const { container } = render(Grid, {
+      props: {
+        node: {
+          kind: "media",
+          media: { kind: "image", url: "https://cdn/rule.png" },
+        },
+      },
+    });
+    const img = container.querySelector("img") as HTMLElement;
+    // Image is inline-block so it follows the ancestor's text-align, not forced
+    // center: no `mx-auto`, no `block`.
+    expect(img.className).toContain("inline-block");
+    expect(img.className).not.toContain("mx-auto");
+    // It sits inside a full-width wrapper div.
+    const wrapper = img.parentElement as HTMLElement;
+    expect(wrapper.tagName).toBe("DIV");
+    expect(wrapper.className).toContain("w-full");
+  });
+
+  it("applies a text node's export style: inline color/padding, margin-right as a md-scoped var", () => {
+    const { container } = render(Grid, {
+      props: {
+        node: {
+          kind: "subtitle",
+          text: "aside",
+          role: "text5",
+          style: {
+            color: "rgb(255, 255, 255)",
+            padding: "8px",
+            "margin-right": "20%",
+          },
+        },
+      },
+    });
+    const p = container.querySelector("p") as HTMLElement;
+    // Role class is preserved alongside the md-scoped margin utility.
+    expect(p.className).toContain("txt-role-text5");
+    // color + padding apply inline at every width.
+    expect(p.style.color).toBe("rgb(255, 255, 255)");
+    expect(p.style.padding).toBe("8px");
+    // margin-right is desktop-only: it rides a custom property + md: class, and
+    // must NOT be an unconditional inline margin-right that leaks onto mobile.
+    expect(p.style.marginRight).toBe("");
+    expect(p.style.getPropertyValue("--node-mr")).toBe("20%");
+    expect(p.className).toContain("md:mr-(--node-mr)");
+  });
+
+  it("applies inline color to a styled heading", () => {
+    const { container } = render(Grid, {
+      props: {
+        node: {
+          kind: "heading",
+          level: 2,
+          html: "Bright",
+          role: "text11",
+          style: { color: "rgb(255, 255, 255)" },
+        },
+      },
+    });
+    const h2 = container.querySelector("h2") as HTMLElement;
+    expect(h2.className).toContain("txt-role-text11");
+    expect(h2.style.color).toBe("rgb(255, 255, 255)");
+    // No margin var when the export carries no margin-right.
+    expect(h2.className).not.toContain("md:mr-(--node-mr)");
+  });
+
+  it("a text node with no style carries only its role class and no inline style", () => {
+    const { container } = render(Grid, {
+      props: {
+        node: { kind: "subtitle", text: "plain", role: "text5" },
+      },
+    });
+    const p = container.querySelector("p") as HTMLElement;
+    expect(p.className).toBe("txt-role-text5");
+    expect(p.getAttribute("style")).toBeNull();
+  });
+
   it("a cell with cols 'any' falls back to an auto basis from md: up", () => {
     const { container } = render(Grid, {
       props: {
