@@ -16,6 +16,11 @@
   import MediaText from "$lib/slices/MediaText/index.svelte";
   import SectionGrid from "$lib/slices/SectionGrid/index.svelte";
   import CollectionList from "$lib/slices/CollectionList/index.svelte";
+  import LeadText from "$lib/slices/LeadText/index.svelte";
+  import TextColumns from "$lib/slices/TextColumns/index.svelte";
+  // Aliased: `Accordion` above is the primitive ($lib/components/Accordion.svelte).
+  import AccordionSlice from "$lib/slices/Accordion/index.svelte";
+  import type { ComponentProps } from "svelte";
   import { trapFocus } from "$lib/actions/trapFocus";
   import type { RichTextField } from "@prismicio/client";
 
@@ -136,6 +141,55 @@
           },
         },
       ],
+    },
+  };
+
+  // Portfolio-intro twins. ComponentProps types the fixture to each slice's own
+  // (inline) prop shape without needing generated Content.* types.
+  const rtx = (text: string): RichTextField =>
+    [{ type: "paragraph", text, spans: [] }] as unknown as RichTextField;
+
+  const leadTextFixture: ComponentProps<typeof LeadText>["slice"] = {
+    slice_type: "lead_text",
+    variation: "default",
+    primary: {
+      eyebrow: "The Challenge",
+      body: rtx(
+        "They needed an identity on a tight timeline to communicate that message.",
+      ),
+      band: null,
+    },
+  };
+  // Eyebrow-less + duplicate/blank titles: locks the h2-promotion (no skip) and
+  // index-key (no each_key_duplicate crash) behaviour under the axe gate.
+  const textColumnsFixture: ComponentProps<typeof TextColumns>["slice"] = {
+    slice_type: "text_columns",
+    variation: "default",
+    primary: {
+      eyebrow: "",
+      hasTopRule: false,
+      desktopColumns: "3",
+      columns: [
+        { title: "Shared", body: rtx("First column.") },
+        { title: "Shared", body: rtx("Duplicate title — index-keyed.") },
+        { title: "", body: rtx("Blank title renders no heading.") },
+      ],
+      band: null,
+    },
+  };
+  const accordionFixture: ComponentProps<typeof AccordionSlice>["slice"] = {
+    slice_type: "accordion",
+    variation: "default",
+    primary: {
+      allowMultiple: true,
+      items: [
+        {
+          title: "About the project",
+          body: "A joint venture between two agencies.",
+        },
+        { title: "The team", body: "Design and strategy leads." },
+      ],
+      band: null,
     },
   };
 </script>
@@ -373,6 +427,9 @@
   <MediaText slice={mediaTextFixture} />
   <SectionGrid slice={sectionGridFixture} />
   <CollectionList slice={collectionListFixture} context={collectionCtx} />
+  <LeadText slice={leadTextFixture} />
+  <TextColumns slice={textColumnsFixture} />
+  <AccordionSlice slice={accordionFixture} />
 </main>
 
 <!-- Renders nothing at rest (overlay only appears mid-navigation, aria-hidden);
