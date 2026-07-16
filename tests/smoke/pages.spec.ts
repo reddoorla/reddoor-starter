@@ -38,12 +38,22 @@ for (const route of smokeRoutes) {
   test(`${route.path} (${route.name}) loads with no console errors`, async ({
     page,
   }) => {
-    const errors = attachConsoleWatcher(page);
+    const expectedStatus = route.expectStatus ?? 200;
+    // A route whose expected status IS an error (e.g. "/" on the placeholder
+    // starter, see tests/smoke/routes.ts) makes the browser log "Failed to
+    // load resource: ... <status>" for the document itself — expected, not a
+    // bug. Same allowance as the dedicated 404-page test below.
+    const errors = attachConsoleWatcher(
+      page,
+      expectedStatus >= 400
+        ? [new RegExp(`Failed to load resource.*${expectedStatus}`, "i")]
+        : [],
+    );
     const response = await page.goto(route.path, {
       waitUntil: "domcontentloaded",
     });
     expect(response?.status(), `HTTP status for ${route.path}`).toBe(
-      route.expectStatus ?? 200,
+      expectedStatus,
     );
     if (route.hydrationMarker) {
       await expect(
