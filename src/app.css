@@ -294,13 +294,40 @@ main > section.hero-band:first-child {
      line-height: 26px;
      letter-spacing: 1.5px;
      text-transform: uppercase;
+     margin: 10px 0;  <- the style's own block margin (site.json .textN)
    }
+
+   Include the style's `margin` when the export declares one: Blux's vertical
+   rhythm between stacked blocks IS these margins, collapsing in normal flow —
+   Grid stacks render flush and rely on them (no synthetic gap).
 
    The starter's placeholders below are empty on purpose — an unconverted site
    keeps its base type. */
+
+/* Blux platform anchor base (site-agnostic): raw anchors in converted trees
+   carry `ib middle links` / `ib middle buttonsN` verbatim. `.ib` is the
+   platform's inline-block, and `.links` must declare its own underline — an
+   inline-block box does not inherit an ancestor's text-decoration. Per-site
+   `.buttonsN` skins come from `blux emit` (emitButtonsCss) like the roles. */
+.ib {
+  display: inline-block;
+}
+.links {
+  text-decoration: underline;
+}
 .txt-role-text1,
 .txt-role-text5,
 .txt-role-text11,
 .txt-role-text12 {
   /* Per-site values measured from the live original go here. */
+}
+
+/* Band content padding with the export's mobile override (≤700px in source). */
+.band-pad {
+  padding: var(--band-pad);
+}
+@media (max-width: 700px) {
+  .band-pad {
+    padding: var(--band-pad-m, var(--band-pad));
+  }
 }

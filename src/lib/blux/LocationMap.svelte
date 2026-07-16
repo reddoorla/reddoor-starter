@@ -7,8 +7,14 @@
   import type { MapRenderConfig } from "./presentation";
   import { loadMapsApi, type GLayer, type GMapsNS } from "./maps-loader";
 
-  type Props = { map: MapRenderConfig };
-  let { map: config }: Props = $props();
+  type Props = {
+    map: MapRenderConfig;
+    /** Selecting a tab notifies the owner (Grid), which switches the
+     * `panels: true` content row rendered elsewhere in the band tree — the
+     * owner mutates its own state, keeping Svelte's ownership model happy. */
+    onselect?: (i: number) => void;
+  };
+  let { map: config, onselect }: Props = $props();
 
   const key: string | undefined = import.meta.env.VITE_GOOGLE_MAPS_KEY;
   let mountEl: HTMLDivElement | undefined = $state();
@@ -28,6 +34,7 @@
     if (i === active) return; // re-applying would re-fetch the KML (flicker)
     const prev = active;
     active = i;
+    onselect?.(i);
     if (gmap) applyToggle(i, prev);
   }
 
@@ -74,15 +81,28 @@
     ></div>
   {/if}
   {#if config.toggles.length > 0}
-    <div class="mt-6 flex flex-wrap gap-3">
+    <!-- The original's map_icon tab bar: equal-width tabs filling the content
+         row, uppercase, label left with a plus/minus state glyph right. The
+         active tab is white on the page; inactive tabs are a solid grey-blue
+         with white text. Colors ride custom properties so a site theme can
+         override them (defaults match the Blux widget's shipped skin). On
+         mobile the row would ellipsis-crush the labels, so the tabs stack as
+         full-width bars — matching the original's accordion-style stack. -->
+    <div class="mt-10 flex w-full max-md:flex-col">
       {#each config.toggles as t, i (i)}
         <button
           type="button"
           aria-pressed={active === i}
-          class="border px-3 py-1 text-sm"
+          class="flex min-w-0 flex-1 basis-0 cursor-pointer items-center justify-between p-2 text-left text-sm font-light tracking-wider uppercase max-md:w-full max-md:flex-none"
+          style={active === i
+            ? "background-color: var(--blux-map-tab-active-bg, rgb(255, 255, 255)); color: var(--blux-map-tab-active-text, rgb(75, 75, 110))"
+            : "background-color: var(--blux-map-tab-bg, rgb(145, 159, 173)); color: var(--blux-map-tab-text, rgb(255, 255, 255))"}
           onclick={() => select(i)}
         >
-          {t.label}
+          <span class="truncate">{t.label}</span>
+          <span aria-hidden="true" class="ml-2 shrink-0"
+            >{active === i ? "−" : "+"}</span
+          >
         </button>
       {/each}
     </div>

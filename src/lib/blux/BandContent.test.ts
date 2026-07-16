@@ -39,6 +39,40 @@ describe("BandContent", () => {
     expect(box.style.textAlign).toBe("center");
   });
 
+  it("moves padding onto --band-pad/--band-pad-m vars + the band-pad class when a mobile override is present", () => {
+    const { container } = render(BandContent, {
+      props: {
+        band: {
+          style: {
+            _contentPadding: "100px 4%",
+            _contentPaddingMobile: "40px 4%",
+          },
+        },
+        children: children(),
+      },
+    });
+    const box = container.querySelector("div") as HTMLElement;
+    // With the override the `.band-pad` class consumes the vars; no inline padding.
+    expect(box.className).toContain("band-pad");
+    expect(box.style.padding).toBe("");
+    expect(box.style.getPropertyValue("--band-pad")).toBe("100px 4%");
+    expect(box.style.getPropertyValue("--band-pad-m")).toBe("40px 4%");
+  });
+
+  it("keeps padding inline and omits band-pad when no mobile override is given", () => {
+    const { container } = render(BandContent, {
+      props: {
+        band: { style: { _contentPadding: "100px 4% 100px 4%" } },
+        children: children(),
+      },
+    });
+    const box = container.querySelector("div") as HTMLElement;
+    expect(box.className).not.toContain("band-pad");
+    // jsdom collapses the 4-value shorthand to its 2-value equivalent.
+    expect(box.style.padding).toBe("100px 4%");
+    expect(box.style.getPropertyValue("--band-pad")).toBe("");
+  });
+
   it("hugs a narrow column to the requested side", () => {
     const { container } = render(BandContent, {
       props: {
