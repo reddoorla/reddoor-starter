@@ -294,7 +294,12 @@ main > section.hero-band:first-child {
      line-height: 26px;
      letter-spacing: 1.5px;
      text-transform: uppercase;
+     margin: 10px 0;  <- the style's own block margin (site.json .textN)
    }
+
+   Include the style's `margin` when the export declares one: Blux's vertical
+   rhythm between stacked blocks IS these margins, collapsing in normal flow —
+   Grid stacks render flush and rely on them (no synthetic gap).
 
    The starter's placeholders below are empty on purpose — an unconverted site
    keeps its base type. */
