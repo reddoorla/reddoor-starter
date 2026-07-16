@@ -5,6 +5,7 @@ import {
   GRID_GUTTER,
   loadPresentation,
   rowCellBases,
+  selectPresentation,
 } from "./presentation";
 import type { Presentation, RenderCell } from "./presentation";
 
@@ -20,6 +21,32 @@ describe("presentation", () => {
     // The starter ships the empty stub; a converted site's emit output has one
     // entry per band, keyed by string index.
     expect(p.bands).toEqual({});
+    // A flat single-page manifest ignores the uid — every page sees it.
+    expect(loadPresentation("about").bands).toEqual({});
+  });
+
+  it("selectPresentation namespaces by page uid on a multi-page manifest", () => {
+    // Band indices are page-local (page-block-N restarts at 0 per page), so a
+    // multi-page manifest keys per uid; unknown uids degrade to empty.
+    const multi = {
+      pages: {
+        home: { bands: { "0": { style: { "text-align": "center" } } } },
+        about: { bands: { "0": { style: { "text-align": "left" } } } },
+      },
+    };
+    expect(
+      selectPresentation(multi, "home").bands["0"]?.style?.["text-align"],
+    ).toBe("center");
+    expect(
+      selectPresentation(multi, "about").bands["0"]?.style?.["text-align"],
+    ).toBe("left");
+    expect(selectPresentation(multi).bands["0"]?.style?.["text-align"]).toBe(
+      "center",
+    );
+    expect(selectPresentation(multi, "ghost").bands).toEqual({});
+    // The flat form passes through regardless of uid.
+    const flat = { bands: { "3": { style: { "background-color": "#eef" } } } };
+    expect(selectPresentation(flat, "anything").bands["3"]).toBeDefined();
   });
 
   it("bandFor looks up by band index and returns null when absent", () => {
