@@ -250,6 +250,51 @@ export type AccordionSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *BluxBlock → Default → Primary*
+ */
+export interface BluxBlockSliceDefaultPrimary {
+  /**
+   * payload (serialized JSON tree) field in *BluxBlock → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_block.default.primary.payload
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  payload: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for BluxBlock Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Fallback
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxBlockSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BluxBlockSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BluxBlock*
+ */
+type BluxBlockSliceVariation = BluxBlockSliceDefault;
+
+/**
+ * BluxBlock Shared Slice
+ *
+ * - **API ID**: `blux_block`
+ * - **Description**: Blux catalog fallback: an opaque serialized-JSON block tree for bands too deep/irregular for the catalog. Content-preserving, rendered recursively.
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxBlockSlice = prismic.SharedSlice<
+  "blux_block",
+  BluxBlockSliceVariation
+>;
+
+/**
  * Item in *BluxSection → Default → Primary → cells → subgrid*
  */
 export interface BluxSectionSliceDefaultPrimaryCellsSubgridItem {
@@ -1802,6 +1847,10 @@ declare module "@prismicio/client" {
       AccordionSliceDefaultPrimary,
       AccordionSliceVariation,
       AccordionSliceDefault,
+      BluxBlockSlice,
+      BluxBlockSliceDefaultPrimary,
+      BluxBlockSliceVariation,
+      BluxBlockSliceDefault,
       BluxSectionSlice,
       BluxSectionSliceDefaultPrimaryCellsSubgridItem,
       BluxSectionSliceDefaultPrimaryCellsItem,
