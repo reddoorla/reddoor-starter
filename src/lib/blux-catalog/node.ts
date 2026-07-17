@@ -4,6 +4,9 @@
 export type BluxNode = {
   tag?: string; // container element tag, default "div"
   className?: string;
+  // Emitted verbatim into the `style` attribute — keys MUST be kebab-case CSS
+  // property names (e.g. "background-color", not "backgroundColor"); camelCase
+  // is silently ignored by the browser.
   style?: Record<string, string>;
   html?: string; // leaf raw HTML (rich text / embed), rendered with {@html}
   image?: { url: string; alt?: string; width?: number; height?: number };
@@ -14,7 +17,7 @@ export function parseBluxPayload(payload: string | null | undefined): BluxNode |
   if (!payload) return null;
   try {
     const node = JSON.parse(payload) as BluxNode;
-    return node && typeof node === "object" ? node : null;
+    return node && typeof node === "object" && !Array.isArray(node) ? node : null;
   } catch {
     return null;
   }

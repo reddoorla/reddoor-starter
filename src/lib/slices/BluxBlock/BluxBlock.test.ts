@@ -2,6 +2,7 @@ import { render, cleanup } from "@testing-library/svelte";
 import { describe, it, expect, afterEach } from "vitest";
 import type { Content } from "@prismicio/client";
 import BluxBlock from "./index.svelte";
+import { styleString } from "$lib/blux-catalog/node";
 
 afterEach(() => cleanup());
 
@@ -36,5 +37,29 @@ describe("BluxBlock fallback slice", () => {
     const bad = { ...slice, primary: { payload: "not json" } } as unknown as Content.BluxBlockSlice;
     const { container } = render(BluxBlock, { props: { slice: bad } });
     expect(container.querySelector(".blux-block")).toBeNull();
+  });
+
+  it("renders nothing for an array payload", () => {
+    const bad = { ...slice, primary: { payload: "[]" } } as unknown as Content.BluxBlockSlice;
+    const { container } = render(BluxBlock, { props: { slice: bad } });
+    expect(container.querySelector(".blux-block")).toBeNull();
+  });
+
+  it("defaults an empty tag to a div and keeps the subtree", () => {
+    const emptyTag = {
+      ...slice,
+      primary: { payload: JSON.stringify({ tag: "", children: [{ html: "<p>kept</p>" }] }) },
+    } as unknown as Content.BluxBlockSlice;
+    const { getByText } = render(BluxBlock, { props: { slice: emptyTag } });
+    expect(getByText("kept")).not.toBeNull();
+  });
+});
+
+describe("styleString", () => {
+  it("joins kebab-case style entries and handles undefined", () => {
+    expect(styleString({ "background-color": "red", "min-height": "10px" })).toBe(
+      "background-color:red;min-height:10px",
+    );
+    expect(styleString(undefined)).toBe("");
   });
 });
