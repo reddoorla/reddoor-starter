@@ -4,12 +4,87 @@ import type * as prismic from "@prismicio/client";
 
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 
+type PickContentRelationshipFieldData<
+  TRelationship extends
+    | prismic.CustomTypeModelFetchCustomTypeLevel1
+    | prismic.CustomTypeModelFetchCustomTypeLevel2
+    | prismic.CustomTypeModelFetchGroupLevel1
+    | prismic.CustomTypeModelFetchGroupLevel2,
+  TData extends Record<
+    string,
+    | prismic.AnyRegularField
+    | prismic.GroupField
+    | prismic.NestedGroupField
+    | prismic.SliceZone
+  >,
+  TLang extends string,
+> =
+  // Content relationship fields
+  {
+    [TSubRelationship in Extract<
+      TRelationship["fields"][number],
+      prismic.CustomTypeModelFetchContentRelationshipLevel1
+    > as TSubRelationship["id"]]: ContentRelationshipFieldWithData<
+      TSubRelationship["customtypes"],
+      TLang
+    >;
+  } & // Group
+  {
+    [TGroup in Extract<
+      TRelationship["fields"][number],
+      | prismic.CustomTypeModelFetchGroupLevel1
+      | prismic.CustomTypeModelFetchGroupLevel2
+    > as TGroup["id"]]: TData[TGroup["id"]] extends prismic.GroupField<
+      infer TGroupData
+    >
+      ? prismic.GroupField<
+          PickContentRelationshipFieldData<TGroup, TGroupData, TLang>
+        >
+      : never;
+  } & // Other fields
+  {
+    [TFieldKey in Extract<
+      TRelationship["fields"][number],
+      string
+    >]: TFieldKey extends keyof TData ? TData[TFieldKey] : never;
+  };
+
+type ContentRelationshipFieldWithData<
+  TCustomType extends
+    | readonly (prismic.CustomTypeModelFetchCustomTypeLevel1 | string)[]
+    | readonly (prismic.CustomTypeModelFetchCustomTypeLevel2 | string)[],
+  TLang extends string = string,
+> = {
+  [ID in Exclude<
+    TCustomType[number],
+    string
+  >["id"]]: prismic.ContentRelationshipField<
+    ID,
+    TLang,
+    PickContentRelationshipFieldData<
+      Extract<TCustomType[number], { id: ID }>,
+      Extract<prismic.Content.AllDocumentTypes, { type: ID }>["data"],
+      TLang
+    >
+  >;
+}[Exclude<TCustomType[number], string>["id"]];
+
 type PageDocumentDataSlicesSlice =
+  | LeadTextSlice
+  | TextColumnsSlice
+  | AccordionSlice
+  | RichTextSlice
   | HeroSlice
   | MediaTextSlice
   | SectionGridSlice
   | CollectionListSlice
-  | RichTextSlice;
+  | GridBandSlice
+  | TitleBandSlice
+  | SplitFeatureSlice
+  | GallerySlice
+  | MediaFullSlice
+  | LocationMapSlice
+  | CarouselSlice;
 
 /**
  * Content for Page documents
@@ -17,32 +92,66 @@ type PageDocumentDataSlicesSlice =
 interface PageDocumentData {
   /**
    * Title field in *Page*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: page.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
    */
-  title: prismic.TitleField;
+  title: prismic.RichTextField;
 
   /**
    * Slice Zone field in *Page*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: page.slices[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/slices
    */
-  slices: prismic.SliceZone<PageDocumentDataSlicesSlice>;
-
-  /**
+  slices: prismic.SliceZone<PageDocumentDataSlicesSlice>; /**
    * Meta Title field in *Page*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A title of the page used for social media and search engines
+   * - **API ID Path**: page.meta_title
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/text
    */
   meta_title: prismic.KeyTextField;
 
   /**
    * Meta Description field in *Page*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: A brief summary of the page
+   * - **API ID Path**: page.meta_description
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/text
    */
   meta_description: prismic.KeyTextField;
 
   /**
    * Meta Image field in *Page*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: page.meta_image
+   * - **Tab**: SEO & Metadata
+   * - **Documentation**: https://prismic.io/docs/fields/image
    */
   meta_image: prismic.ImageField<never>;
 }
 
 /**
  * Page document from Prismic
+ *
+ * - **API ID**: `page`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
  */
 export type PageDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<PageDocumentData>, "page", Lang>;
@@ -50,17 +159,828 @@ export type PageDocument<Lang extends string = string> =
 export type AllDocumentTypes = PageDocument;
 
 /**
+ * Item in *Accordion → Default → Primary → items*
+ */
+export interface AccordionSliceDefaultPrimaryItemsItem {
+  /**
+   * title field in *Accordion → Default → Primary → items*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: e.g. About the project
+   * - **API ID Path**: accordion.default.primary.items[].title
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * body field in *Accordion → Default → Primary → items*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: accordion.default.primary.items[].body
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  body: prismic.KeyTextField;
+}
+
+/**
+ * Primary content in *Accordion → Default → Primary*
+ */
+export interface AccordionSliceDefaultPrimary {
+  /**
+   * items field in *Accordion → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: accordion.default.primary.items[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  items: prismic.GroupField<Simplify<AccordionSliceDefaultPrimaryItemsItem>>;
+
+  /**
+   * allowMultiple field in *Accordion → Default → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: true
+   * - **API ID Path**: accordion.default.primary.allowMultiple
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  allowMultiple: prismic.BooleanField;
+
+  /**
+   * band (optional — wraps in the Blux SectionBand when set) field in *Accordion → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: accordion.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+}
+
+/**
+ * Default variation for Accordion Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: A list of collapsible disclosure items
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type AccordionSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<AccordionSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Accordion*
+ */
+type AccordionSliceVariation = AccordionSliceDefault;
+
+/**
+ * Accordion Shared Slice
+ *
+ * - **API ID**: `accordion`
+ * - **Description**: Accordion
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type AccordionSlice = prismic.SharedSlice<
+  "accordion",
+  AccordionSliceVariation
+>;
+
+/**
+ * Primary content in *Carousel → Default → Primary*
+ */
+export interface CarouselSliceDefaultPrimary {
+  /**
+   * band (index from the Blux export) field in *Carousel → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: carousel.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+
+  /**
+   * Accessible name for the slider region field in *Carousel → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: carousel.default.primary.label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  label: prismic.KeyTextField;
+}
+
+/**
+ * Primary content in *Carousel → Items*
+ */
+export interface CarouselSliceDefaultItem {
+  /**
+   * Slide caption (order matches the manifest slides) field in *Carousel → Items*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: carousel.items[].caption
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  caption: prismic.KeyTextField;
+
+  /**
+   * Slide subcaption / second line (e.g. a hero slide's location) field in *Carousel → Items*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: carousel.items[].subcaption
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  subcaption: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for Carousel Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: APG slider over the band's manifest slides
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CarouselSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<CarouselSliceDefaultPrimary>,
+  Simplify<CarouselSliceDefaultItem>
+>;
+
+/**
+ * Slice variation for *Carousel*
+ */
+type CarouselSliceVariation = CarouselSliceDefault;
+
+/**
+ * Carousel Shared Slice
+ *
+ * - **API ID**: `carousel`
+ * - **Description**: Source slider band — media frames from the presentation manifest, captions editable per slide
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CarouselSlice = prismic.SharedSlice<
+  "carousel",
+  CarouselSliceVariation
+>;
+
+/**
+ * Primary content in *CollectionList → Grid → Primary*
+ */
+export interface CollectionListSliceGridPrimary {
+  /**
+   * heading field in *CollectionList → Grid → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_list.grid.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * collection_type field in *CollectionList → Grid → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_list.grid.primary.collection_type
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  collection_type: prismic.KeyTextField;
+
+  /**
+   * max_items field in *CollectionList → Grid → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: 12
+   * - **API ID Path**: collection_list.grid.primary.max_items
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  max_items: prismic.NumberField;
+}
+
+/**
+ * Grid variation for CollectionList Slice
+ *
+ * - **API ID**: `grid`
+ * - **Description**: Grid of linked collection documents
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CollectionListSliceGrid = prismic.SharedSliceVariation<
+  "grid",
+  Simplify<CollectionListSliceGridPrimary>,
+  never
+>;
+
+/**
+ * Primary content in *CollectionList → List → Primary*
+ */
+export interface CollectionListSliceListPrimary {
+  /**
+   * heading field in *CollectionList → List → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_list.list.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * collection_type field in *CollectionList → List → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_list.list.primary.collection_type
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  collection_type: prismic.KeyTextField;
+
+  /**
+   * max_items field in *CollectionList → List → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: 12
+   * - **API ID Path**: collection_list.list.primary.max_items
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  max_items: prismic.NumberField;
+}
+
+/**
+ * List variation for CollectionList Slice
+ *
+ * - **API ID**: `list`
+ * - **Description**: Vertical list of linked collection documents
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CollectionListSliceList = prismic.SharedSliceVariation<
+  "list",
+  Simplify<CollectionListSliceListPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *CollectionList*
+ */
+type CollectionListSliceVariation =
+  | CollectionListSliceGrid
+  | CollectionListSliceList;
+
+/**
+ * CollectionList Shared Slice
+ *
+ * - **API ID**: `collection_list`
+ * - **Description**: Renders documents of a linked repeatable Custom Type
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CollectionListSlice = prismic.SharedSlice<
+  "collection_list",
+  CollectionListSliceVariation
+>;
+
+/**
+ * Primary content in *Gallery → Default → Primary*
+ */
+export interface GallerySliceDefaultPrimary {
+  /**
+   * band (index from the Blux export) field in *Gallery → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: gallery.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+}
+
+/**
+ * Default variation for Gallery Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Media tiles from the blux presentation manifest
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type GallerySliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<GallerySliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Gallery*
+ */
+type GallerySliceVariation = GallerySliceDefault;
+
+/**
+ * Gallery Shared Slice
+ *
+ * - **API ID**: `gallery`
+ * - **Description**: Band of manifest media tiles
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type GallerySlice = prismic.SharedSlice<
+  "gallery",
+  GallerySliceVariation
+>;
+
+/**
+ * Primary content in *GridBand → Default → Primary*
+ */
+export interface GridBandSliceDefaultPrimary {
+  /**
+   * band (index from the Blux export) field in *GridBand → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: grid_band.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+}
+
+/**
+ * Default variation for GridBand Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Band rendered from the blux presentation manifest by band index
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type GridBandSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<GridBandSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *GridBand*
+ */
+type GridBandSliceVariation = GridBandSliceDefault;
+
+/**
+ * GridBand Shared Slice
+ *
+ * - **API ID**: `grid_band`
+ * - **Description**: Render-faithful fallback band — layout tree lives in the presentation manifest
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type GridBandSlice = prismic.SharedSlice<
+  "grid_band",
+  GridBandSliceVariation
+>;
+
+/**
+ * Primary content in *Hero → Default → Primary*
+ */
+export interface HeroSliceDefaultPrimary {
+  /**
+   * heading field in *Hero → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * body field in *Hero → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * background_image field in *Hero → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.background_image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  background_image: prismic.ImageField<never>;
+
+  /**
+   * cta_label field in *Hero → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.cta_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  cta_label: prismic.KeyTextField;
+
+  /**
+   * cta_link field in *Hero → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.default.primary.cta_link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  cta_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Default variation for Hero Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Background image with heading, body, and CTA
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type HeroSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<HeroSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Primary content in *Hero → Band → Primary*
+ */
+export interface HeroSliceBandPrimary {
+  /**
+   * band (index from the Blux export) field in *Hero → Band → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.band.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+
+  /**
+   * heading field in *Hero → Band → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.band.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  heading: prismic.KeyTextField;
+
+  /**
+   * subtitle field in *Hero → Band → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.band.primary.subtitle
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  subtitle: prismic.KeyTextField;
+
+  /**
+   * body field in *Hero → Band → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: hero.band.primary.body
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  body: prismic.KeyTextField;
+}
+
+/**
+ * Band variation for Hero Slice
+ *
+ * - **API ID**: `band`
+ * - **Description**: Blux band hero — background from the presentation manifest, overlay text
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type HeroSliceBand = prismic.SharedSliceVariation<
+  "band",
+  Simplify<HeroSliceBandPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Hero*
+ */
+type HeroSliceVariation = HeroSliceDefault | HeroSliceBand;
+
+/**
+ * Hero Shared Slice
+ *
+ * - **API ID**: `hero`
+ * - **Description**: Full-bleed hero with background media and heading/CTA
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
+
+/**
+ * Primary content in *LeadText → Default → Primary*
+ */
+export interface LeadTextSliceDefaultPrimary {
+  /**
+   * eyebrow field in *LeadText → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: e.g. The Challenge
+   * - **API ID Path**: lead_text.default.primary.eyebrow
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  eyebrow: prismic.KeyTextField;
+
+  /**
+   * body field in *LeadText → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: lead_text.default.primary.body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * band (optional — wraps in the Blux SectionBand when set) field in *LeadText → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: lead_text.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+}
+
+/**
+ * Default variation for LeadText Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: An eyebrow label above a lead paragraph
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type LeadTextSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<LeadTextSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *LeadText*
+ */
+type LeadTextSliceVariation = LeadTextSliceDefault;
+
+/**
+ * LeadText Shared Slice
+ *
+ * - **API ID**: `lead_text`
+ * - **Description**: LeadText
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type LeadTextSlice = prismic.SharedSlice<
+  "lead_text",
+  LeadTextSliceVariation
+>;
+
+/**
+ * Primary content in *LocationMap → Default → Primary*
+ */
+export interface LocationMapSliceDefaultPrimary {
+  /**
+   * band (index from the Blux export) field in *LocationMap → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: location_map.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+}
+
+/**
+ * Default variation for LocationMap Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Google Map with KML layers from the blux presentation manifest
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type LocationMapSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<LocationMapSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *LocationMap*
+ */
+type LocationMapSliceVariation = LocationMapSliceDefault;
+
+/**
+ * LocationMap Shared Slice
+ *
+ * - **API ID**: `location_map`
+ * - **Description**: Interactive pinned map from the Blux export
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type LocationMapSlice = prismic.SharedSlice<
+  "location_map",
+  LocationMapSliceVariation
+>;
+
+/**
+ * Primary content in *MediaFull → Default → Primary*
+ */
+export interface MediaFullSliceDefaultPrimary {
+  /**
+   * band (index from the Blux export) field in *MediaFull → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: media_full.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+}
+
+/**
+ * Default variation for MediaFull Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Full-bleed media from the blux presentation manifest
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type MediaFullSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<MediaFullSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *MediaFull*
+ */
+type MediaFullSliceVariation = MediaFullSliceDefault;
+
+/**
+ * MediaFull Shared Slice
+ *
+ * - **API ID**: `media_full`
+ * - **Description**: Full-bleed manifest media band
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type MediaFullSlice = prismic.SharedSlice<
+  "media_full",
+  MediaFullSliceVariation
+>;
+
+/**
+ * Primary content in *MediaText → Image Right → Primary*
+ */
+export interface MediaTextSliceImageRightPrimary {
+  /**
+   * heading field in *MediaText → Image Right → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: media_text.imageRight.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * body field in *MediaText → Image Right → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: media_text.imageRight.primary.body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *MediaText → Image Right → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: media_text.imageRight.primary.media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+}
+
+/**
+ * Image Right variation for MediaText Slice
+ *
+ * - **API ID**: `imageRight`
+ * - **Description**: Media on the right, text on the left
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type MediaTextSliceImageRight = prismic.SharedSliceVariation<
+  "imageRight",
+  Simplify<MediaTextSliceImageRightPrimary>,
+  never
+>;
+
+/**
+ * Primary content in *MediaText → Image Left → Primary*
+ */
+export interface MediaTextSliceImageLeftPrimary {
+  /**
+   * heading field in *MediaText → Image Left → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: media_text.imageLeft.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * body field in *MediaText → Image Left → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: media_text.imageLeft.primary.body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *MediaText → Image Left → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: media_text.imageLeft.primary.media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+}
+
+/**
+ * Image Left variation for MediaText Slice
+ *
+ * - **API ID**: `imageLeft`
+ * - **Description**: Media on the left, text on the right
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type MediaTextSliceImageLeft = prismic.SharedSliceVariation<
+  "imageLeft",
+  Simplify<MediaTextSliceImageLeftPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *MediaText*
+ */
+type MediaTextSliceVariation =
+  | MediaTextSliceImageRight
+  | MediaTextSliceImageLeft;
+
+/**
+ * MediaText Shared Slice
+ *
+ * - **API ID**: `media_text`
+ * - **Description**: Image/video beside rich text
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type MediaTextSlice = prismic.SharedSlice<
+  "media_text",
+  MediaTextSliceVariation
+>;
+
+/**
  * Primary content in *RichText → Default → Primary*
  */
 export interface RichTextSliceDefaultPrimary {
   /**
    * content field in *RichText → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: rich_text.default.primary.content
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
    */
   content: prismic.RichTextField;
+
+  /**
+   * band (optional — wraps in the Blux SectionBand when set) field in *RichText → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: rich_text.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
 }
 
 /**
  * Default variation for RichText Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slices
  */
 export type RichTextSliceDefault = prismic.SharedSliceVariation<
   "default",
@@ -75,6 +995,10 @@ type RichTextSliceVariation = RichTextSliceDefault;
 
 /**
  * RichText Shared Slice
+ *
+ * - **API ID**: `rich_text`
+ * - **Description**: RichText
+ * - **Documentation**: https://prismic.io/docs/slices
  */
 export type RichTextSlice = prismic.SharedSlice<
   "rich_text",
@@ -82,133 +1006,343 @@ export type RichTextSlice = prismic.SharedSlice<
 >;
 
 /**
- * Primary content in *Hero → Default → Primary*
- */
-export interface HeroSliceDefaultPrimary {
-  heading: prismic.RichTextField;
-  body: prismic.RichTextField;
-  background_image: prismic.ImageField<never>;
-  cta_label: prismic.KeyTextField;
-  cta_link: prismic.LinkField;
-}
-
-export type HeroSliceDefault = prismic.SharedSliceVariation<
-  "default",
-  Simplify<HeroSliceDefaultPrimary>,
-  never
->;
-
-type HeroSliceVariation = HeroSliceDefault;
-
-export type HeroSlice = prismic.SharedSlice<"hero", HeroSliceVariation>;
-
-/**
- * Primary content in *MediaText → Image Right → Primary*
- */
-export interface MediaTextSliceImageRightPrimary {
-  heading: prismic.RichTextField;
-  body: prismic.RichTextField;
-  media: prismic.ImageField<never>;
-}
-
-export type MediaTextSliceImageRight = prismic.SharedSliceVariation<
-  "imageRight",
-  Simplify<MediaTextSliceImageRightPrimary>,
-  never
->;
-
-/**
- * Primary content in *MediaText → Image Left → Primary*
- */
-export interface MediaTextSliceImageLeftPrimary {
-  heading: prismic.RichTextField;
-  body: prismic.RichTextField;
-  media: prismic.ImageField<never>;
-}
-
-export type MediaTextSliceImageLeft = prismic.SharedSliceVariation<
-  "imageLeft",
-  Simplify<MediaTextSliceImageLeftPrimary>,
-  never
->;
-
-type MediaTextSliceVariation =
-  | MediaTextSliceImageRight
-  | MediaTextSliceImageLeft;
-
-export type MediaTextSlice = prismic.SharedSlice<
-  "media_text",
-  MediaTextSliceVariation
->;
-
-/**
  * Primary content in *SectionGrid → Default → Primary*
  */
 export interface SectionGridSliceDefaultPrimary {
+  /**
+   * heading field in *SectionGrid → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: section_grid.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
   heading: prismic.RichTextField;
+
+  /**
+   * columns field in *SectionGrid → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: 3
+   * - **API ID Path**: section_grid.default.primary.columns
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
   columns: prismic.NumberField;
 }
 
 /**
- * Item in *SectionGrid → Default → Items*
+ * Primary content in *SectionGrid → Items*
  */
 export interface SectionGridSliceDefaultItem {
+  /**
+   * item_heading field in *SectionGrid → Items*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: section_grid.items[].item_heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
   item_heading: prismic.RichTextField;
+
+  /**
+   * item_body field in *SectionGrid → Items*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: section_grid.items[].item_body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
   item_body: prismic.RichTextField;
+
+  /**
+   * item_media field in *SectionGrid → Items*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: section_grid.items[].item_media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
   item_media: prismic.ImageField<never>;
-  item_link: prismic.LinkField;
+
+  /**
+   * item_link field in *SectionGrid → Items*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: section_grid.items[].item_link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  item_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
 }
 
+/**
+ * Default variation for SectionGrid Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Heading plus a grid of item cards
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
 export type SectionGridSliceDefault = prismic.SharedSliceVariation<
   "default",
   Simplify<SectionGridSliceDefaultPrimary>,
   Simplify<SectionGridSliceDefaultItem>
 >;
 
+/**
+ * Slice variation for *SectionGrid*
+ */
 type SectionGridSliceVariation = SectionGridSliceDefault;
 
+/**
+ * SectionGrid Shared Slice
+ *
+ * - **API ID**: `section_grid`
+ * - **Description**: N-column grid of card items
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
 export type SectionGridSlice = prismic.SharedSlice<
   "section_grid",
   SectionGridSliceVariation
 >;
 
 /**
- * Primary content in *CollectionList → Grid → Primary*
+ * Primary content in *SplitFeature → Default → Primary*
  */
-export interface CollectionListSliceGridPrimary {
-  heading: prismic.RichTextField;
-  collection_type: prismic.KeyTextField;
-  max_items: prismic.NumberField;
+export interface SplitFeatureSliceDefaultPrimary {
+  /**
+   * band (index from the Blux export) field in *SplitFeature → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: split_feature.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+
+  /**
+   * body (overrides the manifest text when filled) field in *SplitFeature → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: split_feature.default.primary.body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
 }
 
-export type CollectionListSliceGrid = prismic.SharedSliceVariation<
-  "grid",
-  Simplify<CollectionListSliceGridPrimary>,
+/**
+ * Default variation for SplitFeature Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Text + media split at the export's ratio
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type SplitFeatureSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<SplitFeatureSliceDefaultPrimary>,
   never
 >;
 
 /**
- * Primary content in *CollectionList → List → Primary*
+ * Slice variation for *SplitFeature*
  */
-export interface CollectionListSliceListPrimary {
-  heading: prismic.RichTextField;
-  collection_type: prismic.KeyTextField;
-  max_items: prismic.NumberField;
+type SplitFeatureSliceVariation = SplitFeatureSliceDefault;
+
+/**
+ * SplitFeature Shared Slice
+ *
+ * - **API ID**: `split_feature`
+ * - **Description**: Two-cell band: manifest media beside editable text
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type SplitFeatureSlice = prismic.SharedSlice<
+  "split_feature",
+  SplitFeatureSliceVariation
+>;
+
+/**
+ * Item in *TextColumns → Default → Primary → columns*
+ */
+export interface TextColumnsSliceDefaultPrimaryColumnsItem {
+  /**
+   * title field in *TextColumns → Default → Primary → columns*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_columns.default.primary.columns[].title
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title: prismic.KeyTextField;
+
+  /**
+   * body field in *TextColumns → Default → Primary → columns*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_columns.default.primary.columns[].body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
 }
 
-export type CollectionListSliceList = prismic.SharedSliceVariation<
-  "list",
-  Simplify<CollectionListSliceListPrimary>,
+/**
+ * Primary content in *TextColumns → Default → Primary*
+ */
+export interface TextColumnsSliceDefaultPrimary {
+  /**
+   * eyebrow field in *TextColumns → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: e.g. Our Solution
+   * - **API ID Path**: text_columns.default.primary.eyebrow
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  eyebrow: prismic.KeyTextField;
+
+  /**
+   * hasTopRule field in *TextColumns → Default → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: true
+   * - **API ID Path**: text_columns.default.primary.hasTopRule
+   * - **Documentation**: https://prismic.io/docs/fields/boolean
+   */
+  hasTopRule: prismic.BooleanField;
+
+  /**
+   * desktopColumns field in *TextColumns → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: 3
+   * - **API ID Path**: text_columns.default.primary.desktopColumns
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  desktopColumns: prismic.SelectField<"2" | "3" | "4", "filled">;
+
+  /**
+   * columns field in *TextColumns → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_columns.default.primary.columns[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  columns: prismic.GroupField<
+    Simplify<TextColumnsSliceDefaultPrimaryColumnsItem>
+  >;
+
+  /**
+   * band (optional — wraps in the Blux SectionBand when set) field in *TextColumns → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_columns.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+}
+
+/**
+ * Default variation for TextColumns Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: An eyebrow, an optional rule, and a row of text columns
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TextColumnsSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<TextColumnsSliceDefaultPrimary>,
   never
 >;
 
-type CollectionListSliceVariation =
-  | CollectionListSliceGrid
-  | CollectionListSliceList;
+/**
+ * Slice variation for *TextColumns*
+ */
+type TextColumnsSliceVariation = TextColumnsSliceDefault;
 
-export type CollectionListSlice = prismic.SharedSlice<
-  "collection_list",
-  CollectionListSliceVariation
+/**
+ * TextColumns Shared Slice
+ *
+ * - **API ID**: `text_columns`
+ * - **Description**: TextColumns
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TextColumnsSlice = prismic.SharedSlice<
+  "text_columns",
+  TextColumnsSliceVariation
+>;
+
+/**
+ * Primary content in *TitleBand → Default → Primary*
+ */
+export interface TitleBandSliceDefaultPrimary {
+  /**
+   * band (index from the Blux export) field in *TitleBand → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: title_band.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+
+  /**
+   * heading field in *TitleBand → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: title_band.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  heading: prismic.KeyTextField;
+
+  /**
+   * subtitle field in *TitleBand → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: title_band.default.primary.subtitle
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  subtitle: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for TitleBand Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Heading + optional subtitle
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TitleBandSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<TitleBandSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *TitleBand*
+ */
+type TitleBandSliceVariation = TitleBandSliceDefault;
+
+/**
+ * TitleBand Shared Slice
+ *
+ * - **API ID**: `title_band`
+ * - **Description**: Centered band title with optional subtitle
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TitleBandSlice = prismic.SharedSlice<
+  "title_band",
+  TitleBandSliceVariation
 >;
 
 declare module "@prismicio/client" {
@@ -236,31 +1370,76 @@ declare module "@prismicio/client" {
       PageDocumentData,
       PageDocumentDataSlicesSlice,
       AllDocumentTypes,
-      RichTextSlice,
-      RichTextSliceDefaultPrimary,
-      RichTextSliceVariation,
-      RichTextSliceDefault,
-      HeroSlice,
-      HeroSliceDefaultPrimary,
-      HeroSliceVariation,
-      HeroSliceDefault,
-      MediaTextSlice,
-      MediaTextSliceImageRightPrimary,
-      MediaTextSliceImageLeftPrimary,
-      MediaTextSliceVariation,
-      MediaTextSliceImageRight,
-      MediaTextSliceImageLeft,
-      SectionGridSlice,
-      SectionGridSliceDefaultPrimary,
-      SectionGridSliceDefaultItem,
-      SectionGridSliceVariation,
-      SectionGridSliceDefault,
+      AccordionSlice,
+      AccordionSliceDefaultPrimaryItemsItem,
+      AccordionSliceDefaultPrimary,
+      AccordionSliceVariation,
+      AccordionSliceDefault,
+      CarouselSlice,
+      CarouselSliceDefaultPrimary,
+      CarouselSliceDefaultItem,
+      CarouselSliceVariation,
+      CarouselSliceDefault,
       CollectionListSlice,
       CollectionListSliceGridPrimary,
       CollectionListSliceListPrimary,
       CollectionListSliceVariation,
       CollectionListSliceGrid,
       CollectionListSliceList,
+      GallerySlice,
+      GallerySliceDefaultPrimary,
+      GallerySliceVariation,
+      GallerySliceDefault,
+      GridBandSlice,
+      GridBandSliceDefaultPrimary,
+      GridBandSliceVariation,
+      GridBandSliceDefault,
+      HeroSlice,
+      HeroSliceDefaultPrimary,
+      HeroSliceBandPrimary,
+      HeroSliceVariation,
+      HeroSliceDefault,
+      HeroSliceBand,
+      LeadTextSlice,
+      LeadTextSliceDefaultPrimary,
+      LeadTextSliceVariation,
+      LeadTextSliceDefault,
+      LocationMapSlice,
+      LocationMapSliceDefaultPrimary,
+      LocationMapSliceVariation,
+      LocationMapSliceDefault,
+      MediaFullSlice,
+      MediaFullSliceDefaultPrimary,
+      MediaFullSliceVariation,
+      MediaFullSliceDefault,
+      MediaTextSlice,
+      MediaTextSliceImageRightPrimary,
+      MediaTextSliceImageLeftPrimary,
+      MediaTextSliceVariation,
+      MediaTextSliceImageRight,
+      MediaTextSliceImageLeft,
+      RichTextSlice,
+      RichTextSliceDefaultPrimary,
+      RichTextSliceVariation,
+      RichTextSliceDefault,
+      SectionGridSlice,
+      SectionGridSliceDefaultPrimary,
+      SectionGridSliceDefaultItem,
+      SectionGridSliceVariation,
+      SectionGridSliceDefault,
+      SplitFeatureSlice,
+      SplitFeatureSliceDefaultPrimary,
+      SplitFeatureSliceVariation,
+      SplitFeatureSliceDefault,
+      TextColumnsSlice,
+      TextColumnsSliceDefaultPrimaryColumnsItem,
+      TextColumnsSliceDefaultPrimary,
+      TextColumnsSliceVariation,
+      TextColumnsSliceDefault,
+      TitleBandSlice,
+      TitleBandSliceDefaultPrimary,
+      TitleBandSliceVariation,
+      TitleBandSliceDefault,
     };
   }
 }
