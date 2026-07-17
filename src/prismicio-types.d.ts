@@ -69,6 +69,129 @@ type ContentRelationshipFieldWithData<
   >;
 }[Exclude<TCustomType[number], string>["id"]];
 
+/**
+ * Item in *Collection Item → gallery*
+ */
+export interface CollectionItemDocumentDataGalleryItem {
+  /**
+   * image field in *Collection Item → gallery*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_item.gallery[].image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * caption field in *Collection Item → gallery*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_item.gallery[].caption
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  caption: prismic.KeyTextField;
+}
+
+/**
+ * Content for Collection Item documents
+ */
+interface CollectionItemDocumentData {
+  /**
+   * title field in *Collection Item*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_item.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *Collection Item*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_item.body
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *Collection Item*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_item.media
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * gallery field in *Collection Item*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_item.gallery[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  gallery: prismic.GroupField<Simplify<CollectionItemDocumentDataGalleryItem>>;
+
+  /**
+   * tags (comma-separated) field in *Collection Item*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_item.tags
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  tags: prismic.KeyTextField;
+
+  /**
+   * date field in *Collection Item*
+   *
+   * - **Field Type**: Date
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_item.date
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/date
+   */
+  date: prismic.DateField;
+
+  /**
+   * link field in *Collection Item*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: collection_item.link
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
+ * Collection Item document from Prismic
+ *
+ * - **API ID**: `collection_item`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type CollectionItemDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<
+    Simplify<CollectionItemDocumentData>,
+    "collection_item",
+    Lang
+  >;
+
 type PageDocumentDataSlicesSlice =
   | LeadTextSlice
   | TextColumnsSlice
@@ -156,7 +279,7 @@ interface PageDocumentData {
 export type PageDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<PageDocumentData>, "page", Lang>;
 
-export type AllDocumentTypes = PageDocument;
+export type AllDocumentTypes = CollectionItemDocument | PageDocument;
 
 /**
  * Item in *Accordion → Default → Primary → items*
@@ -1838,6 +1961,9 @@ declare module "@prismicio/client" {
 
   namespace Content {
     export type {
+      CollectionItemDocument,
+      CollectionItemDocumentData,
+      CollectionItemDocumentDataGalleryItem,
       PageDocument,
       PageDocumentData,
       PageDocumentDataSlicesSlice,
