@@ -12,7 +12,12 @@ const slice = {
   variation: "default",
   primary: {
     heading: rt("heading2", "Amenities"),
-    background_image: { link_type: "Media" },
+    background_image: {
+      url: "https://cdn.example/bg.jpg",
+      alt: "bg",
+      dimensions: { width: 1200, height: 800 },
+      edit: { x: 0, y: 0, zoom: 1, background: "transparent" },
+    },
     background_color: "#111111",
     min_height: "80vh",
     vertical_align: "middle",
@@ -53,5 +58,29 @@ describe("BluxSection slice", () => {
     expect(container.querySelector(".blux-section")?.getAttribute("style")).toContain(
       "background-color: rgb(17, 17, 17)",
     );
+    expect(container.querySelector(".blux-section__bg")).not.toBeNull();
+  });
+
+  it("renders a cell's embed html and link", () => {
+    const embedSlice = {
+      slice_type: "blux_section",
+      variation: "default",
+      primary: {
+        cells: [
+          {
+            kind: "embed",
+            embed_html: "<span class='promo'>Book now</span>",
+            link: { link_type: "Web", url: "https://ex.com" },
+            link_label: "Details",
+            subgrid: [],
+          },
+        ],
+      },
+    } as unknown as Content.BluxSectionSlice;
+
+    const { container, getByText } = render(BluxSection, { props: { slice: embedSlice } });
+    expect(container.querySelector(".promo")?.textContent).toContain("Book now");
+    const link = getByText("Details");
+    expect(link.closest("a")?.getAttribute("href")).toBe("https://ex.com");
   });
 });

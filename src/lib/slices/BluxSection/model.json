@@ -195,6 +195,12 @@
                       "config": {
                         "label": "link_label"
                       }
+                    },
+                    "embed_html": {
+                      "type": "Text",
+                      "config": {
+                        "label": "embed_html"
+                      }
                     }
                   }
                 }

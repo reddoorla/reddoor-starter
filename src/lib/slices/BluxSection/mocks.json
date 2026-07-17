@@ -15,7 +15,6 @@
 				]
 			},
 			"background_image": {
-				"__TYPE__": "ImageContent",
 				"origin": {
 					"id": "main",
 					"url": "https://images.unsplash.com/photo-1545239351-1141bd82e8a6",
@@ -34,6 +33,8 @@
 					"background": "transparent"
 				},
 				"alt": "fly",
+				"credits": null,
+				"__TYPE__": "ImageContent",
 				"thumbnails": {}
 			},
 			"background_color": {
@@ -116,7 +117,6 @@
 							[
 								"media",
 								{
-									"__TYPE__": "ImageContent",
 									"origin": {
 										"id": "main",
 										"url": "https://images.unsplash.com/photo-1601933973783-43cf8a7d4c5f",
@@ -135,6 +135,8 @@
 										"background": "transparent"
 									},
 									"alt": "ordinary",
+									"credits": null,
+									"__TYPE__": "ImageContent",
 									"thumbnails": {}
 								}
 							],
@@ -150,10 +152,10 @@
 								"link",
 								{
 									"__TYPE__": "LinkContent",
-									"key": "33e4780e-fcda-4b1c-b6e5-0b3e870c81d9",
+									"key": "f8e3eb45-32c9-4af0-8624-a237fb563f22",
 									"value": {
 										"__TYPE__": "ExternalLink",
-										"url": "https://prismic.io"
+										"url": "http://google.com"
 									}
 								}
 							],
@@ -220,7 +222,6 @@
 												[
 													"media",
 													{
-														"__TYPE__": "ImageContent",
 														"origin": {
 															"id": "main",
 															"url": "https://images.unsplash.com/photo-1587653915936-5623ea0b949a",
@@ -239,6 +240,8 @@
 															"background": "transparent"
 														},
 														"alt": "bone",
+														"credits": null,
+														"__TYPE__": "ImageContent",
 														"thumbnails": {}
 													}
 												],
@@ -254,10 +257,10 @@
 													"link",
 													{
 														"__TYPE__": "LinkContent",
-														"key": "49359858-e3d6-4674-b19a-dde8b1e9a06f",
+														"key": "c1f5e605-6a0f-4124-acba-780c442323cb",
 														"value": {
 															"__TYPE__": "ExternalLink",
-															"url": "https://slicemachine.dev"
+															"url": "http://google.com"
 														}
 													}
 												],

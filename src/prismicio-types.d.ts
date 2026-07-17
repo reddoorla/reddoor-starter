@@ -322,6 +322,16 @@ export interface BluxSectionSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   link_label: prismic.KeyTextField;
+
+  /**
+   * embed_html field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].embed_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  embed_html: prismic.KeyTextField;
 }
 
 /**
