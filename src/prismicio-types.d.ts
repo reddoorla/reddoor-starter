@@ -250,6 +250,313 @@ export type AccordionSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Item in *BluxSection → Default → Primary → cells → subgrid*
+ */
+export interface BluxSectionSliceDefaultPrimaryCellsSubgridItem {
+  /**
+   * kind field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].kind
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  kind: prismic.SelectField<"text" | "media" | "embed">;
+
+  /**
+   * title field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].title
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * media_ratio field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].media_ratio
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  media_ratio: prismic.KeyTextField;
+
+  /**
+   * link field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * link_label field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].link_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  link_label: prismic.KeyTextField;
+}
+
+/**
+ * Item in *BluxSection → Default → Primary → cells*
+ */
+export interface BluxSectionSliceDefaultPrimaryCellsItem {
+  /**
+   * kind field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].kind
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  kind: prismic.SelectField<"text" | "media" | "embed" | "button" | "subgrid">;
+
+  /**
+   * title field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].title
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * media_ratio field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].media_ratio
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  media_ratio: prismic.KeyTextField;
+
+  /**
+   * link field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * link_label field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].link_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  link_label: prismic.KeyTextField;
+
+  /**
+   * embed_html field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].embed_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  embed_html: prismic.KeyTextField;
+
+  /**
+   * subgrid field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  subgrid: prismic.NestedGroupField<
+    Simplify<BluxSectionSliceDefaultPrimaryCellsSubgridItem>
+  >;
+}
+
+/**
+ * Primary content in *BluxSection → Default → Primary*
+ */
+export interface BluxSectionSliceDefaultPrimary {
+  /**
+   * heading field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * background_image field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.background_image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  background_image: prismic.ImageField<never>;
+
+  /**
+   * background_color field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.background_color
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  background_color: prismic.KeyTextField;
+
+  /**
+   * overlay field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.overlay
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  overlay: prismic.KeyTextField;
+
+  /**
+   * max_content_width field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.max_content_width
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  max_content_width: prismic.KeyTextField;
+
+  /**
+   * vertical_align field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.vertical_align
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  vertical_align: prismic.SelectField<"top" | "middle" | "bottom">;
+
+  /**
+   * min_height field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.min_height
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  min_height: prismic.KeyTextField;
+
+  /**
+   * widget_kind field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.widget_kind
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  widget_kind: prismic.KeyTextField;
+
+  /**
+   * widget_html field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.widget_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  widget_html: prismic.KeyTextField;
+
+  /**
+   * cells field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  cells: prismic.GroupField<Simplify<BluxSectionSliceDefaultPrimaryCellsItem>>;
+}
+
+/**
+ * Default variation for BluxSection Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Section with cells
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxSectionSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BluxSectionSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BluxSection*
+ */
+type BluxSectionSliceVariation = BluxSectionSliceDefault;
+
+/**
+ * BluxSection Shared Slice
+ *
+ * - **API ID**: `blux_section`
+ * - **Description**: Blux catalog: a band/section carrying an optional heading, background, inline widget, and a group of typed cells (one may nest a single subgrid).
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxSectionSlice = prismic.SharedSlice<
+  "blux_section",
+  BluxSectionSliceVariation
+>;
+
+/**
  * Primary content in *Carousel → Default → Primary*
  */
 export interface CarouselSliceDefaultPrimary {
@@ -1375,6 +1682,12 @@ declare module "@prismicio/client" {
       AccordionSliceDefaultPrimary,
       AccordionSliceVariation,
       AccordionSliceDefault,
+      BluxSectionSlice,
+      BluxSectionSliceDefaultPrimaryCellsSubgridItem,
+      BluxSectionSliceDefaultPrimaryCellsItem,
+      BluxSectionSliceDefaultPrimary,
+      BluxSectionSliceVariation,
+      BluxSectionSliceDefault,
       CarouselSlice,
       CarouselSliceDefaultPrimary,
       CarouselSliceDefaultItem,

@@ -1,0 +1,289 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"heading": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "heading2",
+						"content": {
+							"text": "Fellow"
+						}
+					}
+				]
+			},
+			"background_image": {
+				"__TYPE__": "ImageContent",
+				"origin": {
+					"id": "main",
+					"url": "https://images.unsplash.com/photo-1545239351-1141bd82e8a6",
+					"width": 3212,
+					"height": 3880
+				},
+				"url": "https://images.unsplash.com/photo-1545239351-1141bd82e8a6",
+				"width": 3212,
+				"height": 3880,
+				"edit": {
+					"zoom": 1,
+					"crop": {
+						"x": 0,
+						"y": 0
+					},
+					"background": "transparent"
+				},
+				"alt": "fly",
+				"thumbnails": {}
+			},
+			"background_color": {
+				"__TYPE__": "FieldContent",
+				"value": "drove",
+				"type": "Text"
+			},
+			"overlay": {
+				"__TYPE__": "FieldContent",
+				"value": "again",
+				"type": "Text"
+			},
+			"max_content_width": {
+				"__TYPE__": "FieldContent",
+				"value": "hospital",
+				"type": "Text"
+			},
+			"vertical_align": {
+				"__TYPE__": "FieldContent",
+				"value": "top",
+				"type": "Select"
+			},
+			"min_height": {
+				"__TYPE__": "FieldContent",
+				"value": "regular",
+				"type": "Text"
+			},
+			"widget_kind": {
+				"__TYPE__": "FieldContent",
+				"value": "clean",
+				"type": "Text"
+			},
+			"widget_html": {
+				"__TYPE__": "FieldContent",
+				"value": "element",
+				"type": "Text"
+			},
+			"cells": {
+				"__TYPE__": "GroupContentType",
+				"value": [
+					{
+						"__TYPE__": "GroupItemContent",
+						"value": [
+							[
+								"kind",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "text",
+									"type": "Select"
+								}
+							],
+							[
+								"title",
+								{
+									"__TYPE__": "StructuredTextContent",
+									"value": [
+										{
+											"type": "heading3",
+											"content": {
+												"text": "Vapor"
+											}
+										}
+									]
+								}
+							],
+							[
+								"body",
+								{
+									"__TYPE__": "StructuredTextContent",
+									"value": [
+										{
+											"type": "paragraph",
+											"content": {
+												"text": "Aliqua ad qui fugiat enim id voluptate aliqua consectetur. Pariatur aute sint fugiat quis dolor quis do."
+											}
+										}
+									]
+								}
+							],
+							[
+								"media",
+								{
+									"__TYPE__": "ImageContent",
+									"origin": {
+										"id": "main",
+										"url": "https://images.unsplash.com/photo-1601933973783-43cf8a7d4c5f",
+										"width": 6597,
+										"height": 4398
+									},
+									"url": "https://images.unsplash.com/photo-1601933973783-43cf8a7d4c5f",
+									"width": 6597,
+									"height": 4398,
+									"edit": {
+										"zoom": 1,
+										"crop": {
+											"x": 0,
+											"y": 0
+										},
+										"background": "transparent"
+									},
+									"alt": "ordinary",
+									"thumbnails": {}
+								}
+							],
+							[
+								"media_ratio",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "bear",
+									"type": "Text"
+								}
+							],
+							[
+								"link",
+								{
+									"__TYPE__": "LinkContent",
+									"key": "33e4780e-fcda-4b1c-b6e5-0b3e870c81d9",
+									"value": {
+										"__TYPE__": "ExternalLink",
+										"url": "https://prismic.io"
+									}
+								}
+							],
+							[
+								"link_label",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "physical",
+									"type": "Text"
+								}
+							],
+							[
+								"embed_html",
+								{
+									"__TYPE__": "FieldContent",
+									"value": "refer",
+									"type": "Text"
+								}
+							],
+							[
+								"subgrid",
+								{
+									"__TYPE__": "GroupContentType",
+									"value": [
+										{
+											"__TYPE__": "GroupItemContent",
+											"value": [
+												[
+													"kind",
+													{
+														"__TYPE__": "FieldContent",
+														"value": "embed",
+														"type": "Select"
+													}
+												],
+												[
+													"title",
+													{
+														"__TYPE__": "StructuredTextContent",
+														"value": [
+															{
+																"type": "heading4",
+																"content": {
+																	"text": "Themselves"
+																}
+															}
+														]
+													}
+												],
+												[
+													"body",
+													{
+														"__TYPE__": "StructuredTextContent",
+														"value": [
+															{
+																"type": "paragraph",
+																"content": {
+																	"text": "Do amet cillum eu magna officia eiusmod ullamco aliqua occaecat eiusmod commodo consequat. Consequat aliqua irure dolor amet adipisicing ipsum."
+																}
+															}
+														]
+													}
+												],
+												[
+													"media",
+													{
+														"__TYPE__": "ImageContent",
+														"origin": {
+															"id": "main",
+															"url": "https://images.unsplash.com/photo-1587653915936-5623ea0b949a",
+															"width": 4000,
+															"height": 4000
+														},
+														"url": "https://images.unsplash.com/photo-1587653915936-5623ea0b949a",
+														"width": 4000,
+														"height": 4000,
+														"edit": {
+															"zoom": 1,
+															"crop": {
+																"x": 0,
+																"y": 0
+															},
+															"background": "transparent"
+														},
+														"alt": "bone",
+														"thumbnails": {}
+													}
+												],
+												[
+													"media_ratio",
+													{
+														"__TYPE__": "FieldContent",
+														"value": "sea",
+														"type": "Text"
+													}
+												],
+												[
+													"link",
+													{
+														"__TYPE__": "LinkContent",
+														"key": "49359858-e3d6-4674-b19a-dde8b1e9a06f",
+														"value": {
+															"__TYPE__": "ExternalLink",
+															"url": "https://slicemachine.dev"
+														}
+													}
+												],
+												[
+													"link_label",
+													{
+														"__TYPE__": "FieldContent",
+														"value": "generally",
+														"type": "Text"
+													}
+												]
+											]
+										}
+									]
+								}
+							]
+						]
+					}
+				]
+			}
+		},
+		"items": [
+			{
+				"__TYPE__": "GroupItemContent",
+				"value": []
+			}
+		]
+	}
+]
