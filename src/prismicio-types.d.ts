@@ -567,6 +567,116 @@ export type BluxSectionSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Item in *BluxText → Default → Primary → buttons*
+ */
+export interface BluxTextSliceDefaultPrimaryButtonsItem {
+  /**
+   * label field in *BluxText → Default → Primary → buttons*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_text.default.primary.buttons[].label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  label: prismic.KeyTextField;
+
+  /**
+   * link field in *BluxText → Default → Primary → buttons*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_text.default.primary.buttons[].link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
+ * Primary content in *BluxText → Default → Primary*
+ */
+export interface BluxTextSliceDefaultPrimary {
+  /**
+   * title field in *BluxText → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_text.default.primary.title
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * subtitle field in *BluxText → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_text.default.primary.subtitle
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  subtitle: prismic.RichTextField;
+
+  /**
+   * body field in *BluxText → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_text.default.primary.body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * subbody field in *BluxText → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_text.default.primary.subbody
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  subbody: prismic.RichTextField;
+
+  /**
+   * buttons field in *BluxText → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_text.default.primary.buttons[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  buttons: prismic.GroupField<Simplify<BluxTextSliceDefaultPrimaryButtonsItem>>;
+}
+
+/**
+ * Default variation for BluxText Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Text
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxTextSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BluxTextSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BluxText*
+ */
+type BluxTextSliceVariation = BluxTextSliceDefault;
+
+/**
+ * BluxText Shared Slice
+ *
+ * - **API ID**: `blux_text`
+ * - **Description**: Blux catalog: a text leaf — title/subtitle/body/subbody with optional buttons.
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxTextSlice = prismic.SharedSlice<
+  "blux_text",
+  BluxTextSliceVariation
+>;
+
+/**
  * Primary content in *Carousel → Default → Primary*
  */
 export interface CarouselSliceDefaultPrimary {
@@ -1698,6 +1808,11 @@ declare module "@prismicio/client" {
       BluxSectionSliceDefaultPrimary,
       BluxSectionSliceVariation,
       BluxSectionSliceDefault,
+      BluxTextSlice,
+      BluxTextSliceDefaultPrimaryButtonsItem,
+      BluxTextSliceDefaultPrimary,
+      BluxTextSliceVariation,
+      BluxTextSliceDefault,
       CarouselSlice,
       CarouselSliceDefaultPrimary,
       CarouselSliceDefaultItem,
