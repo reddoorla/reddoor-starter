@@ -71,6 +71,15 @@
             },
             "carousel": {
               "type": "SharedSlice"
+            },
+            "blux_section": {
+              "type": "SharedSlice"
+            },
+            "blux_text": {
+              "type": "SharedSlice"
+            },
+            "blux_block": {
+              "type": "SharedSlice"
             }
           }
         }

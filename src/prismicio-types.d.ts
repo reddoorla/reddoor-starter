@@ -207,7 +207,10 @@ type PageDocumentDataSlicesSlice =
   | GallerySlice
   | MediaFullSlice
   | LocationMapSlice
-  | CarouselSlice;
+  | CarouselSlice
+  | BluxSectionSlice
+  | BluxTextSlice
+  | BluxBlockSlice;
 
 /**
  * Content for Page documents
