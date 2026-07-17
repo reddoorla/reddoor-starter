@@ -158,6 +158,11 @@ describe("Grid (recursive fallback)", () => {
       "rgba(1,2,3,0.85)",
     );
     expect(panel.textContent).toContain("Suite");
+    // Reveals on hover (pointer), but stays visible on touch (no-hover) and on
+    // keyboard focus — the caption is never permanently hidden from a visitor.
+    expect(panel.className).toContain("group-hover:opacity-100");
+    expect(panel.className).toContain("[@media(hover:none)]:opacity-100");
+    expect(panel.className).toContain("focus-within:opacity-100");
     // The _overlay hints never leak as literal CSS.
     expect(box.getAttribute("style")).not.toContain("_overlay");
   });
