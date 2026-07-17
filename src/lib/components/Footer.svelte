@@ -32,7 +32,9 @@
       // member (truthy) and slip past the filter, then crash on `.platform`.
       .map((s) => ({
         ...s,
-        meta: Object.hasOwn(NETWORK, s.network) ? NETWORK[s.network] : undefined,
+        meta: Object.hasOwn(NETWORK, s.network)
+          ? NETWORK[s.network]
+          : undefined,
       }))
       .filter(
         (s): s is typeof s & { meta: { platform: string; label: string } } =>
