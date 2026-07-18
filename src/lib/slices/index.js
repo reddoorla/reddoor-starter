@@ -2,7 +2,14 @@
 
 import Accordion from "./Accordion/index.svelte";
 import BluxBlock from "./BluxBlock/index.svelte";
+import BluxCarousel from "./BluxCarousel/index.svelte";
+import BluxEmbed from "./BluxEmbed/index.svelte";
+import BluxGallery from "./BluxGallery/index.svelte";
+import BluxGrid from "./BluxGrid/index.svelte";
+import BluxMedia from "./BluxMedia/index.svelte";
+import BluxMediaText from "./BluxMediaText/index.svelte";
 import BluxSection from "./BluxSection/index.svelte";
+import BluxTable from "./BluxTable/index.svelte";
 import BluxText from "./BluxText/index.svelte";
 import Carousel from "./Carousel/index.svelte";
 import CollectionList from "./CollectionList/index.svelte";
@@ -22,7 +29,14 @@ import TitleBand from "./TitleBand/index.svelte";
 export const components = {
   accordion: Accordion,
   blux_block: BluxBlock,
+  blux_carousel: BluxCarousel,
+  blux_embed: BluxEmbed,
+  blux_gallery: BluxGallery,
+  blux_grid: BluxGrid,
+  blux_media: BluxMedia,
+  blux_media_text: BluxMediaText,
   blux_section: BluxSection,
+  blux_table: BluxTable,
   blux_text: BluxText,
   carousel: Carousel,
   collection_list: CollectionList,

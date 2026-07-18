@@ -452,7 +452,14 @@ type PageDocumentDataSlicesSlice =
   | CarouselSlice
   | BluxSectionSlice
   | BluxTextSlice
-  | BluxBlockSlice;
+  | BluxBlockSlice
+  | BluxGridSlice
+  | BluxGallerySlice
+  | BluxCarouselSlice
+  | BluxMediaSlice
+  | BluxMediaTextSlice
+  | BluxEmbedSlice
+  | BluxTableSlice;
 
 /**
  * Content for Page documents
