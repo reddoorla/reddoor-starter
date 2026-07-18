@@ -163,7 +163,7 @@ Extract parses `site.json` into a normalized block tree. Representative node (th
 | **Embed**     | standalone `media.type ∈ {custom (no children), form, social}`                          | raw HTML / form / social embed                                                                  |
 | **Table**     | `media.type=table`                                                                      | tabular embed (2 in corpus) — small, may render via Embed if a dedicated slice isn't warranted  |
 
-**The `widget` field.** Any slice may carry an optional inline **`widget`** (the custom HTML from pass 5: dividers, scroll-animation, timeline, expander, MailChimp). It renders as a decoration/behavior element _alongside_ the slice's normal content. Behavioral widgets (expander/timeline) are captured as `widget.kind` + preserved children; faithful reproduction of the interactive behavior is a fidelity follow-up, not a blocker (content is never lost).
+**The `widget` field (container-level — decision B).** Only **container** slices (Section/Grid/Gallery/Carousel/Collection) carry the optional inline **`widget`** (the custom HTML from pass 5: dividers, scroll-animation, timeline, expander, MailChimp), rendered as a decoration/behavior element _alongside_ the slice's content. Leaf slices (Text/Media/MediaText/Embed/Table) carry **no** widget field. A band whose own content is a bare leaf but which _also_ carries a widget therefore classifies as **Section** (its content becomes a single cell), so the widget always has a home and is never dropped. Behavioral widgets (expander/timeline) are captured as `widget.kind` + preserved children; faithful reproduction of the interactive behavior is a fidelity follow-up, not a blocker (content is never lost).
 
 **Map:** dropped as a slice. Maps appear only as `custom` widgets, so they flow through the `widget` field / Embed path. Re-introduce a dedicated Map slice only if a real `media.type=map` instance surfaces.
 
@@ -190,7 +190,7 @@ One ordered decision tree per band, **first match wins**, run on the _normalized
 7. leaf + text only → **Text**.
 8. subtree exceeds `container → cell → subgrid → leaves` (depth ≥ 3) → **BluxBlock**.
 
-The block's `widget` (custom HTML) rides along on whatever slice rules 1–7 select; it never _captures_ the block.
+**Widget routing (decision B).** A band carrying a `widget` always resolves to a **container**: if rules 1–4 already selected a container (Collection/Carousel/Grid/Gallery/Section), the widget rides on it; otherwise a widget-bearing band that would be a bare leaf (rules 5–7) is **promoted to Section** with its content as a single cell. Leaf slices carry no widget field, so a widget is never silently dropped.
 
 **Cell decomposition** maps each child block by a reduced form of the same tree (`text/media/embed/button`); a `type=grid` child under a container becomes a `subgrid` cell (one level).
 
