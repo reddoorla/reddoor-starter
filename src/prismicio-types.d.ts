@@ -808,6 +808,61 @@ export type BluxCarouselSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *BluxEmbed → Default → Primary*
+ */
+export interface BluxEmbedSliceDefaultPrimary {
+  /**
+   * embed_kind field in *BluxEmbed → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_embed.default.primary.embed_kind
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  embed_kind: prismic.SelectField<"custom" | "form" | "social">;
+
+  /**
+   * embed_html field in *BluxEmbed → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_embed.default.primary.embed_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  embed_html: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for BluxEmbed Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Embed
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxEmbedSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BluxEmbedSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BluxEmbed*
+ */
+type BluxEmbedSliceVariation = BluxEmbedSliceDefault;
+
+/**
+ * BluxEmbed Shared Slice
+ *
+ * - **API ID**: `blux_embed`
+ * - **Description**: Blux catalog: a standalone raw-HTML / form / social embed.
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxEmbedSlice = prismic.SharedSlice<
+  "blux_embed",
+  BluxEmbedSliceVariation
+>;
+
+/**
  * Item in *BluxGallery → Default → Primary → cells → subgrid*
  */
 export interface BluxGallerySliceDefaultPrimaryCellsSubgridItem {
@@ -3307,6 +3362,10 @@ declare module "@prismicio/client" {
       BluxCarouselSliceDefaultPrimary,
       BluxCarouselSliceVariation,
       BluxCarouselSliceDefault,
+      BluxEmbedSlice,
+      BluxEmbedSliceDefaultPrimary,
+      BluxEmbedSliceVariation,
+      BluxEmbedSliceDefault,
       BluxGallerySlice,
       BluxGallerySliceDefaultPrimaryCellsSubgridItem,
       BluxGallerySliceDefaultPrimaryCellsItem,
