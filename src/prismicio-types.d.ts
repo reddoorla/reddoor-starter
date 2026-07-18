@@ -192,6 +192,248 @@ export type CollectionItemDocument<Lang extends string = string> =
     Lang
   >;
 
+/**
+ * Item in *Event → gallery*
+ */
+export interface EventDocumentDataGalleryItem {
+  /**
+   * image field in *Event → gallery*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.gallery[].image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * caption field in *Event → gallery*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.gallery[].caption
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  caption: prismic.KeyTextField;
+}
+
+/**
+ * Content for Event documents
+ */
+interface EventDocumentData {
+  /**
+   * title field in *Event*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *Event*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.body
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *Event*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.media
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * gallery field in *Event*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.gallery[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  gallery: prismic.GroupField<Simplify<EventDocumentDataGalleryItem>>;
+
+  /**
+   * tags (comma-separated) field in *Event*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.tags
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  tags: prismic.KeyTextField;
+
+  /**
+   * date field in *Event*
+   *
+   * - **Field Type**: Date
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.date
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/date
+   */
+  date: prismic.DateField;
+
+  /**
+   * link field in *Event*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: event.link
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
+ * Event document from Prismic
+ *
+ * - **API ID**: `event`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type EventDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<EventDocumentData>, "event", Lang>;
+
+/**
+ * Item in *News Article → gallery*
+ */
+export interface NewsArticleDocumentDataGalleryItem {
+  /**
+   * image field in *News Article → gallery*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_article.gallery[].image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * caption field in *News Article → gallery*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_article.gallery[].caption
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  caption: prismic.KeyTextField;
+}
+
+/**
+ * Content for News Article documents
+ */
+interface NewsArticleDocumentData {
+  /**
+   * title field in *News Article*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_article.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *News Article*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_article.body
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *News Article*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_article.media
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * gallery field in *News Article*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_article.gallery[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  gallery: prismic.GroupField<Simplify<NewsArticleDocumentDataGalleryItem>>;
+
+  /**
+   * tags (comma-separated) field in *News Article*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_article.tags
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  tags: prismic.KeyTextField;
+
+  /**
+   * date field in *News Article*
+   *
+   * - **Field Type**: Date
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_article.date
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/date
+   */
+  date: prismic.DateField;
+
+  /**
+   * link field in *News Article*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_article.link
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
+ * News Article document from Prismic
+ *
+ * - **API ID**: `news_article`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type NewsArticleDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<
+    Simplify<NewsArticleDocumentData>,
+    "news_article",
+    Lang
+  >;
+
 type PageDocumentDataSlicesSlice =
   | LeadTextSlice
   | TextColumnsSlice
@@ -282,7 +524,379 @@ interface PageDocumentData {
 export type PageDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<PageDocumentData>, "page", Lang>;
 
-export type AllDocumentTypes = CollectionItemDocument | PageDocument;
+/**
+ * Item in *Person → gallery*
+ */
+export interface PersonDocumentDataGalleryItem {
+  /**
+   * image field in *Person → gallery*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: person.gallery[].image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * caption field in *Person → gallery*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: person.gallery[].caption
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  caption: prismic.KeyTextField;
+}
+
+/**
+ * Content for Person documents
+ */
+interface PersonDocumentData {
+  /**
+   * title field in *Person*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: person.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *Person*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: person.body
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *Person*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: person.media
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * gallery field in *Person*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: person.gallery[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  gallery: prismic.GroupField<Simplify<PersonDocumentDataGalleryItem>>;
+
+  /**
+   * tags (comma-separated) field in *Person*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: person.tags
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  tags: prismic.KeyTextField;
+
+  /**
+   * date field in *Person*
+   *
+   * - **Field Type**: Date
+   * - **Placeholder**: *None*
+   * - **API ID Path**: person.date
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/date
+   */
+  date: prismic.DateField;
+
+  /**
+   * link field in *Person*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: person.link
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
+ * Person document from Prismic
+ *
+ * - **API ID**: `person`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type PersonDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<Simplify<PersonDocumentData>, "person", Lang>;
+
+/**
+ * Item in *Product → gallery*
+ */
+export interface ProductDocumentDataGalleryItem {
+  /**
+   * image field in *Product → gallery*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.gallery[].image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * caption field in *Product → gallery*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.gallery[].caption
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  caption: prismic.KeyTextField;
+}
+
+/**
+ * Content for Product documents
+ */
+interface ProductDocumentData {
+  /**
+   * title field in *Product*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *Product*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.body
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *Product*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.media
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * gallery field in *Product*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.gallery[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  gallery: prismic.GroupField<Simplify<ProductDocumentDataGalleryItem>>;
+
+  /**
+   * tags (comma-separated) field in *Product*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.tags
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  tags: prismic.KeyTextField;
+
+  /**
+   * date field in *Product*
+   *
+   * - **Field Type**: Date
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.date
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/date
+   */
+  date: prismic.DateField;
+
+  /**
+   * link field in *Product*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: product.link
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
+ * Product document from Prismic
+ *
+ * - **API ID**: `product`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type ProductDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<
+    Simplify<ProductDocumentData>,
+    "product",
+    Lang
+  >;
+
+/**
+ * Item in *Project → gallery*
+ */
+export interface ProjectDocumentDataGalleryItem {
+  /**
+   * image field in *Project → gallery*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.gallery[].image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * caption field in *Project → gallery*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.gallery[].caption
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  caption: prismic.KeyTextField;
+}
+
+/**
+ * Content for Project documents
+ */
+interface ProjectDocumentData {
+  /**
+   * title field in *Project*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.title
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *Project*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.body
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *Project*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.media
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * gallery field in *Project*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.gallery[]
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  gallery: prismic.GroupField<Simplify<ProjectDocumentDataGalleryItem>>;
+
+  /**
+   * tags (comma-separated) field in *Project*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.tags
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  tags: prismic.KeyTextField;
+
+  /**
+   * date field in *Project*
+   *
+   * - **Field Type**: Date
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.date
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/date
+   */
+  date: prismic.DateField;
+
+  /**
+   * link field in *Project*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.link
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
+ * Project document from Prismic
+ *
+ * - **API ID**: `project`
+ * - **Repeatable**: `true`
+ * - **Documentation**: https://prismic.io/docs/content-modeling
+ *
+ * @typeParam Lang - Language API ID of the document.
+ */
+export type ProjectDocument<Lang extends string = string> =
+  prismic.PrismicDocumentWithUID<
+    Simplify<ProjectDocumentData>,
+    "project",
+    Lang
+  >;
+
+export type AllDocumentTypes =
+  | CollectionItemDocument
+  | EventDocument
+  | NewsArticleDocument
+  | PageDocument
+  | PersonDocument
+  | ProductDocument
+  | ProjectDocument;
 
 /**
  * Item in *Accordion → Default → Primary → items*
@@ -3398,9 +4012,24 @@ declare module "@prismicio/client" {
       CollectionItemDocument,
       CollectionItemDocumentData,
       CollectionItemDocumentDataGalleryItem,
+      EventDocument,
+      EventDocumentData,
+      EventDocumentDataGalleryItem,
+      NewsArticleDocument,
+      NewsArticleDocumentData,
+      NewsArticleDocumentDataGalleryItem,
       PageDocument,
       PageDocumentData,
       PageDocumentDataSlicesSlice,
+      PersonDocument,
+      PersonDocumentData,
+      PersonDocumentDataGalleryItem,
+      ProductDocument,
+      ProductDocumentData,
+      ProductDocumentDataGalleryItem,
+      ProjectDocument,
+      ProjectDocumentData,
+      ProjectDocumentDataGalleryItem,
       AllDocumentTypes,
       AccordionSlice,
       AccordionSliceDefaultPrimaryItemsItem,
