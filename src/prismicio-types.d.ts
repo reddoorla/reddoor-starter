@@ -421,6 +421,393 @@ export type BluxBlockSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Item in *BluxCarousel → Default → Primary → cells → subgrid*
+ */
+export interface BluxCarouselSliceDefaultPrimaryCellsSubgridItem {
+  /**
+   * kind field in *BluxCarousel → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].kind
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  kind: prismic.SelectField<"text" | "media" | "embed">;
+
+  /**
+   * title field in *BluxCarousel → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].title
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *BluxCarousel → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *BluxCarousel → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * media_ratio field in *BluxCarousel → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].media_ratio
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  media_ratio: prismic.KeyTextField;
+
+  /**
+   * link field in *BluxCarousel → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * link_label field in *BluxCarousel → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].link_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  link_label: prismic.KeyTextField;
+
+  /**
+   * embed_html field in *BluxCarousel → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].embed_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  embed_html: prismic.KeyTextField;
+}
+
+/**
+ * Item in *BluxCarousel → Default → Primary → cells*
+ */
+export interface BluxCarouselSliceDefaultPrimaryCellsItem {
+  /**
+   * kind field in *BluxCarousel → Default → Primary → cells*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].kind
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  kind: prismic.SelectField<"text" | "media" | "embed" | "button" | "subgrid">;
+
+  /**
+   * title field in *BluxCarousel → Default → Primary → cells*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].title
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *BluxCarousel → Default → Primary → cells*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *BluxCarousel → Default → Primary → cells*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * media_ratio field in *BluxCarousel → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].media_ratio
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  media_ratio: prismic.KeyTextField;
+
+  /**
+   * link field in *BluxCarousel → Default → Primary → cells*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * link_label field in *BluxCarousel → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].link_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  link_label: prismic.KeyTextField;
+
+  /**
+   * embed_html field in *BluxCarousel → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].embed_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  embed_html: prismic.KeyTextField;
+
+  /**
+   * subgrid field in *BluxCarousel → Default → Primary → cells*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  subgrid: prismic.NestedGroupField<
+    Simplify<BluxCarouselSliceDefaultPrimaryCellsSubgridItem>
+  >;
+}
+
+/**
+ * Primary content in *BluxCarousel → Default → Primary*
+ */
+export interface BluxCarouselSliceDefaultPrimary {
+  /**
+   * heading field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * background_image field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.background_image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  background_image: prismic.ImageField<never>;
+
+  /**
+   * background_color field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.background_color
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  background_color: prismic.KeyTextField;
+
+  /**
+   * overlay field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.overlay
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  overlay: prismic.KeyTextField;
+
+  /**
+   * max_content_width field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.max_content_width
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  max_content_width: prismic.KeyTextField;
+
+  /**
+   * vertical_align field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.vertical_align
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  vertical_align: prismic.SelectField<"top" | "middle" | "bottom">;
+
+  /**
+   * min_height field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.min_height
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  min_height: prismic.KeyTextField;
+
+  /**
+   * widget_kind field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.widget_kind
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  widget_kind: prismic.KeyTextField;
+
+  /**
+   * widget_html field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.widget_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  widget_html: prismic.KeyTextField;
+
+  /**
+   * columns_visible field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: 1
+   * - **API ID Path**: blux_carousel.default.primary.columns_visible
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  columns_visible: prismic.NumberField;
+
+  /**
+   * arrows field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.arrows
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  arrows: prismic.SelectField<"on" | "off">;
+
+  /**
+   * dots field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.dots
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  dots: prismic.SelectField<"on" | "off">;
+
+  /**
+   * dots_position field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.dots_position
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  dots_position: prismic.KeyTextField;
+
+  /**
+   * autoplay field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.autoplay
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  autoplay: prismic.SelectField<"off" | "on">;
+
+  /**
+   * transition field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.transition
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  transition: prismic.KeyTextField;
+
+  /**
+   * transition_speed field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.transition_speed
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  transition_speed: prismic.NumberField;
+
+  /**
+   * cells field in *BluxCarousel → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  cells: prismic.GroupField<Simplify<BluxCarouselSliceDefaultPrimaryCellsItem>>;
+}
+
+/**
+ * Default variation for BluxCarousel Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Grid
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxCarouselSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BluxCarouselSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BluxCarousel*
+ */
+type BluxCarouselSliceVariation = BluxCarouselSliceDefault;
+
+/**
+ * BluxCarousel Shared Slice
+ *
+ * - **API ID**: `blux_carousel`
+ * - **Description**: Blux catalog: a slides/carousel of cells.
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxCarouselSlice = prismic.SharedSlice<
+  "blux_carousel",
+  BluxCarouselSliceVariation
+>;
+
+/**
  * Item in *BluxGallery → Default → Primary → cells → subgrid*
  */
 export interface BluxGallerySliceDefaultPrimaryCellsSubgridItem {
@@ -2704,6 +3091,12 @@ declare module "@prismicio/client" {
       BluxBlockSliceDefaultPrimary,
       BluxBlockSliceVariation,
       BluxBlockSliceDefault,
+      BluxCarouselSlice,
+      BluxCarouselSliceDefaultPrimaryCellsSubgridItem,
+      BluxCarouselSliceDefaultPrimaryCellsItem,
+      BluxCarouselSliceDefaultPrimary,
+      BluxCarouselSliceVariation,
+      BluxCarouselSliceDefault,
       BluxGallerySlice,
       BluxGallerySliceDefaultPrimaryCellsSubgridItem,
       BluxGallerySliceDefaultPrimaryCellsItem,
