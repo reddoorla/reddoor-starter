@@ -1,17 +1,12 @@
 <script lang="ts">
-  import {
-    PrismicImage,
-    PrismicLink,
-    PrismicRichText,
-  } from "@prismicio/svelte";
+  import { PrismicImage, PrismicRichText } from "@prismicio/svelte";
   import { isFilled, type Content } from "@prismicio/client";
+  import BluxCell from "$lib/blux-catalog/BluxCell.svelte";
+  import type { BluxCellData } from "$lib/blux-catalog/cell";
 
   let { slice }: { slice: Content.BluxSectionSlice } = $props();
 
   type Cell = Content.BluxSectionSliceDefaultPrimaryCellsItem;
-  type LeafCell =
-    | Content.BluxSectionSliceDefaultPrimaryCellsItem
-    | Content.BluxSectionSliceDefaultPrimaryCellsSubgridItem;
   let cells = $derived((slice.primary.cells ?? []) as Cell[]);
 
   let bandStyle = $derived(
@@ -27,23 +22,6 @@
       .join(";"),
   );
 </script>
-
-{#snippet cellLeaf(cell: LeafCell)}
-  {#if isFilled.image(cell.media)}
-    <div class="blux-cell__media" data-ratio={cell.media_ratio}>
-      <PrismicImage field={cell.media} />
-    </div>
-  {/if}
-  {#if isFilled.richText(cell.title)}<PrismicRichText field={cell.title} />{/if}
-  {#if isFilled.richText(cell.body)}<PrismicRichText field={cell.body} />{/if}
-  {#if isFilled.keyText(cell.embed_html)}
-    <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted Blux migration HTML (widget/embed), sanitized at the Emit stage (spec §6) -->
-    {@html cell.embed_html}
-  {/if}
-  {#if isFilled.link(cell.link)}<PrismicLink field={cell.link}
-      >{cell.link_label || "Read more"}</PrismicLink
-    >{/if}
-{/snippet}
 
 <section
   class="blux-section"
@@ -68,19 +46,7 @@
     data-max-width={slice.primary.max_content_width}
   >
     {#each cells as cell (cell)}
-      <div class="blux-cell" data-kind={cell.kind}>
-        {@render cellLeaf(cell)}
-
-        {#if (cell.subgrid ?? []).length}
-          <div class="blux-subgrid" data-cells={cell.subgrid?.length}>
-            {#each cell.subgrid ?? [] as sub (sub)}
-              <div class="blux-cell" data-kind={sub.kind}>
-                {@render cellLeaf(sub)}
-              </div>
-            {/each}
-          </div>
-        {/if}
-      </div>
+      <BluxCell cell={cell as unknown as BluxCellData} />
     {/each}
   </div>
 
