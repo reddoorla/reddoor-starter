@@ -20,8 +20,11 @@
       loading="lazy"
     />
   {/if}
-  {#if node.html}{@html node.html}{/if}
-  {#each node.children ?? [] as child}
+  {#if node.html}
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted Blux migration HTML (fallback leaf), sanitized at the Emit stage (spec §6) -->
+    {@html node.html}
+  {/if}
+  {#each node.children ?? [] as child (child)}
     <Self node={child} />
   {/each}
 </svelte:element>

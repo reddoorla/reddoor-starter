@@ -22,7 +22,7 @@
     />{/if}
   {#if buttons.length}
     <div class="blux-text__buttons">
-      {#each buttons as b}
+      {#each buttons as b (b)}
         {#if isFilled.link(b.link)}<PrismicLink
             field={b.link}
             class="blux-button">{b.label ?? "Learn more"}</PrismicLink

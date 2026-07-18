@@ -36,7 +36,10 @@
   {/if}
   {#if isFilled.richText(cell.title)}<PrismicRichText field={cell.title} />{/if}
   {#if isFilled.richText(cell.body)}<PrismicRichText field={cell.body} />{/if}
-  {#if isFilled.keyText(cell.embed_html)}{@html cell.embed_html}{/if}
+  {#if isFilled.keyText(cell.embed_html)}
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted Blux migration HTML (widget/embed), sanitized at the Emit stage (spec §6) -->
+    {@html cell.embed_html}
+  {/if}
   {#if isFilled.link(cell.link)}<PrismicLink field={cell.link}
       >{cell.link_label ?? "Read more"}</PrismicLink
     >{/if}
@@ -64,13 +67,13 @@
     data-align={slice.primary.vertical_align}
     data-max-width={slice.primary.max_content_width}
   >
-    {#each cells as cell}
+    {#each cells as cell (cell)}
       <div class="blux-cell" data-kind={cell.kind}>
         {@render cellLeaf(cell)}
 
         {#if (cell.subgrid ?? []).length}
           <div class="blux-subgrid" data-cells={cell.subgrid?.length}>
-            {#each cell.subgrid ?? [] as sub}
+            {#each cell.subgrid ?? [] as sub (sub)}
               <div class="blux-cell" data-kind={sub.kind}>
                 {@render cellLeaf(sub)}
               </div>
@@ -83,6 +86,7 @@
 
   {#if isFilled.keyText(slice.primary.widget_html)}
     <div class="blux-widget" data-widget={slice.primary.widget_kind}>
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted Blux migration HTML (widget/embed), sanitized at the Emit stage (spec §6) -->
       {@html slice.primary.widget_html}
     </div>
   {/if}
