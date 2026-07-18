@@ -25,7 +25,7 @@
       {#each buttons as b (b)}
         {#if isFilled.link(b.link)}<PrismicLink
             field={b.link}
-            class="blux-button">{b.label ?? "Learn more"}</PrismicLink
+            class="blux-button">{b.label || "Learn more"}</PrismicLink
           >{/if}
       {/each}
     </div>

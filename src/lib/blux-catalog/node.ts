@@ -1,3 +1,8 @@
+// `src/lib/blux-catalog/` is the NEW ground-up Blux catalog content model
+// (spec 2026-07-17). It is distinct from the legacy `src/lib/blux/` band/
+// presentation module, which is slated for retirement (spec §9) — edit the
+// right one.
+
 /** The fallback tree a BluxBlock slice carries as stringified JSON in its
  * `payload` field. Renders any depth via BluxNode.svelte. Structure/media are
  * preserved; assets are Prismic asset URLs rewritten by Emit (see spec §6). */

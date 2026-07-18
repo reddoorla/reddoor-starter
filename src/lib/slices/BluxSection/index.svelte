@@ -41,7 +41,7 @@
     {@html cell.embed_html}
   {/if}
   {#if isFilled.link(cell.link)}<PrismicLink field={cell.link}
-      >{cell.link_label ?? "Read more"}</PrismicLink
+      >{cell.link_label || "Read more"}</PrismicLink
     >{/if}
 {/snippet}
 
