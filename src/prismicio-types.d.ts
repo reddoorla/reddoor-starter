@@ -2114,6 +2114,61 @@ export type BluxSectionSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *BluxTable → Default → Primary*
+ */
+export interface BluxTableSliceDefaultPrimary {
+  /**
+   * caption field in *BluxTable → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_table.default.primary.caption
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  caption: prismic.RichTextField;
+
+  /**
+   * table_html field in *BluxTable → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_table.default.primary.table_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  table_html: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for BluxTable Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Table
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxTableSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BluxTableSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BluxTable*
+ */
+type BluxTableSliceVariation = BluxTableSliceDefault;
+
+/**
+ * BluxTable Shared Slice
+ *
+ * - **API ID**: `blux_table`
+ * - **Description**: Blux catalog: a tabular embed (raw table HTML).
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxTableSlice = prismic.SharedSlice<
+  "blux_table",
+  BluxTableSliceVariation
+>;
+
+/**
  * Item in *BluxText → Default → Primary → buttons*
  */
 export interface BluxTextSliceDefaultPrimaryButtonsItem {
@@ -3392,6 +3447,10 @@ declare module "@prismicio/client" {
       BluxSectionSliceDefaultPrimary,
       BluxSectionSliceVariation,
       BluxSectionSliceDefault,
+      BluxTableSlice,
+      BluxTableSliceDefaultPrimary,
+      BluxTableSliceVariation,
+      BluxTableSliceDefault,
       BluxTextSlice,
       BluxTextSliceDefaultPrimaryButtonsItem,
       BluxTextSliceDefaultPrimary,
