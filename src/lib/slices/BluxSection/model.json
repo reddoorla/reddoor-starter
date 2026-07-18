@@ -49,11 +49,7 @@
           "type": "Select",
           "config": {
             "label": "vertical_align",
-            "options": [
-              "top",
-              "middle",
-              "bottom"
-            ]
+            "options": ["top", "middle", "bottom"]
           }
         },
         "min_height": {
@@ -83,13 +79,7 @@
                 "type": "Select",
                 "config": {
                   "label": "kind",
-                  "options": [
-                    "text",
-                    "media",
-                    "embed",
-                    "button",
-                    "subgrid"
-                  ]
+                  "options": ["text", "media", "embed", "button", "subgrid"]
                 }
               },
               "title": {
@@ -148,11 +138,7 @@
                       "type": "Select",
                       "config": {
                         "label": "kind",
-                        "options": [
-                          "text",
-                          "media",
-                          "embed"
-                        ]
+                        "options": ["text", "media", "embed"]
                       }
                     },
                     "title": {

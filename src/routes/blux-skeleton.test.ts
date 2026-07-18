@@ -15,17 +15,28 @@ const slices = [
       cells: [{ kind: "text", title: rt("heading3", "Pool"), subgrid: [] }],
     },
   },
-  { slice_type: "blux_text", variation: "default", primary: { title: rt("heading2", "Welcome"), buttons: [] } },
+  {
+    slice_type: "blux_text",
+    variation: "default",
+    primary: { title: rt("heading2", "Welcome"), buttons: [] },
+  },
   {
     slice_type: "blux_block",
     variation: "default",
-    primary: { payload: JSON.stringify({ tag: "div", children: [{ html: "<p>Fallback content</p>" }] }) },
+    primary: {
+      payload: JSON.stringify({
+        tag: "div",
+        children: [{ html: "<p>Fallback content</p>" }],
+      }),
+    },
   },
 ];
 
 describe("Blux catalog walking skeleton", () => {
   it("renders container, leaf, and fallback slices through the shared SliceZone", () => {
-    const { getByText } = render(SliceZone, { props: { slices: slices as never, components } });
+    const { getByText } = render(SliceZone, {
+      props: { slices: slices as never, components },
+    });
     expect(getByText("Amenities")).not.toBeNull();
     expect(getByText("Pool")).not.toBeNull();
     expect(getByText("Welcome")).not.toBeNull();

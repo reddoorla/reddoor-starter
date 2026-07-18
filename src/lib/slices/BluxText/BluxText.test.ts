@@ -13,7 +13,12 @@ const slice = {
   primary: {
     title: rt("heading2", "Welcome"),
     body: rt("paragraph", "Ground-floor retail."),
-    buttons: [{ label: "Contact", link: { link_type: "Web", url: "https://example.com" } }],
+    buttons: [
+      {
+        label: "Contact",
+        link: { link_type: "Web", url: "https://example.com" },
+      },
+    ],
   },
 } as unknown as Content.BluxTextSlice;
 
@@ -26,6 +31,8 @@ describe("BluxText slice", () => {
 
   it("renders a button when the link is filled", () => {
     const { getByText } = render(BluxText, { props: { slice } });
-    expect(getByText("Contact").closest("a")?.getAttribute("href")).toBe("https://example.com");
+    expect(getByText("Contact").closest("a")?.getAttribute("href")).toBe(
+      "https://example.com",
+    );
   });
 });
