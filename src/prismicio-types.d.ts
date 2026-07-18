@@ -1532,6 +1532,111 @@ export type BluxGridSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *BluxMedia → Default → Primary*
+ */
+export interface BluxMediaSliceDefaultPrimary {
+  /**
+   * media field in *BluxMedia → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media.default.primary.media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * video_embed (raw html for video/youtube/vimeo) field in *BluxMedia → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media.default.primary.video_embed
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  video_embed: prismic.KeyTextField;
+
+  /**
+   * ratio field in *BluxMedia → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media.default.primary.ratio
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  ratio: prismic.KeyTextField;
+
+  /**
+   * crop field in *BluxMedia → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media.default.primary.crop
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  crop: prismic.KeyTextField;
+
+  /**
+   * caption field in *BluxMedia → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media.default.primary.caption
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  caption: prismic.RichTextField;
+
+  /**
+   * link field in *BluxMedia → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media.default.primary.link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * link_label field in *BluxMedia → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media.default.primary.link_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  link_label: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for BluxMedia Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Media
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxMediaSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BluxMediaSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BluxMedia*
+ */
+type BluxMediaSliceVariation = BluxMediaSliceDefault;
+
+/**
+ * BluxMedia Shared Slice
+ *
+ * - **API ID**: `blux_media`
+ * - **Description**: Blux catalog: a single media leaf — image, or a video/embed via raw HTML — with ratio/crop, caption, and an optional link.
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxMediaSlice = prismic.SharedSlice<
+  "blux_media",
+  BluxMediaSliceVariation
+>;
+
+/**
  * Item in *BluxSection → Default → Primary → cells → subgrid*
  */
 export interface BluxSectionSliceDefaultPrimaryCellsSubgridItem {
@@ -3109,6 +3214,10 @@ declare module "@prismicio/client" {
       BluxGridSliceDefaultPrimary,
       BluxGridSliceVariation,
       BluxGridSliceDefault,
+      BluxMediaSlice,
+      BluxMediaSliceDefaultPrimary,
+      BluxMediaSliceVariation,
+      BluxMediaSliceDefault,
       BluxSectionSlice,
       BluxSectionSliceDefaultPrimaryCellsSubgridItem,
       BluxSectionSliceDefaultPrimaryCellsItem,
