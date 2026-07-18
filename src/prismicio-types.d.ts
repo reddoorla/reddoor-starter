@@ -1637,6 +1637,111 @@ export type BluxMediaSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *BluxMediaText → Default → Primary*
+ */
+export interface BluxMediaTextSliceDefaultPrimary {
+  /**
+   * media field in *BluxMediaText → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media_text.default.primary.media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * media_side field in *BluxMediaText → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media_text.default.primary.media_side
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  media_side: prismic.SelectField<"left" | "right">;
+
+  /**
+   * layout_ratio (media % width) field in *BluxMediaText → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: 50
+   * - **API ID Path**: blux_media_text.default.primary.layout_ratio
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  layout_ratio: prismic.NumberField;
+
+  /**
+   * title field in *BluxMediaText → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media_text.default.primary.title
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *BluxMediaText → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media_text.default.primary.body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * link field in *BluxMediaText → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media_text.default.primary.link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * link_label field in *BluxMediaText → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media_text.default.primary.link_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  link_label: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for BluxMediaText Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: MediaText
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxMediaTextSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BluxMediaTextSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BluxMediaText*
+ */
+type BluxMediaTextSliceVariation = BluxMediaTextSliceDefault;
+
+/**
+ * BluxMediaText Shared Slice
+ *
+ * - **API ID**: `blux_media_text`
+ * - **Description**: Blux catalog: two-column media + text.
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxMediaTextSlice = prismic.SharedSlice<
+  "blux_media_text",
+  BluxMediaTextSliceVariation
+>;
+
+/**
  * Item in *BluxSection → Default → Primary → cells → subgrid*
  */
 export interface BluxSectionSliceDefaultPrimaryCellsSubgridItem {
@@ -3218,6 +3323,10 @@ declare module "@prismicio/client" {
       BluxMediaSliceDefaultPrimary,
       BluxMediaSliceVariation,
       BluxMediaSliceDefault,
+      BluxMediaTextSlice,
+      BluxMediaTextSliceDefaultPrimary,
+      BluxMediaTextSliceVariation,
+      BluxMediaTextSliceDefault,
       BluxSectionSlice,
       BluxSectionSliceDefaultPrimaryCellsSubgridItem,
       BluxSectionSliceDefaultPrimaryCellsItem,

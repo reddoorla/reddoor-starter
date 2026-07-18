@@ -1,0 +1,68 @@
+{
+  "id": "blux_media_text",
+  "type": "SharedSlice",
+  "name": "BluxMediaText",
+  "description": "Blux catalog: two-column media + text.",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "MediaText",
+      "imageUrl": "",
+      "primary": {
+        "media": {
+          "type": "Image",
+          "config": {
+            "label": "media",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "media_side": {
+          "type": "Select",
+          "config": {
+            "label": "media_side",
+            "options": ["left", "right"]
+          }
+        },
+        "layout_ratio": {
+          "type": "Number",
+          "config": {
+            "label": "layout_ratio (media % width)",
+            "placeholder": "50"
+          }
+        },
+        "title": {
+          "type": "StructuredText",
+          "config": {
+            "label": "title",
+            "single": "heading2,heading3"
+          }
+        },
+        "body": {
+          "type": "StructuredText",
+          "config": {
+            "label": "body",
+            "multi": "paragraph,strong,em,hyperlink,list-item"
+          }
+        },
+        "link": {
+          "type": "Link",
+          "config": {
+            "label": "link",
+            "allowTargetBlank": true
+          }
+        },
+        "link_label": {
+          "type": "Text",
+          "config": {
+            "label": "link_label"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}
