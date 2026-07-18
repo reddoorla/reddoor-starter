@@ -1148,9 +1148,19 @@ git commit -m "docs(blux): mark Phase 0 + Phase-1 skeleton complete"
 - The route-level skeleton test proves all three render through the shared `SliceZone`/`components`.
 - `pnpm run check && pnpm run lint && pnpm run test:unit && pnpm run build` all pass.
 
+## Pre-freeze decisions from the final review (resolve before Plan 2 builds on the contract)
+
+The whole-implementation review confirmed a sound, freezable foundation (no Critical issues). These contract decisions are cheap now, expensive after Plan 2 copies the pattern 8×:
+
+1. **Widget-on-leaf policy — NEEDS A CALL (surfaced to Tucker).** Spec §6/§7 say a `widget` (custom HTML) may ride on _any_ slice, but only `BluxSection` carries `widget_kind`/`widget_html`; `BluxText` doesn't — so a text band that also has a widget would lose it. Two resolutions: **(A)** add `widget_kind`/`widget_html` to every leaf slice (spec-faithful 1:1 band→slice, but widget-field proliferation), or **(B)** amend §6/§7 so widgets are container-level and a widget-bearing band classifies as `BluxSection` (no proliferation, slight doc inflation). Pick before Plan 2 authors the other leaf slices.
+2. **Extract the shared cell renderer as Plan 2 Task 0.** The `cellLeaf` snippet + subgrid loop currently live inside `BluxSection/index.svelte`. Before the 8 container slices exist, promote a hand-written `BluxCell` interface + `BluxCell.svelte` into `src/lib/blux-catalog/` (mirroring the `node.ts`/`BluxNode.svelte` pattern) so all container slices map their generated cell-item type onto one shared renderer instead of duplicating it. The per-slice `model.json` `cells`/`subgrid` field-set is unavoidably re-declared (Prismic has no include), so treat `BluxSection`'s as the canonical copy-from source.
+3. **Token reconciled:** cell `kind` is `button` (singular) in both spec and model (was `button-group` in the spec) — a cell holds a single `link`+`link_label`. Documented as a conscious reduction (spec §6).
+4. **Documented cell reductions** (vs. the leaf/spec richness, intentional for the reduced cell form): cell `body` omits `o-list-item`; cell `media` is Image-only (no `crop`/`caption`/video — rich media routes through `embed_html`). Plan 2's Gallery/Grid can enrich the shared cell if a real case appears.
+5. **Skeleton test is registration-wiring, not route-load.** `src/routes/blux-skeleton.test.ts` drives `SliceZone`+`components` directly (no `+page.svelte`/`load`). Plan 2 should not rely on it for route coverage.
+
 ## What Plan 2 covers (not this plan)
 
-The remaining catalog slices (Grid, Gallery, Carousel, Collection, Media, MediaText, Embed, Table), built on the cell model this plan proves; the entity custom types (`product`, `person`, `event`, `news_article`, `project`) as `collection_item` + feed-derived extensions. Then Plans 3–4 (`reddoor-maintenance`): the IR/plan contract types, Extract (site.json→IR), Classify (IR→plan), Emit (plan→Prismic docs + asset index + feed materialization), reusing `feed-grid.ts`'s `tagFilter`, `run-migration.ts`, and `products.ts`; Plan 5: the-pointe fidelity gate + rollout.
+The remaining catalog slices (Grid, Gallery, Carousel, Collection, Media, MediaText, Embed, Table), built on the cell model this plan proves (Task 0 = extract the shared `BluxCell`, per decision 2 above); the entity custom types (`product`, `person`, `event`, `news_article`, `project`) as `collection_item` + feed-derived extensions. Then Plans 3–4 (`reddoor-maintenance`): the IR/plan contract types, Extract (site.json→IR), Classify (IR→plan), Emit (plan→Prismic docs + asset index + feed materialization), reusing `feed-grid.ts`'s `tagFilter`, `run-migration.ts`, and `products.ts`; Plan 5: the-pointe fidelity gate + rollout.
 
 ```
 

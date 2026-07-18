@@ -170,7 +170,7 @@ Extract parses `site.json` into a normalized block tree. Representative node (th
 **Cell model & the nesting ceiling.** Prismic (`@prismicio/client` 7.21, verified) supports **exactly one** level of group nesting: a `GroupField` may contain a `NestedGroupField`, but a `NestedGroupField` contains regular fields only. So the model is:
 
 - container slice `primary` holds a **Group** `cells`;
-- each cell is a **homogeneous group row** with a `kind` discriminator (`text | media | embed | button-group | subgrid`) plus the union of all cell fields (a tagged-union is not available — this is one wide field set gated by `kind`);
+- each cell is a **homogeneous group row** with a `kind` discriminator (`text | media | embed | button | subgrid`) plus the union of all cell fields (a tagged-union is not available — this is one wide field set gated by `kind`). A cell carries a single `link`+`link_label` (not a multi-button group) — a conscious reduction from the leaf `buttons` group; enrich in a later plan only if a real multi-button cell appears;
 - a `kind=subgrid` cell holds a **NestedGroup** of leaf cells — **this saturates the nesting ceiling**. A cell needing to nest deeper escalates the **whole band** to `BluxBlock`. The depth-2 native ceiling and Prismic's one-level limit coincide exactly.
 
 This requires **groups-in-`primary` (modern Slice Machine modeling)**, which the current starter slices (flat `items` zone) have never used — a Phase-1 spike gate (§10, §11).
@@ -192,7 +192,7 @@ One ordered decision tree per band, **first match wins**, run on the _normalized
 
 The block's `widget` (custom HTML) rides along on whatever slice rules 1–7 select; it never _captures_ the block.
 
-**Cell decomposition** maps each child block by a reduced form of the same tree (`text/media/embed/button-group`); a `type=grid` child under a container becomes a `subgrid` cell (one level).
+**Cell decomposition** maps each child block by a reduced form of the same tree (`text/media/embed/button`); a `type=grid` child under a container becomes a `subgrid` cell (one level).
 
 **Determinism (confidence/LLM cut from initial scope).** The tree is a pure first-match function that always resolves; the trial fired zero unknowns. Rather than build an undefined confidence score, the initial pipeline emits every non-catalog band as **`BluxBlock`** and lists it in `review-report.json` (with the reason: depth-≥3, unresolved media, unknown style utility, colspan-seen, or `table`-without-slice). An LLM tiebreak is an **explicit future option**, gated behind a config flag, **not built now**.
 
