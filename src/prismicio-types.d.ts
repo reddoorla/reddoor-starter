@@ -421,6 +421,363 @@ export type BluxBlockSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Item in *BluxGallery → Default → Primary → cells → subgrid*
+ */
+export interface BluxGallerySliceDefaultPrimaryCellsSubgridItem {
+  /**
+   * kind field in *BluxGallery → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].kind
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  kind: prismic.SelectField<"text" | "media" | "embed">;
+
+  /**
+   * title field in *BluxGallery → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].title
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *BluxGallery → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *BluxGallery → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * media_ratio field in *BluxGallery → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].media_ratio
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  media_ratio: prismic.KeyTextField;
+
+  /**
+   * link field in *BluxGallery → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * link_label field in *BluxGallery → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].link_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  link_label: prismic.KeyTextField;
+
+  /**
+   * embed_html field in *BluxGallery → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].embed_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  embed_html: prismic.KeyTextField;
+}
+
+/**
+ * Item in *BluxGallery → Default → Primary → cells*
+ */
+export interface BluxGallerySliceDefaultPrimaryCellsItem {
+  /**
+   * kind field in *BluxGallery → Default → Primary → cells*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].kind
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  kind: prismic.SelectField<"text" | "media" | "embed" | "button" | "subgrid">;
+
+  /**
+   * title field in *BluxGallery → Default → Primary → cells*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].title
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  title: prismic.RichTextField;
+
+  /**
+   * body field in *BluxGallery → Default → Primary → cells*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].body
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  body: prismic.RichTextField;
+
+  /**
+   * media field in *BluxGallery → Default → Primary → cells*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].media
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  media: prismic.ImageField<never>;
+
+  /**
+   * media_ratio field in *BluxGallery → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].media_ratio
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  media_ratio: prismic.KeyTextField;
+
+  /**
+   * link field in *BluxGallery → Default → Primary → cells*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].link
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * link_label field in *BluxGallery → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].link_label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  link_label: prismic.KeyTextField;
+
+  /**
+   * embed_html field in *BluxGallery → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].embed_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  embed_html: prismic.KeyTextField;
+
+  /**
+   * subgrid field in *BluxGallery → Default → Primary → cells*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  subgrid: prismic.NestedGroupField<
+    Simplify<BluxGallerySliceDefaultPrimaryCellsSubgridItem>
+  >;
+}
+
+/**
+ * Primary content in *BluxGallery → Default → Primary*
+ */
+export interface BluxGallerySliceDefaultPrimary {
+  /**
+   * heading field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * background_image field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.background_image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  background_image: prismic.ImageField<never>;
+
+  /**
+   * background_color field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.background_color
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  background_color: prismic.KeyTextField;
+
+  /**
+   * overlay field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.overlay
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  overlay: prismic.KeyTextField;
+
+  /**
+   * max_content_width field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.max_content_width
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  max_content_width: prismic.KeyTextField;
+
+  /**
+   * vertical_align field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.vertical_align
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  vertical_align: prismic.SelectField<"top" | "middle" | "bottom">;
+
+  /**
+   * min_height field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.min_height
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  min_height: prismic.KeyTextField;
+
+  /**
+   * widget_kind field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.widget_kind
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  widget_kind: prismic.KeyTextField;
+
+  /**
+   * widget_html field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.widget_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  widget_html: prismic.KeyTextField;
+
+  /**
+   * columns field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: 3
+   * - **API ID Path**: blux_gallery.default.primary.columns
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  columns: prismic.NumberField;
+
+  /**
+   * spacing field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.spacing
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  spacing: prismic.NumberField;
+
+  /**
+   * masonry field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.masonry
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  masonry: prismic.SelectField<"off" | "on">;
+
+  /**
+   * ratio (e.g. 4:3) field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.ratio
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  ratio: prismic.KeyTextField;
+
+  /**
+   * cells field in *BluxGallery → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[]
+   * - **Documentation**: https://prismic.io/docs/fields/repeatable-group
+   */
+  cells: prismic.GroupField<Simplify<BluxGallerySliceDefaultPrimaryCellsItem>>;
+}
+
+/**
+ * Default variation for BluxGallery Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Grid
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxGallerySliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BluxGallerySliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BluxGallery*
+ */
+type BluxGallerySliceVariation = BluxGallerySliceDefault;
+
+/**
+ * BluxGallery Shared Slice
+ *
+ * - **API ID**: `blux_gallery`
+ * - **Description**: Blux catalog: a media grid/masonry of cells.
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxGallerySlice = prismic.SharedSlice<
+  "blux_gallery",
+  BluxGallerySliceVariation
+>;
+
+/**
  * Item in *BluxGrid → Default → Primary → cells → subgrid*
  */
 export interface BluxGridSliceDefaultPrimaryCellsSubgridItem {
@@ -2347,6 +2704,12 @@ declare module "@prismicio/client" {
       BluxBlockSliceDefaultPrimary,
       BluxBlockSliceVariation,
       BluxBlockSliceDefault,
+      BluxGallerySlice,
+      BluxGallerySliceDefaultPrimaryCellsSubgridItem,
+      BluxGallerySliceDefaultPrimaryCellsItem,
+      BluxGallerySliceDefaultPrimary,
+      BluxGallerySliceVariation,
+      BluxGallerySliceDefault,
       BluxGridSlice,
       BluxGridSliceDefaultPrimaryCellsSubgridItem,
       BluxGridSliceDefaultPrimaryCellsItem,
