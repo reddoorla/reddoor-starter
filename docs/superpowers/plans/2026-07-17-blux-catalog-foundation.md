@@ -14,8 +14,8 @@
 
 ## Scope & context (read before starting)
 
-- **This is Plan 1 of a multi-plan project.** It covers spec Phase 0 (freeze the content-model contract — in this repo the Prismic slice models *are* the contract; Slice Machine generates `src/prismicio-types.d.ts` from them) and the Phase-1 nesting spike + a walking skeleton. **Out of scope here:** the remaining 8 catalog slices (Grid, Gallery, Carousel, Collection, Media, MediaText, Embed, Table — Plan 2), the CLI Extract/Classify/Emit stages (Plans 3–4, `reddoor-maintenance`), the `Render` of the full catalog, and migration.
-- **Namespacing.** Catalog slices use `blux_*` slice IDs and `Blux*` directories so they never collide with the general slices (Accordion, RichText, …) that `new-site` builds use. They are added as *additional* choices on the existing `page` custom type; general sites simply don't use them.
+- **This is Plan 1 of a multi-plan project.** It covers spec Phase 0 (freeze the content-model contract — in this repo the Prismic slice models _are_ the contract; Slice Machine generates `src/prismicio-types.d.ts` from them) and the Phase-1 nesting spike + a walking skeleton. **Out of scope here:** the remaining 8 catalog slices (Grid, Gallery, Carousel, Collection, Media, MediaText, Embed, Table — Plan 2), the CLI Extract/Classify/Emit stages (Plans 3–4, `reddoor-maintenance`), the `Render` of the full catalog, and migration.
+- **Namespacing.** Catalog slices use `blux_*` slice IDs and `Blux*` directories so they never collide with the general slices (Accordion, RichText, …) that `new-site` builds use. They are added as _additional_ choices on the existing `page` custom type; general sites simply don't use them.
 - **Repo patterns (verified) you MUST follow:**
   - Slice model: `src/lib/slices/<Name>/model.json`, a `SharedSlice` with `variations[]`; repeatable content historically lives in the flat top-level `items{}` map. **This plan deliberately introduces the modern `Group`-in-`primary` pattern** (no in-repo precedent — that is what Task 1 de-risks).
   - Component: `src/lib/slices/<Name>/index.svelte`, Svelte 5 runes: `let { slice }: { slice: Content.<Name>Slice } = $props();`, types from `import { isFilled, type Content } from "@prismicio/client"`.
@@ -39,9 +39,46 @@
 
 ---
 
+## Spike result (Task 1 — RESOLVED 2026-07-17)
+
+**Decision: NATIVE nested groups.** A `Group` in `primary` containing a nested `Group` generates correct types — the nested group is typed `prismic.NestedGroupField<Simplify<…SubgridItem>>` and the outer as `prismic.GroupField<Simplify<…CellsItem>>`. `pnpm run check` passes clean. Tasks 2–6 proceed on the native path (no serialized-cell fallback).
+
+**Codegen command (reuse for every model change).** `svelte-kit sync` / `vite build` / `start-slicemachine` do NOT regenerate types headlessly. Drive the Slice Machine manager's `slice:update` hook via this Node script (`scratchpad/regen-types.mjs`), invoked from repo root as `node <script> "$PWD" "./src/lib/slices" "src/lib/slices/<Name>/model.json"` — `updateSlice` re-reads ALL models and rewrites `src/prismicio-types.d.ts`:
+
+```js
+import { readFileSync, readdirSync } from "node:fs";
+import path from "node:path";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
+const [, , repoRoot, libraryID, modelPath] = process.argv;
+const pnpmDir = path.join(repoRoot, "node_modules/.pnpm");
+const managerPkg = readdirSync(pnpmDir).find((d) =>
+  d.startsWith("@slicemachine+manager@"),
+);
+const entry = path.join(
+  pnpmDir,
+  managerPkg,
+  "node_modules/@slicemachine/manager/dist/index.cjs",
+);
+const { createSliceMachineManager } = require(entry);
+const model = JSON.parse(readFileSync(modelPath, "utf8"));
+const manager = createSliceMachineManager();
+await manager.plugins.initPlugins();
+await manager.slices.updateSlice({ libraryID, model });
+```
+
+**Gotchas threaded into later tasks:**
+
+- **Dir name must equal the model `name`** (PascalCase). The manager writes the slice to `<lib>/<name>/`; our dirs (`BluxSection`, `BluxText`, `BluxBlock`) already match their `name`, so no duplicate dir is created.
+- **`updateSlice` does NOT touch `src/lib/slices/index.js`.** Slice _types_ regenerate (enough for Tasks 3–6 components), but the runtime `components` map is populated in Task 8 (registration). If the manager won't add it headlessly, hand-edit `index.js` (trivial import + map entry).
+- **One-time normalization:** the first regen reformats `src/prismicio-types.d.ts` from 266 → ~1651 lines (codegen-version bump adding `NestedGroupField` + CR fetch helpers). Task 2 lands this normalization as its OWN commit before the BluxSection feature commit.
+
+---
+
 ### Task 1: Nesting spike — prove (or refute) native nested Groups + establish the codegen command
 
 **Files:**
+
 - Create (temporary): `src/lib/slices/_spike_group/model.json`
 - Inspect (generated): `src/prismicio-types.d.ts`, `src/lib/slices/index.js`
 
@@ -71,14 +108,23 @@ Create `src/lib/slices/_spike_group/model.json`:
           "config": {
             "label": "cells",
             "fields": {
-              "kind": { "type": "Select", "config": { "label": "kind", "options": ["text", "subgrid"] } },
-              "title": { "type": "StructuredText", "config": { "label": "title", "single": "heading3" } },
+              "kind": {
+                "type": "Select",
+                "config": { "label": "kind", "options": ["text", "subgrid"] }
+              },
+              "title": {
+                "type": "StructuredText",
+                "config": { "label": "title", "single": "heading3" }
+              },
               "subgrid": {
                 "type": "Group",
                 "config": {
                   "label": "subgrid",
                   "fields": {
-                    "title": { "type": "StructuredText", "config": { "label": "title", "single": "heading4" } }
+                    "title": {
+                      "type": "StructuredText",
+                      "config": { "label": "title", "single": "heading4" }
+                    }
                   }
                 }
               }
@@ -104,11 +150,12 @@ Expected: one of these regenerates `src/prismicio-types.d.ts` and `src/lib/slice
 
 Run: `grep -A30 "SpikeGroup" src/prismicio-types.d.ts`
 
-Expected (PASS): a `SpikeGroupSliceDefaultPrimaryCellsItem` interface with a `subgrid: prismic.GroupField<...>` property (a `GroupField` typed *inside* the cells item), and `cells: prismic.GroupField<Simplify<SpikeGroupSliceDefaultPrimaryCellsItem>>` on `SpikeGroupSliceDefaultPrimary`.
+Expected (PASS): a `SpikeGroupSliceDefaultPrimaryCellsItem` interface with a `subgrid: prismic.GroupField<...>` property (a `GroupField` typed _inside_ the cells item), and `cells: prismic.GroupField<Simplify<SpikeGroupSliceDefaultPrimaryCellsItem>>` on `SpikeGroupSliceDefaultPrimary`.
 
 - [ ] **Step 4: Record the decision**
 
 Add a short note to the top of this plan file under a new `## Spike result` heading:
+
 - **If the nested `GroupField` type is present:** decision = **native nested groups**. Tasks 2–6 proceed as written.
 - **If codegen errors, flattens the nested group, or drops it:** decision = **serialized-cell fallback** — a cell's `subgrid` becomes a `Text` field holding stringified JSON, rendered by the same `BluxNode.svelte` recursive renderer from Task 6. Update Task 2's model (replace the `subgrid` Group with `"subgrid": { "type": "Text", "config": { "label": "subgrid (serialized)" } }`) and Task 3 to `JSON.parse` it. **Stop and report this branch to the reviewer before continuing.**
 
@@ -129,10 +176,11 @@ git commit -m "spike(blux): verify Prismic nested-group cell modeling + codegen 
 ### Task 2: BluxSection — container slice model
 
 **Files:**
+
 - Create: `src/lib/slices/BluxSection/model.json`
 - Regenerate: `src/prismicio-types.d.ts`, `src/lib/slices/index.js` (via the Task-1 command)
 
-**Note:** the `subgrid` field below assumes the Task-1 decision was *native nested groups*. If it was *serialized-cell fallback*, replace the `subgrid` Group with `{ "type": "Text", "config": { "label": "subgrid (serialized JSON)" } }`.
+**Note:** the `subgrid` field below assumes the Task-1 decision was _native nested groups_. If it was _serialized-cell fallback_, replace the `subgrid` Group with `{ "type": "Text", "config": { "label": "subgrid (serialized JSON)" } }`.
 
 - [ ] **Step 1: Author the model**
 
@@ -153,12 +201,34 @@ Create `src/lib/slices/BluxSection/model.json`:
       "description": "Section with cells",
       "imageUrl": "",
       "primary": {
-        "heading": { "type": "StructuredText", "config": { "label": "heading", "single": "heading2,heading3" } },
-        "background_image": { "type": "Image", "config": { "label": "background_image", "constraint": {}, "thumbnails": [] } },
-        "background_color": { "type": "Text", "config": { "label": "background_color" } },
+        "heading": {
+          "type": "StructuredText",
+          "config": { "label": "heading", "single": "heading2,heading3" }
+        },
+        "background_image": {
+          "type": "Image",
+          "config": {
+            "label": "background_image",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "background_color": {
+          "type": "Text",
+          "config": { "label": "background_color" }
+        },
         "overlay": { "type": "Text", "config": { "label": "overlay" } },
-        "max_content_width": { "type": "Text", "config": { "label": "max_content_width" } },
-        "vertical_align": { "type": "Select", "config": { "label": "vertical_align", "options": ["top", "middle", "bottom"] } },
+        "max_content_width": {
+          "type": "Text",
+          "config": { "label": "max_content_width" }
+        },
+        "vertical_align": {
+          "type": "Select",
+          "config": {
+            "label": "vertical_align",
+            "options": ["top", "middle", "bottom"]
+          }
+        },
         "min_height": { "type": "Text", "config": { "label": "min_height" } },
         "widget_kind": { "type": "Text", "config": { "label": "widget_kind" } },
         "widget_html": { "type": "Text", "config": { "label": "widget_html" } },
@@ -167,26 +237,94 @@ Create `src/lib/slices/BluxSection/model.json`:
           "config": {
             "label": "cells",
             "fields": {
-              "kind": { "type": "Select", "config": { "label": "kind", "options": ["text", "media", "embed", "button", "subgrid"] } },
-              "title": { "type": "StructuredText", "config": { "label": "title", "single": "heading3,heading4" } },
-              "body": { "type": "StructuredText", "config": { "label": "body", "multi": "paragraph,strong,em,hyperlink,list-item" } },
-              "media": { "type": "Image", "config": { "label": "media", "constraint": {}, "thumbnails": [] } },
-              "media_ratio": { "type": "Text", "config": { "label": "media_ratio" } },
-              "link": { "type": "Link", "config": { "label": "link", "allowTargetBlank": true } },
-              "link_label": { "type": "Text", "config": { "label": "link_label" } },
-              "embed_html": { "type": "Text", "config": { "label": "embed_html" } },
+              "kind": {
+                "type": "Select",
+                "config": {
+                  "label": "kind",
+                  "options": ["text", "media", "embed", "button", "subgrid"]
+                }
+              },
+              "title": {
+                "type": "StructuredText",
+                "config": { "label": "title", "single": "heading3,heading4" }
+              },
+              "body": {
+                "type": "StructuredText",
+                "config": {
+                  "label": "body",
+                  "multi": "paragraph,strong,em,hyperlink,list-item"
+                }
+              },
+              "media": {
+                "type": "Image",
+                "config": {
+                  "label": "media",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              },
+              "media_ratio": {
+                "type": "Text",
+                "config": { "label": "media_ratio" }
+              },
+              "link": {
+                "type": "Link",
+                "config": { "label": "link", "allowTargetBlank": true }
+              },
+              "link_label": {
+                "type": "Text",
+                "config": { "label": "link_label" }
+              },
+              "embed_html": {
+                "type": "Text",
+                "config": { "label": "embed_html" }
+              },
               "subgrid": {
                 "type": "Group",
                 "config": {
                   "label": "subgrid",
                   "fields": {
-                    "kind": { "type": "Select", "config": { "label": "kind", "options": ["text", "media", "embed"] } },
-                    "title": { "type": "StructuredText", "config": { "label": "title", "single": "heading4,heading5" } },
-                    "body": { "type": "StructuredText", "config": { "label": "body", "multi": "paragraph,strong,em,hyperlink,list-item" } },
-                    "media": { "type": "Image", "config": { "label": "media", "constraint": {}, "thumbnails": [] } },
-                    "media_ratio": { "type": "Text", "config": { "label": "media_ratio" } },
-                    "link": { "type": "Link", "config": { "label": "link", "allowTargetBlank": true } },
-                    "link_label": { "type": "Text", "config": { "label": "link_label" } }
+                    "kind": {
+                      "type": "Select",
+                      "config": {
+                        "label": "kind",
+                        "options": ["text", "media", "embed"]
+                      }
+                    },
+                    "title": {
+                      "type": "StructuredText",
+                      "config": {
+                        "label": "title",
+                        "single": "heading4,heading5"
+                      }
+                    },
+                    "body": {
+                      "type": "StructuredText",
+                      "config": {
+                        "label": "body",
+                        "multi": "paragraph,strong,em,hyperlink,list-item"
+                      }
+                    },
+                    "media": {
+                      "type": "Image",
+                      "config": {
+                        "label": "media",
+                        "constraint": {},
+                        "thumbnails": []
+                      }
+                    },
+                    "media_ratio": {
+                      "type": "Text",
+                      "config": { "label": "media_ratio" }
+                    },
+                    "link": {
+                      "type": "Link",
+                      "config": { "label": "link", "allowTargetBlank": true }
+                    },
+                    "link_label": {
+                      "type": "Text",
+                      "config": { "label": "link_label" }
+                    }
                   }
                 }
               }
@@ -217,6 +355,7 @@ git commit -m "feat(blux): BluxSection container slice model"
 ### Task 3: BluxSection — component
 
 **Files:**
+
 - Create: `src/lib/slices/BluxSection/index.svelte`
 
 - [ ] **Step 1: Write the component**
@@ -225,7 +364,11 @@ Create `src/lib/slices/BluxSection/index.svelte`:
 
 ```svelte
 <script lang="ts">
-  import { PrismicImage, PrismicLink, PrismicRichText } from "@prismicio/svelte";
+  import {
+    PrismicImage,
+    PrismicLink,
+    PrismicRichText,
+  } from "@prismicio/svelte";
   import { isFilled, type Content } from "@prismicio/client";
 
   let { slice }: { slice: Content.BluxSectionSlice } = $props();
@@ -235,8 +378,12 @@ Create `src/lib/slices/BluxSection/index.svelte`:
 
   let bandStyle = $derived(
     [
-      isFilled.keyText(slice.primary.background_color) ? `background-color:${slice.primary.background_color}` : "",
-      isFilled.keyText(slice.primary.min_height) ? `min-height:${slice.primary.min_height}` : "",
+      isFilled.keyText(slice.primary.background_color)
+        ? `background-color:${slice.primary.background_color}`
+        : "",
+      isFilled.keyText(slice.primary.min_height)
+        ? `min-height:${slice.primary.min_height}`
+        : "",
     ]
       .filter(Boolean)
       .join(";"),
@@ -245,7 +392,10 @@ Create `src/lib/slices/BluxSection/index.svelte`:
 
 <section class="blux-section" data-cells={cells.length} style={bandStyle}>
   {#if isFilled.image(slice.primary.background_image)}
-    <PrismicImage field={slice.primary.background_image} class="blux-section__bg" />
+    <PrismicImage
+      field={slice.primary.background_image}
+      class="blux-section__bg"
+    />
   {/if}
 
   {#if isFilled.richText(slice.primary.heading)}
@@ -256,19 +406,33 @@ Create `src/lib/slices/BluxSection/index.svelte`:
     {#each cells as cell}
       <div class="blux-cell" data-kind={cell.kind}>
         {#if isFilled.image(cell.media)}<PrismicImage field={cell.media} />{/if}
-        {#if isFilled.richText(cell.title)}<PrismicRichText field={cell.title} />{/if}
-        {#if isFilled.richText(cell.body)}<PrismicRichText field={cell.body} />{/if}
+        {#if isFilled.richText(cell.title)}<PrismicRichText
+            field={cell.title}
+          />{/if}
+        {#if isFilled.richText(cell.body)}<PrismicRichText
+            field={cell.body}
+          />{/if}
         {#if isFilled.keyText(cell.embed_html)}{@html cell.embed_html}{/if}
-        {#if isFilled.link(cell.link)}<PrismicLink field={cell.link}>{cell.link_label ?? "Read more"}</PrismicLink>{/if}
+        {#if isFilled.link(cell.link)}<PrismicLink field={cell.link}
+            >{cell.link_label ?? "Read more"}</PrismicLink
+          >{/if}
 
         {#if (cell.subgrid ?? []).length}
           <div class="blux-subgrid" data-cells={cell.subgrid?.length}>
             {#each cell.subgrid ?? [] as sub}
               <div class="blux-cell" data-kind={sub.kind}>
-                {#if isFilled.image(sub.media)}<PrismicImage field={sub.media} />{/if}
-                {#if isFilled.richText(sub.title)}<PrismicRichText field={sub.title} />{/if}
-                {#if isFilled.richText(sub.body)}<PrismicRichText field={sub.body} />{/if}
-                {#if isFilled.link(sub.link)}<PrismicLink field={sub.link}>{sub.link_label ?? "Read more"}</PrismicLink>{/if}
+                {#if isFilled.image(sub.media)}<PrismicImage
+                    field={sub.media}
+                  />{/if}
+                {#if isFilled.richText(sub.title)}<PrismicRichText
+                    field={sub.title}
+                  />{/if}
+                {#if isFilled.richText(sub.body)}<PrismicRichText
+                    field={sub.body}
+                  />{/if}
+                {#if isFilled.link(sub.link)}<PrismicLink field={sub.link}
+                    >{sub.link_label ?? "Read more"}</PrismicLink
+                  >{/if}
               </div>
             {/each}
           </div>
@@ -278,7 +442,9 @@ Create `src/lib/slices/BluxSection/index.svelte`:
   </div>
 
   {#if isFilled.keyText(slice.primary.widget_html)}
-    <div class="blux-widget" data-widget={slice.primary.widget_kind}>{@html slice.primary.widget_html}</div>
+    <div class="blux-widget" data-widget={slice.primary.widget_kind}>
+      {@html slice.primary.widget_html}
+    </div>
   {/if}
 </section>
 ```
@@ -286,7 +452,7 @@ Create `src/lib/slices/BluxSection/index.svelte`:
 - [ ] **Step 2: Typecheck**
 
 Run: `pnpm run check`
-Expected: PASS. (If the Task-1 decision was *serialized-cell fallback*, `cell.subgrid` is a string — replace the `{#each cell.subgrid}` block with `{#if cell.subgrid}` + `JSON.parse(cell.subgrid)` iterating parsed nodes.)
+Expected: PASS. (If the Task-1 decision was _serialized-cell fallback_, `cell.subgrid` is a string — replace the `{#each cell.subgrid}` block with `{#if cell.subgrid}` + `JSON.parse(cell.subgrid)` iterating parsed nodes.)
 
 - [ ] **Step 3: Commit**
 
@@ -300,6 +466,7 @@ git commit -m "feat(blux): BluxSection component (cells + subgrid + widget + bac
 ### Task 4: BluxSection — test
 
 **Files:**
+
 - Create: `src/lib/slices/BluxSection/BluxSection.test.ts`
 
 - [ ] **Step 1: Write the failing test**
@@ -326,13 +493,26 @@ const slice = {
     widget_kind: "Two White Lines",
     widget_html: "<hr class='divider' />",
     cells: [
-      { kind: "text", title: rt("heading3", "Pool"), body: rt("paragraph", "Heated."), subgrid: [] },
+      {
+        kind: "text",
+        title: rt("heading3", "Pool"),
+        body: rt("paragraph", "Heated."),
+        subgrid: [],
+      },
       {
         kind: "subgrid",
         title: rt("heading3", "Floors"),
         subgrid: [
-          { kind: "text", title: rt("heading4", "Level 2"), body: rt("paragraph", "Studios") },
-          { kind: "text", title: rt("heading4", "Level 3"), body: rt("paragraph", "One-beds") },
+          {
+            kind: "text",
+            title: rt("heading4", "Level 2"),
+            body: rt("paragraph", "Studios"),
+          },
+          {
+            kind: "text",
+            title: rt("heading4", "Level 3"),
+            body: rt("paragraph", "One-beds"),
+          },
         ],
       },
     ],
@@ -342,8 +522,12 @@ const slice = {
 describe("BluxSection slice", () => {
   it("renders the band heading and one node per cell", () => {
     const { getByRole, container } = render(BluxSection, { props: { slice } });
-    expect(getByRole("heading", { level: 2 }).textContent).toContain("Amenities");
-    expect(container.querySelectorAll(".blux-section__cells > .blux-cell")).toHaveLength(2);
+    expect(getByRole("heading", { level: 2 }).textContent).toContain(
+      "Amenities",
+    );
+    expect(
+      container.querySelectorAll(".blux-section__cells > .blux-cell"),
+    ).toHaveLength(2);
   });
 
   it("renders nested subgrid cells", () => {
@@ -353,8 +537,14 @@ describe("BluxSection slice", () => {
 
   it("renders the inline widget html and background color", () => {
     const { container } = render(BluxSection, { props: { slice } });
-    expect(container.querySelector(".blux-widget[data-widget='Two White Lines'] hr.divider")).not.toBeNull();
-    expect(container.querySelector(".blux-section")?.getAttribute("style")).toContain("background-color:#111111");
+    expect(
+      container.querySelector(
+        ".blux-widget[data-widget='Two White Lines'] hr.divider",
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector(".blux-section")?.getAttribute("style"),
+    ).toContain("background-color:#111111");
   });
 });
 ```
@@ -362,7 +552,7 @@ describe("BluxSection slice", () => {
 - [ ] **Step 2: Run the test**
 
 Run: `pnpm exec vitest run src/lib/slices/BluxSection/BluxSection.test.ts`
-Expected: PASS (component already exists from Task 3). If a subgrid assertion fails under the *serialized-cell fallback* branch, adapt the mock's `subgrid` to a JSON string.
+Expected: PASS (component already exists from Task 3). If a subgrid assertion fails under the _serialized-cell fallback_ branch, adapt the mock's `subgrid` to a JSON string.
 
 - [ ] **Step 3: Commit**
 
@@ -376,6 +566,7 @@ git commit -m "test(blux): BluxSection renders cells, subgrid, widget, backgroun
 ### Task 5: BluxText — leaf slice (model + component + test)
 
 **Files:**
+
 - Create: `src/lib/slices/BluxText/{model.json,index.svelte,BluxText.test.ts}`
 
 - [ ] **Step 1: Author the model**
@@ -397,17 +588,38 @@ Create `src/lib/slices/BluxText/model.json`:
       "description": "Text",
       "imageUrl": "",
       "primary": {
-        "title": { "type": "StructuredText", "config": { "label": "title", "single": "heading1,heading2,heading3" } },
-        "subtitle": { "type": "StructuredText", "config": { "label": "subtitle", "single": "heading4,heading5" } },
-        "body": { "type": "StructuredText", "config": { "label": "body", "multi": "paragraph,strong,em,hyperlink,list-item,o-list-item" } },
-        "subbody": { "type": "StructuredText", "config": { "label": "subbody", "multi": "paragraph,strong,em,hyperlink" } },
+        "title": {
+          "type": "StructuredText",
+          "config": { "label": "title", "single": "heading1,heading2,heading3" }
+        },
+        "subtitle": {
+          "type": "StructuredText",
+          "config": { "label": "subtitle", "single": "heading4,heading5" }
+        },
+        "body": {
+          "type": "StructuredText",
+          "config": {
+            "label": "body",
+            "multi": "paragraph,strong,em,hyperlink,list-item,o-list-item"
+          }
+        },
+        "subbody": {
+          "type": "StructuredText",
+          "config": {
+            "label": "subbody",
+            "multi": "paragraph,strong,em,hyperlink"
+          }
+        },
         "buttons": {
           "type": "Group",
           "config": {
             "label": "buttons",
             "fields": {
               "label": { "type": "Text", "config": { "label": "label" } },
-              "link": { "type": "Link", "config": { "label": "link", "allowTargetBlank": true } }
+              "link": {
+                "type": "Link",
+                "config": { "label": "link", "allowTargetBlank": true }
+              }
             }
           }
         }
@@ -438,14 +650,25 @@ Create `src/lib/slices/BluxText/index.svelte`:
 </script>
 
 <div class="blux-text">
-  {#if isFilled.richText(slice.primary.title)}<PrismicRichText field={slice.primary.title} />{/if}
-  {#if isFilled.richText(slice.primary.subtitle)}<PrismicRichText field={slice.primary.subtitle} />{/if}
-  {#if isFilled.richText(slice.primary.body)}<PrismicRichText field={slice.primary.body} />{/if}
-  {#if isFilled.richText(slice.primary.subbody)}<PrismicRichText field={slice.primary.subbody} />{/if}
+  {#if isFilled.richText(slice.primary.title)}<PrismicRichText
+      field={slice.primary.title}
+    />{/if}
+  {#if isFilled.richText(slice.primary.subtitle)}<PrismicRichText
+      field={slice.primary.subtitle}
+    />{/if}
+  {#if isFilled.richText(slice.primary.body)}<PrismicRichText
+      field={slice.primary.body}
+    />{/if}
+  {#if isFilled.richText(slice.primary.subbody)}<PrismicRichText
+      field={slice.primary.subbody}
+    />{/if}
   {#if buttons.length}
     <div class="blux-text__buttons">
       {#each buttons as b}
-        {#if isFilled.link(b.link)}<PrismicLink field={b.link} class="blux-button">{b.label ?? "Learn more"}</PrismicLink>{/if}
+        {#if isFilled.link(b.link)}<PrismicLink
+            field={b.link}
+            class="blux-button">{b.label ?? "Learn more"}</PrismicLink
+          >{/if}
       {/each}
     </div>
   {/if}
@@ -470,7 +693,12 @@ const slice = {
   primary: {
     title: rt("heading2", "Welcome"),
     body: rt("paragraph", "Ground-floor retail."),
-    buttons: [{ label: "Contact", link: { link_type: "Web", url: "https://example.com" } }],
+    buttons: [
+      {
+        label: "Contact",
+        link: { link_type: "Web", url: "https://example.com" },
+      },
+    ],
   },
 } as unknown as Content.BluxTextSlice;
 
@@ -483,7 +711,9 @@ describe("BluxText slice", () => {
 
   it("renders a button when the link is filled", () => {
     const { getByText } = render(BluxText, { props: { slice } });
-    expect(getByText("Contact").closest("a")?.getAttribute("href")).toBe("https://example.com");
+    expect(getByText("Contact").closest("a")?.getAttribute("href")).toBe(
+      "https://example.com",
+    );
   });
 });
 ```
@@ -505,6 +735,7 @@ git commit -m "feat(blux): BluxText leaf slice + test"
 ### Task 6: BluxBlock — content-preserving fallback slice + recursive renderer
 
 **Files:**
+
 - Create: `src/lib/blux-catalog/node.ts` (the serialized-node type)
 - Create: `src/lib/slices/BluxBlock/{model.json,index.svelte,BluxNode.svelte,BluxBlock.test.ts}`
 
@@ -525,7 +756,9 @@ export type BluxNode = {
   children?: BluxNode[];
 };
 
-export function parseBluxPayload(payload: string | null | undefined): BluxNode | null {
+export function parseBluxPayload(
+  payload: string | null | undefined,
+): BluxNode | null {
   if (!payload) return null;
   try {
     const node = JSON.parse(payload) as BluxNode;
@@ -556,9 +789,18 @@ Create `src/lib/slices/BluxBlock/BluxNode.svelte`:
   let { node }: { node: BluxNode } = $props();
 </script>
 
-<svelte:element this={node.tag ?? "div"} class={node.className} style={styleString(node.style)}>
+<svelte:element
+  this={node.tag ?? "div"}
+  class={node.className}
+  style={styleString(node.style)}
+>
   {#if node.image}
-    <img src={node.image.url} alt={node.image.alt ?? ""} width={node.image.width} height={node.image.height} />
+    <img
+      src={node.image.url}
+      alt={node.image.alt ?? ""}
+      width={node.image.width}
+      height={node.image.height}
+    />
   {/if}
   {#if node.html}{@html node.html}{/if}
   {#each node.children ?? [] as child}
@@ -586,7 +828,10 @@ Create `src/lib/slices/BluxBlock/model.json`:
       "description": "Fallback",
       "imageUrl": "",
       "primary": {
-        "payload": { "type": "Text", "config": { "label": "payload (serialized JSON tree)" } }
+        "payload": {
+          "type": "Text",
+          "config": { "label": "payload (serialized JSON tree)" }
+        }
       },
       "items": {}
     }
@@ -634,11 +879,15 @@ const tree = {
   tag: "section",
   className: "band",
   children: [
-    { tag: "div", className: "row", children: [
-      { html: "<h3>Stacking Plan</h3>" },
-      { image: { url: "https://cdn.example/plan.png", alt: "plan" } },
-      { tag: "div", children: [{ html: "<p>Level 4</p>" }] },
-    ] },
+    {
+      tag: "div",
+      className: "row",
+      children: [
+        { html: "<h3>Stacking Plan</h3>" },
+        { image: { url: "https://cdn.example/plan.png", alt: "plan" } },
+        { tag: "div", children: [{ html: "<p>Level 4</p>" }] },
+      ],
+    },
   ],
 };
 
@@ -653,12 +902,17 @@ describe("BluxBlock fallback slice", () => {
     const { getByText, container } = render(BluxBlock, { props: { slice } });
     expect(getByText("Stacking Plan")).not.toBeNull();
     expect(getByText("Level 4")).not.toBeNull();
-    expect(container.querySelector("img[alt='plan']")?.getAttribute("src")).toBe("https://cdn.example/plan.png");
+    expect(
+      container.querySelector("img[alt='plan']")?.getAttribute("src"),
+    ).toBe("https://cdn.example/plan.png");
     expect(container.querySelector("section.band .row")).not.toBeNull();
   });
 
   it("renders nothing for an unparseable payload", () => {
-    const bad = { ...slice, primary: { payload: "not json" } } as unknown as Content.BluxBlockSlice;
+    const bad = {
+      ...slice,
+      primary: { payload: "not json" },
+    } as unknown as Content.BluxBlockSlice;
     const { container } = render(BluxBlock, { props: { slice: bad } });
     expect(container.querySelector(".blux-block")).toBeNull();
   });
@@ -682,6 +936,7 @@ git commit -m "feat(blux): BluxBlock fallback slice + recursive node renderer"
 ### Task 7: `collection_item` shared-base custom type
 
 **Files:**
+
 - Create: `customtypes/collection_item/index.json`
 
 - [ ] **Step 1: Author the base custom type**
@@ -698,19 +953,43 @@ Create `customtypes/collection_item/index.json`:
   "json": {
     "Main": {
       "uid": { "type": "UID", "config": { "label": "uid" } },
-      "title": { "type": "StructuredText", "config": { "label": "title", "single": "heading1" } },
-      "body": { "type": "StructuredText", "config": { "label": "body", "multi": "paragraph,strong,em,hyperlink,list-item" } },
-      "media": { "type": "Image", "config": { "label": "media", "constraint": {}, "thumbnails": [] } },
+      "title": {
+        "type": "StructuredText",
+        "config": { "label": "title", "single": "heading1" }
+      },
+      "body": {
+        "type": "StructuredText",
+        "config": {
+          "label": "body",
+          "multi": "paragraph,strong,em,hyperlink,list-item"
+        }
+      },
+      "media": {
+        "type": "Image",
+        "config": { "label": "media", "constraint": {}, "thumbnails": [] }
+      },
       "gallery": {
         "type": "Group",
-        "config": { "label": "gallery", "fields": {
-          "image": { "type": "Image", "config": { "label": "image", "constraint": {}, "thumbnails": [] } },
-          "caption": { "type": "Text", "config": { "label": "caption" } }
-        } }
+        "config": {
+          "label": "gallery",
+          "fields": {
+            "image": {
+              "type": "Image",
+              "config": { "label": "image", "constraint": {}, "thumbnails": [] }
+            },
+            "caption": { "type": "Text", "config": { "label": "caption" } }
+          }
+        }
       },
-      "tags": { "type": "Text", "config": { "label": "tags (comma-separated)" } },
+      "tags": {
+        "type": "Text",
+        "config": { "label": "tags (comma-separated)" }
+      },
       "date": { "type": "Date", "config": { "label": "date" } },
-      "link": { "type": "Link", "config": { "label": "link", "allowTargetBlank": true } }
+      "link": {
+        "type": "Link",
+        "config": { "label": "link", "allowTargetBlank": true }
+      }
     }
   }
 }
@@ -733,6 +1012,7 @@ git commit -m "feat(blux): collection_item shared-base custom type"
 ### Task 8: Register catalog slices on the `page` SliceZone
 
 **Files:**
+
 - Modify: `customtypes/page/index.json` (add three choices)
 - Regenerate: `src/lib/slices/index.js`, `src/prismicio-types.d.ts`
 
@@ -769,6 +1049,7 @@ git commit -m "feat(blux): register catalog slices on the page SliceZone"
 ### Task 9: Route-level render integration test (walking skeleton proof)
 
 **Files:**
+
 - Create: `src/routes/blux-skeleton.test.ts`
 
 This proves the three catalog slices render together through the same `components` map + `SliceZone` the `[uid]` route uses.
@@ -795,17 +1076,28 @@ const slices = [
       cells: [{ kind: "text", title: rt("heading3", "Pool"), subgrid: [] }],
     },
   },
-  { slice_type: "blux_text", variation: "default", primary: { title: rt("heading2", "Welcome"), buttons: [] } },
+  {
+    slice_type: "blux_text",
+    variation: "default",
+    primary: { title: rt("heading2", "Welcome"), buttons: [] },
+  },
   {
     slice_type: "blux_block",
     variation: "default",
-    primary: { payload: JSON.stringify({ tag: "div", children: [{ html: "<p>Fallback content</p>" }] }) },
+    primary: {
+      payload: JSON.stringify({
+        tag: "div",
+        children: [{ html: "<p>Fallback content</p>" }],
+      }),
+    },
   },
 ];
 
 describe("Blux catalog walking skeleton", () => {
   it("renders container, leaf, and fallback slices through the shared SliceZone", () => {
-    const { getByText } = render(SliceZone, { props: { slices: slices as never, components } });
+    const { getByText } = render(SliceZone, {
+      props: { slices: slices as never, components },
+    });
     expect(getByText("Amenities")).not.toBeNull();
     expect(getByText("Pool")).not.toBeNull();
     expect(getByText("Welcome")).not.toBeNull();
@@ -859,4 +1151,7 @@ git commit -m "docs(blux): mark Phase 0 + Phase-1 skeleton complete"
 ## What Plan 2 covers (not this plan)
 
 The remaining catalog slices (Grid, Gallery, Carousel, Collection, Media, MediaText, Embed, Table), built on the cell model this plan proves; the entity custom types (`product`, `person`, `event`, `news_article`, `project`) as `collection_item` + feed-derived extensions. Then Plans 3–4 (`reddoor-maintenance`): the IR/plan contract types, Extract (site.json→IR), Classify (IR→plan), Emit (plan→Prismic docs + asset index + feed materialization), reusing `feed-grid.ts`'s `tagFilter`, `run-migration.ts`, and `products.ts`; Plan 5: the-pointe fidelity gate + rollout.
+
+```
+
 ```

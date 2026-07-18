@@ -4,7 +4,7 @@
 - **Status:** Approved design (v2, revised after a 4-lens adversarial review), pending implementation plan
 - **Repos touched:** `reddoor-maintenance` (the `blux` CLI: extract/classify/emit), `reddoor-starter` (shared SvelteKit + Prismic template: catalog slices, custom types, renderer), and per-site repos (re-conversion targets)
 - **Supersedes:** the band/manifest hybrid (`convert` band-plan + `blux-presentation.json` side-car) and the legacy semantic `emit`
-- **Revision note:** v2 corrects five review findings verified against the data — custom media are inline *widgets* not content-replacing leaves (never discard children); classifier orders container rules before media-leaf rules; the Map slice is dropped (maps are `custom` widgets); the coverage number is corrected to the honest ~94.6% native / ~5.4% fallback dictated by Prismic's one-level group-nesting ceiling; and content-section counts are separated from feed-record counts.
+- **Revision note:** v2 corrects five review findings verified against the data — custom media are inline _widgets_ not content-replacing leaves (never discard children); classifier orders container rules before media-leaf rules; the Map slice is dropped (maps are `custom` widgets); the coverage number is corrected to the honest ~94.6% native / ~5.4% fallback dictated by Prismic's one-level group-nesting ceiling; and content-section counts are separated from feed-record counts.
 
 ---
 
@@ -12,10 +12,10 @@
 
 We migrate ~12 sunsetting Blux sites onto SvelteKit + Prismic. Two conversion architectures exist today:
 
-- **the-pointe (reference)** renders from **real, populated Prismic slices** plus a *thin* per-slice style-role overlay. Content lives in Prismic and is editable; the design styles it. High fidelity.
-- **theTower / compositionHospitality (band hybrid)** render from skeleton `{ band: number }` pointer slices plus a *heavy* `blux-presentation.json` side-car carrying all structure, media, grid geometry, and backgrounds keyed by band index. Only text is editable; **the side-car is the direct cause of the manual massaging** — a lossy pixel-snapshot rather than authoring intent.
+- **the-pointe (reference)** renders from **real, populated Prismic slices** plus a _thin_ per-slice style-role overlay. Content lives in Prismic and is editable; the design styles it. High fidelity.
+- **theTower / compositionHospitality (band hybrid)** render from skeleton `{ band: number }` pointer slices plus a _heavy_ `blux-presentation.json` side-car carrying all structure, media, grid geometry, and backgrounds keyed by band index. Only text is editable; **the side-car is the direct cause of the manual massaging** — a lossy pixel-snapshot rather than authoring intent.
 
-We now have read-only access to the Blux platform source (`pleaseshutup/blux`), exposing Blux's **finite authoring taxonomy** so blocks can be classified by *authoring intent* (`type × media.type × layout × sources`) rather than reverse-engineered from rendered HTML — the enabler for a deterministic pipeline.
+We now have read-only access to the Blux platform source (`pleaseshutup/blux`), exposing Blux's **finite authoring taxonomy** so blocks can be classified by _authoring intent_ (`type × media.type × layout × sources`) rather than reverse-engineered from rendered HTML — the enabler for a deterministic pipeline.
 
 **Mandate (decided during brainstorming):**
 
@@ -39,7 +39,7 @@ We now have read-only access to the Blux platform source (`pleaseshutup/blux`), 
 
 - LLM anywhere in the initial pipeline (future optional tiebreak only, §7).
 - Per-record collection **detail pages** (e.g. composition's ~552 product pages) — deferred to Phase 7 (§9); the card-link contract for the deferred window is defined in §8.
-- Redesigning the visual theme — this spec defines the *content model*, not the site design.
+- Redesigning the visual theme — this spec defines the _content model_, not the site design.
 - Pixel-cloning deliberately quirky layouts — geometry is preserved as data; the design owns final styling.
 
 ## 3. Evidence — the census
@@ -51,34 +51,34 @@ Ran across all 12 exports (`~/Desktop/*/site.json`). Scripts: `scratchpad/blux-c
 - **`block.type` (container behavior):** `(plain) 2414 · grid 492 · none 73 · slides 54 · masonry 2`. (`tabs`/`accordion` exist in Blux's schema but occur **0 times** in the corpus.)
 - **`media.type` (1044 blocks with media, fully itemized):** `image/png 636 · image/jpeg 191 · custom 74 · image/svg+xml 64 · (unresolved) 23 · image/gif 14 · form 11 · video/mp4 9 · youtube 8 · application/pdf 7 · social 3 · table 2 · icon/svg+xml 1 · vimeo 1` = 1044. **`map` does not appear** — Blux maps are `custom` widgets (a "Representative Map" widget exists in xcoSite).
 - **`layout`:** `(stacked) 2464 · tbb 429 · tbr 49 · ttbb 41 · none 38 · tbl 9 · tsbr 5`. (`tsbl` occurs 0 times.)
-- **Flags:** backgrounds 302 · buttons 188 · feed-backed blocks 72 · **`colspan`≠1: 0** (in *these 12 exports* — colspan is a real Blux feature, so Extract must guard for it, §5/§11).
+- **Flags:** backgrounds 302 · buttons 188 · feed-backed blocks 72 · **`colspan`≠1: 0** (in _these 12 exports_ — colspan is a real Blux feature, so Extract must guard for it, §5/§11).
 
 **Two distinct scales — do not conflate.**
 
-- **Content-section nodes (page scale)** — nodes in `site.content[section]`, i.e. landing/category/detail *pages*: `pages 82 · experts 18 · products 14 · events 1 · news 1 · projects 1` (+ `__templates` internal). These become `page` documents (§8).
+- **Content-section nodes (page scale)** — nodes in `site.content[section]`, i.e. landing/category/detail _pages_: `pages 82 · experts 18 · products 14 · events 1 · news 1 · projects 1` (+ `__templates` internal). These become `page` documents (§8).
 - **Feed records (document scale)** — records in `site.feeds[*]`, the collection data: **fleet = 18 feeds / 1789 records**. Largest: `Products 552 · All Projects List 545 · Events 494 · News 60 · Outside The Lines 46 · Team 21 · Reps 11 · Center Features 11`; the rest are equipment grids / trainers / portfolio / projects / observances (≤7 each). composition alone = **1108 records** across 3 feeds. All feeds are `source=manual`. These become collection-item documents (§8).
 
 **Band classification (deterministic trial, `blux-census2.mjs`, 100% routed to a defined bucket):**
 
-| Category | Share | | Category | Share |
-|---|---|---|---|---|
-| Text | 24.9% | | Embed (standalone custom / form) | ~5% |
-| Group/Section (children) | 14.9% | | Carousel | 3.0% |
-| Grid | 13.9% | | CollectionCarousel | 2.6% |
-| Media | 12.8% | | Video | 1.3% |
-| Band (bg + children) | 8.4% | | Document (pdf) | 0.9% |
-| Gallery | 6.6% | | MediaText | 0.3% |
-| Collection | 5.3% | | (social / table / icon — see §6) | ≤0.6% |
+| Category                 | Share |     | Category                         | Share |
+| ------------------------ | ----- | --- | -------------------------------- | ----- |
+| Text                     | 24.9% |     | Embed (standalone custom / form) | ~5%   |
+| Group/Section (children) | 14.9% |     | Carousel                         | 3.0%  |
+| Grid                     | 13.9% |     | CollectionCarousel               | 2.6%  |
+| Media                    | 12.8% |     | Video                            | 1.3%  |
+| Band (bg + children)     | 8.4%  |     | Document (pdf)                   | 0.9%  |
+| Gallery                  | 6.6%  |     | MediaText                        | 0.3%  |
+| Collection               | 5.3%  |     | (social / table / icon — see §6) | ≤0.6% |
 
 **Nesting & fallback (the corrected numbers).** Band subtree-depth CDF, and again after the wrapper-collapse normalization (`blux-census4.mjs`):
 
 | depth | raw | after wrapper-collapse |
-|---|---|---|
-| 0 | 409 | 427 |
-| 1 | 217 | 204 |
-| 2 | 108 | 124 |
-| 3 | 56 | 35 |
-| 4 | 8 | 8 |
+| ----- | --- | ---------------------- |
+| 0     | 409 | 427                    |
+| 1     | 217 | 204                    |
+| 2     | 108 | 124                    |
+| 3     | 56  | 35                     |
+| 4     | 8   | 8                      |
 
 The native catalog expresses **container → cell → subgrid → leaves** = subtree depth ≤ 2. This ceiling is **forced by Prismic**, which supports exactly one level of group nesting (§6, §11) — not a free choice. Therefore:
 
@@ -90,7 +90,7 @@ The earlier "~99% / ~1%" figure was wrong: it assumed a native depth-3 model, wh
 **The deep (fallback) bands are a few repeated idioms** (`blux-census3.mjs`):
 
 1. **Redundant-wrapper templates (~21 raw):** xcoSite's expert card ×18 (`bg-band > padding-wrapper > grid(5) > img`). Wrapper-collapse removes these (xcoSite 22→4 deep, measured).
-2. **Custom-widget bands with nested content (~5):** fitHealthClub "Membership Rates" — a *divider widget* over a real content grid. These are **kept, not deleted** (§5 pass 5); the deep ones (`d4`) route to the content-preserving fallback.
+2. **Custom-widget bands with nested content (~5):** fitHealthClub "Membership Rates" — a _divider widget_ over a real content grid. These are **kept, not deleted** (§5 pass 5); the deep ones (`d4`) route to the content-preserving fallback.
 3. **Genuine section→sub-grid (~25):** tosa "About Us"/stories/partners, mediaStudios image-tile grids, strategyAdvantage scroll blocks, xcoSite process steps — a section column holding a heading **+ its own grid**. One nested grid fits the subgrid rule; grid-in-grid-in-grid (e.g. composition "Corporate Information") exceeds it and falls back.
 4. **Bespoke interactive (~4):** theTower/thePointe "stacking plan" floor diagrams (`d4`), a carousel, a video. Faithful serialized render is correct.
 
@@ -138,32 +138,32 @@ Extract parses `site.json` into a normalized block tree. Representative node (th
 2. **Feed resolution** — resolve `block.sources[]` against `site.feeds`; capture the tag-filter DSL (`&&`/`||`/`,`, per `client/DOMExtensionsCA.js`), `sort`, `limit`, `sourceConfig.layout`, `mediaRatio`.
 3. **Style decode** — translate Blux style utilities (`margin-20r → margin-right:20%`, desktop-only) and `styles{}` (`_max-content-width`, `_contentPadding`, `height`, `vertical-align`) into explicit style data. **Unknown utilities pass through as raw style + a report entry.**
 4. **Wrapper-collapse** — a `plain`/`none` block with no text/media/buttons/feed and **exactly one** child is a pass-through; replace it with its child, **hoisting `background`** (padding-hoist is a tested add-on, not assumed — the measured 8.0%→5.4% validates background-hoist only). Applied to fixpoint. Conservative — multi-child wrappers are real Sections and are preserved.
-5. **Custom-as-widget** *(corrected — was "custom-as-leaf")* — a block with `media.type=custom` carries its raw HTML as an inline `widget` (§6). **Its text and children are preserved and classified normally.** The block becomes a leaf `Embed` **only when it has no text and no children** (~20 standalone customs like "Anchor Help"). *Rationale: verified in `verify-custom.mjs` — of 41 custom bands, 19 carry real text content (dividers, expanders, timelines, MailChimp); Blux's `Page.js` renders `media` and `items` independently. Discarding descendants would delete real content (e.g. fitHealthClub "Membership Rates", tosa "Religions Views Holder" = 29 text nodes).*
+5. **Custom-as-widget** _(corrected — was "custom-as-leaf")_ — a block with `media.type=custom` carries its raw HTML as an inline `widget` (§6). **Its text and children are preserved and classified normally.** The block becomes a leaf `Embed` **only when it has no text and no children** (~20 standalone customs like "Anchor Help"). _Rationale: verified in `verify-custom.mjs` — of 41 custom bands, 19 carry real text content (dividers, expanders, timelines, MailChimp); Blux's `Page.js` renders `media` and `items` independently. Discarding descendants would delete real content (e.g. fitHealthClub "Membership Rates", tosa "Religions Views Holder" = 29 text nodes)._
 6. **Colspan guard** — if any block carries `colspan`≠1 (0 in corpus, but a real Blux feature), record it on the IR grid cell and flag it in the report rather than flattening silently.
 
 ## 6. The catalog (content model — normative, frozen in Phase 0)
 
 **Container slices** — carry a repeatable group of typed **cells**:
 
-| Slice | From | Key geometry fields |
-|---|---|---|
-| **Section** | plain wrapper w/ children, `Band(bg+children)` | `heading`, `background{media,color,overlay,fit,position}`, `maxContentWidth`, `padding`, `verticalAlign`, `minHeight` |
-| **Grid** | `type=grid` (mixed cells) | `columns`, `columnWidth`, `spacing`, `mobileSpacing`, `rowHeight`, `background` |
-| **Gallery** | `type=grid\|masonry`, all-media cells | `columns`/`masonry`, `spacing`, `ratio`, `crop` |
-| **Carousel** | `type=slides` | `columnsVisible`, `arrows`, `dots`, `dotsPosition`, `autoplay`, `transition`, `transitionSpeed` |
-| **Collection** | `feed.sources[]` present | `feedIds`, `filterTag`, `sort`, `limit`, `mediaRatio`, `layout(grid\|carousel)`, `scrollLoadMore` |
+| Slice          | From                                           | Key geometry fields                                                                                                   |
+| -------------- | ---------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| **Section**    | plain wrapper w/ children, `Band(bg+children)` | `heading`, `background{media,color,overlay,fit,position}`, `maxContentWidth`, `padding`, `verticalAlign`, `minHeight` |
+| **Grid**       | `type=grid` (mixed cells)                      | `columns`, `columnWidth`, `spacing`, `mobileSpacing`, `rowHeight`, `background`                                       |
+| **Gallery**    | `type=grid\|masonry`, all-media cells          | `columns`/`masonry`, `spacing`, `ratio`, `crop`                                                                       |
+| **Carousel**   | `type=slides`                                  | `columnsVisible`, `arrows`, `dots`, `dotsPosition`, `autoplay`, `transition`, `transitionSpeed`                       |
+| **Collection** | `feed.sources[]` present                       | `feedIds`, `filterTag`, `sort`, `limit`, `mediaRatio`, `layout(grid\|carousel)`, `scrollLoadMore`                     |
 
 **Leaf slices:**
 
-| Slice | From | Notes |
-|---|---|---|
-| **Text** | leaf, text only | `title/subtitle/body/subbody` rich text, role/level, buttons |
-| **Media** | leaf + `media.type ∈ {image/*, icon/svg+xml, video/*, youtube, vimeo, application/pdf}` | image/video/pdf variants; `icon/svg+xml` is an image variant; `ratio`, `crop`, caption, buttons |
-| **MediaText** | leaf + media, `layout ∈ {tbl,tbr,tsbr}` | two-column; `mediaSide`, `layoutRatio` (`tsbl` unobserved — accepted defensively) |
-| **Embed** | standalone `media.type ∈ {custom (no children), form, social}` | raw HTML / form / social embed |
-| **Table** | `media.type=table` | tabular embed (2 in corpus) — small, may render via Embed if a dedicated slice isn't warranted |
+| Slice         | From                                                                                    | Notes                                                                                           |
+| ------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **Text**      | leaf, text only                                                                         | `title/subtitle/body/subbody` rich text, role/level, buttons                                    |
+| **Media**     | leaf + `media.type ∈ {image/*, icon/svg+xml, video/*, youtube, vimeo, application/pdf}` | image/video/pdf variants; `icon/svg+xml` is an image variant; `ratio`, `crop`, caption, buttons |
+| **MediaText** | leaf + media, `layout ∈ {tbl,tbr,tsbr}`                                                 | two-column; `mediaSide`, `layoutRatio` (`tsbl` unobserved — accepted defensively)               |
+| **Embed**     | standalone `media.type ∈ {custom (no children), form, social}`                          | raw HTML / form / social embed                                                                  |
+| **Table**     | `media.type=table`                                                                      | tabular embed (2 in corpus) — small, may render via Embed if a dedicated slice isn't warranted  |
 
-**The `widget` field.** Any slice may carry an optional inline **`widget`** (the custom HTML from pass 5: dividers, scroll-animation, timeline, expander, MailChimp). It renders as a decoration/behavior element *alongside* the slice's normal content. Behavioral widgets (expander/timeline) are captured as `widget.kind` + preserved children; faithful reproduction of the interactive behavior is a fidelity follow-up, not a blocker (content is never lost).
+**The `widget` field.** Any slice may carry an optional inline **`widget`** (the custom HTML from pass 5: dividers, scroll-animation, timeline, expander, MailChimp). It renders as a decoration/behavior element _alongside_ the slice's normal content. Behavioral widgets (expander/timeline) are captured as `widget.kind` + preserved children; faithful reproduction of the interactive behavior is a fidelity follow-up, not a blocker (content is never lost).
 
 **Map:** dropped as a slice. Maps appear only as `custom` widgets, so they flow through the `widget` field / Embed path. Re-introduce a dedicated Map slice only if a real `media.type=map` instance surfaces.
 
@@ -179,7 +179,7 @@ This requires **groups-in-`primary` (modern Slice Machine modeling)**, which the
 
 ## 7. The classifier (Classify — normative, frozen in Phase 0)
 
-One ordered decision tree per band, **first match wins**, run on the *normalized* IR (wrappers collapsed, custom carried as `widget`, media/feed resolved). **Container-type rules precede media-leaf rules** — matching the validated `blux-census2.mjs` trial order (a media-first order would misroute the 6 `grid`+custom bands and drop their children):
+One ordered decision tree per band, **first match wins**, run on the _normalized_ IR (wrappers collapsed, custom carried as `widget`, media/feed resolved). **Container-type rules precede media-leaf rules** — matching the validated `blux-census2.mjs` trial order (a media-first order would misroute the 6 `grid`+custom bands and drop their children):
 
 1. `feed.sources[]` present → **Collection** (`carousel` variant if `type=slides`, else `grid`).
 2. `type=slides` → **Carousel**.
@@ -190,9 +190,9 @@ One ordered decision tree per band, **first match wins**, run on the *normalized
 7. leaf + text only → **Text**.
 8. subtree exceeds `container → cell → subgrid → leaves` (depth ≥ 3) → **BluxBlock**.
 
-The block's `widget` (custom HTML) rides along on whatever slice rules 1–7 select; it never *captures* the block.
+The block's `widget` (custom HTML) rides along on whatever slice rules 1–7 select; it never _captures_ the block.
 
-**Cell decomposition** maps each child block by a reduced form of the same tree (`text/media/embed/button-group`); a `type=grid` child under a container becomes a `subgrid` cell (one level). 
+**Cell decomposition** maps each child block by a reduced form of the same tree (`text/media/embed/button-group`); a `type=grid` child under a container becomes a `subgrid` cell (one level).
 
 **Determinism (confidence/LLM cut from initial scope).** The tree is a pure first-match function that always resolves; the trial fired zero unknowns. Rather than build an undefined confidence score, the initial pipeline emits every non-catalog band as **`BluxBlock`** and lists it in `review-report.json` (with the reason: depth-≥3, unresolved media, unknown style utility, colspan-seen, or `table`-without-slice). An LLM tiebreak is an **explicit future option**, gated behind a config flag, **not built now**.
 
@@ -217,7 +217,7 @@ The block's `widget` (custom HTML) rides along on whatever slice rules 1–7 sel
 2. Remove `bandFor`/`Presentation` plumbing from TextColumns, Accordion, LeadText, RichText; rewrite SplitFeature, Gallery, MediaFull `index.svelte` off the band components.
 3. Then delete the band module **in full**: `src/lib/blux/{presentation.ts, blux-presentation.json, BandContent, BandTitle, Grid, CarouselFrames, SectionBand, Media, LocationMap, maps-loader.ts, products.ts, products.json, product-types.ts}` + tests, and the band-ref skeleton slice `GridBand` + the `band` fields/variations on Hero/Carousel/SplitFeature/TitleBand/Gallery/MediaFull/LocationMap.
 
-**Per-site safety** comes from each site repo being a **separate copy** — a site migrates when *its* repo adopts the catalog; the starter rewrite doesn't retroactively break already-live sites. It is not that the starter changes are individually non-breaking.
+**Per-site safety** comes from each site repo being a **separate copy** — a site migrates when _its_ repo adopts the catalog; the starter rewrite doesn't retroactively break already-live sites. It is not that the starter changes are individually non-breaking.
 
 **Assets — idempotent by a persisted index, not filename.** Prismic's Asset/Migration API keys on the source file within a run and does **not** treat filename as a unique key (verified in `@prismicio/client` 7.21 `Migration.d.ts`). Emit **persists a `sourceAsset(Blux uuid / source URL) → Prismic asset ID` index**, reconciles against the repo's existing assets before create, and uses filename only as a display label. This covers BluxBlock-embedded assets too (§6).
 
@@ -225,8 +225,8 @@ The block's `widget` (custom HTML) rides along on whatever slice rules 1–7 sel
 
 ## 10. Sequencing (phases → detailed in the implementation plan)
 
-0. **Freeze contracts** — IR.json, plan.json (a full example per catalog slice + cell kind), review-report.json, and the content-model (slice + custom-type JSON) as **normative schemas**. Everything downstream codes against these fixed interfaces.
-1. **Content model + spikes (starter)** — catalog slice models + shared-base custom types. **Gate:** verify Slice Machine 2.21.3 *authoring* + `@slicemachine/adapter-sveltekit` 0.3.96 *codegen* of a group-in-`primary` with a nested `subgrid` group. If unsupported, the subgrid cell degrades to a cell-scale serialized field — a branch that ripples into Emit/Render, so it is resolved here.
+0. **Freeze contracts** — IR.json, plan.json (a full example per catalog slice + cell kind), review-report.json, and the content-model (slice + custom-type JSON) as **normative schemas**. Everything downstream codes against these fixed interfaces. _(Content-model contract — catalog slice models — **DONE** via Plan 1: `docs/superpowers/plans/2026-07-17-blux-catalog-foundation.md`.)_
+1. **Content model + spikes (starter)** — catalog slice models + shared-base custom types. **Gate:** verify Slice Machine 2.21.3 _authoring_ + `@slicemachine/adapter-sveltekit` 0.3.96 _codegen_ of a group-in-`primary` with a nested `subgrid` group. If unsupported, the subgrid cell degrades to a cell-scale serialized field — a branch that ripples into Emit/Render, so it is resolved here. _(**RESOLVED** — native nested groups; walking skeleton — BluxSection + BluxText + BluxBlock + collection_item + page registration — built. **DONE** via Plan 1: `docs/superpowers/plans/2026-07-17-blux-catalog-foundation.md`.)_
 2. **Extract → IR** — parser + normalization passes 1–6 (CLI).
 3. **Classify** — decision tree, cell decomposition, subgrid rule, BluxBlock escalation + report (CLI).
 4. **Emit (4a) + Render (4b) — parallelizable after 1 & 3.**
@@ -238,8 +238,8 @@ The block's `widget` (custom HTML) rides along on whatever slice rules 1–7 sel
 
 ## 11. Risks & open questions
 
-- **Subgrid authoring/codegen (Phase-1 gate).** Runtime nesting is confirmed (one level, `@prismicio/client` 7.21). The open unknowns are Slice Machine 2.21.3 *authoring* of nested groups and `adapter-sveltekit` 0.3.96 *codegen*. Fallback if unsupported: subgrid cell → cell-scale serialized field. Resolved in Phase 1.
-- **Custom-widget behavioral fidelity.** Expander/Timeline/scroll-animation widgets are captured as `widget.kind` + preserved children; reproducing the *interaction* is a follow-up. Content is never lost.
+- **Subgrid authoring/codegen (Phase-1 gate).** Runtime nesting is confirmed (one level, `@prismicio/client` 7.21). The open unknowns are Slice Machine 2.21.3 _authoring_ of nested groups and `adapter-sveltekit` 0.3.96 _codegen_. Fallback if unsupported: subgrid cell → cell-scale serialized field. Resolved in Phase 1.
+- **Custom-widget behavioral fidelity.** Expander/Timeline/scroll-animation widgets are captured as `widget.kind` + preserved children; reproducing the _interaction_ is a follow-up. Content is never lost.
 - **Feed field-derivation completeness.** Only ~8/18 feeds have a `fields` key; derivation must union with observed record keys (§8) or drop fields (e.g. Portfolio `company`/`url`, News `description`). Garbage descriptors (tosa Events empty-named field) filtered.
 - **Feed→type routing.** `source=manual` everywhere; routing is name/template-based with a `collection_item` default. Mis-mapping is possible for oddly-named feeds — surfaced in the report.
 - **Colspan reintroduction.** Uniform-grid is a corpus property, not a Blux guarantee; the §5 pass-6 guard prevents silent flattening if a re-scrape reintroduces `colspan`.
