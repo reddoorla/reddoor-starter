@@ -31,6 +31,7 @@
 ## File structure
 
 **reddoor-maintenance** (branch `feat/blux-catalog-emit`):
+
 - `src/blux/catalog/spec.ts` — catalog spec types (new).
 - `src/blux/catalog/classify.ts` — `bandToCatalogSection` (new).
 - `src/blux/catalog/emit.ts` — `catalogSpecToPlanSlice` + `buildCatalogPlan` (new).
@@ -39,6 +40,7 @@
 - `tests/blux/catalog/{classify,emit,plan-golden}.test.ts` + `tests/cli/blux-catalog-command.test.ts` (new).
 
 **reddoor-starter** (branch `feat/blux-catalog-pipeline`, already checked out):
+
 - `src/lib/slices/BluxSection/BluxSection.emit-skeleton.test.ts` — offline render proof (new).
 - `docs/superpowers/plans/2026-07-18-blux-catalog-emit-skeleton.md` — this plan (already created).
 
@@ -138,7 +140,10 @@ describe("bandToCatalogSection", () => {
       index: 3,
       root: {
         kind: "stack",
-        children: [heading("<h2>Amenities</h2>"), row([body("<p>Pool</p>"), body("<p>Gym</p>")])],
+        children: [
+          heading("<h2>Amenities</h2>"),
+          row([body("<p>Pool</p>"), body("<p>Gym</p>")]),
+        ],
       },
     };
     const spec = bandToCatalogSection(band);
@@ -204,7 +209,8 @@ function cellToCatalog(c: Cell): CatalogCell {
     };
   }
   // Fallback: raw/subtitle/widget → a text cell carrying whatever HTML we have.
-  const html = n.kind === "raw" ? n.html : n.kind === "subtitle" ? `<p>${n.text}</p>` : "";
+  const html =
+    n.kind === "raw" ? n.html : n.kind === "subtitle" ? `<p>${n.text}</p>` : "";
   return { kind: "text", body: html };
 }
 
@@ -218,7 +224,8 @@ export function bandToCatalogSection(band: Band): BluxSectionSpec {
   for (const n of nodes) {
     if (n.kind === "heading") continue; // consumed as the section heading
     if (n.kind === "row") cells.push(...n.cells.map(cellToCatalog));
-    else cells.push(cellToCatalog({ token: { cols: 1, raw: "grid-1" }, node: n }));
+    else
+      cells.push(cellToCatalog({ token: { cols: 1, raw: "grid-1" }, node: n }));
   }
   return {
     slice: "BluxSection",
@@ -250,7 +257,10 @@ git commit -m "feat(blux-catalog): bandToCatalogSection classifier"
 ```ts
 import { describe, it, expect } from "vitest";
 import type { BluxSectionSpec } from "../../../src/blux/catalog/index.js";
-import { catalogSpecToPlanSlice, buildCatalogPlan } from "../../../src/blux/catalog/index.js";
+import {
+  catalogSpecToPlanSlice,
+  buildCatalogPlan,
+} from "../../../src/blux/catalog/index.js";
 
 const spec: BluxSectionSpec = {
   slice: "BluxSection",
@@ -259,7 +269,11 @@ const spec: BluxSectionSpec = {
   heading: "<h2>Amenities</h2>",
   cells: [
     { kind: "text", title: "<h3>Pool</h3>", body: "<p>Heated</p>" },
-    { kind: "media", media: { assetId: "u1", base: "https://cdn/", ext: "jpg" }, mediaRatio: "4:3" },
+    {
+      kind: "media",
+      media: { assetId: "u1", base: "https://cdn/", ext: "jpg" },
+      mediaRatio: "4:3",
+    },
   ],
 };
 
@@ -270,7 +284,9 @@ describe("catalogSpecToPlanSlice", () => {
     expect(slice.variation).toBe("default");
     expect(slice.items).toEqual([]);
     expect(slice.primary.background_color).toBe("#f4f4f4");
-    expect(slice.primary.heading).toEqual({ __richtext_html: "<h2>Amenities</h2>" });
+    expect(slice.primary.heading).toEqual({
+      __richtext_html: "<h2>Amenities</h2>",
+    });
     const cells = slice.primary.cells as Record<string, unknown>[];
     expect(cells).toHaveLength(2);
     expect(cells[0]).toMatchObject({
@@ -278,21 +294,37 @@ describe("catalogSpecToPlanSlice", () => {
       title: { __richtext_html: "<h3>Pool</h3>" },
       body: { __richtext_html: "<p>Heated</p>" },
     });
-    expect(cells[1]).toMatchObject({ kind: "media", media: { __asset_id: "u1" }, media_ratio: "4:3" });
+    expect(cells[1]).toMatchObject({
+      kind: "media",
+      media: { __asset_id: "u1" },
+      media_ratio: "4:3",
+    });
   });
 });
 
 describe("buildCatalogPlan", () => {
   it("wraps specs in one page document and collects the referenced assets", () => {
-    const plan = buildCatalogPlan([{ uid: "home", title: "Home", specs: [spec] }], {
-      assets: [{ id: "u1", url: "https://cdn/u1.jpg", alt: "pool", sourceUrl: "https://cdn/u1.jpg" }],
-      diagnostics: [],
-    });
+    const plan = buildCatalogPlan(
+      [{ uid: "home", title: "Home", specs: [spec] }],
+      {
+        assets: [
+          {
+            id: "u1",
+            url: "https://cdn/u1.jpg",
+            alt: "pool",
+            sourceUrl: "https://cdn/u1.jpg",
+          },
+        ],
+        diagnostics: [],
+      },
+    );
     expect(plan.documents).toHaveLength(1);
     expect(plan.documents[0]).toMatchObject({ type: "page", uid: "home" });
     const slices = (plan.documents[0].data as { slices: unknown[] }).slices;
     expect(slices).toHaveLength(1);
-    expect(plan.assets.find((a) => a.id === "u1")?.url).toBe("https://cdn/u1.jpg");
+    expect(plan.assets.find((a) => a.id === "u1")?.url).toBe(
+      "https://cdn/u1.jpg",
+    );
   });
 });
 ```
@@ -336,8 +368,12 @@ export function catalogSpecToPlanSlice(spec: CatalogSpec): PlanSlice {
     variation: "default",
     items: [],
     primary: {
-      ...(spec.background ? { background_image: assetRef(spec.background.assetId) } : {}),
-      ...(spec.backgroundColor ? { background_color: spec.backgroundColor } : {}),
+      ...(spec.background
+        ? { background_image: assetRef(spec.background.assetId) }
+        : {}),
+      ...(spec.backgroundColor
+        ? { background_color: spec.backgroundColor }
+        : {}),
       ...(spec.heading ? { heading: richText(spec.heading) } : {}),
       cells: spec.cells.map(cellToItem),
     },
@@ -373,10 +409,15 @@ export function buildCatalogPlan(
   const documents: PlanDocument[] = pages.map((p) => ({
     type: "page",
     uid: p.uid,
-    data: { title: richText(`<h1>${p.title}</h1>`), slices: p.specs.map(catalogSpecToPlanSlice) },
+    data: {
+      title: richText(`<h1>${p.title}</h1>`),
+      slices: p.specs.map(catalogSpecToPlanSlice),
+    },
   }));
   const assetById = new Map(ir.assets.map((a) => [a.id, a] as const));
-  const sourceUrlById = new Map(ir.assets.map((a) => [a.id, a.sourceUrl] as const));
+  const sourceUrlById = new Map(
+    ir.assets.map((a) => [a.id, a.sourceUrl] as const),
+  );
   const resolve = (m: Media): PlanAsset | null => {
     const asset = assetById.get(m.assetId);
     const url = mediaUrl(m, sourceUrlById);
@@ -401,7 +442,13 @@ export function buildCatalogPlan(
         });
     }
   }
-  return { customTypes: [], documents, assets, stylesManifest: [], diagnostics };
+  return {
+    customTypes: [],
+    documents,
+    assets,
+    stylesManifest: [],
+    diagnostics,
+  };
 }
 ```
 
@@ -454,7 +501,10 @@ import { describe, it, expect } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parseGridBands } from "../../../src/blux/grid/index.js";
-import { bandToCatalogSection, buildCatalogPlan } from "../../../src/blux/catalog/index.js";
+import {
+  bandToCatalogSection,
+  buildCatalogPlan,
+} from "../../../src/blux/catalog/index.js";
 
 describe("catalog plan — the-pointe Section band (golden)", () => {
   it("emits a populated blux_section document from a real band", () => {
@@ -465,16 +515,27 @@ describe("catalog plan — the-pointe Section band (golden)", () => {
     const bands = parseGridBands(html);
     expect(bands.length).toBeGreaterThan(0);
     const specs = bands.map(bandToCatalogSection);
-    const plan = buildCatalogPlan([{ uid: "home", title: "The Pointe", specs }], {
-      assets: [],
-      diagnostics: [],
-    });
+    const plan = buildCatalogPlan(
+      [{ uid: "home", title: "The Pointe", specs }],
+      {
+        assets: [],
+        diagnostics: [],
+      },
+    );
     const doc = plan.documents[0];
-    const slices = (doc.data as { slices: { slice_type: string; primary: Record<string, unknown> }[] }).slices;
+    const slices = (
+      doc.data as {
+        slices: { slice_type: string; primary: Record<string, unknown> }[];
+      }
+    ).slices;
     // Every emitted slice is a populated blux_section (skeleton routes all → Section).
     expect(slices.every((s) => s.slice_type === "blux_section")).toBe(true);
     // At least one section carries real heading text and non-empty cells.
-    expect(slices.some((s) => s.primary.heading && (s.primary.cells as unknown[]).length > 0)).toBe(true);
+    expect(
+      slices.some(
+        (s) => s.primary.heading && (s.primary.cells as unknown[]).length > 0,
+      ),
+    ).toBe(true);
     expect(plan).toMatchSnapshot();
   });
 });
@@ -524,7 +585,12 @@ describe("BluxSection renders an emit-shaped (resolved) document", () => {
         background_color: "#f4f4f4",
         heading: rt("heading2", "Amenities"),
         cells: [
-          { kind: "text", title: rt("heading3", "Pool"), body: rt("paragraph", "Heated"), subgrid: [] },
+          {
+            kind: "text",
+            title: rt("heading3", "Pool"),
+            body: rt("paragraph", "Heated"),
+            subgrid: [],
+          },
           { kind: "text", title: rt("heading3", "Gym"), subgrid: [] },
         ],
       },
@@ -535,7 +601,9 @@ describe("BluxSection renders an emit-shaped (resolved) document", () => {
     expect(getByText("Pool")).not.toBeNull();
     expect(getByText("Heated")).not.toBeNull();
     expect(getByText("Gym")).not.toBeNull();
-    expect(container.querySelectorAll(".blux-section__cells > .blux-cell")).toHaveLength(2);
+    expect(
+      container.querySelectorAll(".blux-section__cells > .blux-cell"),
+    ).toHaveLength(2);
   });
 });
 ```
