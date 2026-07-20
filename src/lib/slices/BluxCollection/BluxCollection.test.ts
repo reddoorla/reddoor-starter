@@ -42,6 +42,16 @@ const docs: EntityDoc[] = [
       link: { link_type: "Web", url: "https://vendor.example/iron-lamp" },
     },
   },
+  // Disabled records migrate as documents but the live Blux site hides them
+  // from listing grids — the collection must too (review fix, feed-grid parity).
+  {
+    uid: "retired-stool",
+    data: {
+      title: rt("heading1", "Retired Stool"),
+      tags: "metal",
+      disabled: true,
+    },
+  },
 ];
 
 const slice = (primary: Record<string, unknown>) =>
@@ -109,10 +119,26 @@ describe("BluxCollection slice", () => {
     );
     // The linked card is the external-link one.
     expect(anchors[0].textContent).toContain("Iron Lamp");
-    // All three cards render (no filter, no limit).
+    // All three enabled cards render (no filter, no limit; disabled hidden).
     expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(
       3,
     );
+  });
+
+  it("hides disabled records from the listing (live-site parity)", () => {
+    const { queryByText, getByText } = render(BluxCollection, {
+      props: {
+        slice: slice({
+          collection_type: "product",
+          filter_tag: "metal",
+          layout: "grid",
+        }),
+        context: { collections: { product: docs } },
+      },
+    });
+    // "Retired Stool" is metal-tagged but disabled — never rendered.
+    expect(queryByText("Retired Stool")).toBeNull();
+    expect(getByText("Steel Chair")).not.toBeNull();
   });
 
   it("no context: renders the empty container without crashing", () => {

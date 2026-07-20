@@ -21,6 +21,10 @@
       tags?: string | null;
       date?: string | null;
       link?: unknown;
+      /** Extension field from the Blux record: disabled records still migrate
+       * as documents (their detail pages exist) but the live site hides them
+       * from listing grids — the collection must too (feed-grid parity). */
+      disabled?: boolean | null;
     };
   };
 
@@ -53,7 +57,9 @@
     const all =
       context?.collections?.[slice.primary.collection_type ?? ""] ?? [];
     const match = tagFilter(slice.primary.filter_tag ?? undefined);
-    const filtered = all.filter((doc) => match(splitTags(doc.data.tags)));
+    const filtered = all.filter(
+      (doc) => doc.data.disabled !== true && match(splitTags(doc.data.tags)),
+    );
     const sorted =
       slice.primary.sort === "date"
         ? [...filtered].sort((a, b) =>
