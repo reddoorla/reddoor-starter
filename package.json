@@ -15,7 +15,6 @@
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "test:smoke": "playwright install chromium && playwright test",
-    "export:rfp-pdf": "npx --yes md-to-pdf --config-file pdf.config.cjs docs/rfp-handbook.md",
     "slicemachine": "start-slicemachine"
   },
   "devDependencies": {
