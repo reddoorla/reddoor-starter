@@ -3,6 +3,7 @@
 import Accordion from "./Accordion/index.svelte";
 import BluxBlock from "./BluxBlock/index.svelte";
 import BluxCarousel from "./BluxCarousel/index.svelte";
+import BluxCollection from "./BluxCollection/index.svelte";
 import BluxEmbed from "./BluxEmbed/index.svelte";
 import BluxGallery from "./BluxGallery/index.svelte";
 import BluxGrid from "./BluxGrid/index.svelte";
@@ -30,6 +31,7 @@ export const components = {
   accordion: Accordion,
   blux_block: BluxBlock,
   blux_carousel: BluxCarousel,
+  blux_collection: BluxCollection,
   blux_embed: BluxEmbed,
   blux_gallery: BluxGallery,
   blux_grid: BluxGrid,

@@ -101,6 +101,9 @@
             },
             "blux_table": {
               "type": "SharedSlice"
+            },
+            "blux_collection": {
+              "type": "SharedSlice"
             }
           }
         }

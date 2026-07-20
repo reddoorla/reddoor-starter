@@ -459,7 +459,8 @@ type PageDocumentDataSlicesSlice =
   | BluxMediaSlice
   | BluxMediaTextSlice
   | BluxEmbedSlice
-  | BluxTableSlice;
+  | BluxTableSlice
+  | BluxCollectionSlice;
 
 /**
  * Content for Page documents
@@ -1426,6 +1427,171 @@ type BluxCarouselSliceVariation = BluxCarouselSliceDefault;
 export type BluxCarouselSlice = prismic.SharedSlice<
   "blux_carousel",
   BluxCarouselSliceVariation
+>;
+
+/**
+ * Primary content in *BluxCollection → Default → Primary*
+ */
+export interface BluxCollectionSliceDefaultPrimary {
+  /**
+   * heading field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * background_image field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.background_image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  background_image: prismic.ImageField<never>;
+
+  /**
+   * background_color field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.background_color
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  background_color: prismic.KeyTextField;
+
+  /**
+   * collection_type field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.collection_type
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  collection_type: prismic.KeyTextField;
+
+  /**
+   * feed_ids field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.feed_ids
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  feed_ids: prismic.KeyTextField;
+
+  /**
+   * filter_tag field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.filter_tag
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  filter_tag: prismic.KeyTextField;
+
+  /**
+   * sort field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.sort
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  sort: prismic.KeyTextField;
+
+  /**
+   * limit field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.limit
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  limit: prismic.NumberField;
+
+  /**
+   * media_ratio field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.media_ratio
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  media_ratio: prismic.KeyTextField;
+
+  /**
+   * layout field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.layout
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  layout: prismic.SelectField<"grid" | "carousel">;
+
+  /**
+   * scroll_load_more field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.scroll_load_more
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  scroll_load_more: prismic.SelectField<"off" | "on">;
+
+  /**
+   * widget_kind field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.widget_kind
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  widget_kind: prismic.KeyTextField;
+
+  /**
+   * widget_html field in *BluxCollection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_collection.default.primary.widget_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  widget_html: prismic.KeyTextField;
+}
+
+/**
+ * Default variation for BluxCollection Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Collection
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxCollectionSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<BluxCollectionSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *BluxCollection*
+ */
+type BluxCollectionSliceVariation = BluxCollectionSliceDefault;
+
+/**
+ * BluxCollection Shared Slice
+ *
+ * - **API ID**: `blux_collection`
+ * - **Description**: Blux catalog: a query-spec slice for feed-backed bands — no cells; the page load fetches the mapped entity documents and the component filters/sorts/limits them (spec §6 row 5, §8).
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type BluxCollectionSlice = prismic.SharedSlice<
+  "blux_collection",
+  BluxCollectionSliceVariation
 >;
 
 /**
@@ -4093,6 +4259,10 @@ declare module "@prismicio/client" {
       BluxCarouselSliceDefaultPrimary,
       BluxCarouselSliceVariation,
       BluxCarouselSliceDefault,
+      BluxCollectionSlice,
+      BluxCollectionSliceDefaultPrimary,
+      BluxCollectionSliceVariation,
+      BluxCollectionSliceDefault,
       BluxEmbedSlice,
       BluxEmbedSliceDefaultPrimary,
       BluxEmbedSliceVariation,

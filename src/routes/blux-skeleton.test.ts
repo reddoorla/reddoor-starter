@@ -80,6 +80,11 @@ const slices = [
       table_html: "<table><tbody><tr><td>TableCell</td></tr></tbody></table>",
     },
   },
+  {
+    slice_type: "blux_collection",
+    variation: "default",
+    primary: { collection_type: "product", layout: "grid" },
+  },
 ];
 
 describe("Blux catalog walking skeleton", () => {
@@ -108,5 +113,15 @@ describe("Blux catalog walking skeleton", () => {
     ]) {
       expect(getByText(text)).not.toBeNull();
     }
+  });
+
+  it("renders blux_collection with an empty context: root section, no cards, no crash", () => {
+    const { container } = render(SliceZone, {
+      props: { slices: slices as never, components },
+    });
+    expect(container.querySelector("section.blux-collection")).not.toBeNull();
+    expect(container.querySelectorAll(".blux-collection__card")).toHaveLength(
+      0,
+    );
   });
 });
