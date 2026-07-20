@@ -20,6 +20,20 @@
             "thumbnails": []
           }
         },
+        "background_image": {
+          "type": "Image",
+          "config": {
+            "label": "background_image",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "background_color": {
+          "type": "Text",
+          "config": {
+            "label": "background_color"
+          }
+        },
         "media_side": {
           "type": "Select",
           "config": {

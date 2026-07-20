@@ -2222,6 +2222,26 @@ export interface BluxMediaSliceDefaultPrimary {
   media: prismic.ImageField<never>;
 
   /**
+   * background_image field in *BluxMedia → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media.default.primary.background_image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  background_image: prismic.ImageField<never>;
+
+  /**
+   * background_color field in *BluxMedia → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media.default.primary.background_color
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  background_color: prismic.KeyTextField;
+
+  /**
    * video_embed (raw html for video/youtube/vimeo) field in *BluxMedia → Default → Primary*
    *
    * - **Field Type**: Text
@@ -2325,6 +2345,26 @@ export interface BluxMediaTextSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/fields/image
    */
   media: prismic.ImageField<never>;
+
+  /**
+   * background_image field in *BluxMediaText → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media_text.default.primary.background_image
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  background_image: prismic.ImageField<never>;
+
+  /**
+   * background_color field in *BluxMediaText → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_media_text.default.primary.background_color
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  background_color: prismic.KeyTextField;
 
   /**
    * media_side field in *BluxMediaText → Default → Primary*

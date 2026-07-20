@@ -4,7 +4,6 @@
     "variation": "default",
     "primary": {
       "media": {
-        "__TYPE__": "ImageContent",
         "origin": {
           "id": "main",
           "url": "https://images.unsplash.com/photo-1504198070170-4ca53bb1c1fa",
@@ -23,6 +22,8 @@
           "background": "transparent"
         },
         "alt": "community",
+        "credits": null,
+        "__TYPE__": "ImageContent",
         "thumbnails": {}
       },
       "media_side": {
@@ -59,10 +60,10 @@
       },
       "link": {
         "__TYPE__": "LinkContent",
-        "key": "cd544692-2356-4ab5-b30c-f79ef86c1611",
+        "key": "b4e83111-dccf-4678-ad26-3737d685e3e5",
         "value": {
           "__TYPE__": "ExternalLink",
-          "url": "http://twitter.com"
+          "url": "https://prismic.io"
         }
       },
       "link_label": {

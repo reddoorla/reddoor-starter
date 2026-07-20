@@ -7,13 +7,26 @@
   import { isFilled, type Content } from "@prismicio/client";
 
   let { slice }: { slice: Content.BluxMediaSlice } = $props();
+
+  let bandStyle = $derived(
+    isFilled.keyText(slice.primary.background_color)
+      ? `background-color:${slice.primary.background_color}`
+      : "",
+  );
 </script>
 
 <figure
   class="blux-media"
   data-ratio={slice.primary.ratio}
   data-crop={slice.primary.crop}
+  style={bandStyle}
 >
+  {#if isFilled.image(slice.primary.background_image)}
+    <PrismicImage
+      field={slice.primary.background_image}
+      class="blux-media__bg"
+    />
+  {/if}
   {#if isFilled.image(slice.primary.media)}
     <PrismicImage field={slice.primary.media} />
   {:else if isFilled.keyText(slice.primary.video_embed)}

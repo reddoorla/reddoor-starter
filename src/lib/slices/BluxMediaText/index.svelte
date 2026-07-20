@@ -6,13 +6,26 @@
   } from "@prismicio/svelte";
   import { isFilled, type Content } from "@prismicio/client";
   let { slice }: { slice: Content.BluxMediaTextSlice } = $props();
+
+  let bandStyle = $derived(
+    isFilled.keyText(slice.primary.background_color)
+      ? `background-color:${slice.primary.background_color}`
+      : "",
+  );
 </script>
 
 <div
   class="blux-media-text"
   data-media-side={slice.primary.media_side}
   data-ratio={slice.primary.layout_ratio}
+  style={bandStyle}
 >
+  {#if isFilled.image(slice.primary.background_image)}
+    <PrismicImage
+      field={slice.primary.background_image}
+      class="blux-media-text__bg"
+    />
+  {/if}
   {#if isFilled.image(slice.primary.media)}
     <div class="blux-media-text__media">
       <PrismicImage field={slice.primary.media} />
