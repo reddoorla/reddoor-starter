@@ -15,5 +15,8 @@
 <SliceZone
   slices={data.page.data.slices}
   {components}
-  context={{ presentation: loadPresentation(page.params["uid"]) }}
+  context={{
+    presentation: loadPresentation(page.params["uid"]),
+    collections: data.collections,
+  }}
 />

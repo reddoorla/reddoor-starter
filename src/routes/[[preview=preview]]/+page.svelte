@@ -12,5 +12,8 @@
 <SliceZone
   slices={data.page.data.slices}
   {components}
-  context={{ presentation: loadPresentation() }}
+  context={{
+    presentation: loadPresentation(),
+    collections: data.collections,
+  }}
 />
