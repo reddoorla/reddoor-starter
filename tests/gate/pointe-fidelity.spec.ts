@@ -4,18 +4,21 @@ import { mkdirSync, writeFileSync } from "node:fs";
 // Plan 4d fidelity gate. Drives the offline /dev/blux-pointe route (the real
 // the-pointe catalog fixture rendered through the production SliceZone + chrome)
 // under the same webServer the a11y/smoke suites use, asserts it renders and
-// hydrates cleanly, and dumps the rendered HTML for the maintenance coverage
-// gate (tests/blux/catalog/pointe-coverage.test.ts scores it vs the export).
+// hydrates cleanly, and dumps the rendered HTML. That dump feeds the
+// maintenance coverage gate (tests/blux/catalog/pointe-coverage.test.ts) only
+// when POINTE_RENDERED_HTML points at it; that gate's DEFAULT artifact is the
+// `pnpm run build` prerender — both render the same fixture identically.
 
-// Console noise that isn't actionable for an OFFLINE render: the export's
-// CloudFront images 404 (no live CDN in the gate) and the Google Maps script /
-// Vimeo / Turnstile telemetry can surface — none of which are fidelity signals.
+// Console noise that isn't actionable for an OFFLINE render, scoped to the
+// third-party HOSTS whose resources legitimately 404/telemetry-fail without a
+// live CDN (matched against both the message text and the resource URL). NOT a
+// broad "Failed to load resource" catch — a 404 on a LOCAL asset must fail the
+// gate — and a real execution failure surfaces via `pageerror` regardless.
 const ALLOWED_CONSOLE: RegExp[] = [
-  /cloudfront/i,
+  /cloudfront\.net/i, // export images have no live CDN in the gate
   /maps\.googleapis|maps\.google/i,
   /vimeo/i,
   /turnstile|challenges\.cloudflare/i,
-  /Failed to load resource/i,
 ];
 
 function watchConsole(page: Page): string[] {
