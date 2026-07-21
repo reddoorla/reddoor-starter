@@ -56,12 +56,16 @@
     if (kind !== "map" || !hasKey || !host) return;
     const key = import.meta.env.VITE_GOOGLE_MAPS_KEY as string;
     const cfg = parseCfg(host);
-    const mount = cfg
-      ? host.querySelector<HTMLElement>(`#${CSS.escape(cfg.mountId)}`)
-      : null;
+    const mount =
+      cfg && cfg.mountId
+        ? host.querySelector<HTMLElement>(`#${CSS.escape(cfg.mountId)}`)
+        : null;
     if (!cfg || !mount) return; // keyed but malformed html — static legend stays
 
     let cancelled = false;
+    // Listeners bind to chips inside {@html} DOM Svelte doesn't own, so the
+    // effect must remove them itself — one AbortController covers every chip.
+    const ac = new AbortController();
     const layerObjs: Record<string, GLayer> = {};
     let active = cfg.defaultToggle ?? 0;
 
@@ -88,6 +92,10 @@
             map: l.initiallyVisible ? map : null,
           });
         }
+        // Reconcile the on-map layers with defaultToggle (LocationMap's catch-up):
+        // `initiallyVisible` seeds group 0; a non-zero default applies its group
+        // so the pressed chip and the visible layers can't disagree on first paint.
+        if (active !== 0) applyToggle(active, 0, map);
         const chips = host!.querySelectorAll<HTMLElement>(
           ".blux-map .map_icon",
         );
@@ -106,14 +114,18 @@
             applyToggle(i, prev, map);
             markPressed();
           };
-          chip.addEventListener("click", select);
-          chip.addEventListener("keydown", (e) => {
-            const k = (e as KeyboardEvent).key;
-            if (k === "Enter" || k === " ") {
-              e.preventDefault();
-              select();
-            }
-          });
+          chip.addEventListener("click", select, { signal: ac.signal });
+          chip.addEventListener(
+            "keydown",
+            (e) => {
+              const k = (e as KeyboardEvent).key;
+              if (k === "Enter" || k === " ") {
+                e.preventDefault();
+                select();
+              }
+            },
+            { signal: ac.signal },
+          );
         });
         markPressed();
       })
@@ -123,6 +135,7 @@
 
     return () => {
       cancelled = true;
+      ac.abort(); // remove every chip listener bound above
     };
   });
 </script>
