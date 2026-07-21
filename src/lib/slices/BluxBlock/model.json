@@ -17,6 +17,18 @@
           "config": {
             "label": "payload (serialized JSON tree)"
           }
+        },
+        "widget_kind": {
+          "type": "Text",
+          "config": {
+            "label": "widget_kind"
+          }
+        },
+        "widget_html": {
+          "type": "Text",
+          "config": {
+            "label": "widget_html"
+          }
         }
       },
       "items": {}

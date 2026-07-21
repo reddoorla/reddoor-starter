@@ -57,6 +57,37 @@ describe("BluxBlock fallback slice", () => {
     expect(container.querySelector(".blux-block")).toBeNull();
   });
 
+  it("renders a container-level widget after the tree (map bands ride BluxBlock)", () => {
+    const withWidget = {
+      ...slice,
+      primary: {
+        payload: JSON.stringify(tree),
+        widget_kind: "map",
+        widget_html:
+          '<div class="blux-map" data-map-config=\'{"zoom":12}\'><div id="burbank_map"></div></div>',
+      },
+    } as unknown as Content.BluxBlockSlice;
+    const { container } = render(BluxBlock, { props: { slice: withWidget } });
+    const widget = container.querySelector(".blux-widget[data-widget='map']");
+    expect(widget).not.toBeNull();
+    expect(widget?.querySelector("#burbank_map")).not.toBeNull();
+    // The tree still renders alongside the widget.
+    expect(container.querySelector("section.band .row")).not.toBeNull();
+  });
+
+  it("renders the widget even when the payload is empty", () => {
+    const widgetOnly = {
+      ...slice,
+      primary: {
+        payload: "",
+        widget_kind: "map",
+        widget_html: '<div class="blux-map"><div id="m"></div></div>',
+      },
+    } as unknown as Content.BluxBlockSlice;
+    const { container } = render(BluxBlock, { props: { slice: widgetOnly } });
+    expect(container.querySelector(".blux-widget #m")).not.toBeNull();
+  });
+
   it("defaults an empty tag to a div and keeps the subtree", () => {
     const emptyTag = {
       ...slice,

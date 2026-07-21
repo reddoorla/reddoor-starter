@@ -1010,6 +1010,26 @@ export interface BluxBlockSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   payload: prismic.KeyTextField;
+
+  /**
+   * widget_kind field in *BluxBlock → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_block.default.primary.widget_kind
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  widget_kind: prismic.KeyTextField;
+
+  /**
+   * widget_html field in *BluxBlock → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_block.default.primary.widget_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  widget_html: prismic.KeyTextField;
 }
 
 /**
