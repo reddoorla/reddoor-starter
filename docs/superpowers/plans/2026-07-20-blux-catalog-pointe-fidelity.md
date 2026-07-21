@@ -895,7 +895,12 @@ describe("BluxWidget", () => {
   type WidgetMapConfig = {
     mountId: string;
     mid: string;
-    layers: { name: string; lid: string; initiallyVisible?: boolean; preserveViewport?: boolean }[];
+    layers: {
+      name: string;
+      lid: string;
+      initiallyVisible?: boolean;
+      preserveViewport?: boolean;
+    }[];
     toggles: { label: string; layers: string[]; panelIndex: number }[];
     styles: unknown[];
     center?: { lat: number; lng: number };
@@ -917,7 +922,9 @@ describe("BluxWidget", () => {
     if (kind !== "map" || !host) return;
     const key = import.meta.env.VITE_GOOGLE_MAPS_KEY as string | undefined;
     const config = parseConfig(host);
-    const mount = config ? host.querySelector<HTMLElement>(`#${CSS.escape(config.mountId)}`) : null;
+    const mount = config
+      ? host.querySelector<HTMLElement>(`#${CSS.escape(config.mountId)}`)
+      : null;
     if (!key || !config || !mount) {
       placeholder = true;
       return;
@@ -942,7 +949,9 @@ describe("BluxWidget", () => {
       );
       // Legend chips (DOM order = toggles order): clicking chip i shows ONLY
       // that toggle group's layers — the live Blux clickMap behavior.
-      const chips = host!.querySelectorAll<HTMLElement>(".blux-map .chips span, .blux-map [data-map-chip]");
+      const chips = host!.querySelectorAll<HTMLElement>(
+        ".blux-map .chips span, .blux-map [data-map-chip]",
+      );
       chips.forEach((chip, i) => {
         const group = config.toggles[i];
         if (!group) return;
@@ -966,7 +975,12 @@ describe("BluxWidget", () => {
 </script>
 
 {#if html}
-  <div class="blux-widget" data-widget={kind} bind:this={host} data-map-placeholder={placeholder ? "" : undefined}>
+  <div
+    class="blux-widget"
+    data-widget={kind}
+    bind:this={host}
+    data-map-placeholder={placeholder ? "" : undefined}
+  >
     <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted Blux migration HTML, sanitized at the Emit stage (spec §6) -->
     {@html html}
   </div>
@@ -989,7 +1003,10 @@ with
 
 ```svelte
 {#if isFilled.keyText(slice.primary.widget_html)}
-  <BluxWidget kind={slice.primary.widget_kind} html={slice.primary.widget_html} />
+  <BluxWidget
+    kind={slice.primary.widget_kind}
+    html={slice.primary.widget_html}
+  />
 {/if}
 ```
 
