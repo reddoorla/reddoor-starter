@@ -1,7 +1,7 @@
 <script lang="ts">
   type FooterText = { text: string; href?: string };
   type FooterImage = {
-    image: { url: string; maxWidth?: string };
+    image: { url: string; maxWidth?: string; alt?: string };
     href?: string;
   };
   type FooterItem = FooterText | FooterImage;
@@ -16,7 +16,26 @@
   let { columns }: Props = $props();
 
   const isImage = (i: FooterItem): i is FooterImage => "image" in i;
+
+  // Only http(s) links open in a new tab; tel:/mailto: stay same-tab (repo
+  // idiom, ProductDetail.svelte). Consistent shape — Svelte drops undefined
+  // attributes — so target/rel can't drift between the text- and image-link
+  // branches.
+  const isExternal = (href: string) => /^https?:\/\//i.test(href);
+  const linkAttrs = (href: string) => ({
+    href,
+    target: isExternal(href) ? "_blank" : undefined,
+    rel: isExternal(href) ? "noopener noreferrer" : undefined,
+  });
 </script>
+
+{#snippet logo(img: FooterImage["image"])}
+  <img
+    src={img.url}
+    alt={img.alt ?? ""}
+    style={img.maxWidth ? `max-width:${img.maxWidth}` : undefined}
+  />
+{/snippet}
 
 <footer class="w-full px-8 py-12 mt-auto">
   {#if columns?.length}
@@ -26,26 +45,12 @@
           {#each col.items as item, itemIndex (itemIndex)}
             {#if isImage(item)}
               {#if item.href}
-                <a href={item.href}>
-                  <img
-                    src={item.image.url}
-                    alt=""
-                    style={item.image.maxWidth
-                      ? `max-width:${item.image.maxWidth}`
-                      : undefined}
-                  />
-                </a>
+                <a {...linkAttrs(item.href)}>{@render logo(item.image)}</a>
               {:else}
-                <img
-                  src={item.image.url}
-                  alt=""
-                  style={item.image.maxWidth
-                    ? `max-width:${item.image.maxWidth}`
-                    : undefined}
-                />
+                {@render logo(item.image)}
               {/if}
             {:else if item.href}
-              <a href={item.href}>{item.text}</a>
+              <a {...linkAttrs(item.href)}>{item.text}</a>
             {:else}
               <p>{item.text}</p>
             {/if}
