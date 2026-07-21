@@ -1,12 +1,18 @@
 import fixture from "./fixture.json";
 import siteConfig from "./site-config.json";
 
-// Offline fidelity-gate data: the real the-pointe catalog output (produced by
-// `blux catalog` in reddoor-maintenance and committed as fixtures) rendered
+// Offline fidelity-gate data: the real the-pointe catalog output rendered
 // through the production SliceZone + chrome, with no Prismic round-trip. The
 // Playwright gate (tests/gate) drives this route and the coverage check scores
 // the rendered HTML against the export. Chrome (navLinks/footerColumns) is
 // surfaced via page data so the app layout's Nav/Footer render it once.
+//
+// REGEN the committed fixtures (fixture.json / site-config.json / theme.css)
+// from a fresh the-pointe catalog run in reddoor-maintenance:
+//   node dist/cli/bin.js blux catalog ~/Desktop/thePointe --out <tmp>
+//   cp <tmp>/{render-fixture.json,site-config.json,theme.css} this-dir/
+//   # (render-fixture.json → fixture.json), then `prettier --write` them.
+// The load test's count canaries catch structural drift after a regen.
 export const prerender = true;
 
 type FixtureDoc = { uid: string; data: { slices: unknown[] } };

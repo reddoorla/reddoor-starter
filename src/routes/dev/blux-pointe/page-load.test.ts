@@ -18,6 +18,9 @@ describe("blux-pointe fidelity-gate load", () => {
       expect(typeof l.text).toBe("string");
       expect(typeof l.href).toBe("string");
     }
+    // Pin the mapping direction (text←label, href←href) so a swapped mapping
+    // (e.g. text: i.href) can't pass green.
+    expect(data.navLinks[0]).toEqual({ text: "Vision", href: "/#1" });
   });
 
   it("passes the footer columns through for the layout Footer", () => {
