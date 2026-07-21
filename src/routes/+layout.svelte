@@ -39,14 +39,17 @@
 >
   Skip to main content
 </a>
+<!-- Chrome renders from page data when a route supplies it (the Blux catalog
+     fidelity-gate route does), else from the components' own defaults — so
+     existing routes are unaffected (undefined → Nav logo-only, Footer default). -->
 <div class="flex flex-col min-h-screen">
-  <Nav />
+  <Nav navLinks={page.data.navLinks} />
 
   <main id="main-content" tabindex="-1" class="flex-1">
     {@render children?.()}
   </main>
 
-  <Footer />
+  <Footer columns={page.data.footerColumns} />
 </div>
 <TransitionOverlay />
 <LandscapeModal />
