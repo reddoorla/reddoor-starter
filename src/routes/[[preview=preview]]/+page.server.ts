@@ -1,17 +1,18 @@
-import { asText } from "@prismicio/client";
 import { error } from "@sveltejs/kit";
 
 import {
   collectionTypesOf,
   loadCollections,
 } from "$lib/blux-catalog/collections-load";
+import { getPageDoc, pageMeta } from "$lib/blux-catalog/page-doc";
 import { createClient, isPlaceholderRepo } from "$lib/prismicio";
 
 export async function load({ fetch, cookies }) {
   const client = createClient({ fetch, cookies });
 
   try {
-    const page = await client.getByUID("page", "home");
+    // Native `page` or Blux-migrated `catalog_page` — both pin home to "home".
+    const page = await getPageDoc(client, "home");
 
     // Entity documents for any blux_collection slices on this page — slices
     // never fetch; SliceZone hands these down as context.collections.
@@ -20,15 +21,7 @@ export async function load({ fetch, cookies }) {
       collectionTypesOf(page.data.slices as never),
     );
 
-    return {
-      page,
-      collections,
-      title: asText(page.data.title),
-      meta_description: page.data.meta_description,
-      meta_title: page.data.meta_title,
-      meta_image: page.data.meta_image?.url,
-      meta_image_alt: page.data.meta_image?.alt ?? undefined,
-    };
+    return { page, collections, ...pageMeta(page) };
   } catch {
     error(404, { message: "Page not found" });
   }
