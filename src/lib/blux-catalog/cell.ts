@@ -14,5 +14,14 @@ export type BluxCellData = {
   embed_html: prismic.KeyTextField;
   link: prismic.LinkField;
   link_label: prismic.KeyTextField;
+  // --- visual-fidelity fields (Blux catalog visual layer) ---
+  width?: string;
+  spacing?: number | null;
+  cover?: string | null;
+  valign?: string | null;
+  background_color?: string | null;
+  content_padding?: string | null;
+  title_role?: string | null;
+  body_role?: string | null;
   subgrid?: BluxCellData[];
 };

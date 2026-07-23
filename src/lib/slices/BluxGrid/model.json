@@ -16,7 +16,7 @@
           "type": "StructuredText",
           "config": {
             "label": "heading",
-            "single": "heading2,heading3"
+            "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
           }
         },
         "background_image": {
@@ -49,13 +49,56 @@
           "type": "Select",
           "config": {
             "label": "vertical_align",
-            "options": ["top", "middle", "bottom"]
+            "options": [
+              "top",
+              "middle",
+              "bottom"
+            ]
           }
         },
         "min_height": {
           "type": "Text",
           "config": {
             "label": "min_height"
+          }
+        },
+        "content_padding": {
+          "type": "Text",
+          "config": {
+            "label": "content_padding"
+          }
+        },
+        "content_padding_mobile": {
+          "type": "Text",
+          "config": {
+            "label": "content_padding_mobile"
+          }
+        },
+        "text_align": {
+          "type": "Select",
+          "config": {
+            "label": "text_align",
+            "options": [
+              "left",
+              "center",
+              "right"
+            ]
+          }
+        },
+        "column_side": {
+          "type": "Select",
+          "config": {
+            "label": "column_side",
+            "options": [
+              "left",
+              "right"
+            ]
+          }
+        },
+        "heading_role": {
+          "type": "Text",
+          "config": {
+            "label": "heading_role"
           }
         },
         "widget_kind": {
@@ -110,21 +153,27 @@
                 "type": "Select",
                 "config": {
                   "label": "kind",
-                  "options": ["text", "media", "embed", "button", "subgrid"]
+                  "options": [
+                    "text",
+                    "media",
+                    "embed",
+                    "button",
+                    "subgrid"
+                  ]
                 }
               },
               "title": {
                 "type": "StructuredText",
                 "config": {
                   "label": "title",
-                  "single": "heading3,heading4"
+                  "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
                 }
               },
               "body": {
                 "type": "StructuredText",
                 "config": {
                   "label": "body",
-                  "multi": "paragraph,strong,em,hyperlink,list-item"
+                  "multi": "paragraph,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,list-item,o-list-item,image,embed"
                 }
               },
               "media": {
@@ -160,6 +209,54 @@
                   "label": "embed_html"
                 }
               },
+              "width": {
+                "type": "Text",
+                "config": {
+                  "label": "width"
+                }
+              },
+              "spacing": {
+                "type": "Number",
+                "config": {
+                  "label": "spacing"
+                }
+              },
+              "cover": {
+                "type": "Text",
+                "config": {
+                  "label": "cover (on)"
+                }
+              },
+              "valign": {
+                "type": "Text",
+                "config": {
+                  "label": "valign (on)"
+                }
+              },
+              "background_color": {
+                "type": "Text",
+                "config": {
+                  "label": "background_color"
+                }
+              },
+              "content_padding": {
+                "type": "Text",
+                "config": {
+                  "label": "content_padding"
+                }
+              },
+              "title_role": {
+                "type": "Text",
+                "config": {
+                  "label": "title_role"
+                }
+              },
+              "body_role": {
+                "type": "Text",
+                "config": {
+                  "label": "body_role"
+                }
+              },
               "subgrid": {
                 "type": "Group",
                 "config": {
@@ -169,21 +266,25 @@
                       "type": "Select",
                       "config": {
                         "label": "kind",
-                        "options": ["text", "media", "embed"]
+                        "options": [
+                          "text",
+                          "media",
+                          "embed"
+                        ]
                       }
                     },
                     "title": {
                       "type": "StructuredText",
                       "config": {
                         "label": "title",
-                        "single": "heading4,heading5"
+                        "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
                       }
                     },
                     "body": {
                       "type": "StructuredText",
                       "config": {
                         "label": "body",
-                        "multi": "paragraph,strong,em,hyperlink,list-item"
+                        "multi": "paragraph,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,list-item,o-list-item,image,embed"
                       }
                     },
                     "media": {
@@ -217,6 +318,54 @@
                       "type": "Text",
                       "config": {
                         "label": "embed_html"
+                      }
+                    },
+                    "width": {
+                      "type": "Text",
+                      "config": {
+                        "label": "width"
+                      }
+                    },
+                    "spacing": {
+                      "type": "Number",
+                      "config": {
+                        "label": "spacing"
+                      }
+                    },
+                    "cover": {
+                      "type": "Text",
+                      "config": {
+                        "label": "cover (on)"
+                      }
+                    },
+                    "valign": {
+                      "type": "Text",
+                      "config": {
+                        "label": "valign (on)"
+                      }
+                    },
+                    "background_color": {
+                      "type": "Text",
+                      "config": {
+                        "label": "background_color"
+                      }
+                    },
+                    "content_padding": {
+                      "type": "Text",
+                      "config": {
+                        "label": "content_padding"
+                      }
+                    },
+                    "title_role": {
+                      "type": "Text",
+                      "config": {
+                        "label": "title_role"
+                      }
+                    },
+                    "body_role": {
+                      "type": "Text",
+                      "config": {
+                        "label": "body_role"
                       }
                     }
                   }

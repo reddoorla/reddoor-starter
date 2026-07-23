@@ -28,8 +28,8 @@ type PickContentRelationshipFieldData<
       TSubRelationship["customtypes"],
       TLang
     >;
-  } & {
-    // Group
+  } & // Group
+  {
     [TGroup in Extract<
       TRelationship["fields"][number],
       | prismic.CustomTypeModelFetchGroupLevel1
@@ -41,8 +41,8 @@ type PickContentRelationshipFieldData<
           PickContentRelationshipFieldData<TGroup, TGroupData, TLang>
         >
       : never;
-  } & {
-    // Other fields
+  } & // Other fields
+  {
     [TFieldKey in Extract<
       TRelationship["fields"][number],
       string
@@ -2109,6 +2109,86 @@ export interface BluxGridSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+
+  /**
+   * width field in *BluxGrid → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].width
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  width: prismic.KeyTextField;
+
+  /**
+   * spacing field in *BluxGrid → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].spacing
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  spacing: prismic.NumberField;
+
+  /**
+   * cover (on) field in *BluxGrid → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].cover
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  cover: prismic.KeyTextField;
+
+  /**
+   * valign (on) field in *BluxGrid → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].valign
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  valign: prismic.KeyTextField;
+
+  /**
+   * background_color field in *BluxGrid → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].background_color
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  background_color: prismic.KeyTextField;
+
+  /**
+   * content_padding field in *BluxGrid → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].content_padding
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  content_padding: prismic.KeyTextField;
+
+  /**
+   * title_role field in *BluxGrid → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].title_role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title_role: prismic.KeyTextField;
+
+  /**
+   * body_role field in *BluxGrid → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].body_role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  body_role: prismic.KeyTextField;
 }
 
 /**
@@ -2196,6 +2276,86 @@ export interface BluxGridSliceDefaultPrimaryCellsItem {
   embed_html: prismic.KeyTextField;
 
   /**
+   * width field in *BluxGrid → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].width
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  width: prismic.KeyTextField;
+
+  /**
+   * spacing field in *BluxGrid → Default → Primary → cells*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].spacing
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  spacing: prismic.NumberField;
+
+  /**
+   * cover (on) field in *BluxGrid → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].cover
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  cover: prismic.KeyTextField;
+
+  /**
+   * valign (on) field in *BluxGrid → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].valign
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  valign: prismic.KeyTextField;
+
+  /**
+   * background_color field in *BluxGrid → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].background_color
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  background_color: prismic.KeyTextField;
+
+  /**
+   * content_padding field in *BluxGrid → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].content_padding
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  content_padding: prismic.KeyTextField;
+
+  /**
+   * title_role field in *BluxGrid → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].title_role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title_role: prismic.KeyTextField;
+
+  /**
+   * body_role field in *BluxGrid → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].body_role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  body_role: prismic.KeyTextField;
+
+  /**
    * subgrid field in *BluxGrid → Default → Primary → cells*
    *
    * - **Field Type**: Group
@@ -2281,6 +2441,56 @@ export interface BluxGridSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   min_height: prismic.KeyTextField;
+
+  /**
+   * content_padding field in *BluxGrid → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.content_padding
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  content_padding: prismic.KeyTextField;
+
+  /**
+   * content_padding_mobile field in *BluxGrid → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.content_padding_mobile
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  content_padding_mobile: prismic.KeyTextField;
+
+  /**
+   * text_align field in *BluxGrid → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.text_align
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  text_align: prismic.SelectField<"left" | "center" | "right">;
+
+  /**
+   * column_side field in *BluxGrid → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.column_side
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  column_side: prismic.SelectField<"left" | "right">;
+
+  /**
+   * heading_role field in *BluxGrid → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.heading_role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  heading_role: prismic.KeyTextField;
 
   /**
    * widget_kind field in *BluxGrid → Default → Primary*
@@ -2726,6 +2936,86 @@ export interface BluxSectionSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+
+  /**
+   * width field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].width
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  width: prismic.KeyTextField;
+
+  /**
+   * spacing field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].spacing
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  spacing: prismic.NumberField;
+
+  /**
+   * cover (on) field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].cover
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  cover: prismic.KeyTextField;
+
+  /**
+   * valign (on) field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].valign
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  valign: prismic.KeyTextField;
+
+  /**
+   * background_color field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].background_color
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  background_color: prismic.KeyTextField;
+
+  /**
+   * content_padding field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].content_padding
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  content_padding: prismic.KeyTextField;
+
+  /**
+   * title_role field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].title_role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title_role: prismic.KeyTextField;
+
+  /**
+   * body_role field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].body_role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  body_role: prismic.KeyTextField;
 }
 
 /**
@@ -2813,6 +3103,86 @@ export interface BluxSectionSliceDefaultPrimaryCellsItem {
   embed_html: prismic.KeyTextField;
 
   /**
+   * width field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].width
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  width: prismic.KeyTextField;
+
+  /**
+   * spacing field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].spacing
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  spacing: prismic.NumberField;
+
+  /**
+   * cover (on) field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].cover
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  cover: prismic.KeyTextField;
+
+  /**
+   * valign (on) field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].valign
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  valign: prismic.KeyTextField;
+
+  /**
+   * background_color field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].background_color
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  background_color: prismic.KeyTextField;
+
+  /**
+   * content_padding field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].content_padding
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  content_padding: prismic.KeyTextField;
+
+  /**
+   * title_role field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].title_role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  title_role: prismic.KeyTextField;
+
+  /**
+   * body_role field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].body_role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  body_role: prismic.KeyTextField;
+
+  /**
    * subgrid field in *BluxSection → Default → Primary → cells*
    *
    * - **Field Type**: Group
@@ -2898,6 +3268,66 @@ export interface BluxSectionSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   min_height: prismic.KeyTextField;
+
+  /**
+   * content_padding field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.content_padding
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  content_padding: prismic.KeyTextField;
+
+  /**
+   * content_padding_mobile field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.content_padding_mobile
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  content_padding_mobile: prismic.KeyTextField;
+
+  /**
+   * text_align field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.text_align
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  text_align: prismic.SelectField<"left" | "center" | "right">;
+
+  /**
+   * column_side field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.column_side
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  column_side: prismic.SelectField<"left" | "right">;
+
+  /**
+   * heading_role field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.heading_role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  heading_role: prismic.KeyTextField;
+
+  /**
+   * column_width field in *BluxSection → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.column_width
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  column_width: prismic.KeyTextField;
 
   /**
    * widget_kind field in *BluxSection → Default → Primary*
