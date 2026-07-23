@@ -19,10 +19,7 @@ export function cellWidth(width: string | undefined, columns: number): string {
  * by the band `columns`; a subgrid passes its own cell count as `k`). A
  * single-column row reserves nothing. `width` is an explicit share (e.g. a
  * `grid-2-r70` ratio → `"70%"`); absent → equal split of `k`. */
-export function gridCellBasis(
-  width: string | undefined,
-  k: number,
-): string {
+export function gridCellBasis(width: string | undefined, k: number): string {
   const base = cellWidth(width, k);
   if (k <= 1) return base;
   const reserve = Math.ceil(((GRID_GUTTER * (k - 1)) / k) * 10000) / 10000;
