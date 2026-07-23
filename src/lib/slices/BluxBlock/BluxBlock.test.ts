@@ -101,6 +101,26 @@ describe("BluxBlock fallback slice", () => {
     const { getByText } = render(BluxBlock, { props: { slice: emptyTag } });
     expect(getByText("kept")).not.toBeNull();
   });
+
+  it("renders a node's inline background style intact (survives the layout import)", () => {
+    const styled = {
+      ...slice,
+      primary: {
+        payload: JSON.stringify({
+          tag: "div",
+          style: { "background-color": "#eeeeee" },
+          children: [{ tag: "p", html: "Hello" }],
+        }),
+      },
+    } as unknown as Content.BluxBlockSlice;
+    const { container, getByText } = render(BluxBlock, {
+      props: { slice: styled },
+    });
+    expect(getByText("Hello")).not.toBeNull();
+    expect(
+      container.querySelector("[style*='background-color']"),
+    ).not.toBeNull();
+  });
 });
 
 describe("styleString", () => {
