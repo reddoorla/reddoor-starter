@@ -26,6 +26,11 @@
                   "height": 1200
                 }
               },
+              "content_padding": "40px 0",
+              "content_padding_mobile": "20px 0",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
               "cells": [
                 {
                   "kind": "media",
@@ -47,7 +52,8 @@
                       "spans": [],
                       "direction": "ltr"
                     }
-                  ]
+                  ],
+                  "content_padding": "10px 0px 0px"
                 }
               ]
             }
@@ -65,6 +71,11 @@
                   "height": 1200
                 }
               },
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
               "columns": 2,
               "cells": [
                 {
@@ -128,7 +139,8 @@
                       "width": 1600,
                       "height": 1200
                     }
-                  }
+                  },
+                  "width": "40%"
                 }
               ]
             }
@@ -138,6 +150,12 @@
             "variation": "default",
             "items": [],
             "primary": {
+              "content_padding": "40px 0",
+              "content_padding_mobile": "20px 0",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "heading_role": "text5",
               "heading": [
                 {
                   "type": "heading2",
@@ -182,6 +200,12 @@
                   "height": 1200
                 }
               },
+              "background_color": "#ffffff",
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
               "cells": []
             }
           },
@@ -190,6 +214,11 @@
             "variation": "default",
             "items": [],
             "primary": {
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "left",
               "columns": 2,
               "cells": [
                 {
@@ -223,7 +252,10 @@
                       "width": 1600,
                       "height": 1200
                     }
-                  }
+                  },
+                  "width": "60%",
+                  "title_role": "text5",
+                  "body_role": "text1"
                 }
               ]
             }
@@ -233,6 +265,9 @@
             "variation": "default",
             "items": [],
             "primary": {
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
               "columns": 1,
               "cells": [
                 {
@@ -247,7 +282,9 @@
                           "width": 1600,
                           "height": 1200
                         }
-                      }
+                      },
+                      "width": "70%",
+                      "cover": "on"
                     },
                     {
                       "kind": "text",
@@ -268,7 +305,9 @@
                           ],
                           "direction": "ltr"
                         }
-                      ]
+                      ],
+                      "width": "30%",
+                      "body_role": "text14"
                     }
                   ]
                 },
@@ -284,7 +323,9 @@
                           "spans": [],
                           "direction": "ltr"
                         }
-                      ]
+                      ],
+                      "width": "30%",
+                      "body_role": "text14"
                     },
                     {
                       "kind": "media",
@@ -295,7 +336,9 @@
                           "width": 1600,
                           "height": 1200
                         }
-                      }
+                      },
+                      "width": "70%",
+                      "cover": "on"
                     }
                   ]
                 },
@@ -311,7 +354,8 @@
                           "width": 1600,
                           "height": 1200
                         }
-                      }
+                      },
+                      "width": "70%"
                     },
                     {
                       "kind": "text",
@@ -322,7 +366,9 @@
                           "spans": [],
                           "direction": "ltr"
                         }
-                      ]
+                      ],
+                      "width": "30%",
+                      "body_role": "text14"
                     }
                   ]
                 }
@@ -342,6 +388,12 @@
                   "height": 1200
                 }
               },
+              "content_padding": "40px 0",
+              "content_padding_mobile": "20px 0",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "heading_role": "text5",
               "heading": [
                 {
                   "type": "heading2",
@@ -370,6 +422,9 @@
             "variation": "default",
             "items": [],
             "primary": {
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
               "columns_visible": 1,
               "cells": [
                 {
@@ -445,6 +500,11 @@
                   "height": 1200
                 }
               },
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "left",
               "columns": 2,
               "cells": [
                 {
@@ -517,6 +577,11 @@
                   "height": 1200
                 }
               },
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "left",
               "columns": 2,
               "cells": [
                 {
@@ -551,6 +616,9 @@
                       "height": 1200
                     }
                   },
+                  "width": "60%",
+                  "title_role": "text5",
+                  "body_role": "text1",
                   "embed_html": "<a class=\"ib middle buttons2\" href=\"https://dv4tl7yyk1zlp.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/1b5b96c1-16fb-4d8b-8cb0-f71938af22c0.pdf\">Burbank Incentives</a>"
                 }
               ]
@@ -561,6 +629,9 @@
             "variation": "default",
             "items": [],
             "primary": {
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
               "columns": 1,
               "cells": [
                 {
@@ -575,7 +646,9 @@
                           "spans": [],
                           "direction": "ltr"
                         }
-                      ]
+                      ],
+                      "width": "30%",
+                      "body_role": "text14"
                     },
                     {
                       "kind": "media",
@@ -586,7 +659,9 @@
                           "width": 1600,
                           "height": 1200
                         }
-                      }
+                      },
+                      "width": "70%",
+                      "cover": "on"
                     }
                   ]
                 },
@@ -602,7 +677,9 @@
                           "width": 1600,
                           "height": 1200
                         }
-                      }
+                      },
+                      "width": "70%",
+                      "cover": "on"
                     },
                     {
                       "kind": "text",
@@ -613,7 +690,9 @@
                           "spans": [],
                           "direction": "ltr"
                         }
-                      ]
+                      ],
+                      "width": "30%",
+                      "body_role": "text14"
                     }
                   ]
                 },
@@ -629,7 +708,9 @@
                           "spans": [],
                           "direction": "ltr"
                         }
-                      ]
+                      ],
+                      "width": "30%",
+                      "body_role": "text14"
                     },
                     {
                       "kind": "media",
@@ -640,7 +721,9 @@
                           "width": 1600,
                           "height": 1200
                         }
-                      }
+                      },
+                      "width": "70%",
+                      "cover": "on"
                     }
                   ]
                 }
@@ -652,6 +735,12 @@
             "variation": "default",
             "items": [],
             "primary": {
+              "content_padding": "40px 0",
+              "content_padding_mobile": "20px 0",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "heading_role": "text5",
               "heading": [
                 {
                   "type": "heading2",
@@ -690,6 +779,12 @@
             "variation": "default",
             "items": [],
             "primary": {
+              "content_padding": "120px 4% 120px 4%",
+              "content_padding_mobile": "80px 4% 80px 4%",
+              "max_content_width": "1280px",
+              "vertical_align": "middle",
+              "text_align": "center",
+              "heading_role": "text11",
               "heading": [
                 {
                   "type": "heading2",
