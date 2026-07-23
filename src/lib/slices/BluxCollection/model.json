@@ -16,7 +16,7 @@
           "type": "StructuredText",
           "config": {
             "label": "heading",
-            "single": "heading2,heading3"
+            "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
           }
         },
         "background_image": {
@@ -73,14 +73,20 @@
           "type": "Select",
           "config": {
             "label": "layout",
-            "options": ["grid", "carousel"]
+            "options": [
+              "grid",
+              "carousel"
+            ]
           }
         },
         "scroll_load_more": {
           "type": "Select",
           "config": {
             "label": "scroll_load_more",
-            "options": ["off", "on"]
+            "options": [
+              "off",
+              "on"
+            ]
           }
         },
         "widget_kind": {
