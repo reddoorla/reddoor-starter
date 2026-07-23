@@ -62,3 +62,48 @@ test("the-pointe catalog fixture renders faithfully; HTML dumped for coverage", 
   mkdirSync("test-results/gate", { recursive: true });
   writeFileSync("test-results/gate/pointe-rendered.html", html);
 });
+
+// The visual-fidelity layer: assert the emitted data actually resolves into
+// layout (a real flex-basis grid, band padding, cover crops, type-role
+// wrapping, laid-out heights). A failure here is a REAL fidelity gap — fix the
+// render/emit, never weaken the assertion.
+test("catalog visual layer resolves grid, cover, padding, and type roles", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/dev/blux-pointe");
+
+  // Grid columns resolve to a real flex-basis (not 'auto') at desktop.
+  const cell = page.locator(".blux-grid__cells > .blux-cell").first();
+  const basis = await cell.evaluate((el) => getComputedStyle(el).flexBasis);
+  expect(basis).not.toBe("auto");
+  expect(basis).toMatch(/\d/); // a resolved length/percentage
+
+  // At least one band wrapper carries resolved horizontal padding (band-pad →
+  // content_padding). Some bands are "40px 0" (zero horizontal), so check the
+  // MAX across wrappers — not the first, which may legitimately be 0.
+  const pads = await page
+    .locator(".blux-grid__cells, .blux-section__cells")
+    .evaluateAll((els) =>
+      els.map((el) => parseFloat(getComputedStyle(el).paddingLeft)),
+    );
+  expect(Math.max(...pads)).toBeGreaterThan(0);
+
+  // Cover media crops via object-fit (only asserted when the fixture has
+  // cover cells — the-pointe may have none).
+  const cover = page.locator(".blux-cell__media[data-cover='on'] img");
+  if (await cover.count()) {
+    await expect(cover.first()).toHaveCSS("object-fit", "cover");
+  }
+
+  // Type-role wrapping is applied to real text runs.
+  await expect(page.locator("[class*='txt-role-text']").first()).toBeVisible();
+
+  // The tallest band is at least the fold tall — a real, laid-out page.
+  const tallest = await page
+    .locator("section.blux-grid, section.blux-section")
+    .evaluateAll((els) =>
+      Math.max(...els.map((el) => el.getBoundingClientRect().height)),
+    );
+  expect(tallest).toBeGreaterThan(600);
+});
