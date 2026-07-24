@@ -5,7 +5,10 @@ const vals = (o: Record<string, SlotValue>) => new Map(Object.entries(o));
 
 describe("substitute", () => {
   it("replaces text tokens", () => {
-    const out = substitute("<h1>⟦t:s0.t0⟧</h1>", vals({ "s0.t0": { text: "Hello" } }));
+    const out = substitute(
+      "<h1>⟦t:s0.t0⟧</h1>",
+      vals({ "s0.t0": { text: "Hello" } }),
+    );
     expect(out).toBe("<h1>Hello</h1>");
   });
 
@@ -26,7 +29,10 @@ describe("substitute", () => {
   });
 
   it("resolves a missing key to empty and never leaves a raw token", () => {
-    const out = substitute("<p>⟦t:missing⟧</p><i style='background-image:url(⟦i:gone⟧)'></i>", vals({}));
+    const out = substitute(
+      "<p>⟦t:missing⟧</p><i style='background-image:url(⟦i:gone⟧)'></i>",
+      vals({}),
+    );
     expect(ANY_TOKEN_RE.test(out)).toBe(false);
   });
 });

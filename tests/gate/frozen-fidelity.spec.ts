@@ -19,7 +19,11 @@ test("frozen the-pointe renders faithfully: ~15333px, 56 media, no tokens", asyn
 }) => {
   const errors: string[] = [];
   page.on("console", (m: ConsoleMessage) => {
-    if (m.type() === "error" && !allowed(m.text()) && !allowed(m.location()?.url ?? "")) {
+    if (
+      m.type() === "error" &&
+      !allowed(m.text()) &&
+      !allowed(m.location()?.url ?? "")
+    ) {
       errors.push(m.text());
     }
   });

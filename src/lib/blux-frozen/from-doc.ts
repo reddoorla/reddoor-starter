@@ -32,6 +32,10 @@ export function frozenSlotsFromDoc(slots: FrozenDocSlot[]): FrozenRenderSlot[] {
       const url = s.image?.url || s.media_url || undefined;
       return { key: s.key, kind: "image", url };
     }
-    return { key: s.key, kind: "text", text: escapeHtml(asText(s.text as never) ?? "") };
+    return {
+      key: s.key,
+      kind: "text",
+      text: escapeHtml(asText(s.text as never) ?? ""),
+    };
   });
 }

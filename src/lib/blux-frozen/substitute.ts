@@ -28,6 +28,9 @@ export function substitute(
 ): string {
   return template
     .replace(TEXT_RE, (_, key: string) => values.get(key)?.text ?? "")
-    .replace(IMG_URL_RE, (_, key: string) => `url('${values.get(key)?.url ?? ""}')`)
+    .replace(
+      IMG_URL_RE,
+      (_, key: string) => `url('${values.get(key)?.url ?? ""}')`,
+    )
     .replace(IMG_BARE_RE, (_, key: string) => values.get(key)?.url ?? "");
 }
