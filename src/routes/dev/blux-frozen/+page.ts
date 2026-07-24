@@ -16,6 +16,10 @@ export function load() {
     template,
     styleCss,
     fontLinks: manifest.fontLinks,
-    slots: manifest.slots,
+    // Narrow `kind` from the JSON artifact's widened `string` to the slot union.
+    slots: manifest.slots.map((s) => ({
+      ...s,
+      kind: s.kind as "text" | "image",
+    })),
   };
 }

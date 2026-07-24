@@ -34,3 +34,15 @@ export function substitute(
     )
     .replace(IMG_BARE_RE, (_, key: string) => values.get(key)?.url ?? "");
 }
+
+/**
+ * Wrap the freeze's extracted CSS in a `<style>` element for injection via
+ * `{@html}` in `<svelte:head>`. This lives in a `.ts` module on purpose: a
+ * literal `<style>`/`</style>` token in `.svelte` source makes Svelte's parser
+ * try to extract it as the component's own style block, which breaks
+ * `svelte-check` (`element_unclosed: <script> was left open`). Building the tag
+ * in TS keeps that token out of the component source.
+ */
+export function styleTag(css: string): string {
+  return `<style>${css}</style>`;
+}

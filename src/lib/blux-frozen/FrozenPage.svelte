@@ -1,5 +1,9 @@
 <script lang="ts">
-  import { substitute, type SlotValue } from "$lib/blux-frozen/substitute";
+  import {
+    substitute,
+    styleTag,
+    type SlotValue,
+  } from "$lib/blux-frozen/substitute";
 
   // A frozen page = the Blux export's own settled markup (byte-faithful layout,
   // 316 inline styles) with editable leaves tokenized. We inject the extracted
@@ -31,7 +35,10 @@
 
   const values = $derived(
     new Map<string, SlotValue>(
-      slots.map((s) => [s.key, s.kind === "image" ? { url: s.url } : { text: s.text }]),
+      slots.map((s) => [
+        s.key,
+        s.kind === "image" ? { url: s.url } : { text: s.text },
+      ]),
     ),
   );
   const html = $derived(substitute(template, values));
@@ -42,7 +49,7 @@
     <link rel="stylesheet" {href} />
   {/each}
   <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted freeze-emitted style block (build-time, no user input) -->
-  {@html `<style>${styleCss}</style>`}
+  {@html styleTag(styleCss)}
 </svelte:head>
 
 <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted freeze template; tokens substituted for CMS content -->

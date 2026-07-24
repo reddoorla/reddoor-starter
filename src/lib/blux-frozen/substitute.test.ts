@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { substitute, ANY_TOKEN_RE, type SlotValue } from "./substitute";
+import {
+  substitute,
+  styleTag,
+  ANY_TOKEN_RE,
+  type SlotValue,
+} from "./substitute";
 
 const vals = (o: Record<string, SlotValue>) => new Map(Object.entries(o));
 
@@ -34,5 +39,11 @@ describe("substitute", () => {
       vals({}),
     );
     expect(ANY_TOKEN_RE.test(out)).toBe(false);
+  });
+});
+
+describe("styleTag", () => {
+  it("wraps css in a style element", () => {
+    expect(styleTag(".x{color:red}")).toBe("<style>.x{color:red}</style>");
   });
 });
