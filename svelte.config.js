@@ -73,10 +73,6 @@ const config = {
           "data:",
           "https://images.prismic.io",
           "https://*.prismic.io",
-          // DEV-ONLY (frozen gate fixture uses Blux CDN source urls; production
-          // frozen pages serve Prismic-hosted images). TODO drop before ship.
-          "https://d3syaxnfm3oj0e.cloudfront.net",
-          "https://dv4tl7yyk1zlp.cloudfront.net",
         ],
         // Prismic hosts non-image media (e.g. migrated .mp4 assets) on
         // <repo>.cdn.prismic.io — first-party content, same origin family as
