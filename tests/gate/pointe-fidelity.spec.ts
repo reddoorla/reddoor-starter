@@ -99,6 +99,22 @@ test("catalog visual layer resolves grid, cover, padding, and type roles", async
   // Type-role wrapping is applied to real text runs.
   await expect(page.locator("[class*='txt-role-text']").first()).toBeVisible();
 
+  // Role SIZING resolves at runtime: at least one big display-role block inside
+  // a cell body computes to a materially larger font-size than default body
+  // text. Locks the regression where cell subtitles / secondary headings kept
+  // the role CLASS but rendered at default size (RichText could not carry the
+  // class; the theme vars did not resolve at runtime). Fix the emit/render/theme
+  // if this fails — never weaken the assertion.
+  const cellRoleSizes = await page
+    .locator(
+      ".blux-cell__body [class*='txt-role-text'] :is(h1,h2,h3,h4,h5,h6,p)",
+    )
+    .evaluateAll((els) =>
+      els.map((el) => parseFloat(getComputedStyle(el).fontSize)),
+    );
+  expect(cellRoleSizes.length).toBeGreaterThan(0);
+  expect(Math.max(...cellRoleSizes)).toBeGreaterThan(40); // default body ~18px; display roles 44–84px
+
   // The tallest band is at least the fold tall — a real, laid-out page.
   const tallest = await page
     .locator("section.blux-grid, section.blux-section")
