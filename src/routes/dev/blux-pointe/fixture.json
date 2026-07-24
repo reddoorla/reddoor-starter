@@ -1,7 +1,7 @@
 {
   "documents": [
     {
-      "type": "page",
+      "type": "catalog_page",
       "uid": "home",
       "data": {
         "title": [
@@ -12,6 +12,15 @@
             "direction": "ltr"
           }
         ],
+        "meta_title": "The Pointe",
+        "meta_image": {
+          "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/4dd6c119-e41e-43d8-afad-2cbf03068ff8.jpg",
+          "alt": "Pointe-Web-6.jpg",
+          "dimensions": {
+            "width": 1600,
+            "height": 1200
+          }
+        },
         "slices": [
           {
             "slice_type": "blux_grid",
@@ -89,25 +98,11 @@
                     },
                     {
                       "kind": "media",
-                      "media": {
-                        "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png",
-                        "alt": "lines-blue.png",
-                        "dimensions": {
-                          "width": 1600,
-                          "height": 1200
-                        }
-                      }
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png\" alt=\"lines-blue.png\">"
                     },
                     {
                       "kind": "media",
-                      "media": {
-                        "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/e15eb8af-95eb-4aac-b03e-ca1990de534e.png",
-                        "alt": "pointe-placeholder-1.png",
-                        "dimensions": {
-                          "width": 1600,
-                          "height": 1200
-                        }
-                      }
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/e15eb8af-95eb-4aac-b03e-ca1990de534e.png\" alt=\"pointe-placeholder-1.png\">"
                     }
                   ]
                 },
@@ -235,14 +230,7 @@
                   "subgrid": [
                     {
                       "kind": "media",
-                      "media": {
-                        "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/7c52c8df-a506-4a7a-9a1d-91aa11e5d7c6.png",
-                        "alt": "FIT HC.png",
-                        "dimensions": {
-                          "width": 1600,
-                          "height": 1200
-                        }
-                      },
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/7c52c8df-a506-4a7a-9a1d-91aa11e5d7c6.png\" alt=\"FIT HC.png\">",
                       "width": "70%",
                       "cover": "on"
                     },
@@ -263,14 +251,7 @@
                     },
                     {
                       "kind": "media",
-                      "media": {
-                        "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/2c05f47c-cfee-4383-8955-5dea66b4df15.png",
-                        "alt": "pointe-placeholder-4.png",
-                        "dimensions": {
-                          "width": 1600,
-                          "height": 1200
-                        }
-                      },
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/2c05f47c-cfee-4383-8955-5dea66b4df15.png\" alt=\"pointe-placeholder-4.png\">",
                       "width": "70%",
                       "cover": "on"
                     }
@@ -281,14 +262,7 @@
                   "subgrid": [
                     {
                       "kind": "media",
-                      "media": {
-                        "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/6fefaae2-82b2-4861-9efe-b491cc3d2af1.jpg",
-                        "alt": "mrkt-cafe-035-cliffwilliam-_CWF1375.jpg",
-                        "dimensions": {
-                          "width": 1600,
-                          "height": 1200
-                        }
-                      },
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/6fefaae2-82b2-4861-9efe-b491cc3d2af1.jpg\" alt=\"mrkt-cafe-035-cliffwilliam-_CWF1375.jpg\">",
                       "width": "70%"
                     },
                     {
@@ -341,8 +315,6 @@
             "variation": "default",
             "items": [],
             "primary": {
-              "content_padding": "120px 4% 120px 4%",
-              "content_padding_mobile": "80px 4% 80px 4%",
               "max_content_width": "1280px",
               "columns_visible": 1,
               "cells": [
@@ -444,25 +416,11 @@
                     },
                     {
                       "kind": "media",
-                      "media": {
-                        "url": "https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/bf56be7d-863c-4f44-8247-6d92ea7762a9.png",
-                        "alt": "40px_lines.png",
-                        "dimensions": {
-                          "width": 1600,
-                          "height": 1200
-                        }
-                      }
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/bf56be7d-863c-4f44-8247-6d92ea7762a9.png\" alt=\"40px_lines.png\">"
                     },
                     {
                       "kind": "media",
-                      "media": {
-                        "url": "https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/b640649d-05cf-40c1-9edc-f3fc9d427c76.png",
-                        "alt": "TBP-Logo-Outline.png",
-                        "dimensions": {
-                          "width": 1600,
-                          "height": 1200
-                        }
-                      }
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/26c9ecb9-bc35-4562-8155-fadfee8df2b2/b640649d-05cf-40c1-9edc-f3fc9d427c76.png\" alt=\"TBP-Logo-Outline.png\">"
                     }
                   ]
                 }
@@ -543,14 +501,7 @@
                     },
                     {
                       "kind": "media",
-                      "media": {
-                        "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/126045fb-2364-4d99-9d6f-5502674ecdc9.jpg",
-                        "alt": "TBP_Studio_img_Getty_200417679-web.jpg",
-                        "dimensions": {
-                          "width": 1600,
-                          "height": 1200
-                        }
-                      },
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/126045fb-2364-4d99-9d6f-5502674ecdc9.jpg\" alt=\"TBP_Studio_img_Getty_200417679-web.jpg\">",
                       "width": "70%",
                       "cover": "on"
                     }
@@ -561,14 +512,7 @@
                   "subgrid": [
                     {
                       "kind": "media",
-                      "media": {
-                        "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/da8e7a33-0929-4618-9044-4b2ac23041c0.jpg",
-                        "alt": "eva-darron-oCdVtGFeDC0-unsplash.jpg",
-                        "dimensions": {
-                          "width": 1600,
-                          "height": 1200
-                        }
-                      },
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/da8e7a33-0929-4618-9044-4b2ac23041c0.jpg\" alt=\"eva-darron-oCdVtGFeDC0-unsplash.jpg\">",
                       "width": "70%",
                       "cover": "on"
                     },
@@ -589,14 +533,7 @@
                     },
                     {
                       "kind": "media",
-                      "media": {
-                        "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/122c1f54-872a-40af-8437-a6a226ad968a.jpg",
-                        "alt": "TBP_Burbank_women_coffee-web.jpg",
-                        "dimensions": {
-                          "width": 1600,
-                          "height": 1200
-                        }
-                      },
+                      "image_embed": "<img src=\"https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/122c1f54-872a-40af-8437-a6a226ad968a.jpg\" alt=\"TBP_Burbank_women_coffee-web.jpg\">",
                       "width": "70%",
                       "cover": "on"
                     }
