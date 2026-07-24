@@ -1,18 +1,16 @@
 <script lang="ts">
   import BrandIcon from "./BrandIcon.svelte";
-  import type { FooterSocial } from "$lib/blux/site-config";
-
-  type FooterText = { text: string; href?: string };
-  type FooterImage = {
-    image: { url: string; maxWidth?: string; alt?: string };
-    href?: string;
-  };
-  type FooterItem = FooterText | FooterImage;
+  import type {
+    FooterSocial,
+    FooterItem,
+    FooterImage,
+    FooterColumn,
+  } from "$lib/blux/site-config";
 
   interface Props {
     /** Leasing-contact columns (a migrated Blux site supplies these). When
      * present they take precedence over the site-config socials/text chrome. */
-    columns?: { items: FooterItem[] }[];
+    columns?: FooterColumn[];
     /** Social links from the site config (empty → none rendered). */
     socials?: FooterSocial[];
     /** The copyright / rights line; falls back to a generic notice. */
