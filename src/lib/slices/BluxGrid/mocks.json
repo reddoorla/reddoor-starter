@@ -7,23 +7,24 @@
         "__TYPE__": "StructuredTextContent",
         "value": [
           {
-            "type": "heading2",
+            "type": "paragraph",
             "content": {
-              "text": "Build"
+              "text": "Magna qui nisi tempor eiusmod id adipisicing dolore minim dolore velit irure adipisicing. Laborum in nulla minim quis labore anim tempor est. Laborum ad eu do esse aliqua pariatur quis mollit non elit labore pariatur pariatur consequat occaecat."
             }
           }
         ]
       },
       "background_image": {
+        "__TYPE__": "ImageContent",
         "origin": {
           "id": "main",
-          "url": "https://images.unsplash.com/photo-1494173853739-c21f58b16055",
-          "width": 3277,
-          "height": 4092
+          "url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
+          "width": 4016,
+          "height": 6016
         },
-        "url": "https://images.unsplash.com/photo-1494173853739-c21f58b16055",
-        "width": 3277,
-        "height": 4092,
+        "url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
+        "width": 4016,
+        "height": 6016,
         "edit": {
           "zoom": 1,
           "crop": {
@@ -32,24 +33,22 @@
           },
           "background": "transparent"
         },
-        "alt": "there",
-        "credits": null,
-        "__TYPE__": "ImageContent",
+        "alt": "together",
         "thumbnails": {}
       },
       "background_color": {
         "__TYPE__": "FieldContent",
-        "value": "president",
+        "value": "part",
         "type": "Text"
       },
       "overlay": {
         "__TYPE__": "FieldContent",
-        "value": "first",
+        "value": "chair",
         "type": "Text"
       },
       "max_content_width": {
         "__TYPE__": "FieldContent",
-        "value": "effort",
+        "value": "whether",
         "type": "Text"
       },
       "vertical_align": {
@@ -59,42 +58,67 @@
       },
       "min_height": {
         "__TYPE__": "FieldContent",
-        "value": "card",
+        "value": "mirror",
+        "type": "Text"
+      },
+      "content_padding": {
+        "__TYPE__": "FieldContent",
+        "value": "friendly",
+        "type": "Text"
+      },
+      "content_padding_mobile": {
+        "__TYPE__": "FieldContent",
+        "value": "football",
+        "type": "Text"
+      },
+      "text_align": {
+        "__TYPE__": "FieldContent",
+        "value": "left",
+        "type": "Select"
+      },
+      "column_side": {
+        "__TYPE__": "FieldContent",
+        "value": "left",
+        "type": "Select"
+      },
+      "heading_role": {
+        "__TYPE__": "FieldContent",
+        "value": "plates",
         "type": "Text"
       },
       "widget_kind": {
         "__TYPE__": "FieldContent",
-        "value": "close",
+        "value": "public",
         "type": "Text"
       },
       "widget_html": {
         "__TYPE__": "FieldContent",
-        "value": "agree",
+        "value": "chief",
         "type": "Text"
       },
       "columns": {
         "__TYPE__": "FieldContent",
-        "value": "84",
+        "value": "46",
         "type": "Number"
       },
       "column_width": {
         "__TYPE__": "FieldContent",
-        "value": "claws",
+        "value": "check",
         "type": "Text"
       },
       "spacing": {
         "__TYPE__": "FieldContent",
-        "value": "70",
+        "value": "23",
         "type": "Number"
       },
       "mobile_spacing": {
         "__TYPE__": "FieldContent",
-        "value": "86",
+        "value": "69",
         "type": "Number"
       },
       "row_height": {
         "__TYPE__": "FieldContent",
-        "value": "wagon",
+        "value": "thank",
         "type": "Text"
       },
       "cells": {
@@ -107,7 +131,7 @@
                 "kind",
                 {
                   "__TYPE__": "FieldContent",
-                  "value": "media",
+                  "value": "text",
                   "type": "Select"
                 }
               ],
@@ -117,40 +141,35 @@
                   "__TYPE__": "StructuredTextContent",
                   "value": [
                     {
-                      "type": "heading3",
+                      "type": "paragraph",
                       "content": {
-                        "text": "Possibly"
+                        "text": "Nisi commodo ex consequat aliqua irure."
                       }
                     }
                   ]
                 }
               ],
               [
-                "body",
+                "body_html",
                 {
-                  "__TYPE__": "StructuredTextContent",
-                  "value": [
-                    {
-                      "type": "paragraph",
-                      "content": {
-                        "text": "Anim minim cupidatat non excepteur culpa aliqua esse consectetur ut nulla. Deserunt culpa nostrud enim aute consequat dolore nisi est non esse sunt deserunt. Culpa consequat ex excepteur laborum quis nostrud voluptate deserunt deserunt eu laborum cillum officia culpa do."
-                      }
-                    }
-                  ]
+                  "__TYPE__": "FieldContent",
+                  "value": "cause",
+                  "type": "Text"
                 }
               ],
               [
                 "media",
                 {
+                  "__TYPE__": "ImageContent",
                   "origin": {
                     "id": "main",
-                    "url": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5",
-                    "width": 5848,
-                    "height": 3899
+                    "url": "https://images.unsplash.com/photo-1591012911207-0dbac31f37da",
+                    "width": 4000,
+                    "height": 4000
                   },
-                  "url": "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5",
-                  "width": 5848,
-                  "height": 3899,
+                  "url": "https://images.unsplash.com/photo-1591012911207-0dbac31f37da",
+                  "width": 4000,
+                  "height": 4000,
                   "edit": {
                     "zoom": 1,
                     "crop": {
@@ -159,9 +178,7 @@
                     },
                     "background": "transparent"
                   },
-                  "alt": "during",
-                  "credits": null,
-                  "__TYPE__": "ImageContent",
+                  "alt": "trouble",
                   "thumbnails": {}
                 }
               ],
@@ -169,7 +186,7 @@
                 "media_ratio",
                 {
                   "__TYPE__": "FieldContent",
-                  "value": "wore",
+                  "value": "duck",
                   "type": "Text"
                 }
               ],
@@ -177,7 +194,7 @@
                 "link",
                 {
                   "__TYPE__": "LinkContent",
-                  "key": "6061217c-bcc4-4c7d-b9cf-cb9c08e175c0",
+                  "key": "183990a2-0f23-4868-93b7-87bf66a3f603",
                   "value": {
                     "__TYPE__": "ExternalLink",
                     "url": "https://slicemachine.dev"
@@ -188,7 +205,7 @@
                 "link_label",
                 {
                   "__TYPE__": "FieldContent",
-                  "value": "plant",
+                  "value": "done",
                   "type": "Text"
                 }
               ],
@@ -196,7 +213,63 @@
                 "embed_html",
                 {
                   "__TYPE__": "FieldContent",
-                  "value": "call",
+                  "value": "castle",
+                  "type": "Text"
+                }
+              ],
+              [
+                "width",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "steady",
+                  "type": "Text"
+                }
+              ],
+              [
+                "spacing",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "26",
+                  "type": "Number"
+                }
+              ],
+              [
+                "cover",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "cell",
+                  "type": "Text"
+                }
+              ],
+              [
+                "valign",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "managed",
+                  "type": "Text"
+                }
+              ],
+              [
+                "background_color",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "open",
+                  "type": "Text"
+                }
+              ],
+              [
+                "content_padding",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "least",
+                  "type": "Text"
+                }
+              ],
+              [
+                "title_role",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "telephone",
                   "type": "Text"
                 }
               ],
@@ -212,7 +285,7 @@
                           "kind",
                           {
                             "__TYPE__": "FieldContent",
-                            "value": "media",
+                            "value": "embed",
                             "type": "Select"
                           }
                         ],
@@ -222,40 +295,35 @@
                             "__TYPE__": "StructuredTextContent",
                             "value": [
                               {
-                                "type": "heading4",
+                                "type": "paragraph",
                                 "content": {
-                                  "text": "Individual"
+                                  "text": "Id veniam ipsum adipisicing consequat ut et nulla aliqua esse elit."
                                 }
                               }
                             ]
                           }
                         ],
                         [
-                          "body",
+                          "body_html",
                           {
-                            "__TYPE__": "StructuredTextContent",
-                            "value": [
-                              {
-                                "type": "paragraph",
-                                "content": {
-                                  "text": "Officia incididunt nulla anim aliquip in Lorem fugiat laborum in do cillum veniam aliqua pariatur nulla. Voluptate sit labore anim."
-                                }
-                              }
-                            ]
+                            "__TYPE__": "FieldContent",
+                            "value": "bite",
+                            "type": "Text"
                           }
                         ],
                         [
                           "media",
                           {
+                            "__TYPE__": "ImageContent",
                             "origin": {
                               "id": "main",
-                              "url": "https://images.unsplash.com/photo-1607582278043-57198ac8da43",
-                              "width": 4024,
-                              "height": 4024
+                              "url": "https://images.unsplash.com/photo-1547082299-de196ea013d6",
+                              "width": 4272,
+                              "height": 2848
                             },
-                            "url": "https://images.unsplash.com/photo-1607582278043-57198ac8da43",
-                            "width": 4024,
-                            "height": 4024,
+                            "url": "https://images.unsplash.com/photo-1547082299-de196ea013d6",
+                            "width": 4272,
+                            "height": 2848,
                             "edit": {
                               "zoom": 1,
                               "crop": {
@@ -264,9 +332,7 @@
                               },
                               "background": "transparent"
                             },
-                            "alt": "strip",
-                            "credits": null,
-                            "__TYPE__": "ImageContent",
+                            "alt": "depend",
                             "thumbnails": {}
                           }
                         ],
@@ -274,7 +340,7 @@
                           "media_ratio",
                           {
                             "__TYPE__": "FieldContent",
-                            "value": "heart",
+                            "value": "rocket",
                             "type": "Text"
                           }
                         ],
@@ -282,10 +348,10 @@
                           "link",
                           {
                             "__TYPE__": "LinkContent",
-                            "key": "12d7b5e4-5d3d-4db7-8901-45c75c7800ea",
+                            "key": "8591b17b-a79e-421f-822a-d4acdbbfe86f",
                             "value": {
                               "__TYPE__": "ExternalLink",
-                              "url": "http://google.com"
+                              "url": "http://twitter.com"
                             }
                           }
                         ],
@@ -293,7 +359,7 @@
                           "link_label",
                           {
                             "__TYPE__": "FieldContent",
-                            "value": "prevent",
+                            "value": "itself",
                             "type": "Text"
                           }
                         ],
@@ -301,7 +367,63 @@
                           "embed_html",
                           {
                             "__TYPE__": "FieldContent",
-                            "value": "throat",
+                            "value": "taken",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "width",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "above",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "spacing",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "60",
+                            "type": "Number"
+                          }
+                        ],
+                        [
+                          "cover",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "arrive",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "valign",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "vowel",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "background_color",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "canal",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "content_padding",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "brown",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "title_role",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "several",
                             "type": "Text"
                           }
                         ]
