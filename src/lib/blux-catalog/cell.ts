@@ -12,6 +12,11 @@ export type BluxCellData = {
   media: prismic.ImageField;
   media_ratio: prismic.KeyTextField;
   embed_html: prismic.KeyTextField;
+  /** A url-based <img> for a doubly-nested (subgrid) image: the Migration API
+   *  can't resolve a depth-2 Image field, so subgrid images ride this Text
+   *  field (src rewritten to the Prismic-hosted url at migrate). Rendered in
+   *  the same .blux-cell__media wrapper as a `media` Image field. */
+  image_embed: prismic.KeyTextField;
   link: prismic.LinkField;
   link_label: prismic.KeyTextField;
   // --- visual-fidelity fields (Blux catalog visual layer) ---

@@ -191,6 +191,12 @@
                   "label": "embed_html"
                 }
               },
+              "image_embed": {
+                "type": "Text",
+                "config": {
+                  "label": "image_embed"
+                }
+              },
               "width": {
                 "type": "Text",
                 "config": {
@@ -289,6 +295,12 @@
                       "type": "Text",
                       "config": {
                         "label": "embed_html"
+                      }
+                    },
+                    "image_embed": {
+                      "type": "Text",
+                      "config": {
+                        "label": "image_embed"
                       }
                     },
                     "width": {
