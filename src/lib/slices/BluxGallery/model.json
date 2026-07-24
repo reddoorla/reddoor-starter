@@ -154,6 +154,12 @@
                   "label": "embed_html"
                 }
               },
+              "image_embed": {
+                "type": "Text",
+                "config": {
+                  "label": "image_embed"
+                }
+              },
               "subgrid": {
                 "type": "Group",
                 "config": {
@@ -210,6 +216,12 @@
                       "type": "Text",
                       "config": {
                         "label": "embed_html"
+                      }
+                    },
+                    "image_embed": {
+                      "type": "Text",
+                      "config": {
+                        "label": "image_embed"
                       }
                     }
                   }
