@@ -1145,6 +1145,7 @@ export interface BluxCarouselSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+  image_embed: prismic.KeyTextField;
 }
 
 /**
@@ -1230,6 +1231,7 @@ export interface BluxCarouselSliceDefaultPrimaryCellsItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+  image_embed: prismic.KeyTextField;
 
   /**
    * subgrid field in *BluxCarousel → Default → Primary → cells*
@@ -1752,6 +1754,7 @@ export interface BluxGallerySliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+  image_embed: prismic.KeyTextField;
 }
 
 /**
@@ -1837,6 +1840,7 @@ export interface BluxGallerySliceDefaultPrimaryCellsItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+  image_embed: prismic.KeyTextField;
 
   /**
    * subgrid field in *BluxGallery → Default → Primary → cells*
@@ -2109,6 +2113,7 @@ export interface BluxGridSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+  image_embed: prismic.KeyTextField;
 
   /**
    * width field in *BluxGrid → Default → Primary → cells → subgrid*
@@ -2264,6 +2269,7 @@ export interface BluxGridSliceDefaultPrimaryCellsItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+  image_embed: prismic.KeyTextField;
 
   /**
    * width field in *BluxGrid → Default → Primary → cells*
@@ -2916,6 +2922,7 @@ export interface BluxSectionSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+  image_embed: prismic.KeyTextField;
 
   /**
    * width field in *BluxSection → Default → Primary → cells → subgrid*
@@ -3071,6 +3078,7 @@ export interface BluxSectionSliceDefaultPrimaryCellsItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+  image_embed: prismic.KeyTextField;
 
   /**
    * width field in *BluxSection → Default → Primary → cells*

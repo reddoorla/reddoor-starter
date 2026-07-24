@@ -77,3 +77,25 @@ describe("BluxCell visual fields", () => {
     );
   });
 });
+
+describe("BluxCell image_embed (doubly-nested subgrid media)", () => {
+  it("renders image_embed inside .blux-cell__media with cover + ratio", () => {
+    const cell = {
+      kind: "media",
+      image_embed:
+        '<img src="https://images.prismic.io/repo/u1.jpg" alt="Pool">',
+      media_ratio: "4:3",
+      cover: "on",
+    } as unknown as BluxCellData;
+    const { container } = render(BluxCell, { props: { cell } });
+    const wrap = container.querySelector(".blux-cell__media") as HTMLElement;
+    expect(wrap).not.toBeNull();
+    expect(wrap.getAttribute("data-cover")).toBe("on");
+    expect(wrap.getAttribute("data-ratio")).toBe("4:3");
+    const im = wrap.querySelector("img") as HTMLImageElement;
+    expect(im.getAttribute("src")).toBe(
+      "https://images.prismic.io/repo/u1.jpg",
+    );
+    expect(im.getAttribute("alt")).toBe("Pool");
+  });
+});

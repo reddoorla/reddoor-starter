@@ -47,6 +47,16 @@
       <PrismicImage field={cell.media} />
     </div>
   {/if}
+  {#if isFilled.keyText(cell.image_embed)}
+    <div
+      class="blux-cell__media"
+      data-ratio={cell.media_ratio}
+      data-cover={cell.cover || undefined}
+    >
+      <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted Blux migration <img>, sanitized at Emit; src rewritten to the Prismic-hosted url at migrate. Doubly-nested subgrid media ride a Text field because the Migration API can't resolve depth-2 Image-field refs. -->
+      {@html cell.image_embed}
+    </div>
+  {/if}
   {#if isFilled.richText(cell.title)}
     {#if cell.title_role}
       <div class="txt-role-{cell.title_role}">
