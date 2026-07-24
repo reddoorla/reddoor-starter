@@ -10,7 +10,7 @@
   import TransitionOverlay from "$lib/components/TransitionOverlay.svelte";
   import Nav from "$lib/components/Nav.svelte";
   import Footer from "$lib/components/Footer.svelte";
-  import { loadSiteConfig } from "$lib/blux/site-config";
+  import { loadSiteConfig, footerColumns } from "$lib/blux/site-config";
   import {
     disableSmoothScroll,
     restoreSmoothScroll,
@@ -62,7 +62,7 @@
   </main>
 
   <Footer
-    columns={page.data.footerColumns}
+    columns={footerColumns(page.data.footerColumns, siteConfig)}
     socials={siteConfig.footer.socials}
     text={siteConfig.footer.text}
   />
