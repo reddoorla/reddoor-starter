@@ -1,0 +1,335 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "heading": {
+        "__TYPE__": "StructuredTextContent",
+        "value": [
+          {
+            "type": "heading2",
+            "content": {
+              "text": "Later"
+            }
+          }
+        ]
+      },
+      "background_image": {
+        "origin": {
+          "id": "main",
+          "url": "https://images.unsplash.com/photo-1607582278043-57198ac8da43",
+          "width": 4024,
+          "height": 4024
+        },
+        "url": "https://images.unsplash.com/photo-1607582278043-57198ac8da43",
+        "width": 4024,
+        "height": 4024,
+        "edit": {
+          "zoom": 1,
+          "crop": {
+            "x": 0,
+            "y": 0
+          },
+          "background": "transparent"
+        },
+        "alt": "slept",
+        "credits": null,
+        "__TYPE__": "ImageContent",
+        "thumbnails": {}
+      },
+      "background_color": {
+        "__TYPE__": "FieldContent",
+        "value": "history",
+        "type": "Text"
+      },
+      "overlay": {
+        "__TYPE__": "FieldContent",
+        "value": "exchange",
+        "type": "Text"
+      },
+      "max_content_width": {
+        "__TYPE__": "FieldContent",
+        "value": "useful",
+        "type": "Text"
+      },
+      "vertical_align": {
+        "__TYPE__": "FieldContent",
+        "value": "middle",
+        "type": "Select"
+      },
+      "min_height": {
+        "__TYPE__": "FieldContent",
+        "value": "sold",
+        "type": "Text"
+      },
+      "widget_kind": {
+        "__TYPE__": "FieldContent",
+        "value": "lift",
+        "type": "Text"
+      },
+      "widget_html": {
+        "__TYPE__": "FieldContent",
+        "value": "affect",
+        "type": "Text"
+      },
+      "columns_visible": {
+        "__TYPE__": "FieldContent",
+        "value": "72",
+        "type": "Number"
+      },
+      "arrows": {
+        "__TYPE__": "FieldContent",
+        "value": "on",
+        "type": "Select"
+      },
+      "dots": {
+        "__TYPE__": "FieldContent",
+        "value": "off",
+        "type": "Select"
+      },
+      "dots_position": {
+        "__TYPE__": "FieldContent",
+        "value": "method",
+        "type": "Text"
+      },
+      "autoplay": {
+        "__TYPE__": "FieldContent",
+        "value": "on",
+        "type": "Select"
+      },
+      "transition": {
+        "__TYPE__": "FieldContent",
+        "value": "expression",
+        "type": "Text"
+      },
+      "transition_speed": {
+        "__TYPE__": "FieldContent",
+        "value": "92",
+        "type": "Number"
+      },
+      "cells": {
+        "__TYPE__": "GroupContentType",
+        "value": [
+          {
+            "__TYPE__": "GroupItemContent",
+            "value": [
+              [
+                "kind",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "media",
+                  "type": "Select"
+                }
+              ],
+              [
+                "title",
+                {
+                  "__TYPE__": "StructuredTextContent",
+                  "value": [
+                    {
+                      "type": "heading3",
+                      "content": {
+                        "text": "Smallest"
+                      }
+                    }
+                  ]
+                }
+              ],
+              [
+                "body",
+                {
+                  "__TYPE__": "StructuredTextContent",
+                  "value": [
+                    {
+                      "type": "paragraph",
+                      "content": {
+                        "text": "Velit ipsum ut aliquip."
+                      }
+                    }
+                  ]
+                }
+              ],
+              [
+                "media",
+                {
+                  "origin": {
+                    "id": "main",
+                    "url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
+                    "width": 4016,
+                    "height": 6016
+                  },
+                  "url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
+                  "width": 4016,
+                  "height": 6016,
+                  "edit": {
+                    "zoom": 1,
+                    "crop": {
+                      "x": 0,
+                      "y": 0
+                    },
+                    "background": "transparent"
+                  },
+                  "alt": "design",
+                  "credits": null,
+                  "__TYPE__": "ImageContent",
+                  "thumbnails": {}
+                }
+              ],
+              [
+                "media_ratio",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "few",
+                  "type": "Text"
+                }
+              ],
+              [
+                "link",
+                {
+                  "__TYPE__": "LinkContent",
+                  "key": "df931d6c-db4b-444e-ab68-78af82430186",
+                  "value": {
+                    "__TYPE__": "ExternalLink",
+                    "url": "http://twitter.com"
+                  }
+                }
+              ],
+              [
+                "link_label",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "lake",
+                  "type": "Text"
+                }
+              ],
+              [
+                "embed_html",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "rubbed",
+                  "type": "Text"
+                }
+              ],
+              [
+                "subgrid",
+                {
+                  "__TYPE__": "GroupContentType",
+                  "value": [
+                    {
+                      "__TYPE__": "GroupItemContent",
+                      "value": [
+                        [
+                          "kind",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "text",
+                            "type": "Select"
+                          }
+                        ],
+                        [
+                          "title",
+                          {
+                            "__TYPE__": "StructuredTextContent",
+                            "value": [
+                              {
+                                "type": "heading4",
+                                "content": {
+                                  "text": "Lying"
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        [
+                          "body",
+                          {
+                            "__TYPE__": "StructuredTextContent",
+                            "value": [
+                              {
+                                "type": "paragraph",
+                                "content": {
+                                  "text": "Labore laboris consectetur duis laborum culpa nostrud fugiat. Et velit incididunt culpa aliquip duis magna commodo. Enim enim reprehenderit excepteur."
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        [
+                          "media",
+                          {
+                            "origin": {
+                              "id": "main",
+                              "url": "https://images.unsplash.com/photo-1606248897732-2c5ffe759c04",
+                              "width": 4000,
+                              "height": 4000
+                            },
+                            "url": "https://images.unsplash.com/photo-1606248897732-2c5ffe759c04",
+                            "width": 4000,
+                            "height": 4000,
+                            "edit": {
+                              "zoom": 1,
+                              "crop": {
+                                "x": 0,
+                                "y": 0
+                              },
+                              "background": "transparent"
+                            },
+                            "alt": "husband",
+                            "credits": null,
+                            "__TYPE__": "ImageContent",
+                            "thumbnails": {}
+                          }
+                        ],
+                        [
+                          "media_ratio",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "answer",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "link",
+                          {
+                            "__TYPE__": "LinkContent",
+                            "key": "e1ce72f1-07fa-4ffc-aef9-e7d1d2f59aba",
+                            "value": {
+                              "__TYPE__": "ExternalLink",
+                              "url": "https://slicemachine.dev"
+                            }
+                          }
+                        ],
+                        [
+                          "link_label",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "origin",
+                            "type": "Text"
+                          }
+                        ],
+                        [
+                          "embed_html",
+                          {
+                            "__TYPE__": "FieldContent",
+                            "value": "grass",
+                            "type": "Text"
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "items": [
+      {
+        "__TYPE__": "GroupItemContent",
+        "value": []
+      }
+    ]
+  }
+]

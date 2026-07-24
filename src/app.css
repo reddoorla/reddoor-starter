@@ -6,6 +6,7 @@
    an empty placeholder; running `blux emit` and dropping its `theme.css` here
    activates the site's real type roles. */
 @import "./blux-theme.css";
+@import "./blux-layout.css";
 
 @theme {
   --screen-sm: 560px;

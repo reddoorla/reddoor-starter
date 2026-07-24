@@ -11,16 +11,17 @@
   import Nav from "$lib/components/Nav.svelte";
   import Footer from "$lib/components/Footer.svelte";
   import { loadSiteConfig } from "$lib/blux/site-config";
-
-  // Site chrome from the Blux convert (empty stub on an unconverted starter →
-  // logo-only Nav + placeholder Footer).
-  const siteConfig = loadSiteConfig();
   import {
     disableSmoothScroll,
     restoreSmoothScroll,
   } from "$lib/utils/instantNavScroll";
 
   let { data, children } = $props();
+
+  // Site chrome from the Blux convert (empty stub on an unconverted starter →
+  // logo-only Nav + placeholder Footer). A migrated site's page data takes
+  // precedence over this in each chrome component.
+  const siteConfig = loadSiteConfig();
 
   // Kit's own post-nav scroll (top / hash anchor / popstate restore) runs
   // instantly instead of gliding under app.css's smooth-scroll. See the util.
@@ -44,14 +45,27 @@
 >
   Skip to main content
 </a>
+<!-- Chrome renders from page data when a route supplies it (a migrated Blux
+     site's per-route navLinks/footerColumns), else from the site-config chrome
+     (`blux convert` fills it; empty stub → Nav logo-only + Footer default).
+     Each component applies its own page-data-over-config precedence, so
+     existing routes are unaffected. -->
 <div class="flex flex-col min-h-screen">
-  <Nav items={siteConfig.nav.items} logo={siteConfig.nav.logo} />
+  <Nav
+    navLinks={page.data.navLinks}
+    items={siteConfig.nav.items}
+    logo={siteConfig.nav.logo}
+  />
 
   <main id="main-content" tabindex="-1" class="flex-1">
     {@render children?.()}
   </main>
 
-  <Footer socials={siteConfig.footer.socials} text={siteConfig.footer.text} />
+  <Footer
+    columns={page.data.footerColumns}
+    socials={siteConfig.footer.socials}
+    text={siteConfig.footer.text}
+  />
 </div>
 <TransitionOverlay />
 <LandscapeModal />

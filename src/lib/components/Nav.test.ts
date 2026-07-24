@@ -58,6 +58,13 @@ const itemsWithDropdown = [
   { label: "About", href: "#about" },
 ];
 
+// Flat page-data links (a migrated Blux site). These take precedence over
+// `items` and render the focus-trapped mobile menu below.
+const navLinks = [
+  { text: "Services", href: "#services" },
+  { text: "About", href: "#about" },
+];
+
 describe("Nav — logo-only mode", () => {
   it("renders no menu button without items", () => {
     const { queryByLabelText, getByText } = render(Nav);
@@ -208,5 +215,71 @@ describe("Nav — mobile menu", () => {
     expect(toggle.getAttribute("aria-expanded")).toBe("true");
     expect(dialog.textContent).toContain("Chairs");
     expect(dialog.textContent).toContain("Tables");
+  });
+});
+
+// The flat-links chrome a migrated Blux site renders when it passes `navLinks`
+// via page data. Distinct code path from the `items` dropdown nav above.
+describe("Nav — navLinks (page-data) mode", () => {
+  it("opens the menu and moves focus into it", async () => {
+    const { getByLabelText, getByRole } = render(Nav, { navLinks });
+
+    await fireEvent.click(getByLabelText("Open menu"));
+    const dialog = getByRole("dialog");
+    expect(dialog.getAttribute("aria-modal")).toBe("true");
+
+    await frame();
+    expect(document.activeElement).toBe(getByLabelText("Close menu"));
+  });
+
+  it("wraps Tab from the last link back to the close button", async () => {
+    const { getByLabelText, getByRole } = render(Nav, { navLinks });
+    await fireEvent.click(getByLabelText("Open menu"));
+    await frame();
+
+    const dialog = getByRole("dialog");
+    const links = Array.from(dialog.querySelectorAll("a"));
+    const last = links[links.length - 1];
+    last.focus();
+
+    const e = new KeyboardEvent("keydown", {
+      key: "Tab",
+      bubbles: true,
+      cancelable: true,
+    });
+    last.dispatchEvent(e);
+
+    expect(e.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(getByLabelText("Close menu"));
+  });
+
+  it("closes on Escape and returns focus to the re-mounted trigger", async () => {
+    const { getByLabelText, getByRole, queryByRole } = render(Nav, {
+      navLinks,
+    });
+    await fireEvent.click(getByLabelText("Open menu"));
+    await frame();
+
+    await fireEvent.keyDown(getByRole("dialog"), { key: "Escape" });
+    expect(queryByRole("dialog")).toBeNull();
+
+    // The trigger unmounted while the menu was open; focus lands on the fresh
+    // instance one frame after close.
+    await frame();
+    await frame();
+    expect(document.activeElement).toBe(getByLabelText("Open menu"));
+  });
+
+  it("closes when a menu link is activated", async () => {
+    const { getByLabelText, getByRole, queryByRole } = render(Nav, {
+      navLinks,
+    });
+    await fireEvent.click(getByLabelText("Open menu"));
+    await frame();
+
+    const link = Array.from(getByRole("dialog").querySelectorAll("a"))[0];
+    await fireEvent.click(link);
+
+    expect(queryByRole("dialog")).toBeNull();
   });
 });

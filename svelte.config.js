@@ -72,7 +72,10 @@ const config = {
           "https://images.prismic.io",
           "https://*.prismic.io",
         ],
-        "media-src": ["self", "https://*.vimeocdn.com"],
+        // Prismic hosts non-image media (e.g. migrated .mp4 assets) on
+        // <repo>.cdn.prismic.io — first-party content, same origin family as
+        // images.prismic.io already allowed under img-src.
+        "media-src": ["self", "https://*.vimeocdn.com", "https://*.prismic.io"],
         "frame-src": [
           "self",
           "https://player.vimeo.com",
