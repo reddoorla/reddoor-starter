@@ -27,7 +27,7 @@ const slice = {
       {
         kind: "text",
         title: rt("heading3", "Pool"),
-        body: rt("paragraph", "Heated."),
+        body_html: '<div class="txt-role-text1"><p>Heated.</p></div>',
         subgrid: [],
       },
       {
@@ -37,12 +37,12 @@ const slice = {
           {
             kind: "text",
             title: rt("heading4", "Level 2"),
-            body: rt("paragraph", "Studios"),
+            body_html: '<div class="txt-role-text1"><p>Studios</p></div>',
           },
           {
             kind: "text",
             title: rt("heading4", "Level 3"),
-            body: rt("paragraph", "One-beds"),
+            body_html: '<div class="txt-role-text1"><p>One-beds</p></div>',
           },
         ],
       },

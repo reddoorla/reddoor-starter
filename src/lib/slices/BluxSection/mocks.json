@@ -152,10 +152,10 @@
                 "link",
                 {
                   "__TYPE__": "LinkContent",
-                  "key": "dea4e28f-abdb-4786-94c9-5989e53d919d",
+                  "key": "b5320350-19f3-40e1-817d-51f93b4718fc",
                   "value": {
                     "__TYPE__": "ExternalLink",
-                    "url": "https://slicemachine.dev"
+                    "url": "http://twitter.com"
                   }
                 }
               ],
@@ -257,10 +257,10 @@
                           "link",
                           {
                             "__TYPE__": "LinkContent",
-                            "key": "74395bca-254b-4f98-bb50-13d24f22361f",
+                            "key": "d84ef6b0-6810-46a6-9869-bd46ffe7f9ec",
                             "value": {
                               "__TYPE__": "ExternalLink",
-                              "url": "https://prismic.io"
+                              "url": "http://google.com"
                             }
                           }
                         ],

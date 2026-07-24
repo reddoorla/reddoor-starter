@@ -8,7 +8,7 @@ import type * as prismic from "@prismicio/client";
 export type BluxCellData = {
   kind: prismic.SelectField<string> | null;
   title: prismic.RichTextField;
-  body: prismic.RichTextField;
+  body_html: prismic.KeyTextField;
   media: prismic.ImageField;
   media_ratio: prismic.KeyTextField;
   embed_html: prismic.KeyTextField;
@@ -22,6 +22,5 @@ export type BluxCellData = {
   background_color?: string | null;
   content_padding?: string | null;
   title_role?: string | null;
-  body_role?: string | null;
   subgrid?: BluxCellData[];
 };

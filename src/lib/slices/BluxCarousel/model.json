@@ -49,11 +49,7 @@
           "type": "Select",
           "config": {
             "label": "vertical_align",
-            "options": [
-              "top",
-              "middle",
-              "bottom"
-            ]
+            "options": ["top", "middle", "bottom"]
           }
         },
         "min_height": {
@@ -85,20 +81,14 @@
           "type": "Select",
           "config": {
             "label": "arrows",
-            "options": [
-              "on",
-              "off"
-            ]
+            "options": ["on", "off"]
           }
         },
         "dots": {
           "type": "Select",
           "config": {
             "label": "dots",
-            "options": [
-              "on",
-              "off"
-            ]
+            "options": ["on", "off"]
           }
         },
         "dots_position": {
@@ -111,10 +101,7 @@
           "type": "Select",
           "config": {
             "label": "autoplay",
-            "options": [
-              "off",
-              "on"
-            ]
+            "options": ["off", "on"]
           }
         },
         "transition": {
@@ -138,13 +125,7 @@
                 "type": "Select",
                 "config": {
                   "label": "kind",
-                  "options": [
-                    "text",
-                    "media",
-                    "embed",
-                    "button",
-                    "subgrid"
-                  ]
+                  "options": ["text", "media", "embed", "button", "subgrid"]
                 }
               },
               "title": {
@@ -154,11 +135,10 @@
                   "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
                 }
               },
-              "body": {
-                "type": "StructuredText",
+              "body_html": {
+                "type": "Text",
                 "config": {
-                  "label": "body",
-                  "multi": "paragraph,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,list-item,o-list-item,image,embed"
+                  "label": "body_html"
                 }
               },
               "media": {
@@ -203,11 +183,7 @@
                       "type": "Select",
                       "config": {
                         "label": "kind",
-                        "options": [
-                          "text",
-                          "media",
-                          "embed"
-                        ]
+                        "options": ["text", "media", "embed"]
                       }
                     },
                     "title": {
@@ -217,11 +193,10 @@
                         "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
                       }
                     },
-                    "body": {
-                      "type": "StructuredText",
+                    "body_html": {
+                      "type": "Text",
                       "config": {
-                        "label": "body",
-                        "multi": "paragraph,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,list-item,o-list-item,image,embed"
+                        "label": "body_html"
                       }
                     },
                     "media": {

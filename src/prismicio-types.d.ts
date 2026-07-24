@@ -28,8 +28,8 @@ type PickContentRelationshipFieldData<
       TSubRelationship["customtypes"],
       TLang
     >;
-  } & {
-    // Group
+  } & // Group
+  {
     [TGroup in Extract<
       TRelationship["fields"][number],
       | prismic.CustomTypeModelFetchGroupLevel1
@@ -41,8 +41,8 @@ type PickContentRelationshipFieldData<
           PickContentRelationshipFieldData<TGroup, TGroupData, TLang>
         >
       : never;
-  } & {
-    // Other fields
+  } & // Other fields
+  {
     [TFieldKey in Extract<
       TRelationship["fields"][number],
       string
@@ -1087,14 +1087,14 @@ export interface BluxCarouselSliceDefaultPrimaryCellsSubgridItem {
   title: prismic.RichTextField;
 
   /**
-   * body field in *BluxCarousel → Default → Primary → cells → subgrid*
+   * body_html field in *BluxCarousel → Default → Primary → cells → subgrid*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].body
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].body_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
    */
-  body: prismic.RichTextField;
+  body_html: prismic.KeyTextField;
 
   /**
    * media field in *BluxCarousel → Default → Primary → cells → subgrid*
@@ -1172,14 +1172,14 @@ export interface BluxCarouselSliceDefaultPrimaryCellsItem {
   title: prismic.RichTextField;
 
   /**
-   * body field in *BluxCarousel → Default → Primary → cells*
+   * body_html field in *BluxCarousel → Default → Primary → cells*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: blux_carousel.default.primary.cells[].body
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   * - **API ID Path**: blux_carousel.default.primary.cells[].body_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
    */
-  body: prismic.RichTextField;
+  body_html: prismic.KeyTextField;
 
   /**
    * media field in *BluxCarousel → Default → Primary → cells*
@@ -1694,14 +1694,14 @@ export interface BluxGallerySliceDefaultPrimaryCellsSubgridItem {
   title: prismic.RichTextField;
 
   /**
-   * body field in *BluxGallery → Default → Primary → cells → subgrid*
+   * body_html field in *BluxGallery → Default → Primary → cells → subgrid*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].body
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].body_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
    */
-  body: prismic.RichTextField;
+  body_html: prismic.KeyTextField;
 
   /**
    * media field in *BluxGallery → Default → Primary → cells → subgrid*
@@ -1779,14 +1779,14 @@ export interface BluxGallerySliceDefaultPrimaryCellsItem {
   title: prismic.RichTextField;
 
   /**
-   * body field in *BluxGallery → Default → Primary → cells*
+   * body_html field in *BluxGallery → Default → Primary → cells*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: blux_gallery.default.primary.cells[].body
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   * - **API ID Path**: blux_gallery.default.primary.cells[].body_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
    */
-  body: prismic.RichTextField;
+  body_html: prismic.KeyTextField;
 
   /**
    * media field in *BluxGallery → Default → Primary → cells*
@@ -2051,14 +2051,14 @@ export interface BluxGridSliceDefaultPrimaryCellsSubgridItem {
   title: prismic.RichTextField;
 
   /**
-   * body field in *BluxGrid → Default → Primary → cells → subgrid*
+   * body_html field in *BluxGrid → Default → Primary → cells → subgrid*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].body
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].body_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
    */
-  body: prismic.RichTextField;
+  body_html: prismic.KeyTextField;
 
   /**
    * media field in *BluxGrid → Default → Primary → cells → subgrid*
@@ -2179,16 +2179,6 @@ export interface BluxGridSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   title_role: prismic.KeyTextField;
-
-  /**
-   * body_role field in *BluxGrid → Default → Primary → cells → subgrid*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].body_role
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  body_role: prismic.KeyTextField;
 }
 
 /**
@@ -2216,14 +2206,14 @@ export interface BluxGridSliceDefaultPrimaryCellsItem {
   title: prismic.RichTextField;
 
   /**
-   * body field in *BluxGrid → Default → Primary → cells*
+   * body_html field in *BluxGrid → Default → Primary → cells*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: blux_grid.default.primary.cells[].body
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   * - **API ID Path**: blux_grid.default.primary.cells[].body_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
    */
-  body: prismic.RichTextField;
+  body_html: prismic.KeyTextField;
 
   /**
    * media field in *BluxGrid → Default → Primary → cells*
@@ -2344,16 +2334,6 @@ export interface BluxGridSliceDefaultPrimaryCellsItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   title_role: prismic.KeyTextField;
-
-  /**
-   * body_role field in *BluxGrid → Default → Primary → cells*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blux_grid.default.primary.cells[].body_role
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  body_role: prismic.KeyTextField;
 
   /**
    * subgrid field in *BluxGrid → Default → Primary → cells*
@@ -2878,14 +2858,14 @@ export interface BluxSectionSliceDefaultPrimaryCellsSubgridItem {
   title: prismic.RichTextField;
 
   /**
-   * body field in *BluxSection → Default → Primary → cells → subgrid*
+   * body_html field in *BluxSection → Default → Primary → cells → subgrid*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].body
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].body_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
    */
-  body: prismic.RichTextField;
+  body_html: prismic.KeyTextField;
 
   /**
    * media field in *BluxSection → Default → Primary → cells → subgrid*
@@ -3006,16 +2986,6 @@ export interface BluxSectionSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   title_role: prismic.KeyTextField;
-
-  /**
-   * body_role field in *BluxSection → Default → Primary → cells → subgrid*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].body_role
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  body_role: prismic.KeyTextField;
 }
 
 /**
@@ -3043,14 +3013,14 @@ export interface BluxSectionSliceDefaultPrimaryCellsItem {
   title: prismic.RichTextField;
 
   /**
-   * body field in *BluxSection → Default → Primary → cells*
+   * body_html field in *BluxSection → Default → Primary → cells*
    *
-   * - **Field Type**: Rich Text
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: blux_section.default.primary.cells[].body
-   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   * - **API ID Path**: blux_section.default.primary.cells[].body_html
+   * - **Documentation**: https://prismic.io/docs/fields/text
    */
-  body: prismic.RichTextField;
+  body_html: prismic.KeyTextField;
 
   /**
    * media field in *BluxSection → Default → Primary → cells*
@@ -3171,16 +3141,6 @@ export interface BluxSectionSliceDefaultPrimaryCellsItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   title_role: prismic.KeyTextField;
-
-  /**
-   * body_role field in *BluxSection → Default → Primary → cells*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: blux_section.default.primary.cells[].body_role
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  body_role: prismic.KeyTextField;
 
   /**
    * subgrid field in *BluxSection → Default → Primary → cells*

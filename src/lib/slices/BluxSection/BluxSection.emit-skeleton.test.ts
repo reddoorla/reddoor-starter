@@ -11,8 +11,8 @@ import BluxSection from "./index.svelte";
  * recursively turns those markers into rich-text nodes / `{ id }` — including
  * inside the nested `cells` group. This test mirrors that RESOLVED shape and
  * feeds it through the real BluxSection slice, proving the emit's field names
- * (`heading`, `cells`, `kind`, `title`, `body`) line up exactly with what the
- * component reads — WITHOUT a live Prismic round-trip. If a field name drifts,
+ * (`heading`, `cells`, `kind`, `title`, `body_html`) line up exactly with what
+ * the component reads — WITHOUT a live Prismic round-trip. If a field name drifts,
  * the render goes empty and this fails: fix the emit, not the test.
  */
 const rt = (level: string, text: string) => [{ type: level, text, spans: [] }];
@@ -31,7 +31,7 @@ describe("BluxSection renders an emit-shaped (resolved) document", () => {
           {
             kind: "text",
             title: rt("heading3", "Pool"),
-            body: rt("paragraph", "Heated"),
+            body_html: '<div class="txt-role-text1"><p>Heated</p></div>',
             subgrid: [],
           },
           { kind: "text", title: rt("heading3", "Gym"), subgrid: [] },

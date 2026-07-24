@@ -177,10 +177,10 @@
                 "link",
                 {
                   "__TYPE__": "LinkContent",
-                  "key": "bc181e7b-f642-4dbd-a3de-a65a4dc840f3",
+                  "key": "6061217c-bcc4-4c7d-b9cf-cb9c08e175c0",
                   "value": {
                     "__TYPE__": "ExternalLink",
-                    "url": "https://prismic.io"
+                    "url": "https://slicemachine.dev"
                   }
                 }
               ],
@@ -282,7 +282,7 @@
                           "link",
                           {
                             "__TYPE__": "LinkContent",
-                            "key": "da0a06d6-270e-49e8-977b-b48574131799",
+                            "key": "12d7b5e4-5d3d-4db7-8901-45c75c7800ea",
                             "value": {
                               "__TYPE__": "ExternalLink",
                               "url": "http://google.com"

@@ -15,7 +15,6 @@
         ]
       },
       "background_image": {
-        "__TYPE__": "ImageContent",
         "origin": {
           "id": "main",
           "url": "https://images.unsplash.com/photo-1607582278043-57198ac8da43",
@@ -34,6 +33,8 @@
           "background": "transparent"
         },
         "alt": "slept",
+        "credits": null,
+        "__TYPE__": "ImageContent",
         "thumbnails": {}
       },
       "background_color": {
@@ -151,7 +152,6 @@
               [
                 "media",
                 {
-                  "__TYPE__": "ImageContent",
                   "origin": {
                     "id": "main",
                     "url": "https://images.unsplash.com/photo-1593642633279-1796119d5482",
@@ -170,6 +170,8 @@
                     "background": "transparent"
                   },
                   "alt": "design",
+                  "credits": null,
+                  "__TYPE__": "ImageContent",
                   "thumbnails": {}
                 }
               ],
@@ -185,10 +187,10 @@
                 "link",
                 {
                   "__TYPE__": "LinkContent",
-                  "key": "45e45e69-438d-483f-a601-4153a876073f",
+                  "key": "df931d6c-db4b-444e-ab68-78af82430186",
                   "value": {
                     "__TYPE__": "ExternalLink",
-                    "url": "https://prismic.io"
+                    "url": "http://twitter.com"
                   }
                 }
               ],
@@ -255,7 +257,6 @@
                         [
                           "media",
                           {
-                            "__TYPE__": "ImageContent",
                             "origin": {
                               "id": "main",
                               "url": "https://images.unsplash.com/photo-1606248897732-2c5ffe759c04",
@@ -274,6 +275,8 @@
                               "background": "transparent"
                             },
                             "alt": "husband",
+                            "credits": null,
+                            "__TYPE__": "ImageContent",
                             "thumbnails": {}
                           }
                         ],
@@ -289,7 +292,7 @@
                           "link",
                           {
                             "__TYPE__": "LinkContent",
-                            "key": "649f3a10-1d70-41a3-9765-50d56ac50705",
+                            "key": "e1ce72f1-07fa-4ffc-aef9-e7d1d2f59aba",
                             "value": {
                               "__TYPE__": "ExternalLink",
                               "url": "https://slicemachine.dev"

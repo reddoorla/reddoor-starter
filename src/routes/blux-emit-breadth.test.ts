@@ -36,7 +36,10 @@ const slices = [
           kind: "subgrid",
           subgrid: [
             { kind: "media", media: img("sub-img") },
-            { kind: "text", body: rt("paragraph", "SubText") },
+            {
+              kind: "text",
+              body_html: '<div class="txt-role-text1"><p>SubText</p></div>',
+            },
           ],
         },
       ],

@@ -45,17 +45,18 @@ describe("BluxCell visual fields", () => {
     ).not.toBeNull();
   });
 
-  it("wraps title/body in their type-role containers", () => {
+  it("wraps the title in its role container and renders roled body_html via {@html}", () => {
     const cell = {
       kind: "text",
       title: rt("heading3", "T"),
       title_role: "text11",
-      body: rt("paragraph", "B"),
-      body_role: "text1",
+      body_html: '<div class="txt-role-text1"><p>B</p></div>',
     } as unknown as BluxCellData;
     const { container } = render(BluxCell, { props: { cell, basis: "100%" } });
     expect(container.querySelector(".txt-role-text11 h3")).not.toBeNull();
-    expect(container.querySelector(".txt-role-text1 p")).not.toBeNull();
+    expect(
+      container.querySelector(".blux-cell__body .txt-role-text1 p"),
+    ).not.toBeNull();
   });
 
   it("gives each subgrid cell its own basis for a row of that many cells", () => {

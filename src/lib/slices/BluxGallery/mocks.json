@@ -15,7 +15,6 @@
         ]
       },
       "background_image": {
-        "__TYPE__": "ImageContent",
         "origin": {
           "id": "main",
           "url": "https://images.unsplash.com/photo-1607582278038-6bebbd4d7b72",
@@ -34,6 +33,8 @@
           "background": "transparent"
         },
         "alt": "nearer",
+        "credits": null,
+        "__TYPE__": "ImageContent",
         "thumbnails": {}
       },
       "background_color": {
@@ -136,7 +137,6 @@
               [
                 "media",
                 {
-                  "__TYPE__": "ImageContent",
                   "origin": {
                     "id": "main",
                     "url": "https://images.unsplash.com/photo-1494173853739-c21f58b16055",
@@ -155,6 +155,8 @@
                     "background": "transparent"
                   },
                   "alt": "six",
+                  "credits": null,
+                  "__TYPE__": "ImageContent",
                   "thumbnails": {}
                 }
               ],
@@ -170,7 +172,7 @@
                 "link",
                 {
                   "__TYPE__": "LinkContent",
-                  "key": "67517887-d613-463a-aad2-b5f2919b1e8f",
+                  "key": "a45d77aa-dfb3-4f38-babe-a37dd77ce9c2",
                   "value": {
                     "__TYPE__": "ExternalLink",
                     "url": "http://twitter.com"
@@ -240,7 +242,6 @@
                         [
                           "media",
                           {
-                            "__TYPE__": "ImageContent",
                             "origin": {
                               "id": "main",
                               "url": "https://images.unsplash.com/photo-1571126770897-2d612d1f7b89",
@@ -259,6 +260,8 @@
                               "background": "transparent"
                             },
                             "alt": "living",
+                            "credits": null,
+                            "__TYPE__": "ImageContent",
                             "thumbnails": {}
                           }
                         ],
@@ -274,10 +277,10 @@
                           "link",
                           {
                             "__TYPE__": "LinkContent",
-                            "key": "cf4db9d3-c8ca-4712-80bd-9c3ab70df4c9",
+                            "key": "3a8d0593-2ad5-4166-b7c3-7a051d20cfcd",
                             "value": {
                               "__TYPE__": "ExternalLink",
-                              "url": "http://google.com"
+                              "url": "https://prismic.io"
                             }
                           }
                         ],

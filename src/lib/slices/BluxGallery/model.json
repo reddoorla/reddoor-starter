@@ -49,11 +49,7 @@
           "type": "Select",
           "config": {
             "label": "vertical_align",
-            "options": [
-              "top",
-              "middle",
-              "bottom"
-            ]
+            "options": ["top", "middle", "bottom"]
           }
         },
         "min_height": {
@@ -91,10 +87,7 @@
           "type": "Select",
           "config": {
             "label": "masonry",
-            "options": [
-              "off",
-              "on"
-            ]
+            "options": ["off", "on"]
           }
         },
         "ratio": {
@@ -112,13 +105,7 @@
                 "type": "Select",
                 "config": {
                   "label": "kind",
-                  "options": [
-                    "text",
-                    "media",
-                    "embed",
-                    "button",
-                    "subgrid"
-                  ]
+                  "options": ["text", "media", "embed", "button", "subgrid"]
                 }
               },
               "title": {
@@ -128,11 +115,10 @@
                   "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
                 }
               },
-              "body": {
-                "type": "StructuredText",
+              "body_html": {
+                "type": "Text",
                 "config": {
-                  "label": "body",
-                  "multi": "paragraph,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,list-item,o-list-item,image,embed"
+                  "label": "body_html"
                 }
               },
               "media": {
@@ -177,11 +163,7 @@
                       "type": "Select",
                       "config": {
                         "label": "kind",
-                        "options": [
-                          "text",
-                          "media",
-                          "embed"
-                        ]
+                        "options": ["text", "media", "embed"]
                       }
                     },
                     "title": {
@@ -191,11 +173,10 @@
                         "single": "heading1,heading2,heading3,heading4,heading5,heading6,paragraph"
                       }
                     },
-                    "body": {
-                      "type": "StructuredText",
+                    "body_html": {
+                      "type": "Text",
                       "config": {
-                        "label": "body",
-                        "multi": "paragraph,heading1,heading2,heading3,heading4,heading5,heading6,strong,em,hyperlink,list-item,o-list-item,image,embed"
+                        "label": "body_html"
                       }
                     },
                     "media": {

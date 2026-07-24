@@ -54,12 +54,9 @@
       </div>
     {:else}<PrismicRichText field={cell.title} />{/if}
   {/if}
-  {#if isFilled.richText(cell.body)}
-    {#if cell.body_role}
-      <div class="txt-role-{cell.body_role}">
-        <PrismicRichText field={cell.body} />
-      </div>
-    {:else}<PrismicRichText field={cell.body} />{/if}
+  {#if isFilled.keyText(cell.body_html)}
+    <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted first-party Blux migration HTML. Unlike embed_html (sanitized at emit), body_html is intentionally NOT sanitized: the sanitizer would strip the txt-role-* class this fix needs. Content is the client's own export; a role-preserving sanitize is a tracked follow-up. -->
+    <div class="blux-cell__body">{@html cell.body_html}</div>
   {/if}
   {#if isFilled.keyText(cell.embed_html)}
     <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted Blux migration HTML, sanitized at the Emit stage (spec §6) -->
