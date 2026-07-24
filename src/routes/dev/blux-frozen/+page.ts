@@ -12,6 +12,7 @@ export const prerender = true;
 
 export function load() {
   return {
+    frozen: true, // render bare (no app chrome) — the frozen page is standalone
     template,
     styleCss,
     fontLinks: manifest.fontLinks,
