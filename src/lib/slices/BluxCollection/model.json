@@ -73,20 +73,14 @@
           "type": "Select",
           "config": {
             "label": "layout",
-            "options": [
-              "grid",
-              "carousel"
-            ]
+            "options": ["grid", "carousel"]
           }
         },
         "scroll_load_more": {
           "type": "Select",
           "config": {
             "label": "scroll_load_more",
-            "options": [
-              "off",
-              "on"
-            ]
+            "options": ["off", "on"]
           }
         },
         "widget_kind": {

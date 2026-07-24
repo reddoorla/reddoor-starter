@@ -38,10 +38,7 @@
           "type": "Select",
           "config": {
             "label": "media_side",
-            "options": [
-              "left",
-              "right"
-            ]
+            "options": ["left", "right"]
           }
         },
         "layout_ratio": {
