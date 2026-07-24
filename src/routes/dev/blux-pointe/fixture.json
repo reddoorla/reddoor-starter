@@ -45,14 +45,7 @@
                 },
                 {
                   "kind": "text",
-                  "body": [
-                    {
-                      "type": "paragraph",
-                      "text": "BURBANK",
-                      "spans": [],
-                      "direction": "ltr"
-                    }
-                  ],
+                  "body_html": "<div class=\"txt-role-text13\"><p>BURBANK</p></div>",
                   "content_padding": "10px 0px 0px"
                 }
               ]
@@ -91,22 +84,8 @@
                           "direction": "ltr"
                         }
                       ],
-                      "body": [
-                        {
-                          "type": "heading4",
-                          "text": "a monument\nof excellence",
-                          "spans": [],
-                          "direction": "ltr"
-                        },
-                        {
-                          "type": "paragraph",
-                          "text": "Nestled among the biggest names in entertainment, The Pointe is a modern and elegant haven for the finest tenants in Burbank.",
-                          "spans": [],
-                          "direction": "ltr"
-                        }
-                      ],
-                      "title_role": "text5",
-                      "body_role": "text1"
+                      "body_html": "<div class=\"txt-role-text11\"><h4>a monument <br>of excellence</h4></div>\n<div class=\"txt-role-text1\"><p>Nestled among the biggest names in entertainment, The Pointe  is a modern and elegant haven for the finest tenants in Burbank.</p></div>",
+                      "title_role": "text5"
                     },
                     {
                       "kind": "media",
@@ -169,14 +148,7 @@
               "cells": [
                 {
                   "kind": "text",
-                  "body": [
-                    {
-                      "type": "paragraph",
-                      "text": "distinguished design",
-                      "spans": [],
-                      "direction": "ltr"
-                    }
-                  ]
+                  "body_html": "<div class=\"txt-role-text12\"><p>distinguished\ndesign</p></div>"
                 }
               ]
             }
@@ -233,20 +205,7 @@
                       "direction": "ltr"
                     }
                   ],
-                  "body": [
-                    {
-                      "type": "heading4",
-                      "text": "premium\namenities",
-                      "spans": [],
-                      "direction": "ltr"
-                    },
-                    {
-                      "type": "paragraph",
-                      "text": "A campus built for the modern worker, The Pointe offers amenities that enrich the every day.",
-                      "spans": [],
-                      "direction": "ltr"
-                    }
-                  ],
+                  "body_html": "<div class=\"txt-role-text11\"><h4>premium <br>amenities</h4></div>\n<div class=\"txt-role-text1\"><p>A campus built for the modern worker, The Pointe offers amenities that enrich the every day.</p></div>",
                   "media": {
                     "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png",
                     "alt": "lines-blue.png",
@@ -256,8 +215,7 @@
                     }
                   },
                   "width": "60%",
-                  "title_role": "text5",
-                  "body_role": "text1"
+                  "title_role": "text5"
                 }
               ]
             }
@@ -290,26 +248,8 @@
                     },
                     {
                       "kind": "text",
-                      "body": [
-                        {
-                          "type": "paragraph",
-                          "text": "Renew and recover with exclusive access to a state-of-the-art FIT Health Club with full-service locker rooms in a spa-like atmosphere.",
-                          "spans": [
-                            {
-                              "type": "hyperlink",
-                              "data": {
-                                "link_type": "Web",
-                                "url": "https://www.tbpfit.com/"
-                              },
-                              "start": 62,
-                              "end": 77
-                            }
-                          ],
-                          "direction": "ltr"
-                        }
-                      ],
-                      "width": "30%",
-                      "body_role": "text14"
+                      "body_html": "<div class=\"txt-role-text14\"><p>Renew and recover with exclusive access to a state-of-the-art <a href=\"https://www.tbpfit.com/\" class=\"links\">FIT Health Club</a> with full-service locker rooms in a spa-like atmosphere. <br></p></div>",
+                      "width": "30%"
                     }
                   ]
                 },
@@ -318,16 +258,8 @@
                   "subgrid": [
                     {
                       "kind": "text",
-                      "body": [
-                        {
-                          "type": "paragraph",
-                          "text": "Enjoy exclusive access to on-site production and filming studios.",
-                          "spans": [],
-                          "direction": "ltr"
-                        }
-                      ],
-                      "width": "30%",
-                      "body_role": "text14"
+                      "body_html": "<div class=\"txt-role-text14\"><p>Enjoy exclusive access to on-site production and filming studios.</p></div>",
+                      "width": "30%"
                     },
                     {
                       "kind": "media",
@@ -361,16 +293,8 @@
                     },
                     {
                       "kind": "text",
-                      "body": [
-                        {
-                          "type": "paragraph",
-                          "text": "Head to the MRKT for a quick bite on-the-go, or dine in for a filling meal.",
-                          "spans": [],
-                          "direction": "ltr"
-                        }
-                      ],
-                      "width": "30%",
-                      "body_role": "text14"
+                      "body_html": "<div class=\"txt-role-text14\"><p>Head to the MRKT for a quick bite on-the-go, or dine in for a filling meal.</p></div>",
+                      "width": "30%"
                     }
                   ]
                 }
@@ -407,14 +331,7 @@
               "cells": [
                 {
                   "kind": "text",
-                  "body": [
-                    {
-                      "type": "paragraph",
-                      "text": "an impeccably lush haven",
-                      "spans": [],
-                      "direction": "ltr"
-                    }
-                  ]
+                  "body_html": "<div class=\"txt-role-text12\"><p>an impeccably\nlush haven</p></div>"
                 }
               ]
             }
@@ -522,16 +439,8 @@
                           "direction": "ltr"
                         }
                       ],
-                      "body": [
-                        {
-                          "type": "paragraph",
-                          "text": "A collection of 13 buildings offering premier office space among the biggest names in entertainment. Explore 3,100,000 SF of endless possibilities.",
-                          "spans": [],
-                          "direction": "ltr"
-                        }
-                      ],
-                      "title_role": "text5",
-                      "body_role": "text1"
+                      "body_html": "<div class=\"txt-role-text1\"><p>A collection of 13 buildings offering premier office space among the biggest names in entertainment. Explore 3,100,000 SF of endless possibilities.</p></div>",
+                      "title_role": "text5"
                     },
                     {
                       "kind": "media",
@@ -598,20 +507,7 @@
                       "direction": "ltr"
                     }
                   ],
-                  "body": [
-                    {
-                      "type": "heading4",
-                      "text": "a city full of possibilities",
-                      "spans": [],
-                      "direction": "ltr"
-                    },
-                    {
-                      "type": "paragraph",
-                      "text": "Burbank offers a wide range of opportunities from its network of world-renowned studios, accessible airport, and recreational activities.",
-                      "spans": [],
-                      "direction": "ltr"
-                    }
-                  ],
+                  "body_html": "<div class=\"txt-role-text11\"><h4>a city full of possibilities</h4></div>\n<div class=\"txt-role-text1\"><p>Burbank offers a wide range of opportunities from its network of world-renowned studios, accessible airport, and recreational activities.</p></div>",
                   "media": {
                     "url": "https://d3syaxnfm3oj0e.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/ec0c6ec6-45b9-4ac8-84e5-0438c84629b9.png",
                     "alt": "lines-blue.png",
@@ -622,7 +518,6 @@
                   },
                   "width": "60%",
                   "title_role": "text5",
-                  "body_role": "text1",
                   "embed_html": "<a class=\"ib middle buttons2\" href=\"https://dv4tl7yyk1zlp.cloudfront.net/ea3c0e4e-aa87-4d1b-adaa-cb250234ec3c/1b5b96c1-16fb-4d8b-8cb0-f71938af22c0.pdf\">Burbank Incentives</a>"
                 }
               ]
@@ -643,16 +538,8 @@
                   "subgrid": [
                     {
                       "kind": "text",
-                      "body": [
-                        {
-                          "type": "paragraph",
-                          "text": "Be part of the community among the biggest names in entertainment.",
-                          "spans": [],
-                          "direction": "ltr"
-                        }
-                      ],
-                      "width": "30%",
-                      "body_role": "text14"
+                      "body_html": "<div class=\"txt-role-text14\"><p>Be part of the community among the biggest names in entertainment. <br></p></div>",
+                      "width": "30%"
                     },
                     {
                       "kind": "media",
@@ -687,16 +574,8 @@
                     },
                     {
                       "kind": "text",
-                      "body": [
-                        {
-                          "type": "paragraph",
-                          "text": "Fly, surf, ski, all within an hour away. Plus every business partner is around the corner.",
-                          "spans": [],
-                          "direction": "ltr"
-                        }
-                      ],
-                      "width": "30%",
-                      "body_role": "text14"
+                      "body_html": "<div class=\"txt-role-text14\"><p>Fly, surf, ski, all within an hour away. Plus every business partner is around the corner.<br></p></div>",
+                      "width": "30%"
                     }
                   ]
                 },
@@ -705,16 +584,8 @@
                   "subgrid": [
                     {
                       "kind": "text",
-                      "body": [
-                        {
-                          "type": "paragraph",
-                          "text": "Day or night, Burbank delights with vibrant energy and one-of-a-kind character.",
-                          "spans": [],
-                          "direction": "ltr"
-                        }
-                      ],
-                      "width": "30%",
-                      "body_role": "text14"
+                      "body_html": "<div class=\"txt-role-text14\"><p>Day or night, Burbank delights with vibrant energy and one-of-a-kind character.</p></div>",
+                      "width": "30%"
                     },
                     {
                       "kind": "media",
@@ -756,14 +627,7 @@
               "cells": [
                 {
                   "kind": "text",
-                  "body": [
-                    {
-                      "type": "paragraph",
-                      "text": "everything within reach",
-                      "spans": [],
-                      "direction": "ltr"
-                    }
-                  ]
+                  "body_html": "<div class=\"txt-role-text12\"><p>everything\nwithin reach</p></div>"
                 }
               ]
             }
