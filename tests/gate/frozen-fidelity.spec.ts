@@ -9,9 +9,6 @@ import { test, expect, type ConsoleMessage } from "@playwright/test";
 const ALLOWED_CONSOLE: RegExp[] = [
   /cloudfront\.net/i,
   /fonts\.g(oogleapis|static)\.com/i,
-  // Google-Map tiles/cursors are CSP-blocked by design in the static-first v1
-  // (the embed becomes static in v2); both maps hosts emit benign violations.
-  /maps\.(googleapis|gstatic)\.com/i,
   /vimeo/i,
 ];
 const allowed = (s: string) => ALLOWED_CONSOLE.some((re) => re.test(s));
