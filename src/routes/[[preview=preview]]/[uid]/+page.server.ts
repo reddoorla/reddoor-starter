@@ -10,12 +10,18 @@ import {
   pageMeta,
   toPrerenderEntries,
 } from "$lib/blux-catalog/page-doc";
+import { frozenUids, resolveFrozen } from "$lib/blux-frozen/load";
 import { createClient, isPlaceholderRepo } from "$lib/prismicio";
 
 export async function load({ params, fetch, cookies }) {
   if (params.uid === "home") redirect(308, "/");
 
   const client = createClient({ fetch, cookies });
+
+  // A frozen Blux page (committed template artifact + published frozen_page doc)
+  // renders through <FrozenPage>; every other repo falls through unchanged.
+  const frozen = await resolveFrozen(client, params.uid);
+  if (frozen) return frozen;
 
   try {
     // Native `page` or Blux-migrated `catalog_page` — a repo has only one.
@@ -41,5 +47,15 @@ export async function entries() {
 
   // Both native `page` and Blux-migrated `catalog_page` docs, so a migrated
   // multi-page site prerenders every page at its real route.
-  return toPrerenderEntries(await getAllPageDocs(client));
+  const pageEntries = toPrerenderEntries(await getAllPageDocs(client));
+
+  // Frozen Blux pages prerender at their real routes too (home renders at "/",
+  // handled by the root route, so it is excluded here). Deduped against page
+  // entries, though a repo is only ever one kind.
+  const seen = new Set(pageEntries.map((e) => e.uid));
+  const frozenEntries = frozenUids()
+    .filter((uid) => uid !== "home" && !seen.has(uid))
+    .map((uid) => ({ uid }));
+
+  return [...pageEntries, ...frozenEntries];
 }
