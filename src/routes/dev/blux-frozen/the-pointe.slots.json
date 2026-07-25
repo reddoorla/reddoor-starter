@@ -674,395 +674,203 @@
     {
       "key": "s12.t0",
       "kind": "text",
-      "text": "←",
+      "text": "The Burbank Portfolio",
       "section": "s12"
     },
     {
       "key": "s12.t1",
       "kind": "text",
-      "text": "Move left",
+      "text": "Studio And Offices",
       "section": "s12"
     },
     {
       "key": "s12.t2",
       "kind": "text",
-      "text": "→",
+      "text": "Retail And Dining",
       "section": "s12"
     },
     {
       "key": "s12.t3",
       "kind": "text",
-      "text": "Move right",
+      "text": "Hotel And Services",
       "section": "s12"
     },
     {
       "key": "s12.t4",
       "kind": "text",
-      "text": "↑",
+      "text": "The Pointe",
       "section": "s12"
     },
     {
       "key": "s12.t5",
       "kind": "text",
-      "text": "Move up",
+      "text": "2900 West Alameda Ave",
       "section": "s12"
     },
     {
       "key": "s12.t6",
       "kind": "text",
-      "text": "↓",
+      "text": "Burbank, CA 91505",
       "section": "s12"
     },
     {
       "key": "s12.t7",
       "kind": "text",
-      "text": "Move down",
+      "text": "Visit Website",
       "section": "s12"
     },
     {
       "key": "s12.t8",
       "kind": "text",
-      "text": "+",
+      "text": "The Tower",
       "section": "s12"
     },
     {
       "key": "s12.t9",
       "kind": "text",
-      "text": "Zoom in",
+      "text": "3900 West Alameda Ave",
       "section": "s12"
     },
     {
       "key": "s12.t10",
       "kind": "text",
-      "text": "-",
+      "text": "Burbank, CA 91505",
       "section": "s12"
     },
     {
       "key": "s12.t11",
       "kind": "text",
-      "text": "Zoom out",
+      "text": "Visit Website",
       "section": "s12"
     },
     {
       "key": "s12.t12",
       "kind": "text",
-      "text": "Home",
+      "text": "The Pinnacle I",
       "section": "s12"
     },
     {
       "key": "s12.t13",
       "kind": "text",
-      "text": "Jump left by 75%",
+      "text": "3400 West Olive Ave",
       "section": "s12"
     },
     {
       "key": "s12.t14",
       "kind": "text",
-      "text": "End",
+      "text": "Burbank, CA 91505",
       "section": "s12"
     },
     {
       "key": "s12.t15",
       "kind": "text",
-      "text": "Jump right by 75%",
+      "text": "Visit Website",
       "section": "s12"
     },
     {
       "key": "s12.t16",
       "kind": "text",
-      "text": "Page Up",
+      "text": "The Pinnacle II",
       "section": "s12"
     },
     {
       "key": "s12.t17",
       "kind": "text",
-      "text": "Jump up by 75%",
+      "text": "3300 West Olive Ave",
       "section": "s12"
     },
     {
       "key": "s12.t18",
       "kind": "text",
-      "text": "Page Down",
+      "text": "Burbank, CA 91505",
       "section": "s12"
     },
     {
       "key": "s12.t19",
       "kind": "text",
-      "text": "Jump down by 75%",
+      "text": "Visit Website",
       "section": "s12"
     },
     {
       "key": "s12.t20",
       "kind": "text",
-      "text": "Map",
+      "text": "3800 Alameda",
       "section": "s12"
     },
     {
       "key": "s12.t21",
       "kind": "text",
-      "text": "Terrain",
+      "text": "3800 Alameda Ave",
       "section": "s12"
     },
     {
       "key": "s12.t22",
       "kind": "text",
-      "text": "Satellite",
+      "text": "Burbank, CA 91505",
       "section": "s12"
     },
     {
       "key": "s12.t23",
       "kind": "text",
-      "text": "Labels",
+      "text": "Visit Website",
       "section": "s12"
     },
     {
       "key": "s12.t24",
       "kind": "text",
-      "text": "Keyboard shortcuts",
+      "text": "Media Studios",
       "section": "s12"
     },
     {
       "key": "s12.t25",
       "kind": "text",
-      "text": "Map Data",
+      "text": "3100 Thornton Ave",
       "section": "s12"
     },
     {
       "key": "s12.t26",
       "kind": "text",
-      "text": "Map data ©2026 Google",
+      "text": "2255 &amp; 2233 Ontario Ave",
       "section": "s12"
     },
     {
       "key": "s12.t27",
       "kind": "text",
-      "text": "Map data ©2026 Google",
+      "text": "3333 &amp; 3355 Empire Ave",
       "section": "s12"
     },
     {
       "key": "s12.t28",
       "kind": "text",
-      "text": "1 km&nbsp;",
+      "text": "Burbank, CA 91504",
       "section": "s12"
     },
     {
       "key": "s12.t29",
       "kind": "text",
-      "text": "Click to toggle between metric and imperial units",
+      "text": "Visit Website",
       "section": "s12"
     },
     {
       "key": "s12.t30",
       "kind": "text",
-      "text": "Terms",
+      "text": "Central Park",
       "section": "s12"
     },
     {
       "key": "s12.t31",
       "kind": "text",
-      "text": "Report a map error",
+      "text": "3500 West Olive Ave",
       "section": "s12"
     },
     {
       "key": "s12.t32",
       "kind": "text",
-      "text": "The Burbank Portfolio",
+      "text": "Burbank, CA 91505",
       "section": "s12"
     },
     {
       "key": "s12.t33",
-      "kind": "text",
-      "text": "Studio And Offices",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t34",
-      "kind": "text",
-      "text": "Retail And Dining",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t35",
-      "kind": "text",
-      "text": "Hotel And Services",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t36",
-      "kind": "text",
-      "text": "The Pointe",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t37",
-      "kind": "text",
-      "text": "2900 West Alameda Ave",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t38",
-      "kind": "text",
-      "text": "Burbank, CA 91505",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t39",
-      "kind": "text",
-      "text": "Visit Website",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t40",
-      "kind": "text",
-      "text": "The Tower",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t41",
-      "kind": "text",
-      "text": "3900 West Alameda Ave",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t42",
-      "kind": "text",
-      "text": "Burbank, CA 91505",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t43",
-      "kind": "text",
-      "text": "Visit Website",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t44",
-      "kind": "text",
-      "text": "The Pinnacle I",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t45",
-      "kind": "text",
-      "text": "3400 West Olive Ave",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t46",
-      "kind": "text",
-      "text": "Burbank, CA 91505",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t47",
-      "kind": "text",
-      "text": "Visit Website",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t48",
-      "kind": "text",
-      "text": "The Pinnacle II",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t49",
-      "kind": "text",
-      "text": "3300 West Olive Ave",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t50",
-      "kind": "text",
-      "text": "Burbank, CA 91505",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t51",
-      "kind": "text",
-      "text": "Visit Website",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t52",
-      "kind": "text",
-      "text": "3800 Alameda",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t53",
-      "kind": "text",
-      "text": "3800 Alameda Ave",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t54",
-      "kind": "text",
-      "text": "Burbank, CA 91505",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t55",
-      "kind": "text",
-      "text": "Visit Website",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t56",
-      "kind": "text",
-      "text": "Media Studios",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t57",
-      "kind": "text",
-      "text": "3100 Thornton Ave",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t58",
-      "kind": "text",
-      "text": "2255 &amp; 2233 Ontario Ave",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t59",
-      "kind": "text",
-      "text": "3333 &amp; 3355 Empire Ave",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t60",
-      "kind": "text",
-      "text": "Burbank, CA 91504",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t61",
-      "kind": "text",
-      "text": "Visit Website",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t62",
-      "kind": "text",
-      "text": "Central Park",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t63",
-      "kind": "text",
-      "text": "3500 West Olive Ave",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t64",
-      "kind": "text",
-      "text": "Burbank, CA 91505",
-      "section": "s12"
-    },
-    {
-      "key": "s12.t65",
       "kind": "text",
       "text": "Visit Website",
       "section": "s12"
