@@ -14,15 +14,19 @@ export interface FrozenPageData {
   styleCss: string;
   fontLinks: string[];
   slots: FrozenRenderSlot[];
+  // SEO/head keys mirror `pageMeta()` (snake_case) — the root +layout.svelte
+  // <Seo> reads `page.data.meta_title|meta_description|meta_image|meta_image_alt`,
+  // so both load paths must agree on this shape or a frozen page's meta is dropped.
   title: string;
-  metaTitle?: string | undefined;
-  metaDescription?: string | undefined;
-  metaImageUrl?: string | undefined;
+  meta_title?: string | undefined;
+  meta_description?: string | undefined;
+  meta_image?: string | undefined;
+  meta_image_alt?: string | undefined;
 }
 
 /** Compose a committed artifact + a Prismic `frozen_page` doc into the render
  * shape `<FrozenPage>` wants. Slots are decoded via the shared mapper; SEO meta
- * comes from the doc; fontLinks come from the artifact. */
+ * comes from the doc (same keys as `pageMeta`); fontLinks come from the artifact. */
 export function buildFrozenData(
   art: FrozenArtifact,
   doc: FrozenPageDoc,
@@ -34,9 +38,10 @@ export function buildFrozenData(
     fontLinks: art.fontLinks,
     slots: frozenSlotsFromDoc(doc.data.slots),
     title: doc.data.title ?? "",
-    metaTitle: doc.data.meta_title || undefined,
-    metaDescription: doc.data.meta_description || undefined,
-    metaImageUrl: doc.data.meta_image?.url || undefined,
+    meta_title: doc.data.meta_title || undefined,
+    meta_description: doc.data.meta_description || undefined,
+    meta_image: doc.data.meta_image?.url || undefined,
+    meta_image_alt: doc.data.meta_image?.alt || undefined,
   };
 }
 
@@ -51,8 +56,12 @@ export async function resolveFrozen(
   uid: string,
   artifacts: Record<string, FrozenArtifact> = frozenArtifacts,
 ): Promise<FrozenPageData | null> {
-  const art = artifacts[uid];
-  if (!art) return null; // not a frozen site (no committed artifact) → fall through
+  // Own-key check (not a bracket read): a plain object inherits Object.prototype
+  // members, so `artifacts["toString"|"constructor"|"__proto__"|…]` would be a
+  // truthy INHERITED value and wrongly trigger a Prismic query on a non-frozen
+  // repo. `Object.hasOwn` keeps the "no artifact → no query" invariant exact.
+  if (!Object.hasOwn(artifacts, uid)) return null; // not a frozen site → fall through
+  const art = artifacts[uid]!;
   const doc = await getFrozenPageDoc(client, uid);
   return doc ? buildFrozenData(art, doc) : null;
 }

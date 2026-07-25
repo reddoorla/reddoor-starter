@@ -16,7 +16,7 @@ const doc: FrozenPageDoc = {
     title: "The Pointe",
     meta_title: "The Pointe | Home",
     meta_description: "desc",
-    meta_image: { url: "https://images.prismic.io/og.jpg" },
+    meta_image: { url: "https://images.prismic.io/og.jpg", alt: "Storefront" },
     slots: [
       {
         key: "s0.i0",
@@ -40,8 +40,11 @@ describe("buildFrozenData", () => {
     expect(d.styleCss).toBe(art.styleCss);
     expect(d.fontLinks).toEqual(art.fontLinks);
     expect(d.title).toBe("The Pointe");
-    expect(d.metaTitle).toBe("The Pointe | Home");
-    expect(d.metaImageUrl).toBe("https://images.prismic.io/og.jpg");
+    // snake_case keys — the shape the layout <Seo> reads (matches pageMeta()).
+    expect(d.meta_title).toBe("The Pointe | Home");
+    expect(d.meta_description).toBe("desc");
+    expect(d.meta_image).toBe("https://images.prismic.io/og.jpg");
+    expect(d.meta_image_alt).toBe("Storefront");
     expect(d.slots.find((s) => s.key === "s0.i0")?.url).toBe(
       "https://images.prismic.io/x.jpg",
     );
@@ -55,6 +58,28 @@ describe("resolveFrozen — the Blux-only fall-through guarantee", () => {
   it("returns null when the repo has NO committed artifact for the uid (native/catalog site)", async () => {
     // Empty artifact map = the starter template / any non-frozen repo.
     expect(await resolveFrozen(client, "home", {})).toBeNull();
+  });
+
+  it("returns null with NO query for prototype-member uids on a non-frozen repo", async () => {
+    // A plain-object map inherits Object.prototype names; the own-key guard must
+    // still treat these as "no artifact" (no spurious frozen_page query).
+    for (const uid of [
+      "toString",
+      "constructor",
+      "__proto__",
+      "hasOwnProperty",
+      "valueOf",
+    ]) {
+      let queried = false;
+      const spy = {
+        getByUID: async () => {
+          queried = true;
+          return doc;
+        },
+      };
+      expect(await resolveFrozen(spy, uid, {})).toBeNull();
+      expect(queried, `uid "${uid}" must not query`).toBe(false);
+    }
   });
 
   it("returns null (falls through) when the artifact exists but no frozen_page doc is published", async () => {

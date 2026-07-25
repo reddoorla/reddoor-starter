@@ -16,7 +16,7 @@ export interface FrozenPageDoc {
     slots: FrozenDocSlot[];
     meta_title?: string;
     meta_description?: string;
-    meta_image?: { url?: string | null } | null;
+    meta_image?: { url?: string | null; alt?: string | null } | null;
   };
 }
 
