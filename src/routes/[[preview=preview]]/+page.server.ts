@@ -5,10 +5,17 @@ import {
   loadCollections,
 } from "$lib/blux-catalog/collections-load";
 import { getPageDoc, pageMeta } from "$lib/blux-catalog/page-doc";
+import { resolveFrozen } from "$lib/blux-frozen/load";
 import { createClient, isPlaceholderRepo } from "$lib/prismicio";
 
 export async function load({ fetch, cookies }) {
   const client = createClient({ fetch, cookies });
+
+  // A frozen Blux site (committed template artifact + published frozen_page doc)
+  // renders the homepage through <FrozenPage>; every other repo falls through
+  // unchanged (no artifact → no query).
+  const frozen = await resolveFrozen(client, "home");
+  if (frozen) return frozen;
 
   try {
     // Native `page` or Blux-migrated `catalog_page` — both pin home to "home".
