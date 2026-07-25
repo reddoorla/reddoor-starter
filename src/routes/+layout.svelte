@@ -39,36 +39,43 @@
   imageAlt={page.data.meta_image_alt}
   url={page.url}
 />
-<a
-  href="#main-content"
-  class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:bg-white focus:text-primary focus:px-4 focus:py-2 focus:rounded focus:shadow"
->
-  Skip to main content
-</a>
-<!-- Chrome renders from page data when a route supplies it (a migrated Blux
-     site's per-route navLinks/footerColumns), else from the site-config chrome
-     (`blux convert` fills it; empty stub → Nav logo-only + Footer default).
-     Each component applies its own page-data-over-config precedence, so
-     existing routes are unaffected. -->
-<div class="flex flex-col min-h-screen">
-  <Nav
-    navLinks={page.data.navLinks}
-    items={siteConfig.nav.items}
-    logo={siteConfig.nav.logo}
-  />
+{#if page.data.frozen}
+  <!-- A frozen Blux page is a complete standalone document (its own nav, footer,
+       and CSS reset are baked into the frozen template). The app chrome +
+       wrappers would double them, so render the page bare. -->
+  {@render children?.()}
+{:else}
+  <a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-100 focus:bg-white focus:text-primary focus:px-4 focus:py-2 focus:rounded focus:shadow"
+  >
+    Skip to main content
+  </a>
+  <!-- Chrome renders from page data when a route supplies it (a migrated Blux
+       site's per-route navLinks/footerColumns), else from the site-config chrome
+       (`blux convert` fills it; empty stub → Nav logo-only + Footer default).
+       Each component applies its own page-data-over-config precedence, so
+       existing routes are unaffected. -->
+  <div class="flex flex-col min-h-screen">
+    <Nav
+      navLinks={page.data.navLinks}
+      items={siteConfig.nav.items}
+      logo={siteConfig.nav.logo}
+    />
 
-  <main id="main-content" tabindex="-1" class="flex-1">
-    {@render children?.()}
-  </main>
+    <main id="main-content" tabindex="-1" class="flex-1">
+      {@render children?.()}
+    </main>
 
-  <Footer
-    columns={footerColumns(page.data.footerColumns, siteConfig)}
-    socials={siteConfig.footer.socials}
-    text={siteConfig.footer.text}
-  />
-</div>
-<TransitionOverlay />
-<LandscapeModal />
+    <Footer
+      columns={footerColumns(page.data.footerColumns, siteConfig)}
+      socials={siteConfig.footer.socials}
+      text={siteConfig.footer.text}
+    />
+  </div>
+  <TransitionOverlay />
+  <LandscapeModal />
+{/if}
 {#if data.isPreviewSession}
   <PrismicPreview {repositoryName} />
 {/if}

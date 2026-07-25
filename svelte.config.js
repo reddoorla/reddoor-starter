@@ -65,7 +65,9 @@ const config = {
           // Cloudflare Turnstile contact-form widget (enable via PUBLIC_TURNSTILE_SITE_KEY).
           "https://challenges.cloudflare.com",
         ],
-        "style-src": ["self", "unsafe-inline"],
+        // Google Fonts stylesheet host — frozen Blux sites load their type from
+        // fonts.googleapis.com (paired with fonts.gstatic.com under font-src).
+        "style-src": ["self", "unsafe-inline", "https://fonts.googleapis.com"],
         "img-src": [
           "self",
           "data:",
@@ -87,7 +89,7 @@ const config = {
           "https://*.prismic.io",
           "https://static.cdn.prismic.io",
         ],
-        "font-src": ["self", "data:"],
+        "font-src": ["self", "data:", "https://fonts.gstatic.com"],
         "base-uri": ["self"],
         "form-action": ["self"],
         "frame-ancestors": ["self"],
