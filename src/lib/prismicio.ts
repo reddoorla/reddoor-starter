@@ -15,6 +15,9 @@ export const repositoryName =
  */
 export const isPlaceholderRepo = repositoryName === "your-prismic-repo-name";
 
+// Both the native `page` type and the Blux-migration `catalog_page` type
+// resolve to the same routes: a cloned repo populates only one, so a migrated
+// site's documents link-resolve at "/" and "/:uid" just like a native one.
 const routes: prismic.ClientConfig["routes"] = [
   {
     type: "page",
@@ -23,6 +26,15 @@ const routes: prismic.ClientConfig["routes"] = [
   },
   {
     type: "page",
+    path: "/:uid",
+  },
+  {
+    type: "catalog_page",
+    uid: "home",
+    path: "/",
+  },
+  {
+    type: "catalog_page",
     path: "/:uid",
   },
 ];
