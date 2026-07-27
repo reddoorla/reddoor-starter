@@ -35,4 +35,22 @@ describe("frozenArtifacts", () => {
       expect(typeof artifact.styleCss).toBe("string");
     }
   });
+
+  // collect() DEFAULTS a missing sibling (styleCss "" / fontLinks []), and the
+  // vitest ?raw-css quirk rules out content assertions — but glob KEYS come
+  // from the filesystem regardless, so file presence is still checkable. The
+  // freeze emits all three files per uid unconditionally: an absent sibling
+  // always means a broken partial copy (an unstyled page shipping green).
+  const styleKeys = Object.keys(import.meta.glob("./frozen/*.style.css"));
+  const fontKeys = Object.keys(import.meta.glob("./frozen/*.fonts.json"));
+  it("no partial copies: every template has its .style.css and .fonts.json siblings", () => {
+    for (const uid of Object.keys(frozenArtifacts)) {
+      expect(styleKeys, `frozen/${uid}.style.css is missing`).toContain(
+        `./frozen/${uid}.style.css`,
+      );
+      expect(fontKeys, `frozen/${uid}.fonts.json is missing`).toContain(
+        `./frozen/${uid}.fonts.json`,
+      );
+    }
+  });
 });

@@ -20,6 +20,22 @@ const configs: [uid: string, config: FrozenMapConfig][] = Object.entries(
 ]);
 
 describe("frozen map artifacts", () => {
+  // Reverse presence: the freeze bakes `data-kml-mid` onto every KML map
+  // placeholder AND emits the matching <uid>.map.json — so a template carrying
+  // the placeholder without its committed config is a broken partial copy
+  // (the live page would ship a permanently-inert placeholder, green CI).
+  it("every template with a KML map placeholder has its committed map.json", () => {
+    const withConfig = new Set(configs.map(([uid]) => uid));
+    for (const [uid, artifact] of Object.entries(frozenArtifacts)) {
+      if (artifact.template.includes("data-kml-mid")) {
+        expect(
+          withConfig.has(uid),
+          `frozen/${uid}.map.json is missing but the template has a map placeholder`,
+        ).toBe(true);
+      }
+    }
+  });
+
   it("each targets a mount that exists in its page's frozen template", () => {
     for (const [uid, config] of configs) {
       expect(config.mid).toMatch(/^[\w-]{10,}$/);

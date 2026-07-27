@@ -23,6 +23,22 @@ try {
   // no frozen artifact dir → not a frozen site
 }
 
+// Google Maps CSP surface — per Google's documented Maps-JS requirements.
+// These wildcards meaningfully widen script-src (storage.googleapis.com and
+// *.googleusercontent.com host arbitrary user-uploaded content, and google.com
+// exposes known JSONP gadgets), so they are added ONLY where a map can
+// actually hydrate: frozen Blux sites, or any build carrying
+// VITE_GOOGLE_MAPS_KEY — the same key that gates runtime hydration. Keyless
+// native sites keep the tight baseline policy.
+const wantsMapsCsp = isFrozenSite || !!process.env.VITE_GOOGLE_MAPS_KEY;
+const mapsHosts = [
+  "https://*.googleapis.com",
+  "https://*.gstatic.com",
+  "https://*.google.com",
+  "https://*.ggpht.com",
+  "https://*.googleusercontent.com",
+];
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   compilerOptions: {
@@ -49,8 +65,10 @@ const config = {
         // Cloudflare infrastructure paths are never prerenderable routes. Frozen
         // Blux HTML keeps a dead `/cdn-cgi/l/email-protection` link (Cloudflare's
         // email-obfuscation, only resolvable behind Cloudflare) — a 404 on it
-        // during the crawl is expected, not a build failure.
-        if (status === 404 && path.startsWith("/cdn-cgi/")) {
+        // during the crawl is expected, not a build failure. Frozen-only: on a
+        // native site a /cdn-cgi/ link can only be pasted CMS content, and the
+        // build should keep failing loudly so it gets fixed.
+        if (isFrozenSite && status === 404 && path.startsWith("/cdn-cgi/")) {
           return;
         }
         throw new Error(
@@ -86,19 +104,15 @@ const config = {
           "https://player.vimeo.com",
           // Cloudflare Turnstile contact-form widget (enable via PUBLIC_TURNSTILE_SITE_KEY).
           "https://challenges.cloudflare.com",
-          // Google Maps JS API — frozen-page map hydration (VITE_GOOGLE_MAPS_KEY).
-          // Hosts + blob: per Google's documented Maps-JS CSP requirements.
-          "blob:",
-          "https://*.googleapis.com",
-          "https://*.gstatic.com",
-          "https://*.google.com",
-          "https://*.ggpht.com",
-          "https://*.googleusercontent.com",
+          // Google Maps JS API — map hydration (VITE_GOOGLE_MAPS_KEY); see
+          // wantsMapsCsp above for why this set is conditional.
+          ...(wantsMapsCsp ? ["blob:", ...mapsHosts] : []),
         ],
         // Modern Maps JS spawns blob: workers; without this directive the
         // worker-src→script-src→default-src fallback lands on 'self' and
-        // blocks them.
-        "worker-src": ["self", "blob:"],
+        // blocks them. Maps-gated: the baseline keeps no worker-src, exactly
+        // as before the frozen layer.
+        ...(wantsMapsCsp ? { "worker-src": ["self", "blob:"] } : {}),
         // Google Fonts stylesheet host — frozen Blux sites load their type from
         // fonts.googleapis.com (paired with fonts.gstatic.com under font-src).
         "style-src": ["self", "unsafe-inline", "https://fonts.googleapis.com"],
@@ -109,11 +123,7 @@ const config = {
           "https://*.prismic.io",
           // Google Maps tiles, markers, and My-Maps KML pin sprites (pins are
           // served from mt.google.com / maps.google.com, not maps.gstatic).
-          "https://*.googleapis.com",
-          "https://*.gstatic.com",
-          "https://*.google.com",
-          "https://*.ggpht.com",
-          "https://*.googleusercontent.com",
+          ...(wantsMapsCsp ? mapsHosts : []),
         ],
         // Prismic hosts non-image media (e.g. migrated .mp4 assets) on
         // <repo>.cdn.prismic.io — first-party content, same origin family as
@@ -125,18 +135,22 @@ const config = {
           // Cloudflare Turnstile renders its challenge in an iframe from this host.
           "https://challenges.cloudflare.com",
           // Google Maps JS may frame google.com surfaces (per its CSP doc).
-          "https://*.google.com",
+          ...(wantsMapsCsp ? ["https://*.google.com"] : []),
         ],
         "connect-src": [
           "self",
           "https://*.prismic.io",
           "https://static.cdn.prismic.io",
           // Google Maps JS API telemetry, tile and KML fetches.
-          "https://*.googleapis.com",
-          "https://*.google.com",
-          "https://*.gstatic.com",
-          "data:",
-          "blob:",
+          ...(wantsMapsCsp
+            ? [
+                "https://*.googleapis.com",
+                "https://*.google.com",
+                "https://*.gstatic.com",
+                "data:",
+                "blob:",
+              ]
+            : []),
         ],
         "font-src": ["self", "data:", "https://fonts.gstatic.com"],
         "base-uri": ["self"],
