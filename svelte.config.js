@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import adapter from "@sveltejs/adapter-netlify";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
@@ -8,6 +8,36 @@ const slicemachine = JSON.parse(
 const isPlaceholderRepo =
   (process.env.VITE_PRISMIC_ENVIRONMENT || slicemachine.repositoryName) ===
   "your-prismic-repo-name";
+
+// A frozen Blux site commits page artifacts under src/lib/blux-frozen/frozen.
+// Its prerendered pages keep dead Blux link artifacts — JS-driven `#n` slider
+// anchors whose targets never existed statically — so tolerate missing fragment
+// ids during the crawl rather than failing the build (a native site still fails
+// loudly on a genuine broken in-page anchor).
+let isFrozenSite = false;
+try {
+  isFrozenSite = readdirSync(
+    new URL("./src/lib/blux-frozen/frozen", import.meta.url),
+  ).some((f) => f.endsWith(".html"));
+} catch {
+  // no frozen artifact dir → not a frozen site
+}
+
+// Google Maps CSP surface — per Google's documented Maps-JS requirements.
+// These wildcards meaningfully widen script-src (storage.googleapis.com and
+// *.googleusercontent.com host arbitrary user-uploaded content, and google.com
+// exposes known JSONP gadgets), so they are added ONLY where a map can
+// actually hydrate: frozen Blux sites, or any build carrying
+// VITE_GOOGLE_MAPS_KEY — the same key that gates runtime hydration. Keyless
+// native sites keep the tight baseline policy.
+const wantsMapsCsp = isFrozenSite || !!process.env.VITE_GOOGLE_MAPS_KEY;
+const mapsHosts = [
+  "https://*.googleapis.com",
+  "https://*.gstatic.com",
+  "https://*.google.com",
+  "https://*.ggpht.com",
+  "https://*.googleusercontent.com",
+];
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -32,8 +62,45 @@ const config = {
         if (isPlaceholderRepo && status === 404) {
           return;
         }
+        // Cloudflare infrastructure paths are never prerenderable routes. Frozen
+        // Blux HTML keeps a dead `/cdn-cgi/l/email-protection` link (Cloudflare's
+        // email-obfuscation, only resolvable behind Cloudflare) — a 404 on it
+        // during the crawl is expected, not a build failure. Frozen-only: on a
+        // native site a /cdn-cgi/ link can only be pasted CMS content, and the
+        // build should keep failing loudly so it gets fixed.
+        if (isFrozenSite && status === 404 && path.startsWith("/cdn-cgi/")) {
+          return;
+        }
         throw new Error(
           `${status} ${path}${referrer ? ` (linked from ${referrer})` : ""}: ${message}`,
+        );
+      },
+      // `/dev/*` fidelity gates prerender foreign fixture content (e.g. the
+      // the-pointe catalog gate) whose in-page anchors (`/#n`) target ids that
+      // exist on that content's own origin, not on this site's home. Those
+      // routes are robots-excluded dev tooling, so a missing id is tolerated
+      // only when every referrer is a dev gate — content routes keep failing
+      // loudly on genuine broken anchors. (Latent until a native site first
+      // prerendered `/` with real content: placeholder builds 404 `/`, so the
+      // id check never ran against it.)
+      handleMissingId: isFrozenSite
+        ? "warn"
+        : ({ referrers, message }) => {
+            if (referrers.every((r) => r.startsWith("/dev/"))) return;
+            throw new Error(message);
+          },
+      // A malformed URL in CMS-pasted rich text (e.g. a school name typed into a
+      // hyperlink) is unparseable — it can never be a real route to crawl, and
+      // one editor's typo must not fail the whole build. Warn (so it surfaces
+      // for cleanup) and keep prerendering. Unlike handleHttpError's fail-loud
+      // 404 policy, an invalid URL has no valid interpretation to preserve.
+      // (Surfaced on a native site once a collection grid began linking into
+      // entity bodies that carry such migrated link artifacts.)
+      handleInvalidUrl: ({ href, referrer, message }) => {
+        console.warn(
+          `[prerender] skipped invalid URL ${JSON.stringify(href)}` +
+            `${referrer ? ` (linked from ${referrer})` : ""} — fix the CMS link` +
+            `${message ? ` [${message}]` : ""}`,
         );
       },
     },
@@ -64,7 +131,15 @@ const config = {
           "https://player.vimeo.com",
           // Cloudflare Turnstile contact-form widget (enable via PUBLIC_TURNSTILE_SITE_KEY).
           "https://challenges.cloudflare.com",
+          // Google Maps JS API — map hydration (VITE_GOOGLE_MAPS_KEY); see
+          // wantsMapsCsp above for why this set is conditional.
+          ...(wantsMapsCsp ? ["blob:", ...mapsHosts] : []),
         ],
+        // Modern Maps JS spawns blob: workers; without this directive the
+        // worker-src→script-src→default-src fallback lands on 'self' and
+        // blocks them. Maps-gated: the baseline keeps no worker-src, exactly
+        // as before the frozen layer.
+        ...(wantsMapsCsp ? { "worker-src": ["self", "blob:"] } : {}),
         // Google Fonts stylesheet host — frozen Blux sites load their type from
         // fonts.googleapis.com (paired with fonts.gstatic.com under font-src).
         "style-src": ["self", "unsafe-inline", "https://fonts.googleapis.com"],
@@ -73,6 +148,9 @@ const config = {
           "data:",
           "https://images.prismic.io",
           "https://*.prismic.io",
+          // Google Maps tiles, markers, and My-Maps KML pin sprites (pins are
+          // served from mt.google.com / maps.google.com, not maps.gstatic).
+          ...(wantsMapsCsp ? mapsHosts : []),
         ],
         // Prismic hosts non-image media (e.g. migrated .mp4 assets) on
         // <repo>.cdn.prismic.io — first-party content, same origin family as
@@ -83,11 +161,23 @@ const config = {
           "https://player.vimeo.com",
           // Cloudflare Turnstile renders its challenge in an iframe from this host.
           "https://challenges.cloudflare.com",
+          // Google Maps JS may frame google.com surfaces (per its CSP doc).
+          ...(wantsMapsCsp ? ["https://*.google.com"] : []),
         ],
         "connect-src": [
           "self",
           "https://*.prismic.io",
           "https://static.cdn.prismic.io",
+          // Google Maps JS API telemetry, tile and KML fetches.
+          ...(wantsMapsCsp
+            ? [
+                "https://*.googleapis.com",
+                "https://*.google.com",
+                "https://*.gstatic.com",
+                "data:",
+                "blob:",
+              ]
+            : []),
         ],
         "font-src": ["self", "data:", "https://fonts.gstatic.com"],
         "base-uri": ["self"],
