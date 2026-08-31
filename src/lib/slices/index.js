@@ -14,6 +14,7 @@ import BluxTable from "./BluxTable/index.svelte";
 import BluxText from "./BluxText/index.svelte";
 import Carousel from "./Carousel/index.svelte";
 import CollectionList from "./CollectionList/index.svelte";
+import CtaBanner from "./CtaBanner/index.svelte";
 import Gallery from "./Gallery/index.svelte";
 import GridBand from "./GridBand/index.svelte";
 import Hero from "./Hero/index.svelte";
@@ -24,6 +25,7 @@ import MediaText from "./MediaText/index.svelte";
 import RichText from "./RichText/index.svelte";
 import SectionGrid from "./SectionGrid/index.svelte";
 import SplitFeature from "./SplitFeature/index.svelte";
+import Testimonial from "./Testimonial/index.svelte";
 import TextColumns from "./TextColumns/index.svelte";
 import TitleBand from "./TitleBand/index.svelte";
 
@@ -42,6 +44,7 @@ export const components = {
   blux_text: BluxText,
   carousel: Carousel,
   collection_list: CollectionList,
+  cta_banner: CtaBanner,
   gallery: Gallery,
   grid_band: GridBand,
   hero: Hero,
@@ -52,6 +55,7 @@ export const components = {
   rich_text: RichText,
   section_grid: SectionGrid,
   split_feature: SplitFeature,
+  testimonial: Testimonial,
   text_columns: TextColumns,
   title_band: TitleBand,
 };

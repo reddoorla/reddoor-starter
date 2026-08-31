@@ -21,32 +21,30 @@ type PickContentRelationshipFieldData<
 > =
   // Content relationship fields
   {
-    [TSubRelationship in Extract<
-      TRelationship["fields"][number],
-      prismic.CustomTypeModelFetchContentRelationshipLevel1
-    > as TSubRelationship["id"]]: ContentRelationshipFieldWithData<
-      TSubRelationship["customtypes"],
-      TLang
-    >;
+    [
+      TSubRelationship in Extract<
+        TRelationship["fields"][number],
+        prismic.CustomTypeModelFetchContentRelationshipLevel1
+      > as TSubRelationship["id"]
+    ]: ContentRelationshipFieldWithData<TSubRelationship["customtypes"], TLang>;
   } & // Group
   {
-    [TGroup in Extract<
-      TRelationship["fields"][number],
-      | prismic.CustomTypeModelFetchGroupLevel1
-      | prismic.CustomTypeModelFetchGroupLevel2
-    > as TGroup["id"]]: TData[TGroup["id"]] extends prismic.GroupField<
-      infer TGroupData
-    >
+    [
+      TGroup in Extract<
+        TRelationship["fields"][number],
+        | prismic.CustomTypeModelFetchGroupLevel1
+        | prismic.CustomTypeModelFetchGroupLevel2
+      > as TGroup["id"]
+    ]: TData[TGroup["id"]] extends prismic.GroupField<infer TGroupData>
       ? prismic.GroupField<
           PickContentRelationshipFieldData<TGroup, TGroupData, TLang>
         >
       : never;
   } & // Other fields
   {
-    [TFieldKey in Extract<
-      TRelationship["fields"][number],
-      string
-    >]: TFieldKey extends keyof TData ? TData[TFieldKey] : never;
+    [
+      TFieldKey in Extract<TRelationship["fields"][number], string>
+    ]: TFieldKey extends keyof TData ? TData[TFieldKey] : never;
   };
 
 type ContentRelationshipFieldWithData<
@@ -55,10 +53,9 @@ type ContentRelationshipFieldWithData<
     | readonly (prismic.CustomTypeModelFetchCustomTypeLevel2 | string)[],
   TLang extends string = string,
 > = {
-  [ID in Exclude<
-    TCustomType[number],
-    string
-  >["id"]]: prismic.ContentRelationshipField<
+  [
+    ID in Exclude<TCustomType[number], string>["id"]
+  ]: prismic.ContentRelationshipField<
     ID,
     TLang,
     PickContentRelationshipFieldData<
@@ -460,7 +457,9 @@ type PageDocumentDataSlicesSlice =
   | BluxMediaTextSlice
   | BluxEmbedSlice
   | BluxTableSlice
-  | BluxCollectionSlice;
+  | BluxCollectionSlice
+  | TestimonialSlice
+  | CtaBannerSlice;
 
 /**
  * Content for Page documents
@@ -1145,6 +1144,15 @@ export interface BluxCarouselSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+
+  /**
+   * image_embed field in *BluxCarousel → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].subgrid[].image_embed
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
   image_embed: prismic.KeyTextField;
 }
 
@@ -1231,6 +1239,15 @@ export interface BluxCarouselSliceDefaultPrimaryCellsItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+
+  /**
+   * image_embed field in *BluxCarousel → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_carousel.default.primary.cells[].image_embed
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
   image_embed: prismic.KeyTextField;
 
   /**
@@ -1754,6 +1771,15 @@ export interface BluxGallerySliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+
+  /**
+   * image_embed field in *BluxGallery → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].subgrid[].image_embed
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
   image_embed: prismic.KeyTextField;
 }
 
@@ -1840,6 +1866,15 @@ export interface BluxGallerySliceDefaultPrimaryCellsItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+
+  /**
+   * image_embed field in *BluxGallery → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_gallery.default.primary.cells[].image_embed
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
   image_embed: prismic.KeyTextField;
 
   /**
@@ -2113,6 +2148,15 @@ export interface BluxGridSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+
+  /**
+   * image_embed field in *BluxGrid → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].subgrid[].image_embed
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
   image_embed: prismic.KeyTextField;
 
   /**
@@ -2269,6 +2313,15 @@ export interface BluxGridSliceDefaultPrimaryCellsItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+
+  /**
+   * image_embed field in *BluxGrid → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_grid.default.primary.cells[].image_embed
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
   image_embed: prismic.KeyTextField;
 
   /**
@@ -2922,6 +2975,15 @@ export interface BluxSectionSliceDefaultPrimaryCellsSubgridItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+
+  /**
+   * image_embed field in *BluxSection → Default → Primary → cells → subgrid*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].subgrid[].image_embed
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
   image_embed: prismic.KeyTextField;
 
   /**
@@ -3078,6 +3140,15 @@ export interface BluxSectionSliceDefaultPrimaryCellsItem {
    * - **Documentation**: https://prismic.io/docs/fields/text
    */
   embed_html: prismic.KeyTextField;
+
+  /**
+   * image_embed field in *BluxSection → Default → Primary → cells*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: blux_section.default.primary.cells[].image_embed
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
   image_embed: prismic.KeyTextField;
 
   /**
@@ -3703,8 +3774,7 @@ export type CollectionListSliceList = prismic.SharedSliceVariation<
  * Slice variation for *CollectionList*
  */
 type CollectionListSliceVariation =
-  | CollectionListSliceGrid
-  | CollectionListSliceList;
+  CollectionListSliceGrid | CollectionListSliceList;
 
 /**
  * CollectionList Shared Slice
@@ -3716,6 +3786,98 @@ type CollectionListSliceVariation =
 export type CollectionListSlice = prismic.SharedSlice<
   "collection_list",
   CollectionListSliceVariation
+>;
+
+/**
+ * Primary content in *CtaBanner → Default → Primary*
+ */
+export interface CtaBannerSliceDefaultPrimary {
+  /**
+   * heading field in *CtaBanner → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: e.g. Ready to start your project?
+   * - **API ID Path**: cta_banner.default.primary.heading
+   * - **Documentation**: https://prismic.io/docs/fields/rich-text
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * buttonLabel field in *CtaBanner → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: e.g. Talk with us
+   * - **API ID Path**: cta_banner.default.primary.buttonLabel
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  buttonLabel: prismic.KeyTextField;
+
+  /**
+   * buttonLink field in *CtaBanner → Default → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: cta_banner.default.primary.buttonLink
+   * - **Documentation**: https://prismic.io/docs/fields/link
+   */
+  buttonLink: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+
+  /**
+   * background (theme token — ignored inside a Blux band) field in *CtaBanner → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: light
+   * - **API ID Path**: cta_banner.default.primary.background
+   * - **Documentation**: https://prismic.io/docs/fields/select
+   */
+  background: prismic.SelectField<"light" | "dark" | "white", "filled">;
+
+  /**
+   * band (optional — wraps in the Blux SectionBand when set) field in *CtaBanner → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: cta_banner.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+}
+
+/**
+ * Default variation for CtaBanner Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Full-bleed band with a headline and one call-to-action link
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CtaBannerSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<CtaBannerSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *CtaBanner*
+ */
+type CtaBannerSliceVariation = CtaBannerSliceDefault;
+
+/**
+ * CtaBanner Shared Slice
+ *
+ * - **API ID**: `cta_banner`
+ * - **Description**: CtaBanner
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type CtaBannerSlice = prismic.SharedSlice<
+  "cta_banner",
+  CtaBannerSliceVariation
 >;
 
 /**
@@ -4209,8 +4371,7 @@ export type MediaTextSliceImageLeft = prismic.SharedSliceVariation<
  * Slice variation for *MediaText*
  */
 type MediaTextSliceVariation =
-  | MediaTextSliceImageRight
-  | MediaTextSliceImageLeft;
+  MediaTextSliceImageRight | MediaTextSliceImageLeft;
 
 /**
  * MediaText Shared Slice
@@ -4438,6 +4599,101 @@ type SplitFeatureSliceVariation = SplitFeatureSliceDefault;
 export type SplitFeatureSlice = prismic.SharedSlice<
   "split_feature",
   SplitFeatureSliceVariation
+>;
+
+/**
+ * Primary content in *Testimonial → Default → Primary*
+ */
+export interface TestimonialSliceDefaultPrimary {
+  /**
+   * label field in *Testimonial → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: e.g. What clients are saying
+   * - **API ID Path**: testimonial.default.primary.label
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  label: prismic.KeyTextField;
+
+  /**
+   * quote field in *Testimonial → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: Quote text WITHOUT the “ ” marks — the component draws them
+   * - **API ID Path**: testimonial.default.primary.quote
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  quote: prismic.KeyTextField;
+
+  /**
+   * name field in *Testimonial → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: e.g. Dana Whitfield
+   * - **API ID Path**: testimonial.default.primary.name
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  name: prismic.KeyTextField;
+
+  /**
+   * role field in *Testimonial → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: e.g. Director of Operations, Northgate
+   * - **API ID Path**: testimonial.default.primary.role
+   * - **Documentation**: https://prismic.io/docs/fields/text
+   */
+  role: prismic.KeyTextField;
+
+  /**
+   * avatar field in *Testimonial → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: testimonial.default.primary.avatar
+   * - **Documentation**: https://prismic.io/docs/fields/image
+   */
+  avatar: prismic.ImageField<never>;
+
+  /**
+   * band (optional — wraps in the Blux SectionBand when set) field in *Testimonial → Default → Primary*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: testimonial.default.primary.band
+   * - **Documentation**: https://prismic.io/docs/fields/number
+   */
+  band: prismic.NumberField;
+}
+
+/**
+ * Default variation for Testimonial Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: An attributed pull quote with an optional avatar/name/role credit
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TestimonialSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<TestimonialSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Testimonial*
+ */
+type TestimonialSliceVariation = TestimonialSliceDefault;
+
+/**
+ * Testimonial Shared Slice
+ *
+ * - **API ID**: `testimonial`
+ * - **Description**: Testimonial
+ * - **Documentation**: https://prismic.io/docs/slices
+ */
+export type TestimonialSlice = prismic.SharedSlice<
+  "testimonial",
+  TestimonialSliceVariation
 >;
 
 /**
@@ -4731,6 +4987,10 @@ declare module "@prismicio/client" {
       CollectionListSliceVariation,
       CollectionListSliceGrid,
       CollectionListSliceList,
+      CtaBannerSlice,
+      CtaBannerSliceDefaultPrimary,
+      CtaBannerSliceVariation,
+      CtaBannerSliceDefault,
       GallerySlice,
       GallerySliceDefaultPrimary,
       GallerySliceVariation,
@@ -4776,6 +5036,10 @@ declare module "@prismicio/client" {
       SplitFeatureSliceDefaultPrimary,
       SplitFeatureSliceVariation,
       SplitFeatureSliceDefault,
+      TestimonialSlice,
+      TestimonialSliceDefaultPrimary,
+      TestimonialSliceVariation,
+      TestimonialSliceDefault,
       TextColumnsSlice,
       TextColumnsSliceDefaultPrimaryColumnsItem,
       TextColumnsSliceDefaultPrimary,

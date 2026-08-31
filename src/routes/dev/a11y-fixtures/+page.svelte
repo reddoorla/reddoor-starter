@@ -18,6 +18,8 @@
   import CollectionList from "$lib/slices/CollectionList/index.svelte";
   import LeadText from "$lib/slices/LeadText/index.svelte";
   import TextColumns from "$lib/slices/TextColumns/index.svelte";
+  import Testimonial from "$lib/slices/Testimonial/index.svelte";
+  import CtaBanner from "$lib/slices/CtaBanner/index.svelte";
   // Aliased: `Accordion` above is the primitive ($lib/components/Accordion.svelte).
   import AccordionSlice from "$lib/slices/Accordion/index.svelte";
   import type { ComponentProps } from "svelte";
@@ -177,6 +179,42 @@
       band: null,
     },
   };
+  // figure/blockquote/figcaption with an avatar whose alt falls back to the
+  // credited name — audits image-alt plus the "the name is not a heading"
+  // outline decision (the label IS the section h2).
+  const testimonialFixture = {
+    slice_type: "testimonial",
+    variation: "default",
+    primary: {
+      label: "What clients are saying",
+      quote: "They shipped in six weeks what we had budgeted six months for.",
+      name: "Dana Whitfield",
+      role: "Director of Operations, Northgate",
+      avatar: {
+        url: pixel,
+        alt: null,
+        dimensions: { width: 400, height: 400 },
+      },
+      band: null,
+    },
+    items: [],
+  } as unknown as Content.TestimonialSlice;
+  // The dark ground is the contrast-sensitive one: white type + the inverted
+  // outline button skin both get audited here.
+  const ctaBannerFixture = {
+    slice_type: "cta_banner",
+    variation: "default",
+    primary: {
+      heading: [
+        { type: "heading2", text: "Ready to start your project?", spans: [] },
+      ],
+      buttonLabel: "Talk with us",
+      buttonLink: { link_type: "Web", url: "https://example.com" },
+      background: "dark",
+      band: null,
+    },
+    items: [],
+  } as unknown as Content.CtaBannerSlice;
   const accordionFixture: ComponentProps<typeof AccordionSlice>["slice"] = {
     slice_type: "accordion",
     variation: "default",
@@ -430,6 +468,8 @@
   <LeadText slice={leadTextFixture} />
   <TextColumns slice={textColumnsFixture} />
   <AccordionSlice slice={accordionFixture} />
+  <Testimonial slice={testimonialFixture} />
+  <CtaBanner slice={ctaBannerFixture} />
 </main>
 
 <!-- Renders nothing at rest (overlay only appears mid-navigation, aria-hidden);

@@ -104,6 +104,12 @@
             },
             "blux_collection": {
               "type": "SharedSlice"
+            },
+            "testimonial": {
+              "type": "SharedSlice"
+            },
+            "cta_banner": {
+              "type": "SharedSlice"
             }
           }
         }
