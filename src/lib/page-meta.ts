@@ -4,7 +4,9 @@ import type { PageDocument } from "../prismicio-types";
 
 /** The layout's SEO/head payload for a page document (see <Seo> in
  *  +layout.svelte). Shared by both `[[preview]]` loaders so the two stay
- *  identical. */
+ *  identical.
+ *  The optional chaining on meta_image is deliberate — Prismic's empty-image
+ *  shape has changed across API versions, so an unfilled image never throws. */
 export function pageMeta(page: PageDocument) {
   return {
     title: asText(page.data.title),

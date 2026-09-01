@@ -1,24 +1,19 @@
-import { error, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 
-import { pageMeta } from "$lib/page-meta";
+import { loadPage } from "$lib/page-load";
 import { createClient, isPlaceholderRepo } from "$lib/prismicio";
 
 export async function load({ params, fetch, cookies }) {
   if (params.uid === "home") redirect(308, "/");
 
-  const client = createClient({ fetch, cookies });
-
-  try {
-    const page = await client.getByUID("page", params.uid);
-    return { page, ...pageMeta(page) };
-  } catch {
-    error(404, { message: "Page not found" });
-  }
+  return loadPage(createClient({ fetch, cookies }), params.uid);
 }
 
 // Prerender every page document at its real route. "home" renders at "/" via
 // the root route, so it is excluded here. Empty on an unconfigured starter so
-// `pnpm build` succeeds before the Prismic repo is wired.
+// `pnpm build` succeeds before the Prismic repo is wired. (No SvelteKit
+// `fetch` here — `entries()` has no request event; the client falls back to
+// global fetch, which is fine at build time.)
 export async function entries() {
   if (isPlaceholderRepo) return [];
 

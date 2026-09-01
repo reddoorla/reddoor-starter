@@ -1,18 +1,9 @@
-import { error } from "@sveltejs/kit";
-
-import { pageMeta } from "$lib/page-meta";
+import { loadPage } from "$lib/page-load";
 import { createClient, isPlaceholderRepo } from "$lib/prismicio";
 
 export async function load({ fetch, cookies }) {
-  const client = createClient({ fetch, cookies });
-
-  try {
-    // The homepage is the `page` document with uid "home".
-    const page = await client.getByUID("page", "home");
-    return { page, ...pageMeta(page) };
-  } catch {
-    error(404, { message: "Page not found" });
-  }
+  // The homepage is the `page` document with uid "home".
+  return loadPage(createClient({ fetch, cookies }), "home");
 }
 
 // On an unconfigured starter, skip prerendering "/" — the load above would
