@@ -22,16 +22,15 @@ describe("createClient", () => {
 describe("linkResolver", () => {
   it("resolves the home page doc to the root path", () => {
     expect(linkResolver(doc("page", "home"))).toBe("/");
-    expect(linkResolver(doc("catalog_page", "home"))).toBe("/");
   });
 
   it("resolves other page docs to /:uid", () => {
     expect(linkResolver(doc("page", "our-team"))).toBe("/our-team");
-    expect(linkResolver(doc("catalog_page", "about"))).toBe("/about");
   });
 
   it("returns null for non-page types", () => {
     expect(linkResolver(doc("person", "dr-quan"))).toBeNull();
     expect(linkResolver(doc("frozen_page", "home"))).toBeNull();
+    expect(linkResolver(doc("catalog_page", "home"))).toBeNull();
   });
 });

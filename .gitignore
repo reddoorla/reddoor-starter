@@ -20,3 +20,8 @@ test-results
 .lighthouseci
 .reddoor-a11y
 .reddoor-a11y-spec-*
+
+# Agency process artifacts (specs/plans) and local helpers never ship in the
+# template — the canonical copies live in reddoor-maintenance.
+/docs/superpowers/
+/scratchpad/

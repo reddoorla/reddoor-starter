@@ -15,7 +15,6 @@
   import Hero from "$lib/slices/Hero/index.svelte";
   import MediaText from "$lib/slices/MediaText/index.svelte";
   import SectionGrid from "$lib/slices/SectionGrid/index.svelte";
-  import CollectionList from "$lib/slices/CollectionList/index.svelte";
   import LeadText from "$lib/slices/LeadText/index.svelte";
   import TextColumns from "$lib/slices/TextColumns/index.svelte";
   import Testimonial from "$lib/slices/Testimonial/index.svelte";
@@ -71,7 +70,7 @@
     },
   ] as unknown as RichTextField;
 
-  // Blux-conversion slice fixtures. Images use the inline pixel (hermetic — no
+  // Prismic slice fixtures. Images use the inline pixel (hermetic — no
   // external hosts). Headings are h2 (slice sections) / h3 (items) so the page
   // outline stays valid beneath the page <h1>.
   const heroSliceFixture = {
@@ -118,34 +117,6 @@
       },
     ],
   } as unknown as Content.SectionGridSlice;
-  const collectionListFixture = {
-    slice_type: "collection_list",
-    variation: "grid",
-    primary: {
-      heading: [{ type: "heading2", text: "CollectionList slice", spans: [] }],
-      collection_type: "product",
-      max_items: 12,
-    },
-    items: [],
-  } as unknown as Content.CollectionListSlice;
-  const collectionCtx = {
-    collections: {
-      product: [
-        {
-          uid: "aero-sofa",
-          data: {
-            title: [{ type: "heading3", text: "Aero Sofa", spans: [] }],
-            media: {
-              url: pixel,
-              alt: "Aero Sofa",
-              dimensions: { width: 1920, height: 1080 },
-            },
-          },
-        },
-      ],
-    },
-  };
-
   // Portfolio-intro twins. ComponentProps types the fixture to each slice's own
   // (inline) prop shape without needing generated Content.* types.
   const rtx = (text: string): RichTextField =>
@@ -454,12 +425,11 @@
     </p>
   </section>
 
-  <!-- Blux-conversion slices — each renders its own <section> + heading; axe
+  <!-- Prismic slices — each renders its own <section> + heading; axe
        audits the produced markup (contrast, alt text, heading order). -->
   <Hero slice={heroSliceFixture} />
   <MediaText slice={mediaTextFixture} />
   <SectionGrid slice={sectionGridFixture} />
-  <CollectionList slice={collectionListFixture} context={collectionCtx} />
   <LeadText slice={leadTextFixture} />
   <TextColumns slice={textColumnsFixture} />
   <AccordionSlice slice={accordionFixture} />

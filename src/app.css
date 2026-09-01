@@ -1,13 +1,6 @@
 /* Tailwind CSS v4 configuration */
 @import "tailwindcss";
 
-/* The converted site's Blux theme — its @theme text/colour tokens plus the
-   `.txt-role-textN` utilities the slice components apply. A fresh starter ships
-   an empty placeholder; running `blux emit` and dropping its `theme.css` here
-   activates the site's real type roles. */
-@import "./blux-theme.css";
-@import "./blux-layout.css";
-
 @theme {
   --screen-sm: 560px;
   --screen-md: 768px;
