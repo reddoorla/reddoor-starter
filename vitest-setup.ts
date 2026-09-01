@@ -17,9 +17,9 @@ if (typeof window !== "undefined" && typeof window.matchMedia !== "function") {
     }) as unknown as MediaQueryList;
 }
 
-// jsdom ships no `IntersectionObserver`. The `animateIn` action (now on every
-// Blux band via SectionBand) constructs one at mount, so any component test that
-// renders revealed content would throw without it. A no-op default keeps those
+// jsdom ships no `IntersectionObserver`. The `animateIn` action constructs one
+// at mount, so any component test that renders scroll-revealed content would
+// throw without it. A no-op default keeps those
 // tests green; tests that need to DRIVE intersection reassign it in beforeEach.
 if (
   typeof window !== "undefined" &&

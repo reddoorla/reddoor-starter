@@ -21,7 +21,6 @@ const makeSlice = (primary: Record<string, unknown>) =>
       name: null,
       role: null,
       avatar: null,
-      band: null,
       ...primary,
     },
     items: [],
@@ -36,7 +35,6 @@ describe("Testimonial slice", () => {
           name: "Dana Whitfield",
           role: "Director of Operations",
         }),
-        context: {},
       },
     });
 
@@ -61,7 +59,6 @@ describe("Testimonial slice", () => {
     const { container } = render(Testimonial, {
       props: {
         slice: makeSlice({ quote: "No curly marks in the CMS." }),
-        context: {},
       },
     });
     const quote = container.querySelector(".quote");
@@ -73,7 +70,6 @@ describe("Testimonial slice", () => {
     const { container } = render(Testimonial, {
       props: {
         slice: makeSlice({ label: "What clients are saying", quote: "Great." }),
-        context: {},
       },
     });
     expect(container.querySelector("h2")?.textContent?.trim()).toBe(
@@ -85,7 +81,6 @@ describe("Testimonial slice", () => {
     const { container } = render(Testimonial, {
       props: {
         slice: makeSlice({ avatar: image, name: "Dana Whitfield" }),
-        context: {},
       },
     });
     expect(container.querySelector("img")?.getAttribute("alt")).toBe(
@@ -96,7 +91,7 @@ describe("Testimonial slice", () => {
   it("keeps an unnamed avatar decorative but announces the authored alt", () => {
     const authored = { ...(image as object), alt: "A smiling client" } as never;
     const { container } = render(Testimonial, {
-      props: { slice: makeSlice({ avatar: authored }), context: {} },
+      props: { slice: makeSlice({ avatar: authored }) },
     });
     expect(container.querySelector("img")?.getAttribute("alt")).toBe(
       "A smiling client",
@@ -107,9 +102,9 @@ describe("Testimonial slice", () => {
     );
   });
 
-  it("renders nothing but the band when the slice is empty", () => {
+  it("renders an empty section when the slice has no content", () => {
     const { container } = render(Testimonial, {
-      props: { slice: makeSlice({}), context: {} },
+      props: { slice: makeSlice({}) },
     });
     expect(container.querySelector("figure")).toBeNull();
   });

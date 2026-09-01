@@ -1,5 +1,6 @@
-// Site-wide SEO configuration + helpers. `/new-site` should update SITE_NAME
-// (sites with a social presence also fill in organizationJsonLd in the layout).
+// Site-wide SEO configuration + helpers.
+// PER-SITE: `/new-site` sets SITE_NAME, SITE_LOCALE and DEFAULT_OG_IMAGE (and
+// sites with a social presence fill in organizationJsonLd in the layout).
 
 import { imgix, isPrismicImageUrl } from "$lib/utils/image";
 

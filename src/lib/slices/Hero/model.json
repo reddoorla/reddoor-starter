@@ -14,7 +14,10 @@
       "primary": {
         "heading": {
           "type": "StructuredText",
-          "config": { "label": "heading", "single": "heading1,heading2" }
+          "config": {
+            "label": "heading",
+            "single": "heading1,heading2"
+          }
         },
         "body": {
           "type": "StructuredText",
@@ -31,29 +34,19 @@
             "thumbnails": []
           }
         },
-        "cta_label": { "type": "Text", "config": { "label": "cta_label" } },
+        "cta_label": {
+          "type": "Text",
+          "config": {
+            "label": "cta_label"
+          }
+        },
         "cta_link": {
           "type": "Link",
-          "config": { "label": "cta_link", "allowTargetBlank": true }
+          "config": {
+            "label": "cta_link",
+            "allowTargetBlank": true
+          }
         }
-      },
-      "items": {}
-    },
-    {
-      "id": "band",
-      "name": "Band",
-      "docURL": "...",
-      "version": "initial",
-      "description": "Blux band hero — background from the presentation manifest, overlay text",
-      "imageUrl": "",
-      "primary": {
-        "band": {
-          "type": "Number",
-          "config": { "label": "band (index from the Blux export)" }
-        },
-        "heading": { "type": "Text", "config": { "label": "heading" } },
-        "subtitle": { "type": "Text", "config": { "label": "subtitle" } },
-        "body": { "type": "Text", "config": { "label": "body" } }
       },
       "items": {}
     }

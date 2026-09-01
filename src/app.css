@@ -1,13 +1,6 @@
 /* Tailwind CSS v4 configuration */
 @import "tailwindcss";
 
-/* The converted site's Blux theme — its @theme text/colour tokens plus the
-   `.txt-role-textN` utilities the slice components apply. A fresh starter ships
-   an empty placeholder; running `blux emit` and dropping its `theme.css` here
-   activates the site's real type roles. */
-@import "./blux-theme.css";
-@import "./blux-layout.css";
-
 @theme {
   --screen-sm: 560px;
   --screen-md: 768px;
@@ -20,12 +13,20 @@
   --color-white: white;
   --color-background: white;
 
-  /* Neutral placeholder palette — replace per project */
+  /* Neutral placeholder palette — replace per project (docs/STARTER.md). Every
+     value is distinct on purpose so a forgotten token is visible, not silent. */
   --color-light: #e5e7eb;
   --color-primary: #111827;
-  --color-dark: #111827;
+  --color-dark: #1f2937;
   --color-secondary: #6b7280;
-  --color-accent: #111827;
+  --color-accent: #2563eb;
+
+  /* Type — set per project. Self-host the brand's licensed woff2 files under
+     static/fonts (preload the body face in app.html) or load a kit, then
+     point these at the loaded family names. Until then the system stack
+     applies. `font-heading` / `font-body` utilities come from these tokens. */
+  --font-heading: ui-sans-serif, system-ui, sans-serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
 
   --transition-in-expo: cubic-bezier(0.95, 0.05, 0.795, 0.035);
   --transition-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
@@ -161,10 +162,9 @@
   }
 }
 
-/* Generic Blux slice layout — support rules the manifest-driven slice
-   components rely on (the `.mt-media`/`.mt-copy`/`.hero-band`/`.richtext-block`
-   hooks they emit). Site-neutral, so they live in the starter unchanged;
-   per-slice type + band styling comes from the styles manifest, not here. */
+/* Layout hooks shared by the hand-authored slices (`.mt-media`, `.hero-band`,
+   `.richtext-block`). Site-neutral; per-project type and colour come from the
+   @theme tokens above. */
 
 /* Editorial media_text rows alternate the image side down the page —
    `nth-child(… of S)` counts only media_text sections among the slice zone's
@@ -210,7 +210,7 @@ main > section.hero-band:first-child {
   }
 
   body {
-    font-family: "helvetica", sans-serif;
+    font-family: var(--font-body);
     max-width: 100vw;
     overflow-x: clip;
     overflow-y: auto;
@@ -231,7 +231,15 @@ main > section.hero-band:first-child {
     width: 0;
   }
 
-  /* Type scale — define per project (h1–h6, p, responsive variants). */
+  /* Type scale — define per project (sizes, leading, responsive variants). */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
 
   /* Respect users who ask for less motion: neutralize CSS transitions/animations
      and smooth scrolling. Svelte's JS-driven transitions don't see this reset —
@@ -273,62 +281,5 @@ main > section.hero-band:first-child {
     pointer-events: none;
     will-change: transform;
     filter: blur(0.5px);
-  }
-}
-
-/* ── Blux text-role scale (convention) ──────────────────────────────────────
-   The Blux render (src/lib/blux/ — Grid.svelte, BandTitle, carousel captions)
-   tags every text run with `txt-role-text{N}`, the role id from the Blux
-   export. Each rule reproduces the source's typography for one role — font
-   family, size, leading, tracking, weight, case. The export carries NO font
-   data, so the values are measured per-site from the rendered ORIGINAL's
-   computed styles when converting. Keep the rules UNLAYERED so they win over
-   the base h1..h6/body defaults for whichever element a run lands on, while
-   staying at class specificity (a band's own inline color/align still
-   applies); put mobile overrides behind the source's own breakpoint. Example,
-   measured from a live original:
-
-   .txt-role-text5 {
-     font-family: var(--font-body);
-     font-weight: 500;
-     font-size: 15px;
-     line-height: 26px;
-     letter-spacing: 1.5px;
-     text-transform: uppercase;
-     margin: 10px 0;  <- the style's own block margin (site.json .textN)
-   }
-
-   Include the style's `margin` when the export declares one: Blux's vertical
-   rhythm between stacked blocks IS these margins, collapsing in normal flow —
-   Grid stacks render flush and rely on them (no synthetic gap).
-
-   The starter's placeholders below are empty on purpose — an unconverted site
-   keeps its base type. */
-
-/* Blux platform anchor base (site-agnostic): raw anchors in converted trees
-   carry `ib middle links` / `ib middle buttonsN` verbatim. `.ib` is the
-   platform's inline-block, and `.links` must declare its own underline — an
-   inline-block box does not inherit an ancestor's text-decoration. Per-site
-   `.buttonsN` skins come from `blux emit` (emitButtonsCss) like the roles. */
-.ib {
-  display: inline-block;
-}
-.links {
-  text-decoration: underline;
-}
-.txt-role-text1,
-.txt-role-text5,
-.txt-role-text11,
-.txt-role-text12 {
-  /* Per-site values measured from the live original go here. */
-}
-
-/* Band content padding with the export's mobile override (≤700px in source). */
-.band-pad {
-  padding: var(--band-pad);
-}
-@media (max-width: 700px) {
-  .band-pad {
-    padding: var(--band-pad-m, var(--band-pad));
   }
 }

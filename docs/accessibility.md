@@ -19,7 +19,7 @@ This starter targets **WCAG 2.2 Level AA**. Accessibility is treated as a defaul
 | Tool                      | What it gates                                                                               | Where                                                                           |
 | ------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | `axe-core` via Playwright | Zero WCAG 2 A/AA, 2.1 A/AA, 2.2 AA violations on `/dev/a11y-fixtures` and `/dev/animate-in` | [tests/a11y/fixtures.spec.ts](../tests/a11y/fixtures.spec.ts), runs on every PR |
-| Lighthouse CI             | Accessibility ≥ 0.95                                                                        | [lighthouserc.json](../lighthouserc.json), runs on every PR                     |
+| `reddoor-maint audit`     | Fleet a11y audit, fails the build on violations                                             | CI (`--only a11y --fail-on-violations`), runs on every PR                       |
 | Svelte compiler           | Native a11y rule set                                                                        | `pnpm lint`                                                                     |
 | Vitest unit tests         | ARIA attributes on Accordion, Modal, Field, Form                                            | `pnpm test:unit`                                                                |
 
@@ -28,12 +28,12 @@ Run locally:
 ```bash
 pnpm test:unit        # vitest unit tests
 pnpm test:smoke       # Playwright + axe (boots vite dev)
-pnpm test:lhci        # Lighthouse CI (boots vite dev)
+pnpm dlx @lhci/cli autorun   # Lighthouse against lighthouserc.json — manual, not in CI
 ```
 
 ## Manual testing reference
 
-Automated tooling (axe, Lighthouse CI, Svelte compiler) catches the bulk of WCAG violations on every code change. Manual passes aren't part of the standard build. If a client reports an issue or an external audit identifies a gap, these are the checks worth running to reproduce and confirm fixes:
+Automated tooling (axe, the fleet a11y audit, the Svelte compiler) catches the bulk of WCAG violations on every code change. Manual passes aren't part of the standard build. If a client reports an issue or an external audit identifies a gap, these are the checks worth running to reproduce and confirm fixes:
 
 - Keyboard-only navigation through every interactive element, including tab order, visible focus rings, and trap-free modals
 - Screen reader pass with VoiceOver (macOS / iOS) and NVDA (Windows / Firefox)

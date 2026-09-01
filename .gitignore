@@ -20,3 +20,9 @@ test-results
 .lighthouseci
 .reddoor-a11y
 .reddoor-a11y-spec-*
+
+# Agency process artifacts (specs/plans) and local helpers never ship in the
+# template. The Blux-era ones stay tracked in reddoor-starter-blux; new specs
+# and plans live in reddoor-maintenance.
+/docs/superpowers/
+/scratchpad/

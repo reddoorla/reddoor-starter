@@ -40,15 +40,9 @@
         "background": {
           "type": "Select",
           "config": {
-            "label": "background (theme token — ignored inside a Blux band)",
+            "label": "background (theme token)",
             "options": ["light", "dark", "white"],
             "default_value": "light"
-          }
-        },
-        "band": {
-          "type": "Number",
-          "config": {
-            "label": "band (optional — wraps in the Blux SectionBand when set)"
           }
         }
       },

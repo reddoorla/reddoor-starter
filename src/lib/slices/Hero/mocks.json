@@ -5,19 +5,27 @@
     "primary": {
       "heading": {
         "__TYPE__": "StructuredTextContent",
-        "value": [{ "type": "heading1", "content": { "text": "The Pinnacle" } }]
+        "value": [
+          {
+            "type": "heading1",
+            "content": {
+              "text": "The Pinnacle"
+            }
+          }
+        ]
       },
       "body": {
         "__TYPE__": "StructuredTextContent",
         "value": [
           {
             "type": "paragraph",
-            "content": { "text": "Luxury living in Burbank." }
+            "content": {
+              "text": "Luxury living in Burbank."
+            }
           }
         ]
       },
       "background_image": {
-        "__TYPE__": "ImageContent",
         "url": "https://images.unsplash.com/photo-1487958449943-2429e8be8625",
         "origin": {
           "id": "main",
@@ -30,10 +38,15 @@
         "edit": {
           "background": "transparent",
           "zoom": 1,
-          "crop": { "x": 0, "y": 0 }
+          "crop": {
+            "x": 0,
+            "y": 0
+          }
         },
-        "thumbnails": {},
-        "alt": "Building exterior"
+        "alt": "Building exterior",
+        "credits": null,
+        "__TYPE__": "ImageContent",
+        "thumbnails": {}
       },
       "cta_label": {
         "__TYPE__": "FieldContent",
@@ -42,7 +55,11 @@
       },
       "cta_link": {
         "__TYPE__": "LinkContent",
-        "value": { "__TYPE__": "ExternalLink", "url": "https://example.com" }
+        "key": "3f4b54ef-44f4-47ea-b361-ec64d7885546",
+        "value": {
+          "__TYPE__": "ExternalLink",
+          "url": "https://example.com"
+        }
       }
     },
     "items": []

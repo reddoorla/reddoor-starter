@@ -5,11 +5,12 @@
     FooterItem,
     FooterImage,
     FooterColumn,
-  } from "$lib/blux/site-config";
+  } from "$lib/site-config";
 
   interface Props {
-    /** Leasing-contact columns (a migrated Blux site supplies these). When
-     * present they take precedence over the site-config socials/text chrome. */
+    /** Optional per-route override of the `$lib/site-config.json` footer (no
+     * route in the bare template supplies this). When present they take
+     * precedence over the site-config socials/text chrome. */
     columns?: FooterColumn[];
     /** Social links from the site config (empty → none rendered). */
     socials?: FooterSocial[];
@@ -17,18 +18,16 @@
     text?: string;
   }
 
-  // Placeholder styling — restyle per project. `columns` (the shape the Blux
-  // catalog pipeline emits in site-config.json) wins when a migrated site
-  // supplies it; otherwise the site-config socials + rights line render (the
-  // fleet default chrome).
+  // Placeholder styling — restyle per project. `columns` (a per-route
+  // override) wins when a route supplies it; otherwise the site-config
+  // socials + rights line render (the fleet default chrome).
   let { columns, socials = [], text }: Props = $props();
 
   const isImage = (i: FooterItem): i is FooterImage => "image" in i;
 
-  // Only http(s) links open in a new tab; tel:/mailto: stay same-tab (repo
-  // idiom, ProductDetail.svelte). Consistent shape — Svelte drops undefined
-  // attributes — so target/rel can't drift between the text- and image-link
-  // branches.
+  // Only http(s) links open in a new tab; tel:/mailto: stay same-tab.
+  // Consistent shape — Svelte drops undefined attributes — so target/rel
+  // can't drift between the text- and image-link branches.
   const isExternal = (href: string) => /^https?:\/\//i.test(href);
   const linkAttrs = (href: string) => ({
     href,
@@ -36,8 +35,9 @@
     rel: isExternal(href) ? "noopener noreferrer" : undefined,
   });
 
-  // Blux network id → the BrandIcon glyph + an accessible label. Networks
-  // BrandIcon can't draw are dropped rather than rendered as an empty link.
+  // Social network id (from site-config) → the BrandIcon glyph + an
+  // accessible label. Networks BrandIcon can't draw are dropped rather than
+  // rendered as an empty link.
   const NETWORK: Record<string, { platform: string; label: string }> = {
     facebook: { platform: "facebook", label: "Facebook" },
     twitter: { platform: "twitter", label: "Twitter" }, // BrandIcon aliases → X

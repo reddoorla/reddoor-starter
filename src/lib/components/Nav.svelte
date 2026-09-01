@@ -2,7 +2,7 @@
   import { Menu, X, ChevronDown } from "@lucide/svelte";
   import { trapFocus } from "$lib/actions/trapFocus";
   import { fade } from "$lib/transitions";
-  import type { NavItem } from "$lib/blux/site-config";
+  import type { NavItem } from "$lib/site-config";
 
   interface NavLink {
     text: string;
@@ -10,15 +10,17 @@
   }
 
   interface Props {
-    /** Flat page-data nav links (a migrated Blux site supplies these). When
-     * non-empty they take precedence — inline links on desktop, a focus-trapped
-     * full-screen menu on mobile. */
+    /** Optional per-route override of the `$lib/site-config.json` nav (no
+     * route in the bare template supplies this). When non-empty they take
+     * precedence — inline links on desktop, a focus-trapped full-screen menu
+     * on mobile. */
     navLinks?: NavLink[];
     /** Nav entries — a leaf is a link; an entry with `children` is a dropdown.
-     * Omit for a logo-only bar (the unconverted-starter default). */
+     * Omit for a logo-only bar (the bare-template default; comes from
+     * site-config). */
     items?: NavItem[];
-    /** The site logo (a converted site's resolved logo url); falls back to the
-     * "Logo" wordmark. */
+    /** The site logo (resolved from site-config); falls back to the "Logo"
+     * wordmark. */
     logo?: { url: string; maxWidth?: string };
   }
 
@@ -31,9 +33,8 @@
   let openMobileIndex = $state<number | null>(null);
   let openDesktopIndex = $state<number | null>(null);
 
-  // A migrated Blux site passes flat `navLinks` via page data → the flat-links
-  // chrome wins; every other route falls back to the site-config `items`/`logo`
-  // dropdown nav.
+  // A route's flat `navLinks` prop override wins when supplied; every other
+  // route falls back to the site-config `items`/`logo` dropdown nav.
   const useNavLinks = $derived(navLinks.length > 0);
 
   const openMenu = () => (isMenuOpen = true);
@@ -44,8 +45,8 @@
 </script>
 
 {#if useNavLinks}
-  <!-- navLinks (page-data) chrome: inline links on desktop, focus-trapped
-       full-screen menu on mobile. -->
+  <!-- navLinks (per-route override) chrome: inline links on desktop,
+       focus-trapped full-screen menu on mobile. -->
   <nav
     class="fixed top-0 left-0 z-50 flex w-full items-center justify-between px-8 py-4"
   >

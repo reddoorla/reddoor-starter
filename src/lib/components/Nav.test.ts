@@ -58,8 +58,8 @@ const itemsWithDropdown = [
   { label: "About", href: "#about" },
 ];
 
-// Flat page-data links (a migrated Blux site). These take precedence over
-// `items` and render the focus-trapped mobile menu below.
+// Flat `navLinks` — a per-route override of the site-config nav. These take
+// precedence over `items` and render the focus-trapped mobile menu below.
 const navLinks = [
   { text: "Services", href: "#services" },
   { text: "About", href: "#about" },
@@ -218,9 +218,9 @@ describe("Nav — mobile menu", () => {
   });
 });
 
-// The flat-links chrome a migrated Blux site renders when it passes `navLinks`
-// via page data. Distinct code path from the `items` dropdown nav above.
-describe("Nav — navLinks (page-data) mode", () => {
+// The flat-links chrome a route renders when it passes a `navLinks` prop
+// override. Distinct code path from the `items` dropdown nav above.
+describe("Nav — navLinks (per-route override) mode", () => {
   it("opens the menu and moves focus into it", async () => {
     const { getByLabelText, getByRole } = render(Nav, { navLinks });
 

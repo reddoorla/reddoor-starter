@@ -19,12 +19,11 @@ describe("TextColumns slice", () => {
           { title: "One", body: rt("First column.") },
           { title: "Two", body: rt("Second column.") },
         ],
-        band: null,
       },
       items: [],
     } as never;
     const { container } = render(TextColumns, {
-      props: { slice, context: {} },
+      props: { slice },
     });
     expect(container.querySelector("h2")?.textContent?.trim()).toBe(
       "Our Solution",
@@ -44,12 +43,11 @@ describe("TextColumns slice", () => {
         hasTopRule: false,
         desktopColumns: "2",
         columns: [{ title: "Solo", body: rt("Body.") }],
-        band: null,
       },
       items: [],
     } as never;
     const { container } = render(TextColumns, {
-      props: { slice, context: {} },
+      props: { slice },
     });
     expect(container.querySelector("h2")?.textContent?.trim()).toBe("Solo");
     expect(container.querySelector("h3")).toBeNull();
@@ -68,12 +66,11 @@ describe("TextColumns slice", () => {
           { title: "Same", body: rt("b") },
           { title: "", body: rt("c") },
         ],
-        band: null,
       },
       items: [],
     } as never;
     const { getAllByText, getByText } = render(TextColumns, {
-      props: { slice, context: {} },
+      props: { slice },
     });
     expect(getAllByText("Same")).toHaveLength(2);
     expect(getByText("c")).toBeTruthy();

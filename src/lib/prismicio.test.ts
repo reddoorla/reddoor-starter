@@ -11,27 +11,27 @@ const doc = (type: string, uid: string) =>
 
 describe("createClient", () => {
   // Prismic rejects every query on a client whose routes config names a type
-  // with no documents in the repo — and a cloned repo only ever populates one
-  // of page/catalog_page. Routes-free is the only config that works on all of
-  // native, migrated, frozen, and pre-content repos (see module comment).
+  // with no documents in the repo yet — a freshly cloned repo has none. A
+  // routes-free client sidesteps that entirely (see module comment).
   it("creates a routes-free client", () => {
     expect(createClient().routes).toBeUndefined();
   });
 });
 
+// linkResolver is the local stand-in for Prismic's routes resolver (see the
+// comment on the routes-free client in ./prismicio.ts): page documents map to
+// "/" for home and "/<uid>" otherwise; anything else is unresolvable.
 describe("linkResolver", () => {
   it("resolves the home page doc to the root path", () => {
     expect(linkResolver(doc("page", "home"))).toBe("/");
-    expect(linkResolver(doc("catalog_page", "home"))).toBe("/");
   });
 
   it("resolves other page docs to /:uid", () => {
     expect(linkResolver(doc("page", "our-team"))).toBe("/our-team");
-    expect(linkResolver(doc("catalog_page", "about"))).toBe("/about");
   });
 
   it("returns null for non-page types", () => {
     expect(linkResolver(doc("person", "dr-quan"))).toBeNull();
-    expect(linkResolver(doc("frozen_page", "home"))).toBeNull();
+    expect(linkResolver(doc("settings", "x"))).toBeNull();
   });
 });

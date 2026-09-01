@@ -36,4 +36,16 @@ describe("Hero slice", () => {
     const section = container.querySelector("[data-slice-type='hero']");
     expect(section?.getAttribute("data-slice-variation")).toBe("default");
   });
+
+  it("renders no image and no fallback height without a background image", () => {
+    const bare = {
+      ...slice,
+      primary: { ...slice.primary, background_image: {} },
+    } as unknown as Content.HeroSlice;
+    const { container } = render(Hero, { props: { slice: bare } });
+    const section = container.querySelector('[data-slice-type="hero"]');
+    expect(section).not.toBeNull();
+    expect(section?.querySelector("img")).toBeNull();
+    expect(section?.hasAttribute("style")).toBe(false);
+  });
 });

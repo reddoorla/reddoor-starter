@@ -5,9 +5,9 @@ declare global {
     // interface Error {}
     // interface Locals {}
     interface PageData {
-      /** Optional site chrome a route may supply for the shared layout's
-       * Nav/Footer (the Blux catalog fidelity-gate route does). Absent on
-       * every other route → the components' own defaults. Typed here so the
+      /** Optional site chrome a route may supply to override the shared layout's
+       * Nav/Footer defaults from src/lib/site-config.json. No route in the bare
+       * template supplies these. Typed here so the
        * layout↔route contract is checked at both ends fleet-wide. */
       navLinks?: { text: string; href: string }[];
       footerColumns?: {

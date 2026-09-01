@@ -5,7 +5,7 @@ import Footer from "./Footer.svelte";
 afterEach(() => cleanup());
 
 describe("Footer", () => {
-  // --- columns chrome (Blux catalog page-data; takes precedence) ---
+  // --- columns chrome (per-route override; takes precedence) ---
 
   it("default: renders the hardcoded copyright (fleet behavior unchanged)", () => {
     const { container } = render(Footer);

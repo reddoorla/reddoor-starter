@@ -42,12 +42,6 @@
             "placeholder_true": "multiple open",
             "default_value": true
           }
-        },
-        "band": {
-          "type": "Number",
-          "config": {
-            "label": "band (optional — wraps in the Blux SectionBand when set)"
-          }
         }
       },
       "items": {}

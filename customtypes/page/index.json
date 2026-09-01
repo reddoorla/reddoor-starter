@@ -48,63 +48,6 @@
             "section_grid": {
               "type": "SharedSlice"
             },
-            "collection_list": {
-              "type": "SharedSlice"
-            },
-            "grid_band": {
-              "type": "SharedSlice"
-            },
-            "title_band": {
-              "type": "SharedSlice"
-            },
-            "split_feature": {
-              "type": "SharedSlice"
-            },
-            "gallery": {
-              "type": "SharedSlice"
-            },
-            "media_full": {
-              "type": "SharedSlice"
-            },
-            "location_map": {
-              "type": "SharedSlice"
-            },
-            "carousel": {
-              "type": "SharedSlice"
-            },
-            "blux_section": {
-              "type": "SharedSlice"
-            },
-            "blux_text": {
-              "type": "SharedSlice"
-            },
-            "blux_block": {
-              "type": "SharedSlice"
-            },
-            "blux_grid": {
-              "type": "SharedSlice"
-            },
-            "blux_gallery": {
-              "type": "SharedSlice"
-            },
-            "blux_carousel": {
-              "type": "SharedSlice"
-            },
-            "blux_media": {
-              "type": "SharedSlice"
-            },
-            "blux_media_text": {
-              "type": "SharedSlice"
-            },
-            "blux_embed": {
-              "type": "SharedSlice"
-            },
-            "blux_table": {
-              "type": "SharedSlice"
-            },
-            "blux_collection": {
-              "type": "SharedSlice"
-            },
             "testimonial": {
               "type": "SharedSlice"
             },
