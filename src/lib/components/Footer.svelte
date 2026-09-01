@@ -5,7 +5,7 @@
     FooterItem,
     FooterImage,
     FooterColumn,
-  } from "$lib/blux/site-config";
+  } from "$lib/site-config";
 
   interface Props {
     /** Leasing-contact columns (a migrated Blux site supplies these). When

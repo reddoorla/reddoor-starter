@@ -2,7 +2,7 @@
   import { Menu, X, ChevronDown } from "@lucide/svelte";
   import { trapFocus } from "$lib/actions/trapFocus";
   import { fade } from "$lib/transitions";
-  import type { NavItem } from "$lib/blux/site-config";
+  import type { NavItem } from "$lib/site-config";
 
   interface NavLink {
     text: string;
