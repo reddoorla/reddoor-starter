@@ -3,8 +3,8 @@
   import ContentBand from "$lib/components/ContentBand.svelte";
   import type { RichTextField } from "@prismicio/client";
 
-  // Inline prop types (the generated Content.* types don't include this slice
-  // until it's pushed to a wired Prismic repo), mirroring the sibling slices.
+  // Inline prop types keep this slice's contract readable at a glance; they
+  // mirror the generated Content.LeadTextSlice shape.
   type Props = {
     slice: {
       slice_type: string;

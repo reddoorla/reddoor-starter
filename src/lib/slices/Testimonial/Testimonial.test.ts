@@ -102,7 +102,7 @@ describe("Testimonial slice", () => {
     );
   });
 
-  it("renders nothing but the band when the slice is empty", () => {
+  it("renders an empty section when the slice has no content", () => {
     const { container } = render(Testimonial, {
       props: { slice: makeSlice({}) },
     });
