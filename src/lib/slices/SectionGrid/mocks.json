@@ -5,19 +5,38 @@
     "primary": {
       "heading": {
         "__TYPE__": "StructuredTextContent",
-        "value": [{ "type": "heading2", "content": { "text": "Features" } }]
+        "value": [
+          {
+            "type": "heading2",
+            "content": {
+              "text": "Youth"
+            }
+          }
+        ]
       },
-      "columns": { "__TYPE__": "FieldContent", "type": "Number", "value": 3 }
+      "columns": {
+        "__TYPE__": "FieldContent",
+        "value": "25",
+        "type": "Number"
+      }
     },
     "items": [
       {
         "__TYPE__": "GroupItemContent",
+        "key": "a508ea5e-0658-4666-a1f8-b93982694d4a",
         "value": [
           [
             "item_heading",
             {
               "__TYPE__": "StructuredTextContent",
-              "value": [{ "type": "heading3", "content": { "text": "Pool" } }]
+              "value": [
+                {
+                  "type": "heading3",
+                  "content": {
+                    "text": "Connected"
+                  }
+                }
+              ]
             }
           ],
           [
@@ -25,8 +44,49 @@
             {
               "__TYPE__": "StructuredTextContent",
               "value": [
-                { "type": "paragraph", "content": { "text": "Heated." } }
+                {
+                  "type": "paragraph",
+                  "content": {
+                    "text": "Mollit anim fugiat incididunt aliquip ipsum esse minim in. Minim incididunt adipisicing do occaecat voluptate reprehenderit consequat pariatur nisi laboris cupidatat sint ad nulla incididunt."
+                  }
+                }
               ]
+            }
+          ],
+          [
+            "item_media",
+            {
+              "__TYPE__": "ImageContent",
+              "origin": {
+                "id": "main",
+                "url": "https://images.unsplash.com/photo-1515378960530-7c0da6231fb1",
+                "width": 5616,
+                "height": 3744
+              },
+              "width": 5616,
+              "height": 3744,
+              "edit": {
+                "zoom": 1,
+                "crop": {
+                  "x": 0,
+                  "y": 0
+                },
+                "background": "transparent"
+              },
+              "url": "https://images.unsplash.com/photo-1515378960530-7c0da6231fb1",
+              "alt": "army",
+              "thumbnails": {}
+            }
+          ],
+          [
+            "item_link",
+            {
+              "__TYPE__": "LinkContent",
+              "key": "04cd55c9-8121-4aae-bc7f-3b5f1ba98c12",
+              "value": {
+                "__TYPE__": "ExternalLink",
+                "url": "https://slicemachine.dev"
+              }
             }
           ]
         ]

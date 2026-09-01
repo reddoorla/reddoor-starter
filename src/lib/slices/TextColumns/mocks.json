@@ -1,0 +1,62 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "eyebrow": {
+        "__TYPE__": "FieldContent",
+        "value": "interior",
+        "type": "Text"
+      },
+      "hasTopRule": {
+        "__TYPE__": "BooleanContent",
+        "value": false
+      },
+      "desktopColumns": {
+        "__TYPE__": "FieldContent",
+        "value": "3",
+        "type": "Select"
+      },
+      "columns": {
+        "__TYPE__": "GroupContentType",
+        "value": [
+          {
+            "__TYPE__": "GroupItemContent",
+            "key": "f11ccc9e-4edc-4a7b-8193-b724976518cc",
+            "value": [
+              [
+                "title",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "lake",
+                  "type": "Text"
+                }
+              ],
+              [
+                "body",
+                {
+                  "__TYPE__": "StructuredTextContent",
+                  "value": [
+                    {
+                      "type": "paragraph",
+                      "content": {
+                        "text": "Tempor aute aliquip aliquip ad. In magna pariatur deserunt laboris elit officia."
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    "items": [
+      {
+        "__TYPE__": "GroupItemContent",
+        "key": "dd858aaa-29f3-42e0-9384-859c4dce8b2e",
+        "value": []
+      }
+    ]
+  }
+]

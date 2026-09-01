@@ -14,17 +14,26 @@
       "primary": {
         "heading": {
           "type": "StructuredText",
-          "config": { "label": "heading", "single": "heading2,heading3" }
+          "config": {
+            "label": "heading",
+            "single": "heading2,heading3"
+          }
         },
         "columns": {
           "type": "Number",
-          "config": { "label": "columns", "placeholder": "3" }
+          "config": {
+            "label": "columns",
+            "placeholder": "3"
+          }
         }
       },
       "items": {
         "item_heading": {
           "type": "StructuredText",
-          "config": { "label": "item_heading", "single": "heading3,heading4" }
+          "config": {
+            "label": "item_heading",
+            "single": "heading3,heading4"
+          }
         },
         "item_body": {
           "type": "StructuredText",
@@ -43,7 +52,10 @@
         },
         "item_link": {
           "type": "Link",
-          "config": { "label": "item_link", "allowTargetBlank": true }
+          "config": {
+            "label": "item_link",
+            "allowTargetBlank": true
+          }
         }
       }
     }

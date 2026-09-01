@@ -14,7 +14,10 @@
       "primary": {
         "heading": {
           "type": "StructuredText",
-          "config": { "label": "heading", "single": "heading2,heading3" }
+          "config": {
+            "label": "heading",
+            "single": "heading2,heading3"
+          }
         },
         "body": {
           "type": "StructuredText",
@@ -25,7 +28,11 @@
         },
         "media": {
           "type": "Image",
-          "config": { "label": "media", "constraint": {}, "thumbnails": [] }
+          "config": {
+            "label": "media",
+            "constraint": {},
+            "thumbnails": []
+          }
         }
       },
       "items": {}
@@ -40,7 +47,10 @@
       "primary": {
         "heading": {
           "type": "StructuredText",
-          "config": { "label": "heading", "single": "heading2,heading3" }
+          "config": {
+            "label": "heading",
+            "single": "heading2,heading3"
+          }
         },
         "body": {
           "type": "StructuredText",
@@ -51,7 +61,11 @@
         },
         "media": {
           "type": "Image",
-          "config": { "label": "media", "constraint": {}, "thumbnails": [] }
+          "config": {
+            "label": "media",
+            "constraint": {},
+            "thumbnails": []
+          }
         }
       },
       "items": {}

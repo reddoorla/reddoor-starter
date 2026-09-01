@@ -1,0 +1,46 @@
+[
+  {
+    "__TYPE__": "SharedSliceContent",
+    "variation": "default",
+    "primary": {
+      "items": {
+        "__TYPE__": "GroupContentType",
+        "value": [
+          {
+            "__TYPE__": "GroupItemContent",
+            "key": "cb9095b3-4977-40dc-a400-ee02c2a7310b",
+            "value": [
+              [
+                "title",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "source",
+                  "type": "Text"
+                }
+              ],
+              [
+                "body",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "ahead",
+                  "type": "Text"
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      "allowMultiple": {
+        "__TYPE__": "BooleanContent",
+        "value": true
+      }
+    },
+    "items": [
+      {
+        "__TYPE__": "GroupItemContent",
+        "key": "07f75923-ea60-4f2a-8142-c97afa52e61a",
+        "value": []
+      }
+    ]
+  }
+]
