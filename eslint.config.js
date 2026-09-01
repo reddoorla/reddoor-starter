@@ -55,6 +55,8 @@ export default [
       "static/",
       "customtypes/",
       "src/lib/slices/**/index.js",
+      "scratchpad/",
+      "docs/superpowers/",
     ],
   },
 ];
