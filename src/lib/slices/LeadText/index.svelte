@@ -27,9 +27,7 @@
 >
   {#if slice.primary.eyebrow}
     <!-- The eyebrow names the section → it's the section heading (h2). -->
-    <h2
-      class="mb-3 text-sm font-semibold tracking-wide text-secondary uppercase"
-    >
+    <h2 class="mb-3 text-sm font-semibold tracking-wide text-secondary uppercase">
       {slice.primary.eyebrow}
     </h2>
   {/if}

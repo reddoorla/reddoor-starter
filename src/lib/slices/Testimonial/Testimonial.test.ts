@@ -43,15 +43,11 @@ describe("Testimonial slice", () => {
     expect(figure?.querySelector("blockquote")?.textContent).toContain(
       "They shipped in six weeks.",
     );
-    expect(figure?.querySelector("figcaption")?.textContent).toContain(
-      "Dana Whitfield",
-    );
+    expect(figure?.querySelector("figcaption")?.textContent).toContain("Dana Whitfield");
     // The credit is NOT a heading — a name does not title a section.
     expect(figure?.querySelector("h1, h2, h3, h4, h5, h6")).toBeNull();
     // Carries the slice-identity data attributes for parity with siblings.
-    expect(
-      container.querySelector('[data-slice-type="testimonial"]'),
-    ).not.toBeNull();
+    expect(container.querySelector('[data-slice-type="testimonial"]')).not.toBeNull();
     expect(getByText("Director of Operations")).toBeTruthy();
   });
 
@@ -72,9 +68,7 @@ describe("Testimonial slice", () => {
         slice: makeSlice({ label: "What clients are saying", quote: "Great." }),
       },
     });
-    expect(container.querySelector("h2")?.textContent?.trim()).toBe(
-      "What clients are saying",
-    );
+    expect(container.querySelector("h2")?.textContent?.trim()).toBe("What clients are saying");
   });
 
   it("falls back to the credited name for the avatar alt", () => {
@@ -83,9 +77,7 @@ describe("Testimonial slice", () => {
         slice: makeSlice({ avatar: image, name: "Dana Whitfield" }),
       },
     });
-    expect(container.querySelector("img")?.getAttribute("alt")).toBe(
-      "Dana Whitfield",
-    );
+    expect(container.querySelector("img")?.getAttribute("alt")).toBe("Dana Whitfield");
   });
 
   it("keeps an unnamed avatar decorative but announces the authored alt", () => {
@@ -93,13 +85,9 @@ describe("Testimonial slice", () => {
     const { container } = render(Testimonial, {
       props: { slice: makeSlice({ avatar: authored }) },
     });
-    expect(container.querySelector("img")?.getAttribute("alt")).toBe(
-      "A smiling client",
-    );
+    expect(container.querySelector("img")?.getAttribute("alt")).toBe("A smiling client");
     // Nothing else names the subject, so the alt is repeated visually-hidden.
-    expect(container.querySelector(".sr-only")?.textContent).toBe(
-      "A smiling client",
-    );
+    expect(container.querySelector(".sr-only")?.textContent).toBe("A smiling client");
   });
 
   it("renders an empty section when the slice has no content", () => {
@@ -112,9 +100,7 @@ describe("Testimonial slice", () => {
 
 describe("resolveAvatarAlt", () => {
   it("prefers the authored alt", () => {
-    expect(resolveAvatarAlt("Headshot of Dana", "Dana")).toBe(
-      "Headshot of Dana",
-    );
+    expect(resolveAvatarAlt("Headshot of Dana", "Dana")).toBe("Headshot of Dana");
   });
 
   it("falls back to the name, then to null", () => {

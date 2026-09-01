@@ -22,7 +22,5 @@ export async function entries() {
   if (isPlaceholderRepo) return [];
 
   const pages = await createClient().getAllByType("page");
-  return pages
-    .filter((page) => page.uid !== "home")
-    .map((page) => ({ uid: page.uid }));
+  return pages.filter((page) => page.uid !== "home").map((page) => ({ uid: page.uid }));
 }

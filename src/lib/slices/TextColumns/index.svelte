@@ -41,15 +41,9 @@
   contentClass="richtext-block max-w-5xl px-6 py-10"
 >
   {#if slice.primary.eyebrow || slice.primary.hasTopRule}
-    <div
-      class="mb-6 {slice.primary.hasTopRule
-        ? 'border-b border-light pb-2.5'
-        : ''}"
-    >
+    <div class="mb-6 {slice.primary.hasTopRule ? 'border-b border-light pb-2.5' : ''}">
       {#if slice.primary.eyebrow}
-        <h2
-          class="text-sm font-semibold tracking-wide text-secondary uppercase"
-        >
+        <h2 class="text-sm font-semibold tracking-wide text-secondary uppercase">
           {slice.primary.eyebrow}
         </h2>
       {/if}
@@ -62,10 +56,7 @@
     {#each slice.primary.columns as column, i (i)}
       <div>
         {#if column.title}
-          <svelte:element
-            this={titleTag}
-            class="mb-2 text-lg font-semibold text-primary"
-          >
+          <svelte:element this={titleTag} class="mb-2 text-lg font-semibold text-primary">
             {column.title}
           </svelte:element>
         {/if}
