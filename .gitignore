@@ -26,3 +26,8 @@ test-results
 # and plans live in reddoor-maintenance.
 /docs/superpowers/
 /scratchpad/
+
+# canonical entries from @reddoorla/maintenance sync-configs
+dist/
+.vitest-cache/
+.tsbuildinfo
