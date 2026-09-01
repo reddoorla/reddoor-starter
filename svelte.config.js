@@ -36,15 +36,6 @@ const config = {
           `${status} ${path}${referrer ? ` (linked from ${referrer})` : ""}: ${message}`,
         );
       },
-      // `/dev/*` tooling routes may carry in-page anchors that target ids on
-      // fixture content, not on this site's pages. Those routes are
-      // robots-excluded, so a missing id is tolerated only when every referrer
-      // is a dev route — content routes keep failing loudly on a genuine
-      // broken anchor.
-      handleMissingId: ({ referrers, message }) => {
-        if (referrers.every((r) => r.startsWith("/dev/"))) return;
-        throw new Error(message);
-      },
       // A malformed URL in CMS-pasted rich text (e.g. a school name typed into a
       // hyperlink) is unparseable — it can never be a real route to crawl, and
       // one editor's typo must not fail the whole build. Warn (so it surfaces
@@ -68,10 +59,14 @@ const config = {
       $assets: "src/lib/assets",
       "$assets/*": "src/lib/assets/*",
     },
-    // Baseline CSP for Prismic + Vimeo + Turnstile. EXTEND PER PROJECT — every
-    // new host (web fonts, YouTube, a donation platform, analytics, Maps) must
-    // be added to the relevant directive or the browser blocks it silently.
-    // SvelteKit adds nonces/hashes for the inline scripts and styles it emits.
+    // Baseline CSP for Prismic + Vimeo + Turnstile + Google Fonts. EXTEND PER
+    // PROJECT — every new host (a Typekit kit, YouTube, a donation platform,
+    // analytics, Maps) must be added to the relevant directive or the browser
+    // blocks it silently. SvelteKit adds nonces for the inline scripts it emits;
+    // styles are covered by 'unsafe-inline' below, which is LOAD-BEARING: the
+    // template sets style attributes (ContentBand's fallback height, the
+    // animate-in transitions, app.html) and a nonce never authorises a style
+    // *attribute* — removing it silently breaks those in production only.
     csp: {
       mode: "auto",
       // Violations POST to /api/csp-report. To stage a stricter policy without
@@ -80,6 +75,7 @@ const config = {
       // header alongside the enforced one.
       directives: {
         "default-src": ["self"],
+        "object-src": ["none"],
         "script-src": [
           "self",
           "https://static.cdn.prismic.io",
@@ -90,12 +86,7 @@ const config = {
         // Google Fonts stylesheet host (paired with fonts.gstatic.com under
         // font-src). Self-hosted fonts need nothing extra.
         "style-src": ["self", "unsafe-inline", "https://fonts.googleapis.com"],
-        "img-src": [
-          "self",
-          "data:",
-          "https://images.prismic.io",
-          "https://*.prismic.io",
-        ],
+        "img-src": ["self", "data:", "https://*.prismic.io"],
         // Prismic hosts non-image media (e.g. .mp4 assets) on
         // <repo>.cdn.prismic.io — first-party content, same origin family as
         // images.prismic.io already allowed under img-src.
@@ -106,15 +97,13 @@ const config = {
           // Cloudflare Turnstile renders its challenge in an iframe from this host.
           "https://challenges.cloudflare.com",
         ],
-        "connect-src": [
-          "self",
-          "https://*.prismic.io",
-          "https://static.cdn.prismic.io",
-        ],
+        "connect-src": ["self", "https://*.prismic.io"],
         "font-src": ["self", "data:", "https://fonts.gstatic.com"],
         "base-uri": ["self"],
         "form-action": ["self"],
         "frame-ancestors": ["self"],
+        // report-uri is deprecated in favour of report-to, but Firefox still
+        // honours only report-uri and SvelteKit exposes no report-to hook.
         "report-uri": ["/api/csp-report"],
       },
     },

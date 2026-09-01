@@ -43,9 +43,9 @@ describe("Hero slice", () => {
       primary: { ...slice.primary, background_image: {} },
     } as unknown as Content.HeroSlice;
     const { container } = render(Hero, { props: { slice: bare } });
-    expect(container.querySelector("img")).toBeNull();
-    expect(
-      container.querySelector("section")?.getAttribute("style"),
-    ).toBeFalsy();
+    const section = container.querySelector('[data-slice-type="hero"]');
+    expect(section).not.toBeNull();
+    expect(section?.querySelector("img")).toBeNull();
+    expect(section?.hasAttribute("style")).toBe(false);
   });
 });
