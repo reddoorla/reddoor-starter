@@ -1,10 +1,14 @@
-import { redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 
 import { loadPage } from "$lib/page-load";
 import { createClient, isPlaceholderRepo } from "$lib/prismicio";
 
 export async function load({ params, fetch, cookies }) {
   if (params.uid === "home") redirect(308, "/");
+
+  // See the root route: an unconfigured template answers 404 rather than
+  // asking a repository that does not exist.
+  if (isPlaceholderRepo) error(404, { message: "Page not found" });
 
   return loadPage(createClient({ fetch, cookies }), params.uid);
 }

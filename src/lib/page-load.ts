@@ -16,7 +16,10 @@ export type PageClient = {
  *  becomes a 404. Everything else — an outage, a bad access token, a wrong
  *  repository name, a malformed response — is rethrown so it surfaces as a
  *  5xx at runtime and fails a prerender loudly instead of baking a false
- *  "Page not found" into the build. */
+ *  "Page not found" into the build.
+ *
+ *  (The route loaders answer 404 themselves on the placeholder repo before
+ *  calling this, so an unconfigured clone still builds.) */
 export async function loadPage(client: PageClient, uid: string) {
   try {
     const page = await client.getByUID("page", uid);
