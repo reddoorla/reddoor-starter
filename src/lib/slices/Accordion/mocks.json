@@ -8,13 +8,13 @@
         "value": [
           {
             "__TYPE__": "GroupItemContent",
-            "key": "cb9095b3-4977-40dc-a400-ee02c2a7310b",
+            "key": "95f6cb22-e2d0-4942-a881-a031ac8b55d9",
             "value": [
               [
                 "title",
                 {
                   "__TYPE__": "FieldContent",
-                  "value": "source",
+                  "value": "What is included?",
                   "type": "Text"
                 }
               ],
@@ -22,7 +22,51 @@
                 "body",
                 {
                   "__TYPE__": "FieldContent",
-                  "value": "ahead",
+                  "value": "Every home comes with appliances, parking, and in-unit laundry.",
+                  "type": "Text"
+                }
+              ]
+            ]
+          },
+          {
+            "__TYPE__": "GroupItemContent",
+            "key": "320d9742-b818-42c9-8a42-18c3e5310fba",
+            "value": [
+              [
+                "title",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "How long does it take?",
+                  "type": "Text"
+                }
+              ],
+              [
+                "body",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "Applications are reviewed within two business days.",
+                  "type": "Text"
+                }
+              ]
+            ]
+          },
+          {
+            "__TYPE__": "GroupItemContent",
+            "key": "6aee42ff-c81e-4c88-8421-99174c0d9652",
+            "value": [
+              [
+                "title",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "Do you offer support?",
+                  "type": "Text"
+                }
+              ],
+              [
+                "body",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "The on-site team is available seven days a week.",
                   "type": "Text"
                 }
               ]

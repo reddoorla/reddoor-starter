@@ -23,7 +23,9 @@
           "type": "Number",
           "config": {
             "label": "columns",
-            "placeholder": "3"
+            "placeholder": "3",
+            "min": 2,
+            "max": 4
           }
         }
       },

@@ -5,7 +5,7 @@
     "primary": {
       "eyebrow": {
         "__TYPE__": "FieldContent",
-        "value": "lower",
+        "value": "The challenge",
         "type": "Text"
       },
       "body": {
@@ -14,7 +14,7 @@
           {
             "type": "paragraph",
             "content": {
-              "text": "Occaecat cillum tempor nostrud fugiat nostrud officia mollit commodo eu ad."
+              "text": "A site that had grown past what its old template could carry."
             }
           }
         ]

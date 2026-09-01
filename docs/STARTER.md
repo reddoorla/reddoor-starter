@@ -22,14 +22,14 @@ Nine Slice Machine shared slices under `src/lib/slices` — `Hero`, `MediaText`,
 
 A library of responsive, reusable components designed to be used within Prismic Slices or standalone:
 
-- **Animation** — `AnimateInTriggered`, `AnimateOutTriggered`, `Slider`, `TriggerTransitionOnMount`
+- **Animation** — `Slider` (see `use:animateIn` below for the reveal action), `CountUp` (count-to-value on reveal)
 - **Layout** — `ContentWidth`, `ContentBand` (the `<section>` + centered box shell every hand-authored slice renders through), `PreNavTransition` (opt-in fade-to-black _before_ navigation; alternative to `TransitionOverlay`), `ScreenWidthMedia` (poster-first background video: idle-deferred iframe, quality-ramp reveal, reduced-motion poster only), `TransitionOverlay`
 - **Media** — `HeroBackgroundImage` (LCP-preloaded, imgix-srcset hero image), `Img` (progressive blur-up wrapper for `?as=run` imports), `VimeoBanner` (interaction-gated background video with playback heartbeat)
-- **UI** — `Accordion`, `BrandIcon`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Nav`, `Footer`, `ScaleTextToContainer`
+- **UI** — `Accordion`, `BrandIcon`, `DefaultButton`, `DelayedLink`, `LandscapeModal`, `Modal`, `Nav`, `Footer`, `ScaleTextToContainer`, `SkeletonLoader`
 - **Forms** — `TurnstileWidget` (optional Cloudflare Turnstile challenge; dark until `PUBLIC_TURNSTILE_SITE_KEY` is set), plus `Field`/`Form` primitives used by the contact form
 - **Utils** — `$lib/utils/image` (`imgix()` / `srcset()` responsive Prismic image helpers), `$lib/utils/vimeo` (`checkVimeoVideo()` server-side oEmbed existence check)
 - **Utils (from `@reddoorla/maintenance/client`)** — `whenPageReady()` (readiness floor/ceiling around eager-image settlement) and `prefersReducedMotion()` for load-aware splash/intro gating; the starter ships no splash, but the MSOT, espada, and reddoor-website layouts show the pattern
-- **Content** — `RichTextBody` (drop-in `PrismicRichText` replacement that rank-compresses editor-authored heading levels into a gap-free `aria-level` outline without changing visuals)
+- **Content** — `Seo` (the single head source the root layout renders), `RichTextHeading`, `RichTextBody` (drop-in `PrismicRichText` replacement that rank-compresses editor-authored heading levels into a gap-free `aria-level` outline without changing visuals)
 
 `BrandIcon` renders CC0 [simple-icons](https://simpleicons.org/) social glyphs (`facebook`, `x`/`twitter`, `reddit`, `instagram`, `linkedin`) in `currentColor`; it is decorative, so put the accessible name on the wrapping link.
 
@@ -111,6 +111,10 @@ Import `fade`/`fly`/`slide` from `$lib/transitions` instead of `svelte/transitio
 | `pnpm test:smoke`   | Run Playwright + axe a11y checks |
 | `pnpm slicemachine` | Start Slice Machine UI           |
 
+Lighthouse config lives in `lighthouserc.json` (it audits `/dev/a11y-fixtures`);
+it is not wired into CI — run it manually with `pnpm dlx @lhci/cli autorun` once
+the site has real content, and add real routes to its `url` list then.
+
 ## Project Structure
 
 ```text
@@ -118,8 +122,9 @@ src/
 ├── lib/
 │   ├── assets/          # Icons, images, placeholders
 │   ├── components/      # Reusable Svelte components
+│   ├── slices/          # Prismic Slice Machine shared slices
 │   ├── utils/           # Utility functions
-│   └── prismicio.js     # Prismic client config
+│   └── prismicio.ts     # Prismic client config
 ├── routes/              # SvelteKit routes + Prismic preview
 ├── params/              # Route param matchers
 └── app.css              # Global styles (Tailwind)

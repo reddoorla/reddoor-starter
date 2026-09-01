@@ -61,7 +61,7 @@
           {
             "type": "heading2",
             "content": {
-              "text": "Occur"
+              "text": "Neighborhood"
             }
           }
         ]
@@ -72,7 +72,7 @@
           {
             "type": "paragraph",
             "content": {
-              "text": "Labore do ullamco enim nostrud et ut minim ad mollit aliquip quis sint do cillum nulla. Dolor aute culpa non pariatur nulla aute aliqua deserunt laborum cupidatat."
+              "text": "Walkable dining, parks, and transit within a few blocks."
             }
           }
         ]
@@ -96,7 +96,7 @@
           "background": "transparent"
         },
         "url": "https://images.unsplash.com/photo-1515378960530-7c0da6231fb1",
-        "alt": "finest",
+        "alt": "Tree-lined street",
         "thumbnails": {}
       }
     },

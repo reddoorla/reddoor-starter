@@ -5,7 +5,7 @@
     "primary": {
       "eyebrow": {
         "__TYPE__": "FieldContent",
-        "value": "interior",
+        "value": "How we work",
         "type": "Text"
       },
       "hasTopRule": {
@@ -22,13 +22,13 @@
         "value": [
           {
             "__TYPE__": "GroupItemContent",
-            "key": "f11ccc9e-4edc-4a7b-8193-b724976518cc",
+            "key": "c8c5d62f-02dc-41b7-9b6b-85472d6664ea",
             "value": [
               [
                 "title",
                 {
                   "__TYPE__": "FieldContent",
-                  "value": "lake",
+                  "value": "Discover",
                   "type": "Text"
                 }
               ],
@@ -40,7 +40,63 @@
                     {
                       "type": "paragraph",
                       "content": {
-                        "text": "Tempor aute aliquip aliquip ad. In magna pariatur deserunt laboris elit officia."
+                        "text": "We start by learning the audience and the goal."
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "__TYPE__": "GroupItemContent",
+            "key": "30ec6e08-de26-4158-8e65-73a5f915301b",
+            "value": [
+              [
+                "title",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "Design",
+                  "type": "Text"
+                }
+              ],
+              [
+                "body",
+                {
+                  "__TYPE__": "StructuredTextContent",
+                  "value": [
+                    {
+                      "type": "paragraph",
+                      "content": {
+                        "text": "Layouts and type are drawn to fit the content, not a grid."
+                      }
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "__TYPE__": "GroupItemContent",
+            "key": "f388c1fc-e167-4375-86a9-9d51412b558c",
+            "value": [
+              [
+                "title",
+                {
+                  "__TYPE__": "FieldContent",
+                  "value": "Deliver",
+                  "type": "Text"
+                }
+              ],
+              [
+                "body",
+                {
+                  "__TYPE__": "StructuredTextContent",
+                  "value": [
+                    {
+                      "type": "paragraph",
+                      "content": {
+                        "text": "We ship, measure, and keep improving after launch."
                       }
                     }
                   ]

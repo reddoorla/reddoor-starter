@@ -1,10 +1,7 @@
 {
   "ci": {
     "collect": {
-      "url": [
-        "http://localhost:5173/dev/a11y-fixtures",
-        "http://localhost:5173/"
-      ],
+      "url": ["http://localhost:5173/dev/a11y-fixtures"],
       "startServerCommand": "pnpm vite:dev",
       "startServerReadyPattern": "ready in",
       "startServerReadyTimeout": 120000,

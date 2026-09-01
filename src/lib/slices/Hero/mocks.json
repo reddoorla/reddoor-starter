@@ -58,7 +58,7 @@
         "key": "3f4b54ef-44f4-47ea-b361-ec64d7885546",
         "value": {
           "__TYPE__": "ExternalLink",
-          "url": "http://google.com"
+          "url": "https://example.com"
         }
       }
     },
