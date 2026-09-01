@@ -6,40 +6,26 @@
     buttonSkinClasses,
     buttonSkinInverseClasses,
   } from "$lib/components/DefaultButton.svelte";
-  import { bandFor, type Presentation } from "$lib/blux/presentation";
-  import BluxSectionBand from "$lib/blux/SectionBand.svelte";
   import { PrismicLink } from "@prismicio/svelte";
   import { isFilled, type Content } from "@prismicio/client";
 
-  type Props = {
-    slice: Content.CtaBannerSlice;
-    context?: { presentation?: Presentation };
-  };
-  let { slice, context = {} }: Props = $props();
+  type Props = { slice: Content.CtaBannerSlice };
+  let { slice }: Props = $props();
 
-  const band = $derived(
-    bandFor(context.presentation, slice.primary.band ?? null),
-  );
-
-  // A Blux band paints its own ground (block style + background media from the
-  // manifest), so the select stands down inside one rather than stacking a
-  // second ground on top of it.
   const background = $derived(slice.primary.background ?? "light");
-  const onDark = $derived(!band && background === "dark");
+  const onDark = $derived(background === "dark");
 
   // Full literal class strings so the Tailwind scanner keeps them. The palette
   // is the starter's placeholder theme (app.css `@theme`) — swap the tokens
   // per project, not the markup.
   const groundClass = $derived(
-    band
-      ? ""
-      : ((
-          {
-            light: "bg-light text-primary",
-            dark: "bg-dark text-white",
-            white: "bg-white text-primary",
-          } as Record<string, string>
-        )[background] ?? "bg-light text-primary"),
+    (
+      {
+        light: "bg-light text-primary",
+        dark: "bg-dark text-white",
+        white: "bg-white text-primary",
+      } as Record<string, string>
+    )[background] ?? "bg-light text-primary",
   );
 
   const hasButton = $derived(
@@ -58,35 +44,21 @@
      project's own h2 rule (app.css leaves the type scale blank), and
      RichTextBody keeps the announced level gap-free without touching the tag,
      so the visual never drifts from the outline. -->
-{#snippet content()}
-  <ContentBand
-    sliceType={slice.slice_type}
-    variation={slice.variation}
-    sectionClass={groundClass}
-    contentClass="flex max-w-5xl flex-col items-start gap-8 px-6 py-16 md:flex-row md:items-center md:justify-between"
-  >
-    {#if isFilled.richText(slice.primary.heading)}
-      <div class="max-w-2xl">
-        <RichTextBody field={slice.primary.heading} />
-      </div>
-    {/if}
+<ContentBand
+  sliceType={slice.slice_type}
+  variation={slice.variation}
+  sectionClass={groundClass}
+  contentClass="flex max-w-5xl flex-col items-start gap-8 px-6 py-16 md:flex-row md:items-center md:justify-between"
+>
+  {#if isFilled.richText(slice.primary.heading)}
+    <div class="max-w-2xl">
+      <RichTextBody field={slice.primary.heading} />
+    </div>
+  {/if}
 
-    {#if hasButton}
-      <PrismicLink field={slice.primary.buttonLink} class={buttonClass}>
-        {slice.primary.buttonLabel}
-      </PrismicLink>
-    {/if}
-  </ContentBand>
-{/snippet}
-
-{#if band}
-  <BluxSectionBand
-    {band}
-    sliceType={slice.slice_type}
-    sliceVariation={slice.variation}
-  >
-    {@render content()}
-  </BluxSectionBand>
-{:else}
-  {@render content()}
-{/if}
+  {#if hasButton}
+    <PrismicLink field={slice.primary.buttonLink} class={buttonClass}>
+      {slice.primary.buttonLabel}
+    </PrismicLink>
+  {/if}
+</ContentBand>

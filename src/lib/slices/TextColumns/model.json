@@ -58,12 +58,6 @@
               }
             }
           }
-        },
-        "band": {
-          "type": "Number",
-          "config": {
-            "label": "band (optional — wraps in the Blux SectionBand when set)"
-          }
         }
       },
       "items": {}

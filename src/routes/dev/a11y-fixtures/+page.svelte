@@ -159,7 +159,6 @@
       body: rtx(
         "They needed an identity on a tight timeline to communicate that message.",
       ),
-      band: null,
     },
   };
   // Eyebrow-less + duplicate/blank titles: locks the h2-promotion (no skip) and
@@ -176,7 +175,6 @@
         { title: "Shared", body: rtx("Duplicate title — index-keyed.") },
         { title: "", body: rtx("Blank title renders no heading.") },
       ],
-      band: null,
     },
   };
   // figure/blockquote/figcaption with an avatar whose alt falls back to the
@@ -195,7 +193,6 @@
         alt: null,
         dimensions: { width: 400, height: 400 },
       },
-      band: null,
     },
     items: [],
   } as unknown as Content.TestimonialSlice;
@@ -211,7 +208,6 @@
       buttonLabel: "Talk with us",
       buttonLink: { link_type: "Web", url: "https://example.com" },
       background: "dark",
-      band: null,
     },
     items: [],
   } as unknown as Content.CtaBannerSlice;
@@ -227,7 +223,6 @@
         },
         { title: "The team", body: "Design and strategy leads." },
       ],
-      band: null,
     },
   };
 </script>

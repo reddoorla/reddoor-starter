@@ -1,20 +1,11 @@
 <script lang="ts">
   import ContentBand from "$lib/components/ContentBand.svelte";
-  import { bandFor, type Presentation } from "$lib/blux/presentation";
-  import BluxSectionBand from "$lib/blux/SectionBand.svelte";
   import { PrismicImage } from "@prismicio/svelte";
   import { isFilled, type Content, type ImageField } from "@prismicio/client";
   import { resolveAvatarAlt } from "./avatarAlt";
 
-  type Props = {
-    slice: Content.TestimonialSlice;
-    context?: { presentation?: Presentation };
-  };
-  let { slice, context = {} }: Props = $props();
-
-  const band = $derived(
-    bandFor(context.presentation, slice.primary.band ?? null),
-  );
+  type Props = { slice: Content.TestimonialSlice };
+  let { slice }: Props = $props();
 
   const avatar = $derived(slice.primary.avatar);
   const hasAvatar = $derived(isFilled.image(avatar));
@@ -38,75 +29,61 @@
      a section, and marking it as one would both break the page outline and pick
      up whatever type scale the project defines for headings). The optional
      label DOES name the section, so it is the h2 — same call as LeadText. -->
-{#snippet content()}
-  <ContentBand
-    sliceType={slice.slice_type}
-    variation={slice.variation}
-    contentClass="max-w-3xl px-6 py-10"
-  >
-    {#if slice.primary.label}
-      <h2
-        class="mb-3 text-sm font-semibold tracking-wide text-secondary uppercase"
-      >
-        {slice.primary.label}
-      </h2>
-    {/if}
+<ContentBand
+  sliceType={slice.slice_type}
+  variation={slice.variation}
+  contentClass="max-w-3xl px-6 py-10"
+>
+  {#if slice.primary.label}
+    <h2
+      class="mb-3 text-sm font-semibold tracking-wide text-secondary uppercase"
+    >
+      {slice.primary.label}
+    </h2>
+  {/if}
 
-    {#if slice.primary.quote || hasCredit}
-      <figure>
-        {#if slice.primary.quote}
-          <blockquote>
-            <p class="quote text-lg leading-relaxed text-primary">
-              {slice.primary.quote}
-            </p>
-          </blockquote>
-        {/if}
+  {#if slice.primary.quote || hasCredit}
+    <figure>
+      {#if slice.primary.quote}
+        <blockquote>
+          <p class="quote text-lg leading-relaxed text-primary">
+            {slice.primary.quote}
+          </p>
+        </blockquote>
+      {/if}
 
-        {#if hasCredit}
-          <figcaption
-            class="flex items-center gap-4 {slice.primary.quote ? 'mt-6' : ''}"
-          >
-            {#if hasAvatar}
-              <PrismicImage
-                field={avatarField}
-                fallbackAlt=""
-                imgixParams={{ auto: ["format", "compress"] }}
-                widths={[64, 128, 160, 320]}
-                sizes="(min-width: 768px) 80px, 64px"
-                loading="lazy"
-                decoding="async"
-                class="h-16 w-16 shrink-0 rounded-full object-cover md:h-20 md:w-20"
-              />
+      {#if hasCredit}
+        <figcaption
+          class="flex items-center gap-4 {slice.primary.quote ? 'mt-6' : ''}"
+        >
+          {#if hasAvatar}
+            <PrismicImage
+              field={avatarField}
+              fallbackAlt=""
+              imgixParams={{ auto: ["format", "compress"] }}
+              widths={[64, 128, 160, 320]}
+              sizes="(min-width: 768px) 80px, 64px"
+              loading="lazy"
+              decoding="async"
+              class="h-16 w-16 shrink-0 rounded-full object-cover md:h-20 md:w-20"
+            />
+          {/if}
+          <div class="min-w-0">
+            {#if slice.primary.name}
+              <p class="font-semibold text-primary">{slice.primary.name}</p>
             {/if}
-            <div class="min-w-0">
-              {#if slice.primary.name}
-                <p class="font-semibold text-primary">{slice.primary.name}</p>
-              {/if}
-              {#if slice.primary.role}
-                <p class="text-sm text-secondary">{slice.primary.role}</p>
-              {/if}
-              {#if needsSrName}
-                <p class="sr-only">{avatarAlt}</p>
-              {/if}
-            </div>
-          </figcaption>
-        {/if}
-      </figure>
-    {/if}
-  </ContentBand>
-{/snippet}
-
-{#if band}
-  <BluxSectionBand
-    {band}
-    sliceType={slice.slice_type}
-    sliceVariation={slice.variation}
-  >
-    {@render content()}
-  </BluxSectionBand>
-{:else}
-  {@render content()}
-{/if}
+            {#if slice.primary.role}
+              <p class="text-sm text-secondary">{slice.primary.role}</p>
+            {/if}
+            {#if needsSrName}
+              <p class="sr-only">{avatarAlt}</p>
+            {/if}
+          </div>
+        </figcaption>
+      {/if}
+    </figure>
+  {/if}
+</ContentBand>
 
 <style>
   /* The curly marks are chrome, not content: the CMS stores the quote bare so

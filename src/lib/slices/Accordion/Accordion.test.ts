@@ -30,21 +30,20 @@ const slice = {
       },
       { title: "The team", body: "Design and strategy leads." },
     ],
-    band: null,
   },
   items: [],
 } as never;
 
 describe("Accordion slice", () => {
   it("renders a disclosure button per item, collapsed by default", () => {
-    const { getByRole } = render(Accordion, { props: { slice, context: {} } });
+    const { getByRole } = render(Accordion, { props: { slice } });
     const button = getByRole("button", { name: "About the project" });
     expect(button.getAttribute("aria-expanded")).toBe("false");
     expect(button.getAttribute("aria-controls")).toBeTruthy();
   });
 
   it("expands an item on click and exposes its panel", async () => {
-    const { getByRole } = render(Accordion, { props: { slice, context: {} } });
+    const { getByRole } = render(Accordion, { props: { slice } });
     const button = getByRole("button", { name: "The team" });
     await fireEvent.click(button);
     expect(button.getAttribute("aria-expanded")).toBe("true");

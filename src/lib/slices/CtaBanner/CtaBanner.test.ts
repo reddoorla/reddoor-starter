@@ -18,7 +18,6 @@ const makeSlice = (primary: Record<string, unknown> = {}) =>
       buttonLabel: "Talk with us",
       buttonLink: link,
       background: "light",
-      band: null,
       ...primary,
     },
     items: [],
@@ -27,7 +26,7 @@ const makeSlice = (primary: Record<string, unknown> = {}) =>
 describe("CtaBanner slice", () => {
   it("renders the heading and the CTA as an anchor", () => {
     const { container, getByRole } = render(CtaBanner, {
-      props: { slice: makeSlice(), context: {} },
+      props: { slice: makeSlice() },
     });
 
     expect(getByRole("heading", { level: 2 }).textContent).toContain(
@@ -46,7 +45,7 @@ describe("CtaBanner slice", () => {
 
   it("paints the selected ground and inverts the button on the dark one", () => {
     const { container } = render(CtaBanner, {
-      props: { slice: makeSlice({ background: "dark" }), context: {} },
+      props: { slice: makeSlice({ background: "dark" }) },
     });
     const section = container.querySelector("section");
     expect(section?.className).toContain("bg-dark");
@@ -58,32 +57,14 @@ describe("CtaBanner slice", () => {
 
   it("omits the CTA when the link or the label is missing", () => {
     const { container: noLabel } = render(CtaBanner, {
-      props: { slice: makeSlice({ buttonLabel: "" }), context: {} },
+      props: { slice: makeSlice({ buttonLabel: "" }) },
     });
     expect(noLabel.querySelector("a")).toBeNull();
     cleanup();
 
     const { container: noLink } = render(CtaBanner, {
-      props: { slice: makeSlice({ buttonLink: null }), context: {} },
+      props: { slice: makeSlice({ buttonLink: null }) },
     });
     expect(noLink.querySelector("a")).toBeNull();
-  });
-
-  it("stands its own ground down inside a Blux band", () => {
-    const presentation = {
-      bands: { "0": { style: { "background-color": "#123456" } } },
-    };
-    const { container } = render(CtaBanner, {
-      props: {
-        slice: makeSlice({ band: 0, background: "dark" }),
-        context: { presentation } as never,
-      },
-    });
-    // The band's <section> owns the ground; the inner band carries none.
-    const sections = container.querySelectorAll("section");
-    expect(sections.length).toBe(2);
-    expect(sections[1].className).not.toContain("bg-dark");
-    // …and the button keeps the default (non-inverted) skin.
-    expect(container.querySelector("a")?.className).toContain("border-dark");
   });
 });

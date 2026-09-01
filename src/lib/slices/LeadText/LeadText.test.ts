@@ -12,7 +12,6 @@ const slice = {
   primary: {
     eyebrow: "The Challenge",
     body: rt("They needed an identity on a tight timeline."),
-    band: null,
   },
   items: [],
 } as never;
@@ -20,7 +19,7 @@ const slice = {
 describe("LeadText slice", () => {
   it("renders the eyebrow as an h2 and the body paragraph", () => {
     const { container, getByText } = render(LeadText, {
-      props: { slice, context: {} },
+      props: { slice },
     });
     const h2 = container.querySelector("h2");
     expect(h2?.textContent?.trim()).toBe("The Challenge");
@@ -37,11 +36,11 @@ describe("LeadText slice", () => {
     const noEyebrow = {
       slice_type: "lead_text",
       variation: "default",
-      primary: { eyebrow: "", body: rt("Body only."), band: null },
+      primary: { eyebrow: "", body: rt("Body only.") },
       items: [],
     } as never;
     const { container, getByText } = render(LeadText, {
-      props: { slice: noEyebrow, context: {} },
+      props: { slice: noEyebrow },
     });
     expect(container.querySelector("h2")).toBeNull();
     expect(getByText("Body only.")).toBeTruthy();

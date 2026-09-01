@@ -4045,67 +4045,9 @@ export type HeroSliceDefault = prismic.SharedSliceVariation<
 >;
 
 /**
- * Primary content in *Hero → Band → Primary*
- */
-export interface HeroSliceBandPrimary {
-  /**
-   * band (index from the Blux export) field in *Hero → Band → Primary*
-   *
-   * - **Field Type**: Number
-   * - **Placeholder**: *None*
-   * - **API ID Path**: hero.band.primary.band
-   * - **Documentation**: https://prismic.io/docs/fields/number
-   */
-  band: prismic.NumberField;
-
-  /**
-   * heading field in *Hero → Band → Primary*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: hero.band.primary.heading
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  heading: prismic.KeyTextField;
-
-  /**
-   * subtitle field in *Hero → Band → Primary*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: hero.band.primary.subtitle
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  subtitle: prismic.KeyTextField;
-
-  /**
-   * body field in *Hero → Band → Primary*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: hero.band.primary.body
-   * - **Documentation**: https://prismic.io/docs/fields/text
-   */
-  body: prismic.KeyTextField;
-}
-
-/**
- * Band variation for Hero Slice
- *
- * - **API ID**: `band`
- * - **Description**: Blux band hero — background from the presentation manifest, overlay text
- * - **Documentation**: https://prismic.io/docs/slices
- */
-export type HeroSliceBand = prismic.SharedSliceVariation<
-  "band",
-  Simplify<HeroSliceBandPrimary>,
-  never
->;
-
-/**
  * Slice variation for *Hero*
  */
-type HeroSliceVariation = HeroSliceDefault | HeroSliceBand;
+type HeroSliceVariation = HeroSliceDefault;
 
 /**
  * Hero Shared Slice
@@ -5001,10 +4943,8 @@ declare module "@prismicio/client" {
       GridBandSliceDefault,
       HeroSlice,
       HeroSliceDefaultPrimary,
-      HeroSliceBandPrimary,
       HeroSliceVariation,
       HeroSliceDefault,
-      HeroSliceBand,
       LeadTextSlice,
       LeadTextSliceDefaultPrimary,
       LeadTextSliceVariation,
