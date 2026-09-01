@@ -22,10 +22,7 @@
 >
   {#snippet background()}
     {#if hasImage}
-      <HeroBackgroundImage
-        image={slice.primary.background_image}
-        preload={false}
-      />
+      <HeroBackgroundImage image={slice.primary.background_image} preload={false} />
     {/if}
   {/snippet}
   <PrismicRichText field={slice.primary.heading} />

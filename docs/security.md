@@ -18,8 +18,8 @@ This starter maps to **OWASP ASVS Level 2** as a baseline and treats the OWASP T
 
 ### Dependency hygiene
 
-- **Dependabot** opens grouped monthly PRs for npm and GitHub Actions ([.github/dependabot.yml](../.github/dependabot.yml)). Routine cadence — high-severity CVEs are caught immediately by the per-PR `pnpm audit` gate, independent of Dependabot's schedule.
-- **`pnpm audit --audit-level=high`** runs on every PR. High and critical CVEs fail CI.
+- **Renovate** opens dependency and GitHub Actions PRs on a twice-daily cron ([.github/workflows/renovate.yml](../.github/workflows/renovate.yml), shared config in [renovate.json](../renovate.json)). It authenticates as the org-wide `reddoor-renovate` GitHub App, so a new repo is covered with no per-repo setup.
+- **CVE scanning is nightly, not per-PR.** The fleet audit's `security` check (`reddoor-maint audit --only security`) reads GitHub's dependency alerts for the repo and falls back to `pnpm audit` without a token. Per-PR CI runs lint, types, build, the axe a11y gate and the test suites — it does **not** run `pnpm audit`, so do not treat a green PR as a vulnerability all-clear.
 - Lockfile (`pnpm-lock.yaml`) committed and CI uses `--frozen-lockfile`.
 
 ## OWASP Top 10 mapping

@@ -23,11 +23,7 @@ describe("loadPage", () => {
 
   it("turns a Prismic miss into a 404", async () => {
     const client = clientThat(async () => {
-      throw new NotFoundError(
-        "No documents were returned",
-        "https://x",
-        undefined,
-      );
+      throw new NotFoundError("No documents were returned", "https://x", undefined);
     });
     await expect(loadPage(client, "missing")).rejects.toMatchObject({
       status: 404,
@@ -43,11 +39,7 @@ describe("loadPage", () => {
   });
 
   it("rethrows a wrong repository name instead of calling it a 404", async () => {
-    const wrongRepo = new RepositoryNotFoundError(
-      "Repository not found",
-      "https://x",
-      undefined,
-    );
+    const wrongRepo = new RepositoryNotFoundError("Repository not found", "https://x", undefined);
     const client = clientThat(async () => {
       throw wrongRepo;
     });

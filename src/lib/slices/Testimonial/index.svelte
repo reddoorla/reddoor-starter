@@ -13,9 +13,7 @@
   // back onto the field rather than passed as a prop (see ./avatarAlt.ts).
   const avatarAlt = $derived(resolveAvatarAlt(avatar?.alt, slice.primary.name));
   const avatarField = $derived({ ...avatar, alt: avatarAlt } as ImageField);
-  const hasCredit = $derived(
-    Boolean(slice.primary.name || slice.primary.role || hasAvatar),
-  );
+  const hasCredit = $derived(Boolean(slice.primary.name || slice.primary.role || hasAvatar));
   // A filled avatar with nothing beside it naming the person is the one case
   // where the credit carries no text at all — give assistive tech the resolved
   // alt as visually-hidden text so the figure is never a bare, silent image.
@@ -35,9 +33,7 @@
   contentClass="max-w-3xl px-6 py-10"
 >
   {#if slice.primary.label}
-    <h2
-      class="mb-3 text-sm font-semibold tracking-wide text-secondary uppercase"
-    >
+    <h2 class="mb-3 text-sm font-semibold tracking-wide text-secondary uppercase">
       {slice.primary.label}
     </h2>
   {/if}
@@ -53,9 +49,7 @@
       {/if}
 
       {#if hasCredit}
-        <figcaption
-          class="flex items-center gap-4 {slice.primary.quote ? 'mt-6' : ''}"
-        >
+        <figcaption class="flex items-center gap-4 {slice.primary.quote ? 'mt-6' : ''}">
           {#if hasAvatar}
             <PrismicImage
               field={avatarField}

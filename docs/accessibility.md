@@ -9,7 +9,7 @@ This starter targets **WCAG 2.2 Level AA**. Accessibility is treated as a defaul
 - **Accessible primitives** for the patterns most likely to ship a11y bugs:
   - [Accordion](../src/lib/components/Accordion.svelte) — disclosure pattern with `aria-expanded`, `aria-controls`, `aria-labelledby`.
   - [Modal](../src/lib/components/Modal.svelte) — native `<dialog>` with backdrop, ESC-to-close, and implicit focus trap.
-  - [Slider](../src/lib/components/Animation/Slider.svelte) — `aria-roledescription="carousel"`, per-slide controls with `aria-current`.
+  - [Slider](../src/lib/components/Slider.svelte) — `aria-roledescription="carousel"`, per-slide controls with `aria-current`.
   - [Form / Field](../src/lib/components/Form.svelte) — every input has a programmatic label, required fields announce "(required)" to screen readers, errors link via `aria-describedby` and surface in a focused error summary.
 - **`prefers-reduced-motion` honored** in animation primitives ([animateIn.ts:51](../src/lib/actions/animateIn.ts#L51)) — users with the OS preference get no transform, no transition, immediate reveal.
 - **Compiler-level a11y warnings** via Svelte's built-in checks (run on `pnpm lint`).
@@ -26,8 +26,10 @@ This starter targets **WCAG 2.2 Level AA**. Accessibility is treated as a defaul
 Run locally:
 
 ```bash
+pnpm verify           # everything CI runs, in CI's order
 pnpm test:unit        # vitest unit tests
 pnpm test:smoke       # Playwright + axe (boots vite dev)
+pnpm test:a11y        # the fleet a11y audit CI gates on
 pnpm dlx @lhci/cli autorun   # Lighthouse against lighthouserc.json — manual, not in CI
 ```
 
@@ -52,7 +54,7 @@ Automated tooling (axe, the fleet a11y audit, the Svelte compiler) catches the b
 
 ## Accessibility statement
 
-Public-sector and education clients should publish an accessibility statement at `/accessibility`. A starting template is in this repo's [docs/accessibility-statement-template.md](./accessibility-statement-template.md) once you create it (TODO).
+Public-sector and education clients should publish an accessibility statement at `/accessibility`, naming the conformance target (WCAG 2.2 AA), known gaps, and a contact route for reporting barriers. No template ships here — write it against the site's actual audit results, since a statement that overclaims is worse than none.
 
 ## Reporting issues
 

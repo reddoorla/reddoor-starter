@@ -20,11 +20,7 @@
     variation={slice.variation}
     contentClass="max-w-5xl px-6 py-16"
   >
-    <PrismicImage
-      field={slice.primary.media}
-      fallbackAlt=""
-      class="mx-auto h-auto w-full"
-    />
+    <PrismicImage field={slice.primary.media} fallbackAlt="" class="mx-auto h-auto w-full" />
   </ContentBand>
 {:else}
   <!-- Photo-dominant editorial row: copy ~1/3, image ~2/3, alternating sides
@@ -37,9 +33,7 @@
     <div
       class="mt-copy {hasMedia
         ? 'lg:col-span-4'
-        : 'text-center lg:col-span-8 lg:col-start-3'} {reverse
-        ? 'lg:order-2'
-        : ''}"
+        : 'text-center lg:col-span-8 lg:col-start-3'} {reverse ? 'lg:order-2' : ''}"
     >
       {#if hasHeading}
         <PrismicRichText field={slice.primary.heading} />
@@ -48,11 +42,7 @@
     </div>
     {#if hasMedia}
       <div class="mt-media lg:col-span-8 {reverse ? 'lg:order-1' : ''}">
-        <PrismicImage
-          field={slice.primary.media}
-          fallbackAlt=""
-          class="h-auto w-full"
-        />
+        <PrismicImage field={slice.primary.media} fallbackAlt="" class="h-auto w-full" />
       </div>
     {/if}
   </ContentBand>
