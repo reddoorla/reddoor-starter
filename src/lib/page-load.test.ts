@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { NotFoundError } from "@prismicio/client";
+import { NotFoundError, RepositoryNotFoundError } from "@prismicio/client";
 
 import { loadPage, type PageClient } from "./page-load";
 
@@ -40,5 +40,17 @@ describe("loadPage", () => {
       throw boom;
     });
     await expect(loadPage(client, "about")).rejects.toBe(boom);
+  });
+
+  it("rethrows a wrong repository name instead of calling it a 404", async () => {
+    const wrongRepo = new RepositoryNotFoundError(
+      "Repository not found",
+      "https://x",
+      undefined,
+    );
+    const client = clientThat(async () => {
+      throw wrongRepo;
+    });
+    await expect(loadPage(client, "about")).rejects.toBe(wrongRepo);
   });
 });

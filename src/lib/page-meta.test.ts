@@ -34,7 +34,7 @@ describe("pageMeta", () => {
   });
 
   it("is undefined-safe when the SEO tab is empty", () => {
-    const bare = { ...page, data: { ...page.data, meta_image: {} } };
+    const bare = { ...page, data: { ...page.data, meta_image: undefined } };
     expect(pageMeta(bare as unknown as PageDocument)).toMatchObject({
       title: "Our Team",
       meta_image: undefined,

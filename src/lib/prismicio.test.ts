@@ -30,11 +30,8 @@ describe("linkResolver", () => {
     expect(linkResolver(doc("page", "our-team"))).toBe("/our-team");
   });
 
-  it("ignores non-page documents", () => {
-    expect(linkResolver({ type: "settings", uid: "x" } as never)).toBeNull();
-  });
-
   it("returns null for non-page types", () => {
     expect(linkResolver(doc("person", "dr-quan"))).toBeNull();
+    expect(linkResolver(doc("settings", "x"))).toBeNull();
   });
 });

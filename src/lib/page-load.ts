@@ -1,5 +1,5 @@
 import { error } from "@sveltejs/kit";
-import { NotFoundError } from "@prismicio/client";
+import { NotFoundError, RepositoryNotFoundError } from "@prismicio/client";
 
 import type { PageDocument } from "../prismicio-types";
 import { pageMeta } from "$lib/page-meta";
@@ -22,7 +22,14 @@ export async function loadPage(client: PageClient, uid: string) {
     const page = await client.getByUID("page", uid);
     return { page, ...pageMeta(page) };
   } catch (err) {
-    if (err instanceof NotFoundError) error(404, { message: "Page not found" });
+    // RepositoryNotFoundError extends NotFoundError but means "wrong repository
+    // name", not "no such page" — that must stay loud.
+    if (
+      err instanceof NotFoundError &&
+      !(err instanceof RepositoryNotFoundError)
+    ) {
+      error(404, { message: "Page not found" });
+    }
     throw err;
   }
 }
