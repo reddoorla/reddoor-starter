@@ -57,14 +57,6 @@ A Svelte action that attaches fade-up reveal behavior to any element. Defaults t
 
 **Options:** `trigger?: boolean` · `duration?: number` (ms, default `2400`) · `delayMax?: number` (ms, default `400`; viewport mode only — position-based stagger) · `translateY?: string` (default `"50%"`).
 
-## Recipes
-
-Opt-in patterns that need an extra dependency live in [`docs/recipes/`](docs/recipes/) — currently the [flatpickr datepicker action](docs/recipes/datepicker.md) (`pnpm add flatpickr` to activate).
-
-## SEO routes
-
-`robots.txt` and `sitemap.xml` are prerendered server routes (not static files) so both can emit absolute URLs on the deploy origin — Netlify's `URL` build env feeds `kit.prerender.origin` in `svelte.config.js`.
-
 ### Focus trap action — `use:trapFocus`
 
 Apply to an overlay gated by an `{#if}` block: moves focus in on open (or to `[data-autofocus]`), cycles Tab/Shift+Tab within the overlay, and restores focus on close. **Options:** `onEscape?: () => void` · `enabled?: boolean` · `restoreFocus?: () => HTMLElement | null | undefined` (for triggers that unmount while the overlay is open). Not for `<dialog>` + `showModal()`, which traps natively.
@@ -77,17 +69,31 @@ Import `fade`/`fly`/`slide` from `$lib/transitions` instead of `svelte/transitio
 
 `bump` / `negative-bump` (press feedback), `bob-on-hover` / `bob-always` (vertical wiggle), `pulse-always` (scale breathing), `boop` (one-shot rotate wiggle) — Tailwind `@utility` entries in `app.css`, all inert under `prefers-reduced-motion`.
 
+## Recipes
+
+Opt-in patterns that need an extra dependency live in [`docs/recipes/`](recipes/) — currently the [flatpickr datepicker action](recipes/datepicker.md) (`pnpm add flatpickr` to activate).
+
+## SEO routes
+
+`robots.txt` and `sitemap.xml` are prerendered server routes (not static files) so both can emit absolute URLs on the deploy origin — Netlify's `URL` build env feeds `kit.prerender.origin` in `svelte.config.js`.
+
 ## Getting Started
 
-1. Fork/clone this repo and init a new project
+New Reddoor client sites are bootstrapped from this template by the `/new-site`
+skill, which also wires CI, branch protection, the Airtable fleet row and the
+Netlify/Prismic prompts. To stand one up by hand instead:
+
+1. `gh repo create reddoorla/<slug> --template reddoorla/reddoor-starter`, then clone it
 2. Install dependencies:
 
    ```bash
    pnpm install
    ```
 
-3. Create a new Prismic repository
-4. Update `slicemachine.config.json` with your new Prismic repo name
+3. Work through the per-site checklist in [NEW-SITE.md](NEW-SITE.md) — it lists
+   every file that still carries a template default
+4. Create the Prismic repository and put its name in `slicemachine.config.json`
+   (until then the placeholder sentinel keeps builds green — see NEW-SITE.md)
 5. Start the dev server (runs Vite + Slice Machine concurrently):
 
    ```bash
@@ -95,21 +101,23 @@ Import `fade`/`fly`/`slide` from `$lib/transitions` instead of `svelte/transitio
    ```
 
 6. Push your custom types/slices to Prismic
-7. Build your site using slices for complex CMS needs, or custom types for simpler setups
+7. Build the site using slices for complex CMS needs, or custom types for simpler setups
 
 ## Scripts
 
-| Command             | Description                      |
-| ------------------- | -------------------------------- |
-| `pnpm dev`          | Start dev server + Slice Machine |
-| `pnpm build`        | Production build                 |
-| `pnpm preview`      | Preview production build         |
-| `pnpm check`        | Svelte type checking             |
-| `pnpm lint`         | Lint with ESLint + Prettier      |
-| `pnpm format`       | Auto-format with Prettier        |
-| `pnpm test:unit`    | Run unit tests with Vitest       |
-| `pnpm test:smoke`   | Run Playwright + axe a11y checks |
-| `pnpm slicemachine` | Start Slice Machine UI           |
+| Command             | Description                                                     |
+| ------------------- | --------------------------------------------------------------- |
+| `pnpm verify`       | **Everything CI runs, in CI's order** — run this before pushing |
+| `pnpm dev`          | Start dev server + Slice Machine                                |
+| `pnpm build`        | Production build                                                |
+| `pnpm preview`      | Preview production build                                        |
+| `pnpm check`        | Svelte type checking                                            |
+| `pnpm lint`         | Lint with ESLint + Prettier                                     |
+| `pnpm format`       | Auto-format with Prettier                                       |
+| `pnpm test:unit`    | Run unit tests with Vitest                                      |
+| `pnpm test:smoke`   | Run Playwright route/hydration smoke suite                      |
+| `pnpm test:a11y`    | Run the axe audit CI gates on (`reddoor-maint`)                 |
+| `pnpm slicemachine` | Start Slice Machine UI                                          |
 
 Lighthouse config lives in `lighthouserc.json` (it audits `/dev/a11y-fixtures`);
 it is not wired into CI — run it manually with `pnpm dlx @lhci/cli autorun` once
