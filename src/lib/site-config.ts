@@ -1,7 +1,7 @@
 // Site chrome (navigation + footer) from a checked-in JSON stub. The starter
 // ships it empty, so a fresh site renders the logo-only Nav + placeholder
-// Footer; a site fills it in (or replaces it with a Prismic `settings`
-// document — the VLF build does that first, and upstreams it).
+// Footer; a site fills it in, or swaps this module for a Prismic
+// `settings`-document loader behind the same exports.
 import config from "./site-config.json";
 
 export type NavItem = { label: string; href: string; children?: NavItem[] };
@@ -26,7 +26,7 @@ export type SiteConfig = {
   footer: {
     socials: FooterSocial[];
     text?: string;
-    // Optional link columns. Absent on the stub.
+    // Optional footer columns — text, link, or image rows. Absent on the stub.
     columns?: FooterColumn[];
   };
 };
@@ -37,7 +37,7 @@ export function loadSiteConfig(): SiteConfig {
 }
 
 /** Resolve the footer columns for a route: per-route page data wins, else the
- *  site-config chrome. Undefined when neither supplies columns — <Footer>
+ *  site-config defaults. Undefined when neither supplies columns — <Footer>
  *  renders its placeholder. */
 export function footerColumns(
   pageColumns: FooterColumn[] | undefined,

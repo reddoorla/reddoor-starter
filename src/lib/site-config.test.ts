@@ -13,22 +13,22 @@ describe("loadSiteConfig", () => {
 
 describe("footerColumns", () => {
   const chromeCols = [
-    { items: [{ text: "Leasing: (555) 123-4567", href: "tel:5551234567" }] },
+    { items: [{ text: "Call us: (555) 123-4567", href: "tel:5551234567" }] },
   ];
   const configWithColumns: SiteConfig = {
     nav: { items: [] },
     footer: { socials: [], columns: chromeCols },
   };
 
-  it("prefers the per-route page-data columns (the dev fidelity gate injects them)", () => {
+  it("prefers the per-route page-data columns when a route supplies them", () => {
     const pageCols = [{ items: [{ text: "from page data" }] }];
     expect(footerColumns(pageCols, configWithColumns)).toBe(pageCols);
   });
 
   it("falls back to the site-config chrome columns when page data has none", () => {
-    // The regression this guards: a migrated site's leasing-contact footer
-    // rides site-config.json (the catalog chrome emit), NOT page.data — so a
-    // layout that reads only page.data.footerColumns drops the real footer.
+    // The regression this guards: a site whose footer is configured in
+    // site-config.json, not page data — a layout reading only
+    // page.data.footerColumns would drop it.
     expect(footerColumns(undefined, configWithColumns)).toBe(chromeCols);
   });
 
