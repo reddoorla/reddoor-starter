@@ -78,6 +78,85 @@ evidence of how the mistake was made.
 
 If a session produced nothing worth an entry, that is itself worth one line.
 
+## Six rules that came from shipping a site
+
+Each of these is a defect class that shipped on a real build, not a preference.
+They are stated as rules because in every case the reasoning was available at the
+time and did not get applied.
+
+### A pass needs positive evidence — never the absence of an error
+
+The single most expensive pattern. A green must require an artifact only a
+working system produces: a 2xx for the script that makes the widget, a minted
+token, a real submission traced end to end. **An error matcher may only ever DENY
+a green**, never grant one.
+
+Worked example, because the shape is slippery. A site's `/health` reported
+`turnstile: true` — a truthiness check on an env var that never contacts
+Cloudflare — and that boolean was allowed to mean "the widget works". The fix
+required a mount point in the DOM, which the component server-renders whenever
+the env var is set. The next fix required Cloudflare's script to load, which it
+does regardless of whether the sitekey is valid. Each correction reintroduced the
+same shape one step along, and the last survived by exactly one error code.
+
+Corollary: **a field that can only observe configuration must never be named
+after the thing it cannot observe.**
+
+### Enumerate the defect class before fixing an instance
+
+When a defect is found, the next question is _what else is in this class_ —
+every value a script supplies, every string the CMS does not write, every
+`%sveltekit.*%` placeholder — then fix once. Fixing instances one at a time
+shipped four PRs for no-JS (three of them inside 69 minutes, each merged
+believing it had closed the class), four for a second locale, and the same
+template-placeholder bug twice in one hour, the second time in the act of
+documenting the first.
+
+### A claim about what the tests cover is a claim about code
+
+So it must be made by reading that code. Three claims about a probe's behaviour
+were written and found false within 24 hours, including one asserting it swapped
+a sitekey when nothing in it wrote `data-sitekey` at all. **Documentation written
+in the same session as the fix is a hypothesis, not a record.**
+
+Two things follow:
+
+- **Write the test that fails for the reason you think it fails, by breaking the
+  thing on purpose.** A guard that names a class in its selector passes a rename
+  happily — the class stops matching, so the test measures one element and finds
+  one. Mutate, watch it go red, then keep it.
+- **Check what the shared harness forces.** `playwright-a11y` sets
+  `contextOptions.reducedMotion: "reduce"` on every test, which made a whole
+  class of new no-JS tests vacuous while they passed.
+
+### Anything found and not fixed in the same PR gets an issue
+
+A code comment is not a tracker and a doc correction is not a fix. The a11y gate
+gap was correctly diagnosed and written up as a documentation correction; the
+real fix was eight strings in `package.json` and waited two more days. A note
+about unlicensed placeholder photography lived in a code comment for four days
+and became the largest launch blocker, because it was in neither an issue nor
+the "what is NOT done" list — the two places a launch sweep reads.
+
+### Verify on a production build
+
+Some defects are not merely invisible on the dev server — it **actively hides**
+them. Both scroll-driven runway stages rendered correctly under `vite dev` and
+frame 0 in the shipped bundle. Fonts load by a different CSP directive in dev
+than in prod, so a CSP assertion exercised against `pnpm dev` proves nothing
+about the shipped path. `pnpm build && pnpm preview` before believing a
+CSP, font, hydration or no-JS result.
+
+### Branch per batch, and keep in-flight state where it survives the session
+
+Two deterministic losses, neither a judgment call: a PR squash-merged while
+commits were still landing on its branch orphaned them silently, with no CI and
+nothing on main; and a PR stacked on another PR's branch was auto-closed when
+that base was deleted, and **a closed PR whose base is gone cannot be reopened**.
+
+Branch each batch off `main`. And when work is in flight across a pause — a
+session limit, a compaction, a crash — the journal entry is what survives it.
+
 ## Orientation
 
 | Looking for                       | Go to                                                                       |
@@ -89,6 +168,8 @@ If a session produced nothing worth an entry, that is itself worth one line.
 | Page rendering                    | `src/routes/[[preview=preview]]/[uid]/+page.server.ts` → `$lib/page-load`   |
 | Prismic slices                    | `src/lib/slices/<Name>/` — `model.json`, `mocks.json`, `index.svelte`, test |
 | Brand tokens                      | `src/app.css` `@theme` block                                                |
+| Measuring the build vs the comp   | `scripts/figma-compare/` — stand it up at Stage A, before the first slice   |
+| What this session did, and why    | `docs/workJournal.md`                                                       |
 
 ## Traps
 
