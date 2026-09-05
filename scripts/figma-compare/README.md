@@ -52,6 +52,12 @@ typographic comp. Look for them at Stage A and report them in the inventory.
   trimmed, then give the site `t-*` utilities in `app.css` that encode the comp's
   text styles once, so a slice takes a style by name instead of re-deriving it.
   Body copy and button labels are usually not trimmed; check rather than assume.
+  The trim is a property of the text STYLE, not the family — the REST API
+  reports it as `style.leadingTrim: "CAP_HEIGHT"`, and `pull-figma.mjs`
+  records it as `trim` on every text node. The measured write-up, with the
+  CSS that matches it, is
+  [figma-cap-height-trim.md](https://github.com/reddoorla/vida-legacy-foundation/blob/main/docs/figma-cap-height-trim.md)
+  in the site that found it.
 - **Prototype sticky scrolls** — bands the comp pins so the next slides over
   them. `pull-figma.mjs` reports the flag. This is a whole-page mechanism, not a
   slice property, so nothing in a per-slice loop will look for it, and
