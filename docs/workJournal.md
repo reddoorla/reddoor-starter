@@ -13,6 +13,9 @@ earlier one and says so.
 
 ## 2026-09-05 — Journal opened, and 280 commits of history summarised rather than reconstructed (`chore/work-journal`)
 
+> Superseded in part by 2026-09-08 — The Webflow rebuild pipeline has a home,
+> and it is not this repo.
+
 The journal starts today, so this first entry is a **backfill**: a deliberately
 coarse summary of what came before, written from the commit log rather than
 from memory. Detail below this line is trustworthy; detail above it is not, and
@@ -102,3 +105,74 @@ that unnecessary requirements in them make tasks _harder_. The archive is worth
 having; keeping all of it in the always-on file is not. Traps and history belong
 in the journal, and `CLAUDE.md` should hold the minimum a session must not
 violate. This starter’s own is 194 lines and should stay closer to that than to 963.
+
+## 2026-09-08 — The Webflow rebuild pipeline has a home, and it is not this repo (`docs/webflow-pipeline-records`)
+
+Docs only. Nothing Webflow-specific enters this template, and that is the
+decision worth recording.
+
+The 2026-08-31 track-split spec said the Webflow importer targets the native
+`page` type. **That was a third true.** The importer also emits `person`,
+`news_article` and `collection_item` documents, and Beachfront renders them
+through a `CollectionList` slice and a collections loader wired into the page
+route — all of which exist in the Blux track and in Beachfront, none of them
+here. Believing the old sentence would have made "point the importer at a native
+clone" sound like a small job.
+
+So the pipeline lives next door: importer and seed runner in reddoor-maintenance,
+round scripts and the `/dev/match` twin installed by a new `match-harness`
+recipe, the phase protocol in the `matching-a-page` skill, the round rules
+written into each site's own `CLAUDE.md`. This repo gets one orientation row. The
+rule behind that placement is what the Blux split taught: **the template ships no
+hook whose default does work, and no field an editor cannot fill.** A "three-line
+seam" in `page-load` was considered and rejected — same species as the two
+document types probed per page load that native-ize deleted in #106 (242 files
+changed, 178 deleted, slices 28 → 9, custom types 7 → 1, build 840K → 412K).
+
+Lists on a rebuilt site are content relationships by default (a repeatable group
+restricted to a type; order is the group's order; no route change), and automatic
+indexes are dedicated routes with their own server load, like `/contact`. Both
+are site-side patterns, not template mechanisms.
+
+**The largest thing NOT done, so it is not rediscovered as new.** Fourteen
+generic product-quality fixes Beachfront made between 2026-08-07 and 2026-09-02 —
+noindex prefixes, reveal state in the markup, a focus-ring floor, live
+reduced-motion, modal scroll-lock, nav tap response — are absent here and are
+already propagating into sites bootstrapped from this template; Vida Legacy
+Foundation inherited five of them on 2026-09-01 and independently re-fixed a
+sixth. It is the largest per-site saving measured anywhere in this work (~18% of
+a Beachfront-sized build, against ~10% for every conversion layer combined), and
+it is now #121 on this repo with commits, files, native counterpart and a test
+for each, one PR per item.
+
+**Honest accounting, because this entry was drafted before the work it
+describes.** The paragraphs above were written into the plan on 2026-09-08 and
+are unchanged; what follows is what actually happened, and some of it contradicts
+what was believed while planning. Two of the plan's own predictions were wrong on
+contact. An empty Prismic repository does not 404 — it 500s, because the Content
+API rejects the _predicate_ when nothing of that type is published. And the error
+it gives, `unexpected field 'my.page.uid'`, was then documented as meaning "the
+type was never pushed", which is also wrong: the same error appears with the type
+registered, byte-identical to the error for a type that has never existed. Both
+corrections are in reddoor-maintenance, the second one twice, because the first
+fix asserted a discriminating check in both directions when it only holds in one.
+
+That pattern is the entry's real content. Across one session, eight separate
+claims failed the same way — a derived, cached, or configuration view of state
+read as though it were the state. A CDN served a `no-store` response as a cache
+hit. An author-filtered PR search returned a confident empty set because
+self-hosted Renovate authors as a person, not an app. A `>>` redirect denied by a
+sandbox still printed "appended", because the `echo` after it reports on itself.
+Three of the eight were committed by someone actively holding the fleet rule
+about positive evidence in mind, and one _while writing the correction to a
+previous instance of it_. They are enumerated as reddoor-maintenance#711.
+
+The eighth is the one worth carrying into this repo, because it is a different
+shape and no rule here covers it. A verification step existed, was correct, was
+run, and passed — and its coverage was exactly complementary to its bug: it
+checked a CLI entry guard by invoking the script through a real path, and the
+guard only fails when invoked through a symlink. An absent check is visibly
+absent. A check blind in precisely the configuration that breaks reads as green
+diligence. `CLAUDE.md`'s existing rules tell you to demand positive evidence and
+to enumerate the class; neither tells you to ask **under what invocation the
+evidence was produced, and whether that is the invocation that fails.**

@@ -178,6 +178,7 @@ session limit, a compaction, a crash — the journal entry is what survives it.
 | Brand tokens                      | `src/app.css` `@theme` block                                                |
 | Measuring the build vs the comp   | `scripts/figma-compare/` — stand it up at Stage A, before the first slice   |
 | What this session did, and why    | `docs/workJournal.md`                                                       |
+| Rebuilding from a live site       | reddoor-maintenance `webflow` + `match-harness`, the matching-a-page skill  |
 
 ## Traps
 
