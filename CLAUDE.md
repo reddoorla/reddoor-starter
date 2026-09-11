@@ -137,6 +137,64 @@ Two things follow:
   `contextOptions.reducedMotion: "reduce"` on every test, which made a whole
   class of new no-JS tests vacuous while they passed.
 
+### Read the inventory before writing behaviour
+
+`docs/COMPONENTS.md` is generated from `src/lib` and lists every shared module
+with its real prop/export names and test count. Read it before writing
+interactive behaviour into a slice — a carousel, a dialog, a disclosure, a focus
+trap, a reduced-motion check.
+
+This is not "check for existing work" restated. That instruction was already in
+this file and did not stop three re-derivations in two days on one site:
+`Slider.svelte` rebuilt as a slice-local carousel, `actions/trapFocus.ts` as six
+hand-rolled dialogs, and `transitions.ts`'s `prefersReducedMotion` copied
+verbatim into two slices. Every session had read CLAUDE.md. The instruction was
+never the missing piece — the DATA was. Nothing anywhere put the string
+`Slider.svelte` next to the word "carousel".
+
+So it is a list, not a gate, and deliberately so. A check that fails in CI fires
+after the component is written: the hour is already spent and all it saves is
+the merge. It has to be read before the decision or it does nothing.
+
+**Reuse is not always the answer.** A component whose markup fights the design is
+a reason to lift its logic, not to reach for it whole — and on a site with a
+matching harness, the geometry gate diffs slice DOM against transcribed reference
+markup, so a shared component often cannot be dropped in at all. That is an
+argument against reusing the component and never against reading it. Where you
+decline one, say which and why: in `matching/LEDGER.md` on a matching site, in
+the journal otherwise.
+
+**Regenerate** with `node scripts/capability-index.mjs` after adding or changing
+anything under `src/lib`. `scripts/capability-index.test.ts` fails when the index
+is stale — that guard is retroactive on purpose, because it protects the index
+rather than the decision.
+
+**Optional, and the part that fires first.** `scripts/hooks/reuse-context.mjs` is
+a `UserPromptSubmit` hook: given a request naming behaviour this repo ships, it
+prints the matching rows before the agent plans. It never blocks a tool call —
+one false refusal makes the whole mechanism something to route around. Enable it
+with a `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/reuse-context.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+`.claude/` is gitignored here and machine-wide on at least one maintainer's
+setup, so that file is per-checkout until someone decides otherwise.
+
 ### Anything found and not fixed in the same PR gets an issue
 
 A code comment is not a tracker and a doc correction is not a fix. The a11y gate
@@ -169,6 +227,8 @@ session limit, a compaction, a crash — the journal entry is what survives it.
 
 | Looking for                       | Go to                                                                       |
 | --------------------------------- | --------------------------------------------------------------------------- |
+| **Behaviour that already exists** | **[docs/COMPONENTS.md](docs/COMPONENTS.md) — read before writing any**      |
+|                                   | **interactive behaviour into a slice**                                      |
 | What this stack ships             | [docs/STARTER.md](docs/STARTER.md)                                          |
 | What's still a template default   | [docs/NEW-SITE.md](docs/NEW-SITE.md)                                        |
 | A11y conventions and the axe gate | [docs/accessibility.md](docs/accessibility.md)                              |
