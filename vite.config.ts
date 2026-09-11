@@ -13,7 +13,9 @@ export default defineConfig({
   },
   test: {
     environment: "jsdom",
-    include: ["src/**/*.test.{js,ts}"],
+    // scripts/ too: the capability index and its prompt hook live there, and a
+    // repo-invariant test that never runs is a comment.
+    include: ["src/**/*.test.{js,ts}", "scripts/**/*.test.{js,ts}"],
     setupFiles: ["./vitest-setup.ts"],
     server: {
       deps: {
