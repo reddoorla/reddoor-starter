@@ -54,6 +54,18 @@ a real repository name re-arms loud-fail prerendering by design — after that, 
 (`svelte.config.js`, `src/lib/prismicio.ts`, the route loaders, and
 `tests/smoke/routes.ts`); change it in `slicemachine.config.json` only.
 
+`VITE_PRISMIC_ENVIRONMENT=your-prismic-repo-name` reaches the same sentinel
+from the environment, and it is a **local-only hatch** — for a developer's
+machine after the config file names a real repository but before that
+repository has content. Never set it in CI or in Netlify's environment. There
+it is invisible in the diff, persists indefinitely, and produces a green build
+that emits no `build/index.html` alongside a green smoke run that expects `/`
+to 404 — every gate agreeing about a site that does not exist. Since #120,
+`svelte.config.js` and `tests/smoke/routes.ts` both refuse to load when the
+hatch is set and `CI` or `NETLIFY` is, so the failure is loud at the point
+someone reaches for it. A site whose Prismic repository is not ready should
+stay red, or keep the sentinel in `slicemachine.config.json`.
+
 ## Before pushing
 
 ```bash
