@@ -32,7 +32,7 @@ source. It is the fastest way to recognise what a thing does.
 | [`Field.svelte`](../src/lib/components/Field.svelte) | `name`, `label`, `type`, `value`, `description`, `error`, `required`, `autocomplete`, `placeholder`, `minlength`, `maxlength`, `pattern`, `inputmode`, `rows` | 8 |  |
 | [`Footer.svelte`](../src/lib/components/Footer.svelte) | `columns`, `socials`, `text` | 11 | Optional per-route override of the `$lib/site-config.json` footer (no route in the bare template supplies this) |
 | [`Form.svelte`](../src/lib/components/Form.svelte) | `errors`, `errorSummaryTitle`, `children` | 3 |  |
-| [`HeroBackgroundImage.svelte`](../src/lib/components/HeroBackgroundImage.svelte) | `image`, `altFallback`, `preload` | 6 | LCP-optimized hero image |
+| [`HeroBackgroundImage.svelte`](../src/lib/components/HeroBackgroundImage.svelte) | `image`, `altFallback`, `preload` | 8 | LCP-optimized hero image |
 | [`Img.svelte`](../src/lib/components/Img.svelte) | `src` | 5 | Progressive-loading wrapper around @zerodevx/svelte-img: the image renders blurred (`.progressive-img` in app.css) and sharpens once the underlying <img> finishes — or fails — loading |
 | [`LandscapeModal.svelte`](../src/lib/components/LandscapeModal.svelte) | — | 3 | Orientation lockout — a primitive the template deliberately does NOT mount (tests/smoke/landscape.spec.ts fails if it is re-mounted), because an undismissable landscape overlay fails WCAG 2.1 SC 1.3.4 (Orientation) |
 | [`Modal.svelte`](../src/lib/components/Modal.svelte) | `open`, `onclose`, `label`, `labelledby`, `children` | 8 | Accessible name for the dialog |
@@ -66,4 +66,4 @@ source. It is the fastest way to recognise what a thing does.
 | [`richTextHeadings.ts`](../src/lib/utils/richTextHeadings.ts) | `RT_HEADING_CTX`, `defaultLevel`, `buildHeadingLevelMap` | 9 | Editors author arbitrary heading levels inside Prismic rich-text bodies (heading1–6 are all enabled in the slice models) |
 | [`vimeo.ts`](../src/lib/utils/vimeo.ts) | `checkVimeoVideo` | 5 | True when the Vimeo video exists and is embeddable (oEmbed responds 200) |
 
-48 modules, 310 tests behind them.
+48 modules, 312 tests behind them.
