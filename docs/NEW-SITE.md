@@ -44,6 +44,42 @@ See [`.env.example`](../.env.example) for the annotated list.
 Renovate needs nothing per-repo: it authenticates as the org-wide
 `reddoor-renovate` GitHub App.
 
+### Build hook: a Prismic publish must trigger a build
+
+`src/routes/+layout.server.ts` sets `prerender = "auto"`, so `/` is baked at
+build time. A Prismic publish reaches visitors only when Netlify builds, and
+out of the box only a git push does that. The client can publish all day and
+production will not change, while every surface an editor checks shows the new
+content: the document reads published, the Prismic preview renders it, and the
+next code PR's deploy preview shows it too. Found the hard way on 29-navy
+(reddoorla/29-navy#31).
+
+1. Create the hook. Body fields go under `body`. Passed flat, the CLI accepts
+   them and silently creates a hook with `title: null, branch: null`:
+
+   ```bash
+   netlify api createSiteBuildHook \
+     --data '{"site_id":"<site-id>","body":{"title":"Prismic publish","branch":"main"}}'
+   netlify api listSiteBuildHooks --data '{"site_id":"<site-id>"}'
+   ```
+
+   `<site-id>` is the Netlify site id: `netlify api listSites --data '{"name":"<slug>"}'`, or Site configuration → General in the Netlify UI. The response's `url` is the hook. Never POST to it by hand
+   except to deploy production on purpose.
+
+2. Prismic → Settings → Webhooks → Add a webhook: paste the hook URL and
+   trigger it on document publish (and unpublish). No secret is needed;
+   Netlify ignores the payload.
+
+3. Prove it the way the gap was found, not by reading settings. Publish a
+   trivial content change, wait for the build to finish, then:
+
+   ```bash
+   curl -s https://<production-url>/ | grep -a -c "<the new string>"
+   ```
+
+   `0` means the hook did not fire, or fired before the publish landed.
+   Prismic's webhook log and Netlify's deploy list say which.
+
 ## Placeholder builds
 
 `slicemachine.config.json`'s `your-prismic-repo-name` sentinel is load-bearing.
