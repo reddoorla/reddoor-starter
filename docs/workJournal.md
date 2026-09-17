@@ -434,3 +434,66 @@ reddoorla/reddoor-maintenance#863 so it is not lost.
 `docs/workJournal.md` duly happened; it was resolved by rebasing onto #147 and
 keeping both entries in the order they merged, since they are appends to the
 same tail and neither contradicts the other.
+
+## 2026-09-17 — Two template defects the second site paid for: a frozen copyright year and a text token that cannot be trusted with a brand colour (`fix/footer-year-and-text-contrast`)
+
+Both of these were found by bootstrapping roalson-interests earlier today, and
+both are template problems rather than that site's, so they are fixed here.
+
+**The copyright year could only be right once.** `SiteConfig.footer.text` is a
+plain string and `<Footer>` rendered it verbatim, falling back to
+`© ${new Date().getFullYear()} Company Name`. So a site had two options: leave
+the placeholder, which says "Company Name" on every page, or set `text` to its
+own line — which freezes whatever year it typed. Correct in the January it is
+written, wrong every January after, in a repo nobody is looking at. Roalson took
+the second option at bootstrap and its footer now reads a hardcoded 2026.
+
+`footer.owner` is the fix: the site names the entity, `<Footer>` supplies the
+year. `text` stays, documented down to what it is actually for — a rights line
+that is not of the form `© <year> <owner>`, which is why composition-hospitality
+has one. Its test asserts the CURRENT year computed at assertion time rather
+than a literal, because a literal expectation would pass for a year and then
+start failing on a date nobody associates with the change.
+
+**`--color-secondary` asserts something the template never checked.** The name
+says the token is text-capable. A brand's "secondary colour" very often is not,
+and the template spends this one as text in eight places a new site never
+touches — footer copyright, `Field.svelte`'s description, the eyebrows on
+LeadText, TextColumns and Testimonial, the testimonial role line, the contact
+intro, a dev fixture. So assigning a light tint to it does not fail somewhere; it
+fails on every page that renders a footer.
+
+Roalson's dust `#B2AC9F` measured **1.97:1** on the page ground. The a11y gate
+caught it, and that is later than it sounds: the gate needs a built site and a
+browser, it names one node rather than the class, and on a fresh clone it is
+pointed at fixtures — on a site that had not yet published a home document it
+would not have run on a real page at all.
+
+`src/lib/theme-contrast.test.ts` now parses the `@theme` block and measures
+every text/ground pair the template actually composes, failing below 4.5:1 in
+milliseconds with no browser. Both halves were proven by mutation rather than
+asserted:
+
+- setting `--color-secondary` to Roalson's dust fails two cases with
+  `--color-secondary on --color-background is 2.26:1, below AA (4.5:1)` — and
+  the message names the fix, which is to split the token rather than to change
+  the pair being measured;
+- changing one `text-secondary` to `text-accent` fails the completeness case
+  with `unmeasured: accent`, so a new text token cannot quietly arrive without
+  someone saying which ground it lands on.
+
+**One measurement worth recording, which is NOT asserted.** In the shipped
+placeholder palette `secondary` `#6b7280` on `light` `#e5e7eb` is **3.90:1** —
+already below AA. `bg-light` is used 17 times and `text-secondary` 12 times, but
+no component currently nests one in the other: in `/dev/animate-in`, the only
+file with both, they are siblings. So the pair is not asserted, because
+asserting it would fail the template's own defaults for a composition that does
+not exist. It is one nesting away from being real, and that is written into the
+test beside the list rather than left to be rediscovered.
+
+**Honest accounting.** The class was not obvious from the failure. The first fix
+here repointed the dev fixture at a new `-aa` token, which left the gate red,
+because the fixture was never the failing element — the footer was.
+`grep -rn "text-secondary"` returns eight files and was available the whole
+time. CLAUDE.md already says to enumerate the class before fixing an instance;
+this session still had to pay for it once before doing so.
