@@ -176,3 +176,164 @@ absent. A check blind in precisely the configuration that breaks reads as green
 diligence. `CLAUDE.md`'s existing rules tell you to demand positive evidence and
 to enumerate the class; neither tells you to ask **under what invocation the
 evidence was produced, and whether that is the invocation that fails.**
+
+## 2026-09-17 — Ready for site #2, except the a11y gate has been measuring a 404 page (audit only, no code change; #147)
+
+A fifteen-agent workflow asked one question before the second client site is built
+from this template: can `/new-site` clone `origin/main` today and produce a green
+site? Four readiness audits — the starter itself, the `/new-site` and
+`/figma-slices` skills, the Vida Legacy Foundation backport, and the
+fleet-maintenance side — each had an adversarial verifier whose job was to
+confirm, partially confirm or refute, and to list the claims that rested on the
+absence of an error rather than on an artifact. Nothing in this repo was changed
+today. This entry records what the audit found about the template and the
+pipeline; the client-specific inventory is being written into another repo.
+
+**The answer is yes, with numbers.** A fresh clone of `origin/main` at `0859ab8`,
+with `/new-site`'s bootstrap edits applied (package name, the `netlify-site` CI
+input, `SITE_NAME`, the README placeholders), installs from the frozen lockfile
+and passes `pnpm verify`: prettier clean, eslint over 165 files with 0 errors and
+0 warnings, svelte-check `COMPLETED 4519 FILES 0 ERRORS 0 WARNINGS`, a build, the
+a11y audit, 60 test files / 469 unit tests, and 12 smoke specs. CI on that same
+SHA (run 35182451450) logged the same counts, so the local run is not a different
+configuration that happens to agree. eslint and prettier really do reach the
+`.svelte` files — 46 of them, 0 different — which is the hole `.prettierrc`
+closed and is worth re-measuring rather than assuming.
+
+**The most valuable correction is that the a11y green is vacuous at bootstrap.**
+The template ships `reddoor.a11yRoutes: ["/"]`, and `/new-site` step 3c sets it
+before Prismic exists. While the `your-prismic-repo-name` sentinel is in place,
+`/` returns 404 on purpose — `tests/smoke/routes.ts` knows that and asserts it.
+The a11y audit does not: `@reddoorla/maintenance` 0.93.1, which the lockfile
+pins, calls `page.goto(path)` and hands the page straight to axe with no status
+check, so axe scans the SvelteKit error page and reports zero violations for a
+home page that does not exist. A verifier reproduced the whole shape in its own
+clone rather than trusting the auditor's logs: on 0.93.1 with `a11yRoutes ["/"]`,
+`pnpm test:a11y` exits 0 and prints "0 violations across 2 routes"; pinned to
+0.96.0 with the same config it exits 1 with `{id: "route-missing", impact:
+"serious", route: "/", help: "/ returned 404"}`; the control, 0.96.0 with
+`a11yRoutes []`, exits 0 again. The status branch first appears in v0.96.0 and is
+absent from 0.93.1 through 0.95.1.
+
+That matters more than a stale pin. This repo's own first rule says a pass must
+require an artifact only a working system produces, and that a field which can
+only observe configuration must not be named after the thing it cannot observe.
+Here the rule fails _inside the instrument that enforces the other rules_: the
+gate whose whole job is to produce positive evidence about rendered pages has
+been producing an absence-of-violations result on an error page, and every
+previous audit that cited "a11y: 0 violations" as evidence of health — including
+this one's own positive-evidence list, as its verifier pointed out — inherited
+that vacuity. The verifier also corrected the blast radius. Nothing is red today,
+because `main` and fresh clones pin 0.93.1 and the shared Renovate config only
+acts before 6pm on Mondays with a one-day `minimumReleaseAge`, so the earliest
+window is 2026-09-21. When it fires, the red lands on the grouped
+`renovate/all-minor-patch` PR, which carries `@lucide/svelte`, `@playwright/test`,
+eslint, prettier, svelte, vite, typescript-eslint and the `reddoorla/.github` pin
+along with the maintenance bump. One 404 therefore stalls every non-major update
+in the group, not just the bump that exposes it.
+
+**A fix that looked obvious would have broken the template.** The natural
+follow-on to bumping to 0.96.0 is to take the new `reddoor.gateServer:
+"preview"` option, which answers this repo's "verify on a production build" rule
+and VLF's open issue about it. Two verifiers independently showed that setting it
+at bootstrap is wrong. Under `preview`, the v0.96.0 Playwright `webServer` runs
+the build and probes `http://localhost:<port>/` for readiness, and Playwright
+1.62.1 treats a server as ready only for `statusCode >= 200 && statusCode < 404`
+— so on the placeholder, where `/` is a deliberate 404, the server never becomes
+ready and both gates fail at the five-minute timeout. Separately, the starter's
+own browser specs target `/dev/a11y-fixtures` and `/dev/animate-in`, which `#134`
+made 404 in a production build, so they would fail under preview even with a home
+page. The order is: bootstrap on the dev server and report explicitly that the
+gate is not yet measuring the site, publish the home document, then opt into
+preview and split the `/dev`-targeting specs into their own project. One more
+correction from the same thread: `gateServer` moves the hydration smoke, not the
+axe scan, which stays on `vite dev` by design.
+
+**VLF's process lessons came back; its code lessons largely did not.** The six
+standing rules, the journal convention with its forward-pointer clause, the
+figma-compare harness with the cap-height trim recorded per style, real
+`a11yRoutes` at bootstrap, the locale-string inventory and the review-round rules
+all landed here or in the skills. The generic defects VLF found while fixing its
+own did not, and four of them were re-measured today rather than taken on
+report. A Prismic preview of any non-home page lands on `/`: since `#90` the
+client is routes-free, so the Content API leaves `doc.url` null, `/api/preview`
+passes the bare client to `redirectToPreviewURL`, and `asLink` with no
+linkResolver returns null, falling back to `defaultURL`. Run against the
+installed `@prismicio/client` 7.22.0 with a stubbed fetch returning
+`{uid: "about", url: null}`, this template answers `Location: /preview/` where
+VLF's wrapper answers `Location: /preview/about`. The `--screen-*` tokens in
+`app.css` are Tailwind v3 naming that v4 ignores: compiling `@theme { --screen-sm:
+560px; --screen-xl: 1340px }` with the installed `@tailwindcss/node` 4.3.3 emits
+`@media (width >= 40rem)` and `@media (width >= 80rem)`, so `sm` is really 640px
+and `xl` really 1280px and the declared 560/1340 are dead — the second site to
+rediscover this, after the Beachfront note. The fleet's Typekit swap,
+`media="print" onload="this.media='all'"`, is an inline handler that the nonce
+CSP refuses; measured in Chromium, media stays `print` and `faces=0`. The
+verifier refuted half of that finding as received: all 210 font URLs in kit
+`noj4tji.css` are `use.typekit.net/af/...`, so faces register and load with only
+`use.typekit.net` in `style-src` and `font-src`; `p.typekit.net` is needed only
+to silence the console error from the `p.css` tracking `@import`, which matters
+because a console-error smoke assertion would fail on it. And `Nav.svelte` has no
+no-JS path below `lg`: the link list is `hidden ... lg:flex` and the menu exists
+only inside `{#if isMenuOpen}`, so a phone visitor without JS cannot navigate at
+all — while the fleet Playwright config still forces `reducedMotion: "reduce"` on
+every test, which is what made a class of no-JS assertions vacuous before.
+
+**Four fleet-side facts would bite site #2 on day one.** The local maintenance
+`dist/` was built at 2026-09-15 11:05, four hours before `#812` landed at 15:10,
+so `ensure-site --name` still behaves create-only there; the skill never passes
+`--name` anyway, which is why two fleet rows still carry their bare slug as the
+client-facing Name sixteen days later. Checking `--version` does not detect this,
+because the CLI reads its version from `package.json` at runtime and this stale
+build cheerfully prints `0.96.0`. `sync-configs` still decides by exact byte
+match for eslint, playwright, lighthouse and prettier: today's starter plans zero
+writes, but VLF's `origin/main` plans two, and one of them replaces a 3020-byte
+`playwright.config.ts` carrying a four-project no-JS/phone rendering matrix with
+the 74-byte re-export — the suite still passes afterwards and simply covers less.
+Across 24 local checkouts the planner would overwrite 38 such files. The starter
+sits on maintenance 0.93.1 against a released 0.96.0, and on `reddoorla/.github`
+v1.4.1 against v1.4.2 (22 of 23 org repos are on the old pin); v1.4.2 is the
+commit that stops apt reading Google's Chrome repo, the failure that took out
+every fleet CI run three times in forty minutes on 2026-09-09.
+
+**Two of the traps the verifiers found are not about code at all.**
+`ensure-site` throws unless the display name slugifies back to the slug, and
+`siteSlug` lowercases and collapses non-alphanumerics, so the skill's own example
+slug cannot take the client's real name — the slug decides the client-facing
+name, in auto-reply copy and report subjects, and it also becomes the GitHub repo,
+the Netlify site, the forms-ingest path and the suggested Prismic repo name.
+Deciding it late means renaming five systems; the operator has now settled on
+`roalson-interests`. The second: `FIGMA_PAT` is the only working Figma REST
+credential on this machine — a read-only `/v1/me` with it returns 200 — and it is
+what `scripts/figma-compare/pull-figma.mjs` in _this_ repo consumes at Stage A.
+It appears on the maintenance meta-week list of "the four keys nothing reads",
+tagged as measured, because that census grepped only the maintenance repo and
+never saw the consumer that lives here. Carrying out that five-minute rider would
+have deleted Stage A's credential days before it is needed.
+
+**Honest accounting about the audit itself.** The verifiers' most useful output
+was not the confirmations but the list of claims resting on absence of evidence:
+grep finding no analytics IDs or font-kit strings is not proof the routes are
+clean; `gh repo create --help` listing `--public` is not a repo created;
+`node --check` passing on the figma-compare scripts is not the harness run
+against a comp; "`/dev` routes 404 in production" was verified by observing that
+the guard file exists in both repos, with no production build loaded; the
+scroll-reveal no-JS spec was read, not mutated to watch it go red. Several
+severities were corrected downward on contact — the missing capability-index
+mention in the skills is belt-and-braces now that `docs/COMPONENTS.md` is tracked
+and `CLAUDE.md` points every session at it, and the chrome-link prerender failure
+names its own referrer in the error, so it costs one failed build rather than an
+afternoon. Two side effects are worth recording because someone will otherwise
+pay for them without knowing why: the starter-health agent's unsandboxed run of
+`playwright install chromium` made Playwright 1.62.1 evict the cached
+`chromium-1243` and `chromium_headless_shell-1243` builds from
+`~/Library/Caches/ms-playwright`, so every other checkout pinned to 1243 will
+re-download them on its next install; and one agent briefly wrote a probe script
+into the `reddoor-maintenance` checkout before deleting it seconds later.
+
+**Nothing was fixed today.** No file in this repo changed; this entry is the only
+artifact. The skill patches — the `--name` argument, the rebuild step, the gate
+order, the Typekit and Turnstile traps — are being made in the `claude-skills`
+repo, and the template-side work (bump maintenance to 0.96.0 behind a
+sentinel-aware a11y audit, the CI pin to v1.4.2, and the VLF backports named
+above) is a separate batch that has not landed.
