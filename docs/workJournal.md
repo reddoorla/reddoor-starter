@@ -177,7 +177,7 @@ diligence. `CLAUDE.md`'s existing rules tell you to demand positive evidence and
 to enumerate the class; neither tells you to ask **under what invocation the
 evidence was produced, and whether that is the invocation that fails.**
 
-## 2026-09-17 — Ready for site #2, except the a11y gate has been measuring a 404 page (audit only, no code change; `docs/site-2-readiness-audit`)
+## 2026-09-17 — Ready for site #2, except the a11y gate has been measuring a 404 page (audit only, no code change; #147)
 
 A fifteen-agent workflow asked one question before the second client site is built
 from this template: can `/new-site` clone `origin/main` today and produce a green
