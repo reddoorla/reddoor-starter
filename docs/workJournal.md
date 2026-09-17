@@ -215,6 +215,17 @@ a pass. The line `0 violations` was true and meant nothing — the exact shape
 CLAUDE.md's "a pass needs positive evidence" rule names. 0.96.0 did not create a
 red; it converted a false green into an honest one.
 
+**Honest accounting: that diagnosis is not this session's.** It was made and
+measured in the 2026-09-17 readiness audit (#147), whose verifier pinned 0.93.1
+with `a11yRoutes ["/"]` in a clone and watched `pnpm test:a11y` exit 0 printing
+"0 violations across 2 routes" for a home page that does not exist, then pinned
+0.96.0 with the same config and watched it exit 1. This session measured only
+the two runs above — 0.96.0 with `["/"]` and with `[]` — and did not re-run
+0.93.1. Anyone re-deriving the blast radius should read #147's entry, not this
+one; it also records the part that made the timing matter, which is that the red
+would otherwise have landed on the grouped `renovate/all-minor-patch` PR on
+2026-09-21, stalling eight unrelated updates behind one 404.
+
 **The fix here is a workaround, and the better one is filed.** The template set
 `a11yRoutes` to `[]` and `docs/NEW-SITE.md` grew a section saying why, and
 saying that a real site adds `"/"` back at `/new-site` step 6 once the Prismic
