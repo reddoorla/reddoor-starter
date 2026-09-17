@@ -14,8 +14,9 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     // scripts/ too: the capability index and its prompt hook live there, and a
-    // repo-invariant test that never runs is a comment.
-    include: ["src/**/*.test.{js,ts}", "scripts/**/*.test.{js,ts}"],
+    // repo-invariant test that never runs is a comment. netlify/ for the same
+    // reason: the edge functions deploy from there, outside src/.
+    include: ["src/**/*.test.{js,ts}", "scripts/**/*.test.{js,ts}", "netlify/**/*.test.{js,ts}"],
     setupFiles: ["./vitest-setup.ts"],
     server: {
       deps: {
