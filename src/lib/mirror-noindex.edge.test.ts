@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import mirrorNoindex, { config } from "./mirror-noindex";
+// Lives in src/, not beside the function: Netlify bundles EVERY file in
+// netlify/edge-functions/ as an edge function, and a test file there fails the
+// deploy trying to load vitest on Deno ("Bundling of edge function failed").
+import mirrorNoindex, { config } from "../../netlify/edge-functions/mirror-noindex";
 
 // The edge function is the only layer that runs in front of PRERENDERED pages:
 // Netlify serves those straight from the CDN without invoking the SvelteKit
