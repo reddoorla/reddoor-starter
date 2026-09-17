@@ -13,15 +13,16 @@ grep -rn "your-prismic-repo-name\|reddoor-wireframer\|<Site name>\|<Client>" \
 
 ## Identity
 
-| File                       | Change                                                                                                                                         |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `package.json` → `name`    | The site slug. Fleet audits match sites to Airtable rows by this.                                                                              |
-| `.github/workflows/ci.yml` | `netlify-site: "<slug>"` — drives the deploy-preview link CI comments on every PR.                                                             |
-| `slicemachine.config.json` | `repositoryName` → the real Prismic repo. **See "Placeholder builds" below.**                                                                  |
-| `src/lib/seo.ts`           | `SITE_NAME` (defaults to `"Reddoor"` — every `<title>` says so until you change it), `SITE_LOCALE`, `DEFAULT_DESCRIPTION`, `DEFAULT_OG_IMAGE`. |
-| `src/app.html`             | `<html lang>` if the primary language is not English.                                                                                          |
-| `static/favicon.png`       | The client's icon.                                                                                                                             |
-| `README.md`                | `<Site name>` and `<Client>`.                                                                                                                  |
+| File                                  | Change                                                                                                                                         |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `package.json` → `name`               | The site slug. Fleet audits match sites to Airtable rows by this.                                                                              |
+| `.github/workflows/ci.yml`            | `netlify-site: "<slug>"` — drives the deploy-preview link CI comments on every PR.                                                             |
+| `slicemachine.config.json`            | `repositoryName` → the real Prismic repo. **See "Placeholder builds" below.**                                                                  |
+| `src/lib/seo.ts`                      | `SITE_NAME` (defaults to `"Reddoor"` — every `<title>` says so until you change it), `SITE_LOCALE`, `DEFAULT_DESCRIPTION`, `DEFAULT_OG_IMAGE`. |
+| `src/app.html`                        | `<html lang>` if the primary language is not English.                                                                                          |
+| `static/favicon.png`                  | The client's icon.                                                                                                                             |
+| `README.md`                           | `<Site name>` and `<Client>`.                                                                                                                  |
+| `package.json` → `reddoor.a11yRoutes` | The site's real routes, once the Prismic repo has content. Ships `[]`. **See "The a11y gate's routes" below.**                                 |
 
 ## Design
 
@@ -101,6 +102,53 @@ to 404 — every gate agreeing about a site that does not exist. Since #120,
 hatch is set and `CI` or `NETLIFY` is, so the failure is loud at the point
 someone reaches for it. A site whose Prismic repository is not ready should
 stay red, or keep the sentinel in `slicemachine.config.json`.
+
+## The a11y gate's routes
+
+`package.json` → `reddoor.a11yRoutes` is the list of this site's own pages that
+`pnpm test:a11y` loads and scans with axe. **The template ships it empty, and
+that is not the state a real site stays in.**
+
+It ships empty because of the sentinel above. Since `@reddoorla/maintenance`
+0.96.0 the audit checks each configured route's HTTP status first: anything that
+is not a 200 is recorded as `route-missing` / `serious` and fails the gate,
+instead of running axe over whatever the error page happens to render
+(reddoor-maintenance #680 — a designed 404 watermark once reported as a markup
+violation with no route named). The template sits on `your-prismic-repo-name`
+permanently, so `/` 404s **by design** here: `src/routes/[[preview=preview]]/+page.server.ts`
+calls `error(404)` while `isPlaceholderRepo`, and `tests/smoke/routes.ts`
+expects exactly that 404. A template that kept `["/"]` would therefore ship its
+own CI red — and before 0.96.0 it was worse than red: the gate was quietly
+running axe against the 404 page and reporting a green.
+
+Empty is not "gate off". The audit still scans `/dev/a11y-fixtures` and
+`/dev/animate-in` and still hydration-smokes `/`, so a real regression in the
+shared chrome or the fixtures is still caught; what it does not do is claim to
+have scanned a page of the site.
+
+**A real site adds its routes back at `/new-site` step 6**, once
+`slicemachine.config.json` names the real Prismic repository and a `home`
+document is published:
+
+```jsonc
+// package.json
+"reddoor": { "a11yRoutes": ["/", "/about", "/contact"] }
+```
+
+Grow the list as routes land — it is part of the definition of done for
+`/figma-slices`, the same way `tests/smoke/routes.ts` is. At that point the
+0.96.0 status guard becomes a real positive-evidence check: the gate passes only
+if the route actually served a 200 and axe actually scanned it. Left empty on a
+live site, every PR would report "axe 0 violations" having looked at no page of
+the site at all — that hole once let a critical `image-alt` violation ship to
+five production pages with CI green.
+
+Note the ordering trap: `/new-site` step 3c asks for the gates to be pointed at
+real routes at bootstrap, which is before step 6 replaces the sentinel. Between
+those two steps `/` still 404s, so `["/"]` is red for a reason that is not a
+defect in the site. Until the audit is sentinel-aware
+(reddoor-maintenance#863), a site in that window keeps `[]` and adds its routes
+with the repository name, in one commit.
 
 ## Before pushing
 
