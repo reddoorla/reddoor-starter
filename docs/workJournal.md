@@ -497,3 +497,44 @@ because the fixture was never the failing element — the footer was.
 `grep -rn "text-secondary"` returns eight files and was available the whole
 time. CLAUDE.md already says to enumerate the class before fixing an instance;
 this session still had to pay for it once before doing so.
+
+## 2026-09-29 — The none-hued Tailwind palette gets explicit hues, so axe can measure the Hero (#152, PR to follow)
+
+Tailwind 4.3 writes 13 palette entries with a `none` hue: every `neutral-*`,
+`zinc-50` and `mauve-50`. The Hero slice's `bg-neutral-900`, for example, is
+`oklch(20.5% 0 none)`. Browsers render `none` as 0. axe-core 4.13.0, the
+latest release, cannot parse it. The Hero's white "Explore" CTA sits on that
+band, so axe finds the CTA's white first. It then parses every element under
+the CTA to build the stacking context, reaches the band, and throws. The
+color-contrast rule is skipped for the whole `/dev/a11y-fixtures` page. The
+gate fails only on violations, so the page read as clean. Contrast had not
+been measured there at all.
+
+@reddoorla/maintenance#916 turns that crash into a `rule-errored` failure. It
+also turns text sitting directly on such a colour into a
+`contrast-unmeasured` failure. Measured in a copy of this repo at `f96b4ac`
+with a packed build of that PR:
+
+- On main: `rule-errored on a11y fixtures`. The crash node was the CTA
+  (`.inline-block`), and 0 color-contrast nodes were measured on the page.
+- With this change: `0 violations across 2 routes`. 64 color-contrast nodes
+  were measured on the fixtures page.
+- On main with the locked 0.97.0: `0 violations`. That was the blind green.
+
+The fix overrides the 13 tokens in `@theme` with Tailwind 4.3.3's own values,
+with the hue written as 0. The screenshots of `oklch(L 0 none)` and
+`oklch(L 0 0)` are byte-identical at all 11 lightness values, so nothing on
+screen moves. Once Tailwind or axe is fixed upstream, the override can go,
+but only after the gate has been seen passing without it.
+
+The override sits inside the `@theme` block that `theme-contrast.test.ts`
+scans, and it stays there. That put the 13 tokens in front of a guard that
+read only hex. A later `text-neutral-600` would have failed as unclassified,
+and classifying it would then have failed as "cannot measure oklch". This
+was found by review, by adding a throwaway `text-neutral-600` line. The guard
+now reads an achromatic `oklch(L 0 H)` as the sRGB encoding of L³ in linear
+light, which gives Tailwind's own greys: #fafafa, #525252, #171717, #0a0a0a.
+It still refuses a `none` hue. With the fix, the same probe passes both
+steps (15 tests), and the probe was removed. This is the first part of #152.
+Field's `red-600` failing AA off white, the issue's second part, is not
+touched here.

@@ -67,12 +67,32 @@ function parseThemeColors(css: string): Record<string, string> {
   return out;
 }
 
+/**
+ * An achromatic `oklch(L 0 H)`, the form app.css gives Tailwind's none-hued
+ * greys (#152). With chroma 0, OKLab's a and b are 0, every LMS cone response
+ * equals L, and linear sRGB is L³ in all three channels; this is that value,
+ * sRGB-encoded to 8 bits (`oklch(20.5% 0 0)` is #171717, neutral-900). The
+ * hue must be a number: a `none` hue is exactly what axe cannot parse, so this
+ * guard refuses it too. Null for anything else.
+ */
+function achromaticOklch(value: string): Rgb | null {
+  const m = /^oklch\(\s*([\d.]+)(%?)\s+0(?:\.0+)?%?\s+-?[\d.]+(?:deg)?\s*\)$/i.exec(value);
+  if (!m) return null;
+  const lightness = Number(m[1]) / (m[2] ? 100 : 1);
+  const linear = lightness ** 3;
+  const encoded = linear <= 0.0031308 ? 12.92 * linear : 1.055 * linear ** (1 / 2.4) - 0.055;
+  const channel = Math.round(Math.min(1, Math.max(0, encoded)) * 255);
+  return [channel, channel, channel];
+}
+
 function toRgb(value: string, token: string): Rgb {
+  const grey = achromaticOklch(value);
+  if (grey) return grey;
   const v = NAMED[value] ?? value;
   if (!v.startsWith("#")) {
     throw new Error(
       `--color-${token} is "${value}", which this guard cannot measure. ` +
-        `Use a hex value, or add it to NAMED if it is a named colour.`,
+        `Use a hex value, an achromatic oklch(L 0 0), or add it to NAMED if it is a named colour.`,
     );
   }
   const h = v.slice(1).length === 3 ? v.slice(1).replace(/./g, (c) => c + c) : v.slice(1);
@@ -143,6 +163,23 @@ describe("theme contrast", () => {
       ).toBeGreaterThanOrEqual(AA_NORMAL_TEXT);
     },
   );
+
+  /**
+   * The 13 none-hued Tailwind tokens app.css overrides with a 0 hue (#152) are
+   * in this @theme block, so a `text-neutral-*` in src is classified here
+   * like any other token, and this guard has to be able to measure it. These
+   * are Tailwind's own sRGB values for the same greys.
+   */
+  it("measures the none-hued palette overrides, and refuses a none hue", () => {
+    const overrides = Object.keys(colors).filter((t) => /^(neutral-\d+|zinc-50|mauve-50)$/.test(t));
+    expect(overrides).toHaveLength(13);
+    for (const token of overrides) expect(() => resolveToken(token)).not.toThrow();
+    expect(resolveToken("neutral-50")).toEqual([250, 250, 250]);
+    expect(resolveToken("neutral-600")).toEqual([82, 82, 82]);
+    expect(resolveToken("neutral-900")).toEqual([23, 23, 23]);
+    expect(resolveToken("neutral-950")).toEqual([10, 10, 10]);
+    expect(() => toRgb("oklch(20.5% 0 none)", "neutral-900")).toThrow(/cannot measure/);
+  });
 
   /**
    * Completeness, so the lists above cannot quietly fall behind the markup.

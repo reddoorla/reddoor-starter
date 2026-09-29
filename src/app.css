@@ -21,6 +21,28 @@
   --color-secondary: #6b7280;
   --color-accent: #2563eb;
 
+  /* Tailwind 4.3 writes 13 of its palette entries with a `none` hue — every
+     neutral, zinc-50 and mauve-50, e.g. neutral-900 is `oklch(20.5% 0 none)`.
+     Browsers render `none` as 0, but axe-core 4.13 cannot parse it: text on
+     such a colour is never measured for contrast, and with a white CTA inside
+     the band (the Hero slice) axe's color-contrast rule throws and skips the
+     whole page. @reddoorla/maintenance's a11y gate fails both (#916). These
+     are Tailwind 4.3.3's values with the hue written as 0, which renders
+     identically. */
+  --color-neutral-50: oklch(98.5% 0 0);
+  --color-neutral-100: oklch(97% 0 0);
+  --color-neutral-200: oklch(92.2% 0 0);
+  --color-neutral-300: oklch(87% 0 0);
+  --color-neutral-400: oklch(70.8% 0 0);
+  --color-neutral-500: oklch(55.6% 0 0);
+  --color-neutral-600: oklch(43.9% 0 0);
+  --color-neutral-700: oklch(37.1% 0 0);
+  --color-neutral-800: oklch(26.9% 0 0);
+  --color-neutral-900: oklch(20.5% 0 0);
+  --color-neutral-950: oklch(14.5% 0 0);
+  --color-zinc-50: oklch(98.5% 0 0);
+  --color-mauve-50: oklch(98.5% 0 0);
+
   /* Type — set per project. Self-host the brand's licensed woff2 files under
      static/fonts (preload the body face in app.html) or load a kit, then
      point these at the loaded family names. Until then the system stack
