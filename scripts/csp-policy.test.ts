@@ -5,7 +5,7 @@
 // under jsdom ("new TextEncoder().encode('') instanceof Uint8Array is
 // incorrectly false", a cross-realm Uint8Array). Asserting against the actual
 // exported config is the whole point; a hand-copied policy would prove nothing.
-import { describe, it, expect } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { SVELTE_EVENT_REPLAY_HASH } from "@reddoorla/maintenance/configs/svelte";
 
@@ -55,20 +55,52 @@ describe("the Prismic toolbar under this site's policy", () => {
   const slicemachine = JSON.parse(
     readFileSync(new URL("../slicemachine.config.json", import.meta.url), "utf8"),
   ) as { repositoryName: string };
+  const repository = process.env.VITE_PRISMIC_ENVIRONMENT || slicemachine.repositoryName;
+  const matching = (directive: string, needle: string) =>
+    ((directives as Record<string, string[] | undefined>)[directive] ?? []).filter((source) =>
+      source.includes(needle),
+    );
 
   it("lets the toolbar scripts load from prismic.io's toolbar path, and nothing else there", () => {
-    expect(directives["script-src"]).toContain("https://prismic.io/prismic-toolbar/");
-    expect(directives["script-src"]).not.toContain("https://prismic.io");
+    expect(matching("script-src", "prismic.io")).toEqual([
+      "https://static.cdn.prismic.io",
+      "https://prismic.io/prismic-toolbar/",
+    ]);
   });
 
   it("lets the toolbar's Share button load html2canvas, and only that file", () => {
-    expect(directives["script-src"]).toContain(
+    expect(matching("script-src", "hertzen.com")).toEqual([
       "https://html2canvas.hertzen.com/dist/html2canvas.min.js",
-    );
+    ]);
   });
 
   it("frames only this site's own Prismic repository", () => {
-    expect(directives["frame-src"]).toContain(`https://${slicemachine.repositoryName}.prismic.io`);
-    expect(directives["frame-src"]).not.toContain("https://*.prismic.io");
+    expect(matching("frame-src", "prismic.io")).toEqual([`https://${repository}.prismic.io`]);
+  });
+
+  describe("when VITE_PRISMIC_ENVIRONMENT names the repository", () => {
+    afterEach(() => {
+      vi.unstubAllEnvs();
+      vi.resetModules();
+    });
+
+    const load = async (name: string) => {
+      vi.stubEnv("VITE_PRISMIC_ENVIRONMENT", name);
+      vi.resetModules();
+      return (await import("../svelte.config.js")).default;
+    };
+
+    it("frames that repository, not slicemachine's", async () => {
+      const loaded = await load("other-repo");
+      expect(
+        (loaded.kit?.csp?.directives?.["frame-src"] ?? []).filter((s: string) =>
+          s.includes("prismic.io"),
+        ),
+      ).toEqual(["https://other-repo.prismic.io"]);
+    });
+
+    it("refuses a name that would write another directive into the policy", async () => {
+      await expect(load("x; script-src *")).rejects.toThrow("is not a repository name");
+    });
   });
 });

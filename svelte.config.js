@@ -9,6 +9,12 @@ const slicemachine = JSON.parse(
 const PLACEHOLDER_SENTINEL = "your-prismic-repo-name";
 const prismicRepository = process.env.VITE_PRISMIC_ENVIRONMENT || slicemachine.repositoryName;
 const isPlaceholderRepo = prismicRepository === PLACEHOLDER_SENTINEL;
+if (!/^[a-z0-9][a-z0-9-]*$/i.test(prismicRepository)) {
+  throw new Error(
+    `Prismic repository name ${JSON.stringify(prismicRepository)} is not a repository name; ` +
+      "it is written into the CSP frame-src, so it must be letters, digits and hyphens only.",
+  );
+}
 
 // The env-var route to the sentinel is a LOCAL-ONLY hatch (#120). Set in CI
 // or on Netlify it makes `entries()` return [] so `/` is never prerendered,
