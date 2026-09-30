@@ -2,6 +2,7 @@
 // refusal that keeps the gate's flag out of a deploy. See +layout.server.ts.
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { spawnSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 
@@ -51,6 +52,18 @@ describe("/dev guard", () => {
 });
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+
+// reddoor-maintenance's launch pre-flight (`carriesGuard`) recognises this
+// guard only as a literal `if (!dev)` whose own branch refuses. A flattened
+// `if (!dev && …)` behaves the same and blocks launch.
+describe("/dev guard shape", () => {
+  it("keeps the refusal inside a literal `if (!dev)` branch", () => {
+    const code = readFileSync(resolve(repoRoot, "src/routes/dev/+layout.server.ts"), "utf-8")
+      .replace(/\/\*[\s\S]*?\*\//g, "")
+      .replace(/\/\/.*$/gm, "");
+    expect(code).toMatch(/if\s*\(\s*!\s*dev\s*\)\s*\{[^}]*error\s*\(\s*404/);
+  });
+});
 
 function importConfigUnder(env: { netlify?: boolean; flag?: boolean }) {
   const child = { ...process.env };
