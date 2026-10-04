@@ -22,7 +22,7 @@ export const SERVICE_HOSTS: Record<EmbedService | FontService, string[]> = {
 };
 
 const ANALYTICS_PATTERNS = [
-  /\binitAnalytics\s*\(/,
+  /(?<!function\s+)\binitAnalytics\s*\(/,
   /googletagmanager\.com\/(gtag\/js|gtm\.js)/,
   /\bgtag\s*\(\s*["']config["']/,
 ];
@@ -84,18 +84,27 @@ function sourceHost(source: string): string | null {
   return (m[1] ?? "") + m[2];
 }
 
-export function cspAdmits(directives: CspDirectives, host: string): boolean {
-  for (const [name, value] of Object.entries(directives)) {
-    if (name.startsWith("report") || !Array.isArray(value)) continue;
-    for (const entry of value) {
-      if (typeof entry !== "string") continue;
-      const h = sourceHost(entry);
-      if (h === null) continue;
-      if (h === "*" || h === host) return true;
-      if (h.startsWith("*.") && host.endsWith(h.slice(1))) return true;
-    }
+export const CSP_FALLBACK: Record<EmbedService | FontService, string[]> = {
+  vimeo: ["frame-src", "child-src", "default-src"],
+  youtube: ["frame-src", "child-src", "default-src"],
+  googleFonts: ["style-src", "default-src"],
+  adobeFonts: ["style-src", "default-src"],
+};
+
+function listAdmits(value: unknown[], host: string): boolean {
+  for (const entry of value) {
+    if (typeof entry !== "string") continue;
+    const h = sourceHost(entry);
+    if (h === null) continue;
+    if (h === "*" || h === host) return true;
+    if (h.startsWith("*.") && host.endsWith(h.slice(1))) return true;
   }
   return false;
+}
+
+export function cspAdmits(directives: CspDirectives, host: string, fallback: string[]): boolean {
+  const name = fallback.find((d) => Array.isArray(directives[d]));
+  return name !== undefined && listAdmits(directives[name] as unknown[], host);
 }
 
 export function deriveBuildServices(input: {
@@ -107,7 +116,8 @@ export function deriveBuildServices(input: {
   const named = (service: EmbedService | FontService) =>
     code.some((c) => SERVICE_HOSTS[service].some((h) => c.includes(h)));
   const admitted = (service: EmbedService | FontService) =>
-    input.csp !== null && SERVICE_HOSTS[service].some((h) => cspAdmits(input.csp!, h));
+    input.csp !== null &&
+    SERVICE_HOSTS[service].some((h) => cspAdmits(input.csp!, h, CSP_FALLBACK[service]));
   const embed = (service: EmbedService) =>
     input.csp === null ? named(service) : admitted(service);
   const font = (service: FontService) =>
@@ -116,7 +126,7 @@ export function deriveBuildServices(input: {
 
   return {
     forms: ingest.length > 0,
-    newsletter: ingest.some((c) => /\bformType\s*:\s*["'`]newsletter["'`]/.test(c)),
+    newsletter: ingest.length > 0 && code.some((c) => /["'`]newsletter["'`]/.test(c)),
     ga4: code.some(startsAnalytics),
     netlify: input.adapterName === "@sveltejs/adapter-netlify",
     vimeo: embed("vimeo"),

@@ -76,15 +76,15 @@ The services the page lists are not written by hand. `scripts/privacy-services.t
 reads the site at build time: the CSP that `svelte.config.js` resolves to (so a
 `createSvelteConfig` baseline counts), and the code under `src/`.
 
-| Service                   | On when                                                                                    |
-| ------------------------- | ------------------------------------------------------------------------------------------ |
-| Central forms             | a route calls `createIngestAction` or `createIngestEndpoint`                               |
-| Newsletter mailing list   | one of those calls has `formType: "newsletter"`                                            |
-| Cloudflare Turnstile      | forms are on and `PUBLIC_TURNSTILE_SITE_KEY` is set (read per request, as the widget does) |
-| Google Analytics 4        | the code calls `initAnalytics(`, `gtag("config"`, or loads `gtag/js` or `gtm.js`           |
-| Vimeo, YouTube            | the CSP admits the player host (CMS content can embed it); with no CSP, `src/` names it    |
-| Google Fonts, Adobe Fonts | `src/` loads the font host and the CSP admits it                                           |
-| Netlify                   | the adapter is `@sveltejs/adapter-netlify`                                                 |
+| Service                   | On when                                                                                                                                 |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Central forms             | a route calls `createIngestAction` or `createIngestEndpoint`                                                                            |
+| Newsletter mailing list   | forms are on and any file under `src/` uses the string `"newsletter"`                                                                   |
+| Cloudflare Turnstile      | forms are on and `PUBLIC_TURNSTILE_SITE_KEY` is set (read per request, as the widget does)                                              |
+| Google Analytics 4        | the code calls (not defines) `initAnalytics(`, calls `gtag("config"`, or loads `gtag/js` or `gtm.js`                                    |
+| Vimeo, YouTube            | `frame-src` (else `child-src`, else `default-src`) admits the player host, since CMS content can embed it; with no CSP, `src/` names it |
+| Google Fonts, Adobe Fonts | `src/` loads the font host and `style-src` (else `default-src`) admits it; with no CSP, `src/` alone                                    |
+| Netlify                   | the adapter is `@sveltejs/adapter-netlify`                                                                                              |
 
 Comments do not count, and neither do tests, `src/routes/dev` or the privacy
 code itself. **Trim the CSP to what the site uses**: the starter admits Vimeo,
@@ -94,6 +94,8 @@ Mailchimp or a webhook is chosen on the site's central row, which the site's
 code cannot see.
 
 While the policy is a DRAFT the page is `noindex` and left out of the sitemap.
+A Prismic `page` document with the uid `privacy` is shadowed by this route and
+would still be listed by the sitemap's Prismic query, so do not create one.
 
 The text is a **DRAFT** until a lawyer has reviewed it once
 (reddoor-maintenance BACKLOG Operator decision 45). The banner is

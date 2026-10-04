@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync, symlinkSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -50,6 +50,20 @@ describe("collectBuildServices", () => {
       `const base = { "frame-src": ["https://*.vimeo.com"] };
 export default { kit: { csp: { directives: { ...base } } } };`,
     );
+    expect((await collectBuildServices(root)).vimeo).toBe(true);
+  });
+
+  it("finishes on a source tree with symlink cycles", async () => {
+    put("src/a/x.ts", "export {};");
+    put("src/b/y.ts", "export {};");
+    symlinkSync(join(root, "src"), join(root, "src/a/up"));
+    symlinkSync(join(root, "src"), join(root, "src/b/up2"));
+    expect((await collectBuildServices(root)).forms).toBe(false);
+  });
+
+  it("keeps a CSP with no directives from counting as a CSP", async () => {
+    put("svelte.config.js", `export default { kit: { csp: { directives: {} } } };`);
+    put("src/lib/V.svelte", `<iframe src="https://player.vimeo.com/video/1"></iframe>`);
     expect((await collectBuildServices(root)).vimeo).toBe(true);
   });
 

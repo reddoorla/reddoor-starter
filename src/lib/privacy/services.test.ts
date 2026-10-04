@@ -54,6 +54,10 @@ describe("startsAnalytics", () => {
     expect(startsAnalytics(`"https://www.googletagmanager.com/gtm.js?id=GTM-ABC123"`)).toBe(true);
   });
 
+  it("does not take a site's own definition of initAnalytics for a call", () => {
+    expect(startsAnalytics(`export function initAnalytics(id: string) {}`)).toBe(false);
+  });
+
   it("does not take a mention of the package for a call", () => {
     expect(startsAnalytics(`import { initAnalytics } from "@reddoorla/maintenance/client";`)).toBe(
       false,
@@ -65,6 +69,22 @@ describe("maskComments", () => {
   it("keeps URLs inside strings while dropping line comments", () => {
     const out = maskComments(`const a = "https://player.vimeo.com"; // https://use.typekit.net`);
     expect(out).toContain("https://player.vimeo.com");
+    expect(out).not.toContain("typekit");
+  });
+
+  it("drops a block comment in script", () => {
+    const out = maskComments(`const a = 1; /* "https://use.typekit.net" */ const b = 2;`);
+    expect(out).not.toContain("typekit");
+    expect(out).toContain("const b = 2;");
+  });
+
+  it("keeps an escaped quote inside a string from ending it", () => {
+    const out = maskComments(`const a = "x\\" // y"; const u = "https://player.vimeo.com";`);
+    expect(out).toContain("https://player.vimeo.com");
+  });
+
+  it("closes an unterminated quote at the end of its line", () => {
+    const out = maskComments(`const a = "open\n// https://use.typekit.net\nconst b = 1;`);
     expect(out).not.toContain("typekit");
   });
 
@@ -96,15 +116,39 @@ describe("maskComments", () => {
 });
 
 describe("cspAdmits", () => {
-  it("matches exact hosts, wildcards and scheme-only sources, ignoring report targets", () => {
-    expect(cspAdmits(CSP, "player.vimeo.com")).toBe(true);
-    expect(cspAdmits({ "frame-src": ["https://*.vimeo.com"] }, "player.vimeo.com")).toBe(true);
-    expect(cspAdmits({ "frame-src": ["https:"] }, "www.youtube.com")).toBe(true);
-    expect(cspAdmits({ "frame-src": ["'self'"] }, "player.vimeo.com")).toBe(false);
-    expect(cspAdmits({ "report-uri": ["https://player.vimeo.com"] }, "player.vimeo.com")).toBe(
+  const FRAME = ["frame-src", "child-src", "default-src"];
+
+  it("matches exact hosts, wildcards and scheme-only sources", () => {
+    expect(cspAdmits(CSP, "player.vimeo.com", FRAME)).toBe(true);
+    expect(cspAdmits({ "frame-src": ["https://*.vimeo.com"] }, "player.vimeo.com", FRAME)).toBe(
+      true,
+    );
+    expect(cspAdmits({ "frame-src": ["https:"] }, "www.youtube.com", FRAME)).toBe(true);
+    expect(cspAdmits({ "frame-src": ["'self'"] }, "player.vimeo.com", FRAME)).toBe(false);
+    expect(cspAdmits({ "frame-src": ["https://notvimeo.com"] }, "player.vimeo.com", FRAME)).toBe(
       false,
     );
-    expect(cspAdmits({ "frame-src": ["https://notvimeo.com"] }, "player.vimeo.com")).toBe(false);
+  });
+
+  it("does not let a wildcard admit its own bare host", () => {
+    expect(
+      cspAdmits({ "frame-src": ["https://*.player.vimeo.com"] }, "player.vimeo.com", FRAME),
+    ).toBe(false);
+  });
+
+  it("reads only the directive that governs the request, with CSP's fallback", () => {
+    expect(cspAdmits({ "img-src": ["https:"] }, "player.vimeo.com", FRAME)).toBe(false);
+    expect(
+      cspAdmits({ "report-uri": ["https://player.vimeo.com"] }, "player.vimeo.com", FRAME),
+    ).toBe(false);
+    expect(cspAdmits({ "default-src": ["https:"] }, "player.vimeo.com", FRAME)).toBe(true);
+    expect(
+      cspAdmits(
+        { "frame-src": ["self"], "default-src": ["https://player.vimeo.com"] },
+        "player.vimeo.com",
+        FRAME,
+      ),
+    ).toBe(false);
   });
 });
 
@@ -128,6 +172,19 @@ describe("deriveBuildServices", () => {
     expect(derive([HOOK]).forms).toBe(false);
   });
 
+  it("finds a newsletter whose formType is set in the component that posts it", () => {
+    const endpoint = src(
+      "src/routes/api/forms/+server.ts",
+      `export const POST = createIngestEndpoint({ buildPayload: (b) => ({ formType: b.formType }) });`,
+    );
+    const signup = src(
+      "src/lib/NewsletterSignup.svelte",
+      `<script>submitForm({ "formType": "newsletter" });</script>`,
+    );
+    expect(derive([endpoint, signup]).newsletter).toBe(true);
+    expect(derive([signup]).newsletter).toBe(false);
+  });
+
   it("turns the newsletter on only for a newsletter form", () => {
     expect(derive([CONTACT]).newsletter).toBe(false);
     const signup = src(
@@ -135,6 +192,11 @@ describe("deriveBuildServices", () => {
       `export const POST = createIngestEndpoint({ formType: "newsletter" });`,
     );
     expect(derive([signup])).toMatchObject({ forms: true, newsletter: true });
+  });
+
+  it("does not list a video host the CSP blocks, even when the source names it", () => {
+    const yt = src("src/lib/Embed.svelte", `"https://www.youtube.com/embed/x"`);
+    expect(derive([yt], { "frame-src": ["self"] }).youtube).toBe(false);
   });
 
   it("lists a video host whenever the CSP admits it, since CMS content can embed it", () => {

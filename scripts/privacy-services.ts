@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync, realpathSync, statSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 import { pathToFileURL } from "node:url";
 import type { Plugin } from "vite";
@@ -16,7 +16,15 @@ const CODE_FILE = /\.(svelte|ts|js|mjs|cjs|mts|cts|css|html)$/;
 const SKIPPED_FILE = /\.(test|spec)\.[cm]?[jt]s$|\.d\.ts$/;
 const SKIPPED_DIRS = ["src/lib/privacy", "src/routes/privacy", "src/routes/dev"];
 
-function walk(root: string, dir: string, out: SourceFile[]): void {
+function walk(root: string, dir: string, out: SourceFile[], seen = new Set<string>()): void {
+  let real: string;
+  try {
+    real = realpathSync(dir);
+  } catch {
+    return;
+  }
+  if (seen.has(real)) return;
+  seen.add(real);
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     const rel = relative(root, full).split(sep).join("/");
@@ -27,7 +35,7 @@ function walk(root: string, dir: string, out: SourceFile[]): void {
       continue;
     }
     if (stats.isDirectory()) {
-      if (!SKIPPED_DIRS.includes(rel) && entry !== "node_modules") walk(root, full, out);
+      if (!SKIPPED_DIRS.includes(rel) && entry !== "node_modules") walk(root, full, out, seen);
     } else if (CODE_FILE.test(entry) && !SKIPPED_FILE.test(entry)) {
       out.push({ path: rel, text: readFileSync(full, "utf8") });
     }
@@ -39,7 +47,9 @@ type KitConfig = { kit?: { csp?: { directives?: CspDirectives }; adapter?: { nam
 async function readSvelteConfig(root: string): Promise<KitConfig> {
   const path = join(root, "svelte.config.js");
   if (!existsSync(path)) return {};
-  const mod = (await import(pathToFileURL(path).href)) as {
+  const href = pathToFileURL(path).href;
+  const fresh = process.env.VITEST ? href : `${href}?t=${statSync(path).mtimeMs}`;
+  const mod = (await import(fresh)) as {
     default?: KitConfig;
   };
   return mod.default ?? {};

@@ -122,7 +122,15 @@ describe("the privacy page", () => {
   it("answers whether others track visitors across sites, whatever is switched on", () => {
     expect(text(page().getByTestId("privacy-tracking"))).toMatch(/No other party/);
     cleanup();
-    for (const id of ["ga4", "vimeo", "youtube", "googleFonts", "adobeFonts", "turnstile"]) {
+    for (const id of [
+      "forms",
+      "ga4",
+      "vimeo",
+      "youtube",
+      "googleFonts",
+      "adobeFonts",
+      "turnstile",
+    ]) {
       expect(text(page({ [id]: true }).getByTestId("privacy-tracking")), id).toMatch(
         /may collect information about your online activities over time/,
       );
@@ -132,5 +140,21 @@ describe("the privacy page", () => {
 
   it("says personal information is not sold", () => {
     expect(text(page().container)).toMatch(/do not sell/);
+  });
+});
+
+describe("the form paragraph's IP sentence", () => {
+  it("names the real-browser check only when Turnstile is on", () => {
+    expect(text(page({ forms: true }).container)).not.toMatch(/confirm the form came from a real/);
+    cleanup();
+    expect(text(page({ forms: true, turnstile: true }).container)).toMatch(
+      /confirm the form came from a real browser/,
+    );
+  });
+
+  it("discloses the cross-site spam comparison with the forms recipient", () => {
+    expect(text(page({ forms: true }).getByTestId("service-forms"))).toMatch(
+      /compares your email address and message with messages sent through those websites/,
+    );
   });
 });

@@ -21,7 +21,7 @@
   const owner = $derived(p.legalName?.trim() || "[client legal name]");
   const email = $derived(p.contactEmail?.trim() || "");
   const tracksAcrossSites = $derived(
-    s.ga4 || s.vimeo || s.youtube || s.googleFonts || s.adobeFonts || s.turnstile,
+    s.forms || s.ga4 || s.vimeo || s.youtube || s.googleFonts || s.adobeFonts || s.turnstile,
   );
   const effective = $derived(formatEffectiveDate(p.effectiveDate?.trim()) ?? "[effective date]");
 </script>
@@ -60,8 +60,9 @@
       <p>
         When you send us a form, we collect what you enter, such as your name, email address, phone
         number and message, and the address of the page you sent it from, including any campaign
-        tags in that link. The IP address the form was sent from is passed to our spam check so it
-        can confirm the form came from a real browser; it is not normally stored with your message.
+        tags in that link. The IP address the form was sent from goes to Reddoor with your message{#if s.turnstile}
+          and is used to confirm the form came from a real browser{/if}. It is not saved with your
+        message, except in a backup copy kept if our system cannot file the message normally.
       </p>
     {/if}
     <p>
@@ -110,8 +111,11 @@
       {#if s.forms}
         <li data-testid="service-forms">
           Form messages go to Reddoor, the agency that builds and maintains this site for us.
-          Reddoor checks them for spam, stores them in a database hosted by Turso, and uses Resend
-          to email them to us and to send you a confirmation.
+          Reddoor checks them for spam, stores them with its spam assessment in a database hosted by
+          Turso, and uses Resend to email them to us and usually to send you a confirmation. Because
+          Reddoor handles forms for other websites too, its spam check compares your email address
+          and message with messages sent through those websites in the last 30 days, to catch the
+          same message sent to many sites.
         </li>
       {/if}
       {#if s.turnstile}
@@ -123,9 +127,10 @@
       {/if}
       {#if s.newsletter}
         <li data-testid="service-newsletter">
-          If you sign up for our newsletter, your email address is added to our mailing list, which
-          is kept by the email service that sends the newsletter. Every newsletter has a link to
-          unsubscribe.
+          If you sign up for our newsletter, your name and email address are added to our mailing
+          list, kept by the email service that sends the newsletter. They may also be passed, with
+          the page you signed up from, to an automation service that connects that list to our other
+          tools. Every newsletter has a link to unsubscribe.
         </li>
       {/if}
       {#if s.ga4}

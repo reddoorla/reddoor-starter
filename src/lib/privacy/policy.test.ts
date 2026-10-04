@@ -1,5 +1,13 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { formatEffectiveDate } from "./policy";
+
+const savedTz = process.env.TZ;
+beforeAll(() => {
+  process.env.TZ = "America/Los_Angeles";
+});
+afterAll(() => {
+  process.env.TZ = savedTz;
+});
 
 describe("formatEffectiveDate", () => {
   it("formats an ISO date in UTC, so the day never shifts", () => {
