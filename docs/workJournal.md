@@ -584,7 +584,7 @@ ignored. One consequence for a laptop checkout that still has #32's
 untracked `.claude/settings.json`: the pull will refuse to overwrite it, so
 that file has to move to `settings.local.json` first.
 
-## 2026-10-04 — The simulator leaves the public pages' bundle; an encoded path gets the simulator's framing (this PR)
+## 2026-10-04 — The simulator leaves the public pages' bundle; an encoded path gets the simulator's framing (#168)
 
 Two findings from the adversarial review of caltex-landing#69, both inherited from #166.
 
