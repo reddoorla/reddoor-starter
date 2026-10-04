@@ -1,29 +1,33 @@
 export type SourceFile = { path: string; text: string };
 
-export type HostedService = "vimeo" | "youtube" | "googleFonts" | "adobeFonts" | "mailchimp";
+export type CspDirectives = Record<string, unknown>;
 
-export type BuildServices = Record<HostedService, boolean> & {
+export type EmbedService = "vimeo" | "youtube";
+export type FontService = "googleFonts" | "adobeFonts";
+
+export type BuildServices = Record<EmbedService | FontService, boolean> & {
   forms: boolean;
+  newsletter: boolean;
   ga4: boolean;
   netlify: boolean;
 };
 
 export type PrivacyServices = BuildServices & { turnstile: boolean };
 
-export const SERVICE_HOSTS: Record<HostedService, string[]> = {
+export const SERVICE_HOSTS: Record<EmbedService | FontService, string[]> = {
   vimeo: ["player.vimeo.com"],
-  youtube: ["youtube.com", "youtube-nocookie.com"],
+  youtube: ["www.youtube.com", "youtube.com", "www.youtube-nocookie.com"],
   googleFonts: ["fonts.googleapis.com", "fonts.gstatic.com"],
-  adobeFonts: ["use.typekit.net"],
-  mailchimp: ["list-manage.com"],
+  adobeFonts: ["use.typekit.net", "p.typekit.net"],
 };
 
-const MEASUREMENT_ID_PATTERNS = [
-  /initAnalytics\s*\(\s*\{[^}]*?\bmeasurementId\s*:\s*["'`](G-[A-Z0-9]{10})["'`]/,
-  /googletagmanager\.com\/gtag\/js\?id=(G-[A-Z0-9]{10})\b/,
+const ANALYTICS_PATTERNS = [
+  /\binitAnalytics\s*\(/,
+  /googletagmanager\.com\/(gtag\/js|gtm\.js)/,
+  /\bgtag\s*\(\s*["']config["']/,
 ];
 
-export function maskComments(source: string): string {
+function maskScript(source: string): string {
   let out = "";
   let i = 0;
   let quote: string | null = null;
@@ -40,17 +44,12 @@ export function maskComments(source: string): string {
       i++;
       continue;
     }
-    if (source.startsWith("<!--", i)) {
-      const end = source.indexOf("-->", i + 4);
-      i = end === -1 ? source.length : end + 3;
-      continue;
-    }
     if (source.startsWith("/*", i)) {
       const end = source.indexOf("*/", i + 2);
       i = end === -1 ? source.length : end + 2;
       continue;
     }
-    if (source.startsWith("//", i) && source[i - 1] !== ":") {
+    if (source.startsWith("//", i) && !/[:(]/.test(source[i - 1] ?? "")) {
       const end = source.indexOf("\n", i);
       i = end === -1 ? source.length : end;
       continue;
@@ -62,36 +61,68 @@ export function maskComments(source: string): string {
   return out;
 }
 
-export function measurementIdIn(code: string): string | null {
-  for (const pattern of MEASUREMENT_ID_PATTERNS) {
-    const match = pattern.exec(code);
-    if (match) return match[1];
-  }
-  return null;
+export function maskComments(source: string, path = "file.ts"): string {
+  if (path.endsWith(".css")) return source.replace(/\/\*[\s\S]*?(\*\/|$)/g, "");
+  const markupFree = /\.(svelte|html)$/.test(path)
+    ? source.replace(/<!--[\s\S]*?(-->|$)/g, "")
+    : source;
+  return maskScript(markupFree);
 }
 
-const mentions = (code: string, hosts: string[]) => hosts.some((h) => code.includes(h));
+export function startsAnalytics(code: string): boolean {
+  return ANALYTICS_PATTERNS.some((p) => p.test(code));
+}
+
+function sourceHost(source: string): string | null {
+  const s = source.replace(/^'|'$/g, "").toLowerCase();
+  if (s === "*" || s === "https:" || s === "http:") return "*";
+  const m =
+    /^(?:[a-z][a-z0-9+.-]*:\/\/)?(\*\.)?([a-z0-9-]+(?:\.[a-z0-9-]+)+)(?::\d+|:\*)?(?:\/.*)?$/.exec(
+      s,
+    );
+  if (!m) return null;
+  return (m[1] ?? "") + m[2];
+}
+
+export function cspAdmits(directives: CspDirectives, host: string): boolean {
+  for (const [name, value] of Object.entries(directives)) {
+    if (name.startsWith("report") || !Array.isArray(value)) continue;
+    for (const entry of value) {
+      if (typeof entry !== "string") continue;
+      const h = sourceHost(entry);
+      if (h === null) continue;
+      if (h === "*" || h === host) return true;
+      if (h.startsWith("*.") && host.endsWith(h.slice(1))) return true;
+    }
+  }
+  return false;
+}
 
 export function deriveBuildServices(input: {
-  svelteConfig: string;
+  csp: CspDirectives | null;
+  adapterName?: string;
   sources: SourceFile[];
 }): BuildServices {
-  const config = maskComments(input.svelteConfig);
-  const code = input.sources.map((s) => maskComments(s.text));
-  const hasCsp = /\bcsp\s*:/.test(config) && /\bdirectives\s*:/.test(config);
-  const hosted = (service: HostedService) =>
-    code.some((c) => mentions(c, SERVICE_HOSTS[service])) &&
-    (!hasCsp || mentions(config, SERVICE_HOSTS[service]));
+  const code = input.sources.map((s) => maskComments(s.text, s.path));
+  const named = (service: EmbedService | FontService) =>
+    code.some((c) => SERVICE_HOSTS[service].some((h) => c.includes(h)));
+  const admitted = (service: EmbedService | FontService) =>
+    input.csp !== null && SERVICE_HOSTS[service].some((h) => cspAdmits(input.csp!, h));
+  const embed = (service: EmbedService) =>
+    input.csp === null ? named(service) : admitted(service);
+  const font = (service: FontService) =>
+    named(service) && (input.csp === null || admitted(service));
+  const ingest = code.filter((c) => /\bcreateIngest(Action|Endpoint)\s*\(/.test(c));
 
   return {
-    forms: code.some((c) => /\bcreateIngestAction\s*\(/.test(c)),
-    ga4: code.some((c) => measurementIdIn(c) !== null),
-    netlify: config.includes("@sveltejs/adapter-netlify"),
-    vimeo: hosted("vimeo"),
-    youtube: hosted("youtube"),
-    googleFonts: hosted("googleFonts"),
-    adobeFonts: hosted("adobeFonts"),
-    mailchimp: hosted("mailchimp"),
+    forms: ingest.length > 0,
+    newsletter: ingest.some((c) => /\bformType\s*:\s*["'`]newsletter["'`]/.test(c)),
+    ga4: code.some(startsAnalytics),
+    netlify: input.adapterName === "@sveltejs/adapter-netlify",
+    vimeo: embed("vimeo"),
+    youtube: embed("youtube"),
+    googleFonts: font("googleFonts"),
+    adobeFonts: font("adobeFonts"),
   };
 }
 

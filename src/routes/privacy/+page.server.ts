@@ -11,6 +11,7 @@ export const load: PageServerLoad = () => {
   const values = loadSiteConfig().privacy ?? {};
   return {
     title: "Privacy Policy",
+    noindex: PRIVACY_POLICY_DRAFT,
     privacy: {
       legalName: values.legalName,
       contactEmail: values.contactEmail,

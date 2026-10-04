@@ -11,7 +11,7 @@ vi.mock("virtual:privacy-services", () => ({
     youtube: false,
     googleFonts: false,
     adobeFonts: false,
-    mailchimp: false,
+    newsletter: false,
   },
 }));
 
@@ -43,5 +43,6 @@ describe("the privacy page's load", () => {
     expect(out.title).toBe("Privacy Policy");
     expect(out.privacy.services.forms).toBe(true);
     expect(out.privacy.draft).toBe(true);
+    expect((out as unknown as { noindex: boolean }).noindex).toBe(true);
   });
 });

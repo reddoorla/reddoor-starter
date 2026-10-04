@@ -13,7 +13,7 @@ const NONE: PrivacyServices = {
   youtube: false,
   googleFonts: false,
   adobeFonts: false,
-  mailchimp: false,
+  newsletter: false,
   turnstile: false,
 };
 
@@ -95,7 +95,7 @@ describe("the privacy page", () => {
     const ids = [
       "forms",
       "turnstile",
-      "mailchimp",
+      "newsletter",
       "ga4",
       "googleFonts",
       "adobeFonts",
@@ -117,6 +117,17 @@ describe("the privacy page", () => {
     expect(text(page().container)).not.toMatch(/phone number/);
     cleanup();
     expect(text(page({ forms: true }).container)).toMatch(/phone number/);
+  });
+
+  it("answers whether others track visitors across sites, whatever is switched on", () => {
+    expect(text(page().getByTestId("privacy-tracking"))).toMatch(/No other party/);
+    cleanup();
+    for (const id of ["ga4", "vimeo", "youtube", "googleFonts", "adobeFonts", "turnstile"]) {
+      expect(text(page({ [id]: true }).getByTestId("privacy-tracking")), id).toMatch(
+        /may collect information about your online activities over time/,
+      );
+      cleanup();
+    }
   });
 
   it("says personal information is not sold", () => {

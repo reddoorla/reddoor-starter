@@ -1,16 +1,23 @@
 import { describe, it, expect } from "vitest";
-import { deriveBuildServices, maskComments, measurementIdIn, type SourceFile } from "./services";
-
-const CSP_ALL = `
-import adapter from "@sveltejs/adapter-netlify";
-export default { kit: { adapter: adapter(), csp: { directives: {
-  "script-src": ["self", "https://player.vimeo.com", "https://www.youtube.com", "https://challenges.cloudflare.com"],
-  "style-src": ["self", "https://fonts.googleapis.com", "https://use.typekit.net"],
-  "form-action": ["self", "https://example.us1.list-manage.com"],
-} } } };
-`;
+import {
+  cspAdmits,
+  deriveBuildServices,
+  maskComments,
+  startsAnalytics,
+  withRuntime,
+  type BuildServices,
+  type SourceFile,
+} from "./services";
 
 const src = (path: string, text: string): SourceFile => ({ path, text });
+
+const CSP = {
+  "script-src": ["self", "https://challenges.cloudflare.com"],
+  "style-src": ["self", "unsafe-inline", "https://fonts.googleapis.com", "https://use.typekit.net"],
+  "frame-src": ["self", "https://player.vimeo.com", "https://www.youtube.com"],
+  "font-src": ["self", "https://fonts.gstatic.com"],
+  "report-uri": ["https://player.vimeo.com/should-not-count"],
+};
 
 const HOOK = src(
   "src/hooks.client.ts",
@@ -25,31 +32,32 @@ export const init = () => {
 
 const CONTACT = src(
   "src/routes/contact/+page.server.ts",
-  `import { createIngestAction } from "@reddoorla/maintenance/forms";
-export const actions = { default: createIngestAction({ formType: "contact" }) };`,
+  `export const actions = { default: createIngestAction({ formType: "contact" }) };`,
 );
 
-describe("measurementIdIn", () => {
-  it("reads the ID from an initAnalytics call", () => {
-    expect(measurementIdIn(HOOK.text)).toBe("G-ABCDEFGHIJ");
+const derive = (sources: SourceFile[], csp: Record<string, unknown> | null = CSP) =>
+  deriveBuildServices({ csp, adapterName: "@sveltejs/adapter-netlify", sources });
+
+describe("startsAnalytics", () => {
+  it("finds the analytics-tag recipe's hook", () => {
+    expect(startsAnalytics(HOOK.text)).toBe(true);
   });
 
-  it("reads the ID from a direct gtag loader", () => {
-    expect(
-      measurementIdIn(`<script src="https://www.googletagmanager.com/gtag/js?id=G-ZYXWVUTSRQ">`),
-    ).toBe("G-ZYXWVUTSRQ");
+  it("finds an ID read from env, nested options, a gtag loader and a GTM container", () => {
+    expect(startsAnalytics(`initAnalytics({ measurementId: env.PUBLIC_GA_ID })`)).toBe(true);
+    expect(startsAnalytics(`initAnalytics({ consent: { ad: false }, measurementId: "G-X" })`)).toBe(
+      true,
+    );
+    expect(startsAnalytics(`"https://www.googletagmanager.com/gtag/js?id=G-ZYXWVUTSRQ"`)).toBe(
+      true,
+    );
+    expect(startsAnalytics(`"https://www.googletagmanager.com/gtm.js?id=GTM-ABC123"`)).toBe(true);
   });
 
-  it("ignores an ID that only appears in a comment", () => {
-    expect(
-      measurementIdIn(
-        maskComments(`// initAnalytics({ measurementId: "G-ABCDEFGHIJ" })\nexport {};`),
-      ),
-    ).toBeNull();
-  });
-
-  it("ignores a malformed ID", () => {
-    expect(measurementIdIn(`initAnalytics({ measurementId: "G-123" })`)).toBeNull();
+  it("does not take a mention of the package for a call", () => {
+    expect(startsAnalytics(`import { initAnalytics } from "@reddoorla/maintenance/client";`)).toBe(
+      false,
+    );
   });
 });
 
@@ -60,94 +68,120 @@ describe("maskComments", () => {
     expect(out).not.toContain("typekit");
   });
 
-  it("drops block and HTML comments", () => {
-    const out = maskComments(`/* fonts.googleapis.com */ <!-- list-manage.com --> <p></p>`);
-    expect(out).not.toContain("googleapis");
-    expect(out).not.toContain("list-manage");
-    expect(out).toContain("<p></p>");
+  it("keeps a protocol-relative url() in CSS and drops CSS comments", () => {
+    const out = maskComments(
+      `@import url(//fonts.googleapis.com/css2); /* use.typekit.net */`,
+      "src/app.css",
+    );
+    expect(out).toContain("fonts.googleapis.com");
+    expect(out).not.toContain("typekit");
+  });
+
+  it("keeps a protocol-relative url() inside a component's style block", () => {
+    const out = maskComments(
+      `<style>@import url(//fonts.googleapis.com/css2);</style>`,
+      "src/routes/+layout.svelte",
+    );
+    expect(out).toContain("fonts.googleapis.com");
+  });
+
+  it("drops an HTML comment even after an apostrophe in markup", () => {
+    const out = maskComments(
+      `<p>We'll reply</p> <!-- https://use.typekit.net/x.css --> <p>ok</p>`,
+      "src/routes/x/+page.svelte",
+    );
+    expect(out).not.toContain("typekit");
+    expect(out).toContain("<p>ok</p>");
+  });
+});
+
+describe("cspAdmits", () => {
+  it("matches exact hosts, wildcards and scheme-only sources, ignoring report targets", () => {
+    expect(cspAdmits(CSP, "player.vimeo.com")).toBe(true);
+    expect(cspAdmits({ "frame-src": ["https://*.vimeo.com"] }, "player.vimeo.com")).toBe(true);
+    expect(cspAdmits({ "frame-src": ["https:"] }, "www.youtube.com")).toBe(true);
+    expect(cspAdmits({ "frame-src": ["'self'"] }, "player.vimeo.com")).toBe(false);
+    expect(cspAdmits({ "report-uri": ["https://player.vimeo.com"] }, "player.vimeo.com")).toBe(
+      false,
+    );
+    expect(cspAdmits({ "frame-src": ["https://notvimeo.com"] }, "player.vimeo.com")).toBe(false);
   });
 });
 
 describe("deriveBuildServices", () => {
-  it("turns GA4 on only when the site's code carries a measurement ID", () => {
-    expect(deriveBuildServices({ svelteConfig: CSP_ALL, sources: [HOOK] }).ga4).toBe(true);
-    expect(deriveBuildServices({ svelteConfig: CSP_ALL, sources: [CONTACT] }).ga4).toBe(false);
+  it("turns GA4 on only when the site's code starts analytics", () => {
+    expect(derive([HOOK]).ga4).toBe(true);
+    expect(derive([CONTACT]).ga4).toBe(false);
   });
 
   it("does not take GA4 from a CSP that merely admits Google's hosts", () => {
-    const csp = CSP_ALL.replace(`"self",`, `"self", "https://www.googletagmanager.com",`);
-    const page = src("src/app.html", `<link href="https://www.googletagmanager.com">`);
-    expect(deriveBuildServices({ svelteConfig: csp, sources: [page] }).ga4).toBe(false);
+    const csp = { ...CSP, "script-src": ["https://www.googletagmanager.com"] };
+    expect(derive([], csp).ga4).toBe(false);
   });
 
-  it("turns forms on only for a route that forwards to the central ingest", () => {
-    expect(deriveBuildServices({ svelteConfig: CSP_ALL, sources: [CONTACT] }).forms).toBe(true);
-    expect(deriveBuildServices({ svelteConfig: CSP_ALL, sources: [HOOK] }).forms).toBe(false);
-  });
-
-  it("needs both the site's source and its CSP to name a third-party host", () => {
-    const vimeo = src(
-      "src/lib/components/VimeoBanner.svelte",
-      `"https://player.vimeo.com/video/1"`,
-    );
-    expect(deriveBuildServices({ svelteConfig: CSP_ALL, sources: [vimeo] }).vimeo).toBe(true);
+  it("turns forms on for a route that forwards to the central ingest, action or endpoint", () => {
+    expect(derive([CONTACT]).forms).toBe(true);
     expect(
-      deriveBuildServices({
-        svelteConfig: CSP_ALL.replace(`"https://player.vimeo.com", `, ""),
-        sources: [vimeo],
-      }).vimeo,
-    ).toBe(false);
-    expect(deriveBuildServices({ svelteConfig: CSP_ALL, sources: [] }).vimeo).toBe(false);
+      derive([src("src/routes/api/x/+server.ts", `export const POST = createIngestEndpoint({});`)])
+        .forms,
+    ).toBe(true);
+    expect(derive([HOOK]).forms).toBe(false);
   });
 
-  it("falls back to the source alone when svelte.config.js sets no CSP", () => {
+  it("turns the newsletter on only for a newsletter form", () => {
+    expect(derive([CONTACT]).newsletter).toBe(false);
+    const signup = src(
+      "src/routes/api/newsletter/+server.ts",
+      `export const POST = createIngestEndpoint({ formType: "newsletter" });`,
+    );
+    expect(derive([signup])).toMatchObject({ forms: true, newsletter: true });
+  });
+
+  it("lists a video host whenever the CSP admits it, since CMS content can embed it", () => {
+    expect(derive([])).toMatchObject({ vimeo: true, youtube: true });
+    expect(derive([], { "frame-src": ["self"] })).toMatchObject({ vimeo: false, youtube: false });
+  });
+
+  it("lists a video host from the source alone when the site sets no CSP", () => {
+    const yt = src("src/lib/Embed.svelte", `"https://www.youtube.com/embed/x"`);
+    expect(derive([yt], null)).toMatchObject({ youtube: true, vimeo: false });
+  });
+
+  it("lists a font host only when the source loads it and the CSP admits it", () => {
     const fonts = src(
       "src/app.html",
       `<link href="https://fonts.googleapis.com/css2?family=Inter">`,
     );
-    const noCsp = `import adapter from "@sveltejs/adapter-netlify"; export default { kit: { adapter: adapter() } };`;
-    expect(deriveBuildServices({ svelteConfig: noCsp, sources: [fonts] }).googleFonts).toBe(true);
+    expect(derive([]).googleFonts).toBe(false);
+    expect(derive([fonts]).googleFonts).toBe(true);
+    expect(derive([fonts], { "style-src": ["self"] }).googleFonts).toBe(false);
+    expect(derive([fonts], null).googleFonts).toBe(true);
   });
 
-  it("ignores a host named only in a comment", () => {
+  it("ignores a font host named only in a comment", () => {
     const commented = src("src/app.html", `<!-- https://use.typekit.net/abc.css -->`);
-    expect(deriveBuildServices({ svelteConfig: CSP_ALL, sources: [commented] }).adobeFonts).toBe(
-      false,
-    );
-    const config = CSP_ALL.replace(`"https://use.typekit.net"`, `/* "https://use.typekit.net" */`);
+    expect(derive([commented]).adobeFonts).toBe(false);
     const live = src("src/app.html", `<link href="https://use.typekit.net/abc.css">`);
-    expect(deriveBuildServices({ svelteConfig: config, sources: [live] }).adobeFonts).toBe(false);
-  });
-
-  it("finds each embed and font host it knows", () => {
-    const all = src(
-      "src/app.html",
-      [
-        "https://www.youtube.com/embed/x",
-        "https://fonts.googleapis.com/css2",
-        "https://use.typekit.net/abc.css",
-        "https://example.us1.list-manage.com/subscribe/post",
-        "https://player.vimeo.com/video/1",
-      ]
-        .map((u) => `"${u}"`)
-        .join("\n"),
-    );
-    expect(deriveBuildServices({ svelteConfig: CSP_ALL, sources: [all] })).toMatchObject({
-      youtube: true,
-      googleFonts: true,
-      adobeFonts: true,
-      mailchimp: true,
-      vimeo: true,
-    });
+    expect(derive([live]).adobeFonts).toBe(true);
   });
 
   it("names Netlify from the adapter the site builds with", () => {
-    expect(deriveBuildServices({ svelteConfig: CSP_ALL, sources: [] }).netlify).toBe(true);
+    expect(derive([]).netlify).toBe(true);
     expect(
-      deriveBuildServices({
-        svelteConfig: CSP_ALL.replace("adapter-netlify", "adapter-node"),
-        sources: [],
-      }).netlify,
+      deriveBuildServices({ csp: CSP, adapterName: "@sveltejs/adapter-node", sources: [] }).netlify,
     ).toBe(false);
+  });
+});
+
+describe("withRuntime", () => {
+  const base = derive([]) as BuildServices;
+
+  it("lists Turnstile only when the site has a form and a sitekey", () => {
+    const withForms = { ...base, forms: true };
+    expect(withRuntime(withForms, { turnstileSiteKey: "0x4AAA" }).turnstile).toBe(true);
+    expect(withRuntime(withForms, { turnstileSiteKey: "  " }).turnstile).toBe(false);
+    expect(withRuntime({ ...base, forms: false }, { turnstileSiteKey: "0x4AAA" }).turnstile).toBe(
+      false,
+    );
   });
 });

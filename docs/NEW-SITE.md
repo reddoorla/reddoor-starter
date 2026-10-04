@@ -73,21 +73,27 @@ e.g. "Roalson Interests, LLC"), `contactEmail` (where privacy requests go) and
 placeholder on the page, so an unfilled value is visible, not silent.
 
 The services the page lists are not written by hand. `scripts/privacy-services.ts`
-reads the site's own code at build time:
+reads the site at build time: the CSP that `svelte.config.js` resolves to (so a
+`createSvelteConfig` baseline counts), and the code under `src/`.
 
 | Service                   | On when                                                                                    |
 | ------------------------- | ------------------------------------------------------------------------------------------ |
-| Central forms             | a route calls `createIngestAction`                                                         |
+| Central forms             | a route calls `createIngestAction` or `createIngestEndpoint`                               |
+| Newsletter mailing list   | one of those calls has `formType: "newsletter"`                                            |
 | Cloudflare Turnstile      | forms are on and `PUBLIC_TURNSTILE_SITE_KEY` is set (read per request, as the widget does) |
-| Google Analytics 4        | the code carries a measurement ID (`initAnalytics({ measurementId })` or a `gtag/js?id=`)  |
-| Vimeo, YouTube            | `src/` references the player host and `kit.csp` admits it                                  |
-| Google Fonts, Adobe Fonts | `src/` references the font host and `kit.csp` admits it                                    |
-| Mailchimp                 | `src/` references `list-manage.com` and `kit.csp` admits it                                |
-| Netlify                   | `svelte.config.js` builds with `@sveltejs/adapter-netlify`                                 |
+| Google Analytics 4        | the code calls `initAnalytics(`, `gtag("config"`, or loads `gtag/js` or `gtm.js`           |
+| Vimeo, YouTube            | the CSP admits the player host (CMS content can embed it); with no CSP, `src/` names it    |
+| Google Fonts, Adobe Fonts | `src/` loads the font host and the CSP admits it                                           |
+| Netlify                   | the adapter is `@sveltejs/adapter-netlify`                                                 |
 
 Comments do not count, and neither do tests, `src/routes/dev` or the privacy
-code itself. Adding a host to the CSP without using it, or using it without the
-CSP, changes nothing.
+code itself. **Trim the CSP to what the site uses**: the starter admits Vimeo,
+so a fresh clone's page says some pages may show Vimeo video until
+`player.vimeo.com` is removed. The newsletter line does not name the provider:
+Mailchimp or a webhook is chosen on the site's central row, which the site's
+code cannot see.
+
+While the policy is a DRAFT the page is `noindex` and left out of the sitemap.
 
 The text is a **DRAFT** until a lawyer has reviewed it once
 (reddoor-maintenance BACKLOG Operator decision 45). The banner is
@@ -194,7 +200,7 @@ document is published:
 
 ```jsonc
 // package.json
-"reddoor": { "a11yRoutes": ["/", "/about", "/contact"] }
+"reddoor": { "a11yRoutes": ["/", "/about", "/contact", "/privacy"] }
 ```
 
 Grow the list as routes land — it is part of the definition of done for

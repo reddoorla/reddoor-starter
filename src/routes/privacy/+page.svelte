@@ -20,6 +20,9 @@
   const s = $derived(p.services);
   const owner = $derived(p.legalName?.trim() || "[client legal name]");
   const email = $derived(p.contactEmail?.trim() || "");
+  const tracksAcrossSites = $derived(
+    s.ga4 || s.vimeo || s.youtube || s.googleFonts || s.adobeFonts || s.turnstile,
+  );
   const effective = $derived(formatEffectiveDate(p.effectiveDate?.trim()) ?? "[effective date]");
 </script>
 
@@ -55,9 +58,10 @@
     <h2 class="text-xl font-semibold">What we collect</h2>
     {#if s.forms}
       <p>
-        When you send us a form, we collect what you enter: your name, email address, phone number
-        and message. We also record the IP address the form was sent from, which we use to limit
-        abuse.
+        When you send us a form, we collect what you enter, such as your name, email address, phone
+        number and message, and the address of the page you sent it from, including any campaign
+        tags in that link. The IP address the form was sent from is passed to our spam check so it
+        can confirm the form came from a real browser; it is not normally stored with your message.
       </p>
     {/if}
     <p>
@@ -77,39 +81,51 @@
     <h2 class="text-xl font-semibold">How we use it</h2>
     <ul class="list-disc pl-6 space-y-1">
       {#if s.forms}
-        <li>To answer your message and follow up on your request.</li>
+        <li>To answer your message, follow up on your request and filter out spam.</li>
       {/if}
       <li>To run the site, keep it secure and fix problems.</li>
       {#if s.ga4}
         <li>To understand how the site is used and improve it.</li>
       {/if}
     </ul>
-    <p>We do not sell your personal information, and we do not share it for advertising.</p>
+    <p>We do not sell your personal information.</p>
   </section>
 
   <section class="space-y-3">
     <h2 class="text-xl font-semibold">Who else receives it</h2>
     <p>
-      We use the service providers below to run this site. Each receives only what it needs to do
-      its job.
+      We use the service providers below to run this site. Each receives the information described
+      next to it.
+    </p>
+    <p data-testid="privacy-tracking">
+      {#if tracksAcrossSites}
+        Some of the services below may collect information about your online activities over time
+        and across different websites.
+      {:else}
+        No other party collects information about your online activities over time and across
+        different websites through this site.
+      {/if}
     </p>
     <ul class="list-disc pl-6 space-y-2">
       {#if s.forms}
         <li data-testid="service-forms">
           Form messages go to Reddoor, the agency that builds and maintains this site for us.
-          Reddoor stores them in a database hosted by Turso and emails them to us through Resend.
+          Reddoor checks them for spam, stores them in a database hosted by Turso, and uses Resend
+          to email them to us and to send you a confirmation.
         </li>
       {/if}
       {#if s.turnstile}
         <li data-testid="service-turnstile">
           Cloudflare Turnstile checks that a form is sent by a person rather than a bot. To do that
-          it reads signals from your browser, such as how the page was loaded and interacted with.
+          it reads signals from your browser, such as how the page was loaded and interacted with,
+          and receives your IP address.
         </li>
       {/if}
-      {#if s.mailchimp}
-        <li data-testid="service-mailchimp">
-          If you sign up for our newsletter, your email address is sent to Mailchimp, which stores
-          our mailing list and sends the newsletter. Every newsletter has a link to unsubscribe.
+      {#if s.newsletter}
+        <li data-testid="service-newsletter">
+          If you sign up for our newsletter, your email address is added to our mailing list, which
+          is kept by the email service that sends the newsletter. Every newsletter has a link to
+          unsubscribe.
         </li>
       {/if}
       {#if s.ga4}
@@ -117,7 +133,8 @@
           Google Analytics measures how visitors use the site. Google sets cookies to tell one visit
           from the next and receives your IP address, device and browser details, and the pages you
           view. Google may collect information about your online activities over time and across
-          different websites. You can opt out with Google's
+          different websites. The analytics account is managed by Reddoor, which uses it to prepare
+          reports for us. You can opt out with Google's
           <a href="https://tools.google.com/dlpage/gaoptout" class="underline">browser add-on</a>.
         </li>
       {/if}
@@ -135,13 +152,13 @@
       {/if}
       {#if s.vimeo}
         <li data-testid="service-vimeo">
-          Some pages show video from Vimeo. Vimeo receives your IP address when the video loads, and
-          its player may set cookies.
+          Some pages may show video from Vimeo. Vimeo receives your IP address when the video loads,
+          and its player may set cookies.
         </li>
       {/if}
       {#if s.youtube}
         <li data-testid="service-youtube">
-          Some pages show video from YouTube, which is owned by Google. YouTube receives your IP
+          Some pages may show video from YouTube, which is owned by Google. YouTube receives your IP
           address when the video loads, and its player may set cookies.
         </li>
       {/if}
@@ -173,7 +190,7 @@
   <section class="space-y-3">
     <h2 class="text-xl font-semibold">Your choices</h2>
     <p>
-      To ask what information we hold about you, or to have it corrected or deleted, email
+      To ask what information we hold about you, or to ask us to correct or delete it, email
       {@render contact()}.
     </p>
   </section>
