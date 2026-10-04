@@ -538,3 +538,48 @@ It still refuses a `none` hue. With the fix, the same probe passes both
 steps (15 tests), and the probe was removed. This is the first part of #152.
 Field's `red-600` failing AA off white, the issue's second part, is not
 touched here.
+
+## 2026-10-04 — A cloud session can run `pnpm test:a11y`: the starter gets a cloud setup hook (reddoor-maintenance decision 70)
+
+A Claude cloud container could not run this template's axe gate.
+`pnpm test:a11y` printed `a11y: no results written (exit 1)`, and in the
+published 0.97.0 of `@reddoorla/maintenance` the only text behind it was
+an npm warning. The cause, measured from reddoor-maintenance on
+mantis-landscaping (reddoor-maintenance #1132, #1136): the lockfile
+resolves `@playwright/test` 1.63.0, which launches
+`chromium_headless_shell-1243`, and the image's `/opt/pw-browsers` held
+only revisions 1194 and 1234. The sandbox was not the problem; Playwright
+handles root itself. With 1243 aliased to 1234 the audit passed, so the
+missing revision was the only thing in the way. The operator approved this
+hook as decision 70.
+
+`.claude/hooks/cloud-session-setup.sh` runs on startup and resume, and only
+when `CLAUDE_CODE_REMOTE=true`, so CI and the laptop never run it. It is
+reddoor-maintenance's hook minus that repo's GA key, `gh` and unshallow
+steps. It puts `.nvmrc`'s Node on `PATH` (the image ships 22), runs
+`pnpm install --frozen-lockfile`, installs the chromium and headless-shell
+revisions the pinned Playwright names when they are missing, exports
+Playwright's Chromium as `CHROME_PATH` when no Chrome is on `PATH` (lhci
+finds none otherwise), and adds the egress proxy's CA to Chromium's NSS
+store. It says nothing when all of that worked.
+
+Measured in a container on this branch. The first run took 33 s,
+downloaded both 1243 builds, and wrote `PATH` (Node 24.21.0) and
+`CHROME_PATH` to the env file. A second run took 3 s and downloaded
+nothing. Then, with only what the hook set up, `pnpm test:a11y` passed:
+`0 violations across 2 routes (+1 hydration smoke)`, in 35 s. Before the
+hook, the same command on the same image failed.
+
+Sites already generated from this template do not get the hook. Each would
+need its own PR, and that backfill is a separate decision for the operator.
+The Blux track (`reddoor-starter-blux`) can take it with a cherry-pick.
+
+The hook needed `.claude/settings.json` tracked again. #32 untracked it and
+ignored all of `.claude/`, because the file then held the operator's
+personal permission allowlist, which must not ship to client sites. The
+ignore is now narrowed: `.claude/*` stays ignored except `settings.json` and
+`hooks/`. The tracked `settings.json` registers the hook and nothing else;
+personal permissions belong in `.claude/settings.local.json`, which is still
+ignored. One consequence for a laptop checkout that still has #32's
+untracked `.claude/settings.json`: the pull will refuse to overwrite it, so
+that file has to move to `settings.local.json` first.
