@@ -12,9 +12,7 @@ for (const path of ["/slice-simulator", "/slice%2Dsimulator", "/slice%2dsimulato
   });
 }
 
-test("an ordinary page stays SAMEORIGIN and does not let Prismic frame it", async ({
-  request,
-}) => {
+test("an ordinary page stays SAMEORIGIN and does not let Prismic frame it", async ({ request }) => {
   const response = await request.get("/privacy");
   expect(response.status()).toBe(200);
   expect(response.headers()["x-frame-options"]).toBe("SAMEORIGIN");
