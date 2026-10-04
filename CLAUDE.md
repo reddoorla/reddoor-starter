@@ -192,8 +192,10 @@ with a `.claude/settings.json`:
 }
 ```
 
-`.claude/` is gitignored here and machine-wide on at least one maintainer's
-setup, so that file is per-checkout until someone decides otherwise.
+`.claude/settings.json` is tracked (it registers the cloud-session hook,
+`.claude/hooks/cloud-session-setup.sh`), so add that block to it rather than
+creating the file. Personal settings belong in `.claude/settings.local.json`,
+which stays gitignored with the rest of `.claude/`.
 
 ### Anything found and not fixed in the same PR gets an issue
 
