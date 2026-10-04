@@ -151,6 +151,16 @@ next code PR's deploy preview shows it too. Found the hard way on 29-navy
    `0` means the hook did not fire, or fired before the publish landed.
    Prismic's webhook log and Netlify's deploy list say which.
 
+### Slice previews in the Type Builder
+
+Once the site is deployed, set the Prismic repository's simulator URL to
+`https://<site>/slice-simulator` (Prismic → the repository → the Type Builder's
+preview settings; `pnpm exec prismic preview set-simulator <url>` does the same
+under your own login). Until it is set, every slice preview in the Type Builder
+is blank. The route may be framed by prismic.io and nothing else
+(`src/lib/security/cms-framing.ts`); Slice Machine used to provide this
+preview locally.
+
 ## Placeholder builds
 
 `prismic.config.json`'s `your-prismic-repo-name` sentinel is load-bearing.
