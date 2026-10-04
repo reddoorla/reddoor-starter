@@ -538,3 +538,21 @@ It still refuses a `none` hue. With the fix, the same probe passes both
 steps (15 tests), and the probe was removed. This is the first part of #152.
 Field's `red-600` failing AA off white, the issue's second part, is not
 touched here.
+
+## 2026-10-04 — The simulator leaves the public pages' bundle; an encoded path gets the simulator's framing (this PR)
+
+Two findings from the adversarial review of caltex-landing#69, both inherited from #166.
+
+**The simulator rode every Prismic page.** #166 imported `SliceSimulator` from the `@prismicio/svelte` barrel. Measured from `.svelte-kit/output/client/.vite/manifest.json`, the home and `[uid]` nodes' static imports went from 37,093 to 40,331 B gzipped between `f538398` and `631f9a5`, and both now reached the chunk holding `@prismicio/simulator/kit` (13,655 B gz). Before #166 that code lived only in the simulator route's node. caltex saw the same thing as +3.3 KB of modulepreload on `index.html`.
+
+The cause is how Rolldown assigns modules to chunks: it follows the static import graph, and the barrel statically re-exports `SliceSimulator`, so once the simulator route uses it, it lands in the barrel's chunk, which every page that renders a `SliceZone` loads. Four fixes were tried, each measured the same way. A dynamic `import("@prismicio/svelte")` in the route made it worse (41,428): it is the same barrel module. A deep path to `dist/SliceSimulator.svelte` produced a byte-identical chunk, because the barrel's edge decides, not the importer's path (and the package's `exports` do not allow a deep import anyway). A local copy of the component importing `@prismicio/simulator/kit` moved the component out but left the kit in the shared chunk (39,881). A `codeSplitting` group swallowed `SliceZone` and its dependencies into a 75 KB chunk, and Rolldown refuses the group's `includeDependenciesRecursively: false` under SvelteKit's `preserveEntrySignatures: "strict"`.
+
+What worked: `scripts/prismic-barrel.ts` declares the barrel module alone side-effect-free. It is nothing but `export { default as X } from "./X.svelte"` lines, so the declaration is true, and Rolldown then binds `SliceZone` straight to its own module and the barrel stops being an edge. Home and `[uid]` drop to 36,145 B gz, 948 below the pre-#166 baseline, and the simulator code is reachable only from the simulator node. The re-exported components keep their own side effects. If an upgrade ever puts anything but re-exports in the barrel, the plugin fails the build rather than declare it.
+
+Why the baseline was clean in the first place: the old adapter imported its own copy of the simulator, a different module from the barrel's, so the barrel's edge never reached it. Nothing about the old setup was deliberate.
+
+`scripts/prismic-barrel.test.ts` reads the built manifest when CI has built first (the shared workflow builds before `pnpm test`), asserts the simulator node does reach the simulator code (the positive control) and every other client entry does not.
+
+**An encoded path missed the framing exception.** `isCmsFramedRoute` matched `event.url.pathname`, which is the raw path, while SvelteKit routes on the decoded one. From `vite preview` on `main`, `/slice%2Dsimulator` rendered the simulator with `X-Frame-Options: SAMEORIGIN` and `frame-ancestors 'self'`. That fails closed here, but a site whose hook touches only the simulator fails open to no framing header. The hook now asks `event.route.id === "/slice-simulator"`. Measured from `vite preview` after the change: `/slice-simulator` 200, no XFO, widened frame-ancestors; `/slice%2Dsimulator` and `/slice%2dsimulator` the same; `/slice-simulator/` a 308 to the canonical path, as before; `/Slice-Simulator` 404 and SAMEORIGIN; `/privacy` SAMEORIGIN with `frame-ancestors 'self'`.
+
+Seven mutations, all red: the plugin removed (the build test), the hook back on the pathname, the check always true, a null route treated as framed, the re-export guard disabled, the plugin applied to every id (the suite fails to load), and the simulator markers changed to miss (the positive control).

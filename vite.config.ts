@@ -3,9 +3,10 @@ import { defineConfig } from "vitest/config";
 import { imagetools } from "@zerodevx/svelte-img/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { privacyServices } from "./scripts/privacy-services.ts";
+import { prismicBarrel } from "./scripts/prismic-barrel.ts";
 
 export default defineConfig({
-  plugins: [sveltekit(), imagetools(), tailwindcss(), privacyServices()],
+  plugins: [sveltekit(), imagetools(), tailwindcss(), privacyServices(), prismicBarrel()],
   server: {
     fs: {
       // Allow access to files from the project root.
