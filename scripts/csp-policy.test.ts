@@ -52,10 +52,10 @@ describe("the template's Content-Security-Policy", () => {
 
 describe("the Prismic toolbar under this site's policy", () => {
   const directives = config.kit?.csp?.directives ?? {};
-  const slicemachine = JSON.parse(
-    readFileSync(new URL("../slicemachine.config.json", import.meta.url), "utf8"),
+  const prismicConfig = JSON.parse(
+    readFileSync(new URL("../prismic.config.json", import.meta.url), "utf8"),
   ) as { repositoryName: string };
-  const repository = process.env.VITE_PRISMIC_ENVIRONMENT || slicemachine.repositoryName;
+  const repository = process.env.VITE_PRISMIC_ENVIRONMENT || prismicConfig.repositoryName;
   const matching = (directive: string, needle: string) =>
     ((directives as Record<string, string[] | undefined>)[directive] ?? []).filter((source) =>
       source.includes(needle),
@@ -90,7 +90,7 @@ describe("the Prismic toolbar under this site's policy", () => {
       return (await import("../svelte.config.js")).default;
     };
 
-    it("frames that repository, not slicemachine's", async () => {
+    it("frames that repository, not the config file's", async () => {
       const loaded = await load("other-repo");
       expect(
         (loaded.kit?.csp?.directives?.["frame-src"] ?? []).filter((s: string) =>
