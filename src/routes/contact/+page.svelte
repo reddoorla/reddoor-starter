@@ -2,6 +2,7 @@
   import { enhance } from "$app/forms";
   import Field from "$lib/components/Field.svelte";
   import TurnstileWidget from "$lib/components/TurnstileWidget.svelte";
+  import PrivacyNotice from "$lib/components/PrivacyNotice.svelte";
   import type { ActionData, PageData } from "./$types";
 
   let { data, form }: { data: PageData; form: ActionData } = $props();
@@ -109,6 +110,8 @@
            createIngestAction reads and forwards. Verification is central (the
            dashboard holds TURNSTILE_SECRET_KEY; sites carry only the public key). -->
       <TurnstileWidget />
+
+      <PrivacyNotice />
 
       <!-- The last click in the flow, and it used to acknowledge the wait by
            DIMMING itself: `disabled:opacity-60` composited the label against a

@@ -1,5 +1,6 @@
 <script lang="ts">
   import BrandIcon from "./BrandIcon.svelte";
+  import { PRIVACY_PATH } from "$lib/privacy/policy";
   import type { FooterSocial, FooterItem, FooterImage, FooterColumn } from "$lib/site-config";
 
   interface Props {
@@ -130,4 +131,7 @@
       </p>
     </div>
   {/if}
+  <p class="mt-6 text-center text-sm">
+    <a href={PRIVACY_PATH} class="underline hover:opacity-70">Privacy Policy</a>
+  </p>
 </footer>

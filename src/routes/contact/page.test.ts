@@ -48,3 +48,11 @@ describe("the contact page's confirmation", () => {
     await vi.waitFor(() => expect(document.activeElement).toBe(status));
   });
 });
+
+describe("the contact form's privacy notice", () => {
+  it("sits inside the form and links to the privacy page", () => {
+    const { container } = render(ContactPage, props());
+    const link = container.querySelector("form [data-testid='privacy-notice'] a");
+    expect(link?.getAttribute("href")).toBe("/privacy");
+  });
+});

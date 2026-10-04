@@ -5,6 +5,19 @@ import Footer from "./Footer.svelte";
 afterEach(() => cleanup());
 
 describe("Footer", () => {
+  it("links to the privacy page on the default chrome", () => {
+    const { container } = render(Footer);
+    const link = container.querySelector("footer a[href='/privacy']");
+    expect(link?.textContent).toBe("Privacy Policy");
+  });
+
+  it("links to the privacy page when a route supplies its own columns", () => {
+    const { container } = render(Footer, {
+      props: { columns: [{ items: [{ text: "Call us" }] }] },
+    });
+    expect(container.querySelector("footer a[href='/privacy']")).not.toBeNull();
+  });
+
   // --- columns chrome (per-route override; takes precedence) ---
 
   it("default: renders the hardcoded copyright (fleet behavior unchanged)", () => {
@@ -194,7 +207,7 @@ describe("Footer", () => {
     // No <a> (a href="#" would be a dead link); a labelled role=img span instead.
     expect(yt.tagName).toBe("SPAN");
     expect(yt.getAttribute("role")).toBe("img");
-    expect(container.querySelector("a")).toBeNull();
+    expect(container.querySelector("ul a")).toBeNull();
     // The brand glyph still renders.
     expect(container.querySelector("svg")).toBeTruthy();
   });

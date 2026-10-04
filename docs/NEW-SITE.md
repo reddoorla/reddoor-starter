@@ -64,6 +64,36 @@ line verbatim and freezes whatever year it contains — correct the January it i
 written, wrong every January after. It exists only for lines that are not of the
 form `© <year> <owner>`.
 
+### The privacy page
+
+`/privacy` (reddoor-maintenance#1055) renders from three values in
+`src/lib/site-config.json` → `privacy`: `legalName` (the client's legal entity,
+e.g. "Roalson Interests, LLC"), `contactEmail` (where privacy requests go) and
+`effectiveDate` (`YYYY-MM-DD`). Each one left empty renders as a bracketed
+placeholder on the page, so an unfilled value is visible, not silent.
+
+The services the page lists are not written by hand. `scripts/privacy-services.ts`
+reads the site's own code at build time:
+
+| Service                   | On when                                                                                    |
+| ------------------------- | ------------------------------------------------------------------------------------------ |
+| Central forms             | a route calls `createIngestAction`                                                         |
+| Cloudflare Turnstile      | forms are on and `PUBLIC_TURNSTILE_SITE_KEY` is set (read per request, as the widget does) |
+| Google Analytics 4        | the code carries a measurement ID (`initAnalytics({ measurementId })` or a `gtag/js?id=`)  |
+| Vimeo, YouTube            | `src/` references the player host and `kit.csp` admits it                                  |
+| Google Fonts, Adobe Fonts | `src/` references the font host and `kit.csp` admits it                                    |
+| Mailchimp                 | `src/` references `list-manage.com` and `kit.csp` admits it                                |
+| Netlify                   | `svelte.config.js` builds with `@sveltejs/adapter-netlify`                                 |
+
+Comments do not count, and neither do tests, `src/routes/dev` or the privacy
+code itself. Adding a host to the CSP without using it, or using it without the
+CSP, changes nothing.
+
+The text is a **DRAFT** until a lawyer has reviewed it once
+(reddoor-maintenance BACKLOG Operator decision 45). The banner is
+`PRIVACY_POLICY_DRAFT` in `src/lib/privacy/policy.ts`. Do not clear it on a
+site before that review.
+
 ## Deploy
 
 Netlify environment variables (set on the site, not in the repo):
