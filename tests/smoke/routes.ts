@@ -64,4 +64,5 @@ export const smokeRoutes: SmokeRoute[] = [
         expectStatus: 404,
       }
     : { path: "/", name: "home", hydrationMarker: "footer" },
+  { path: "/privacy", name: "privacy policy", hydrationMarker: "footer" },
 ];

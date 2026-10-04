@@ -1,4 +1,5 @@
 import { isNetlifyMirrorHost } from "$lib/indexability";
+import { PRIVACY_PATH, PRIVACY_POLICY_DRAFT } from "$lib/privacy/policy";
 import { createClient, isPlaceholderRepo } from "$lib/prismicio";
 import type { RequestHandler } from "./$types";
 
@@ -18,7 +19,7 @@ export const prerender = false;
  *
  *  Only genuinely public, indexable routes belong here — never /dev/*, the
  *  slice simulator or /preview (see NOINDEX_PREFIXES in $lib/seo). */
-const STATIC_ROUTES = ["/contact"];
+const STATIC_ROUTES = ["/contact", ...(PRIVACY_POLICY_DRAFT ? [] : [PRIVACY_PATH])];
 
 export const GET: RequestHandler = async ({ fetch, url }) => {
   const origin = url.origin;

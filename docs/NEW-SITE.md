@@ -64,6 +64,44 @@ line verbatim and freezes whatever year it contains — correct the January it i
 written, wrong every January after. It exists only for lines that are not of the
 form `© <year> <owner>`.
 
+### The privacy page
+
+`/privacy` (reddoor-maintenance#1055) renders from three values in
+`src/lib/site-config.json` → `privacy`: `legalName` (the client's legal entity,
+e.g. "Roalson Interests, LLC"), `contactEmail` (where privacy requests go) and
+`effectiveDate` (`YYYY-MM-DD`). Each one left empty renders as a bracketed
+placeholder on the page, so an unfilled value is visible, not silent.
+
+The services the page lists are not written by hand. `scripts/privacy-services.ts`
+reads the site at build time: the CSP that `svelte.config.js` resolves to (so a
+`createSvelteConfig` baseline counts), and the code under `src/`.
+
+| Service                   | On when                                                                                                                                 |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| Central forms             | a route calls `createIngestAction` or `createIngestEndpoint`                                                                            |
+| Newsletter mailing list   | forms are on and any file under `src/` uses the string `"newsletter"`                                                                   |
+| Cloudflare Turnstile      | forms are on and `PUBLIC_TURNSTILE_SITE_KEY` is set (read per request, as the widget does)                                              |
+| Google Analytics 4        | the code calls (not defines) `initAnalytics(`, calls `gtag("config"`, or loads `gtag/js` or `gtm.js`                                    |
+| Vimeo, YouTube            | `frame-src` (else `child-src`, else `default-src`) admits the player host, since CMS content can embed it; with no CSP, `src/` names it |
+| Google Fonts, Adobe Fonts | `src/` loads the font host and `style-src` (else `default-src`) admits it; with no CSP, `src/` alone                                    |
+| Netlify                   | the adapter is `@sveltejs/adapter-netlify`                                                                                              |
+
+Comments do not count, and neither do tests, `src/routes/dev` or the privacy
+code itself. **Trim the CSP to what the site uses**: the starter admits Vimeo,
+so a fresh clone's page says some pages may show Vimeo video until
+`player.vimeo.com` is removed. The newsletter line does not name the provider:
+Mailchimp or a webhook is chosen on the site's central row, which the site's
+code cannot see.
+
+While the policy is a DRAFT the page is `noindex` and left out of the sitemap.
+A Prismic `page` document with the uid `privacy` is shadowed by this route and
+would still be listed by the sitemap's Prismic query, so do not create one.
+
+The text is a **DRAFT** until a lawyer has reviewed it once
+(reddoor-maintenance BACKLOG Operator decision 45). The banner is
+`PRIVACY_POLICY_DRAFT` in `src/lib/privacy/policy.ts`. Do not clear it on a
+site before that review.
+
 ## Deploy
 
 Netlify environment variables (set on the site, not in the repo):
@@ -164,7 +202,7 @@ document is published:
 
 ```jsonc
 // package.json
-"reddoor": { "a11yRoutes": ["/", "/about", "/contact"] }
+"reddoor": { "a11yRoutes": ["/", "/about", "/contact", "/privacy"] }
 ```
 
 Grow the list as routes land — it is part of the definition of done for
