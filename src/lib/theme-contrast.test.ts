@@ -165,19 +165,28 @@ describe("theme contrast", () => {
   );
 
   /**
-   * The 13 none-hued Tailwind tokens app.css overrides with a 0 hue (#152) are
+   * The none-hued Tailwind tokens app.css overrides with a 0 hue (#152) are
    * in this @theme block, so a `text-neutral-*` in src is classified here
-   * like any other token, and this guard has to be able to measure it. These
-   * are Tailwind's own sRGB values for the same greys.
+   * like any other token, and this guard has to be able to measure it. The
+   * overrides are checked against Tailwind's own theme.css: every colour it
+   * writes with a `none` component must be overridden here with a value this
+   * guard can measure, so a dropped or reverted override fails. The converter
+   * is checked on literals, against Tailwind's own sRGB values for
+   * neutral-900 and neutral-50.
    */
-  it("measures the none-hued palette overrides, and refuses a none hue", () => {
-    const overrides = Object.keys(colors).filter((t) => /^(neutral-\d+|zinc-50|mauve-50)$/.test(t));
-    expect(overrides).toHaveLength(13);
-    for (const token of overrides) expect(() => resolveToken(token)).not.toThrow();
-    expect(resolveToken("neutral-50")).toEqual([250, 250, 250]);
-    expect(resolveToken("neutral-600")).toEqual([82, 82, 82]);
-    expect(resolveToken("neutral-900")).toEqual([23, 23, 23]);
-    expect(resolveToken("neutral-950")).toEqual([10, 10, 10]);
+  it("measures the achromatic oklch tokens, and refuses a none hue", () => {
+    const achromatic = Object.keys(colors).filter((t) =>
+      /^oklch\(\s*[\d.]+%?\s+0(?:\.0+)?%?\s/i.test(colors[t]),
+    );
+    for (const token of achromatic) expect(() => resolveToken(token), token).not.toThrow();
+    const tailwind = readFileSync(resolve(REPO_ROOT, "node_modules/tailwindcss/theme.css"), "utf8");
+    const entries = [...tailwind.matchAll(/--color-([a-z0-9-]+):\s*([^;]+);/g)];
+    expect(entries.length, "read no colours from Tailwind's theme.css").toBeGreaterThan(0);
+    for (const [, token, value] of entries) {
+      if (/\bnone\b/.test(value)) expect(() => resolveToken(token), token).not.toThrow();
+    }
+    expect(toRgb("oklch(20.5% 0 0)", "t")).toEqual([23, 23, 23]);
+    expect(toRgb("oklch(98.5% 0 0)", "t")).toEqual([250, 250, 250]);
     expect(() => toRgb("oklch(20.5% 0 none)", "neutral-900")).toThrow(/cannot measure/);
   });
 
