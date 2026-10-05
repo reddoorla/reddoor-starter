@@ -1,5 +1,5 @@
 import { test, expect, type Page, type ConsoleMessage } from "@playwright/test";
-import { smokeRoutes } from "./routes";
+import { HYDRATION_TIMEOUT, smokeRoutes } from "./routes";
 
 // Console messages we don't care about. Add patterns here only after seeing them
 // in CI and confirming they aren't actionable. Patterns are matched against both
@@ -58,7 +58,7 @@ for (const route of smokeRoutes) {
         await expect(
           page.locator(route.hydrationMarker).filter({ visible: true }).first(),
           `hydration marker "${route.hydrationMarker}" on ${route.path}`,
-        ).toBeVisible();
+        ).toBeVisible({ timeout: HYDRATION_TIMEOUT });
       }
       expect(errors, `console errors on ${route.path}`).toEqual([]);
     },

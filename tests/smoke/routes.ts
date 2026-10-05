@@ -10,8 +10,14 @@
 // the repository name — mirroring `isPlaceholderRepo` in src/lib/prismicio.ts
 // and the entries() prerender guard in the home route. The moment a fork wires
 // a real Prismic repo in prismic.config.json, the same entry expects 200
-// with zero edits. The hydration marker `footer` is the shared layout footer,
-// present on every page including the error page.
+// with zero edits.
+//
+// The hydration marker used to be `footer`. The footer is server-rendered, so
+// it was visible with scripting off, with the bundle missing and before
+// hydration: the field could only observe that the page rendered
+// (reddoor-maintenance#947). It is now `html[data-hydrated]`, which only the
+// root layout's onMount writes (src/routes/+layout.svelte), so it matches only
+// once script has taken the page over. hydrated.spec.ts is its control.
 
 // Playwright runs this file as native ESM in Node, where JSON imports require
 // the explicit attribute (unlike Vite-bundled src/lib/prismicio.ts).
@@ -22,7 +28,8 @@ export type SmokeRoute = {
   path: string;
   /** Human-readable label used in the test title. */
   name: string;
-  /** CSS selector asserted visible after load (hydration proof). Default: skip. */
+  /** CSS selector asserted visible after load. It is hydration proof only if
+   *  script alone can make it match — see HYDRATED. Default: skip. */
   hydrationMarker?: string;
   /** Expected HTTP status. Default: 200. */
   expectStatus?: number;
@@ -52,6 +59,14 @@ if (
   );
 }
 
+/** The document root, once the root layout has mounted. */
+export const HYDRATED = "html[data-hydrated]";
+
+/** How long a route may take to hydrate. Playwright's 5s default is shorter
+ *  than a cold dev server's first client transform (5–7s measured on
+ *  roalson-interests), and the old server-rendered marker never paid for it. */
+export const HYDRATION_TIMEOUT = 20_000;
+
 export const smokeRoutes: SmokeRoute[] = [
   isPlaceholderRepo
     ? // Bare starter: home intentionally 404s until Prismic is wired (see the
@@ -60,9 +75,9 @@ export const smokeRoutes: SmokeRoute[] = [
       {
         path: "/",
         name: "home — placeholder repo, expecting 404",
-        hydrationMarker: "footer",
+        hydrationMarker: HYDRATED,
         expectStatus: 404,
       }
-    : { path: "/", name: "home", hydrationMarker: "footer" },
-  { path: "/privacy", name: "privacy policy", hydrationMarker: "footer" },
+    : { path: "/", name: "home", hydrationMarker: HYDRATED },
+  { path: "/privacy", name: "privacy policy", hydrationMarker: HYDRATED },
 ];
