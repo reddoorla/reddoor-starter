@@ -62,6 +62,11 @@ if (
 /** The document root, once the root layout has mounted. */
 export const HYDRATED = "html[data-hydrated]";
 
+/** How long a route may take to hydrate. Playwright's 5s default is shorter
+ *  than a cold dev server's first client transform (5–7s measured on
+ *  roalson-interests), and the old server-rendered marker never paid for it. */
+export const HYDRATION_TIMEOUT = 20_000;
+
 export const smokeRoutes: SmokeRoute[] = [
   isPlaceholderRepo
     ? // Bare starter: home intentionally 404s until Prismic is wired (see the

@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { HYDRATED } from "./routes";
+import { HYDRATED, HYDRATION_TIMEOUT } from "./routes";
 
 // `html[data-hydrated]` is the marker every smoke route waits on (routes.ts),
 // so it has to mean what it says: only a mounted root layout writes it. These
@@ -16,7 +16,7 @@ test(
   { tag: "@smoke" },
   async ({ page }) => {
     await page.goto(ROUTE, { waitUntil: "domcontentloaded" });
-    await expect(page.locator(HYDRATED)).toBeVisible();
+    await expect(page.locator(HYDRATED)).toBeVisible({ timeout: HYDRATION_TIMEOUT });
   },
 );
 
