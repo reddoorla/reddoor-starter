@@ -623,3 +623,51 @@ The hook calls `node_modules/.bin/lint-staged` rather than `pnpm exec lint-stage
 `simple-git-hooks: false` sits under `allowBuilds`, because the root `prepare` does the install and pnpm refuses an unlisted build script (`ERR_PNPM_IGNORED_BUILDS`).
 
 Not done: `reddoor-starter-blux` does not carry this yet. Per its README it adopts native changes by cherry-pick, never by merge.
+
+## 2026-10-05 — Tests build; they don't freeze: the template ships a `@smoke` gate, a nightly tier and a scaffold tier (`claude/trusting-hawking-aauv3f`)
+
+> Follows 2026-10-05 — A pre-commit hook runs prettier on what is staged.
+
+A fleet survey that day found one shape on every site but roalson-interests. `test:smoke` ran every Playwright spec inside the required `ci / ci`, and CLAUDE.md had no rule saying where a design pin belongs, so every pin went in the gate. Six sites were rated high freeze risk. The template is where that starts, because every site copies it. The template now ships the tiers roalson-interests#256 introduced, together with CLAUDE.md's "Tests build; they don't freeze".
+
+**The gate.** It is vitest without design pins, plus 12 of the 17 Playwright tests tagged `@smoke`:
+
+- slice-simulator (4)
+- a11y fixtures (2)
+- pages (3)
+- landscape (2)
+- reveal-no-js with scripting off (1)
+
+`test:nightly` runs the reveal's first-frame trace and the modal scroll lock, which moved into its own `modal-scroll-lock.spec.ts`. `test:scaffold` holds the modal-centring geometry. `nightly.yml` runs nightly and on dispatch, and blocks nothing.
+
+**The inherited pins, rewritten as properties.** These are the files every site copied:
+
+- **focus-floor:** the ring's contrast against the light grounds must be at least 3:1, replacing the `outline: 2px solid` regex.
+- **reduced-motion-reset:** each forced duration and delay must be under 1 ms, replacing the `0.01ms` regex.
+- **reveal-hidden-state:** runs `animateIn` and compares its inline writes with the gated CSS, instead of regexing `animateIn.ts`.
+- **theme-contrast:** checks converter correctness on literal inputs, replacing pinned token RGBs and a count of 13.
+- **Field:** the border is a theme token at 3:1 or better.
+- **Modal:** the close button has a hit box of at least 24px, replacing the exact class list.
+- **animateIn and ContentWidth:** the literal 2400ms and `translateY(50%)` are gone, and a no-op is checked against the element's own prior state.
+
+Measured on scratch worktrees, with each mutation reverted:
+
+| change                                                 | `main`     | this branch                           |
+| ------------------------------------------------------ | ---------- | ------------------------------------- |
+| Field border `border-secondary` → `border-dark`        | 1 unit red | green                                 |
+| close button `min-h-11 min-w-11` → `min-h-12 min-w-12` | 1 unit red | green                                 |
+| focus ring 2px → 3px                                   | 1 unit red | green                                 |
+| reveal duration 2400 → 1200                            | 2 unit red | green                                 |
+| reveal travel 50% → 40% in JS only                     | —          | 1 unit red (the coupling, on purpose) |
+| Field label loses its `for`                            | —          | 10 unit + 1 smoke red                 |
+| close button loses `aria-label`                        | —          | 3 unit red                            |
+| focus ring colour → `--color-light`                    | —          | 1 unit red                            |
+
+`pnpm verify` passes: 564 unit tests, 12 Playwright, and 0 a11y violations across 2 routes, in 279 s. The 17-test suite took 57 s before this change, so the time saved on the template is small. What changes is what a red means on every site that starts from it.
+
+**Found and filed, not fixed here:**
+
+- #170: the focus floor draws a near-black ring on dark grounds, 1.01:1 on Hero and 1.21:1 on CtaBanner dark. The new contrast test measures the light grounds only, so it does not turn red on this. It is a real accessibility defect with an issue, not a test that hides it.
+- #176: filed from the beachfront-dentistry pass.
+- #178: landscape's `@smoke` tests each wait a fixed 8 s.
+- #179: `capability-index.mjs` rewrites `docs/COMPONENTS.md` on any argument but `--check`, including `--help`.
