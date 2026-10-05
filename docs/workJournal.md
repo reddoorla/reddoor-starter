@@ -671,3 +671,13 @@ Measured on scratch worktrees, with each mutation reverted:
 - #176: filed from the beachfront-dentistry pass.
 - #178: landscape's `@smoke` tests each wait a fixed 8 s.
 - #179: `capability-index.mjs` rewrites `docs/COMPONENTS.md` on any argument but `--check`, including `--help`.
+
+## 2026-10-05 — The root layout writes `html[data-hydrated]`, and the smoke routes wait on it (`fix/hydrated-marker`)
+
+Every smoke route's hydration marker was `footer`. The footer is server-rendered, so it is visible with scripting off, with the bundle missing and before hydration: the field could only ever observe that the page rendered (reddoor-maintenance#947). On roalson-interests, where the same fix landed as #57, preview alone returned 208 in 12 of 14 cold runs and preview plus a wait on `html[data-hydrated]` returned 208 in 10 of 10. The template now carries roalson's mechanism: the root layout's `onMount` sets `document.documentElement.dataset.hydrated`, and `tests/smoke/routes.ts` points every route at `HYDRATED = "html[data-hydrated]"`. Roalson's selector is `html[data-hydrated] footer`; the template uses the bare root because reddoor-maintenance's smoke recipe scaffolds the same string for sites that have no footer contract.
+
+The marker is proven from both sides before any route trusts it. `tests/smoke/hydrated.spec.ts` (`@smoke`) shows it set on `/privacy` with script and absent with `javaScriptEnabled: false`, the server-rendered footer present in both. `src/routes/layout-hydrated.test.ts` shows the browser does not write it early: not at module evaluation, and not when a child throws during mount. Early matters to reddoor-maintenance#1148, where form-e2e's injection before hydration caused the very `refilled` wipe it then reported; a marker written during the layout's init would let that probe inject into a tree Svelte is still claiming.
+
+Mutations, each run against these tests: `data-hydrated` on `<html>` in `app.html` turned the no-JS smoke red; an unguarded write in `<script module>` crashed SSR (`document is not defined`, the webServer never came up); a guarded module-level write turned the module-evaluation test red; a guarded write in the instance script, outside `onMount`, turned the throwing-child test red; removing the write turned the smoke routes and the mounted test red. `html[data-hydrated]` passes Playwright's `toBeVisible()`, measured, not assumed: 14 of 14 `@smoke` passed in the container.
+
+Not done here: `reddoor-starter-blux` takes this by cherry-pick in a follow-up, and the fleet's existing sites get it as per-repo PRs, not from the template.
