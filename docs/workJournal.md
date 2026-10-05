@@ -603,3 +603,23 @@ Why the baseline was clean in the first place: the old adapter imported its own 
 Seven mutations, all red: the plugin removed (the build test), the hook back on the pathname, the check always true, a null route treated as framed, the re-export guard disabled, the plugin applied to every id (the suite fails to load), and the simulator markers changed to miss (the positive control).
 
 An adversarial review found no blocker and five minor findings, all folded in. First, the framed route is a route id, so moving the page into a route group (`/(cms)/slice-simulator`) would have unframed it silently; a test now requires each id in `CMS_FRAMED_ROUTES` to name a directory with a `+page`. Second, the encoded-path unit test could not prove SvelteKit's decoding, since the hook no longer reads the URL; `tests/smoke/slice-simulator.spec.ts` now asks the server for `/slice%2Dsimulator` and `/slice%2dsimulator`. On `main` it fails both encoded paths, and on this branch it passes. Its control first failed on both, because it checked the whole CSP for `*.prismic.io`, which `connect-src` and `img-src` legitimately name; it now looks only at `frame-ancestors`. Third, under `CI` the build test fails instead of skipping when there is no build to read. Fourth, the re-export guard no longer accepts `export {} from` or `export * from`, since each can pull a module in for its side effects alone, and declaring the barrel side-effect-free would then drop it. Fifth, the production client was proven in a browser. The whole Playwright suite ran against `vite preview` of this branch and of `main`. Both fail the same seven `/dev` fixture specs, which 404 in a production build, and pass everything else. The shared config's own preview mode cannot start on the placeholder starter, because its readiness probe waits for `/`, and `/` is a 404 here.
+
+## 2026-10-05 — A pre-commit hook runs prettier on what is staged, as on roalson-interests (`claude/trusting-hawking-aauv3f`)
+
+Ported from roalson-interests#259. That site's #251 went red in 20 seconds on `prettier --check` before any test ran, and formatting is the one CI failure a machine can fix without judgement. `pnpm install` now runs `prepare`, and `simple-git-hooks` writes `.git/hooks/pre-commit`. The hook runs `lint-staged`, which runs `prettier --write --ignore-unknown` on the staged files. Every site generated from this template gets it on its first install. The cloud-session setup hook already runs `pnpm install --frozen-lockfile`, so cloud sessions get it too.
+
+The same four cases were re-measured here, because this repo pins pnpm 12.5.1 where roalson pins 11.11.0:
+
+| case                              | result                                                  |
+| --------------------------------- | ------------------------------------------------------- |
+| staged, badly formatted line      | committed as `export const uglyThing = { a: 1, b: 2 };` |
+| unstaged edit in the same file    | left unstaged and untouched                             |
+| staged syntax error               | hook rc 1, HEAD unmoved                                 |
+| worktree with no `node_modules`   | commits, with the `pre-commit:` line                    |
+| install with no `.git`, `CI=true` | `No .git root folder found, skipping`, rc 0             |
+
+The hook calls `node_modules/.bin/lint-staged` rather than `pnpm exec lint-staged` for the reason the roalson entry gives. Hooks live in the shared `.git/hooks` and fire in every worktree. There, pnpm's dependency-status check aborted a commit in a worktree with a symlinked `node_modules`, and a worktree with no install would have been blocked outright.
+
+`simple-git-hooks: false` sits under `allowBuilds`, because the root `prepare` does the install and pnpm refuses an unlisted build script (`ERR_PNPM_IGNORED_BUILDS`).
+
+Not done: `reddoor-starter-blux` does not carry this yet. Per its README it adopts native changes by cherry-pick, never by merge.
