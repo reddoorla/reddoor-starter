@@ -86,9 +86,9 @@ export function jsonLdScript(data: unknown): string {
  * `/preview` route segment removed and the query string / hash dropped (so
  * `?utm_*`-tagged and previewed URLs both canonicalize to the real page).
  * The origin is whatever `page.url` carries — prerender-safe because the
- * starter sets `kit.prerender.origin` from Netlify's `URL` at build time.
+ * starter sets `paths.origin` (kit 2: `prerender.origin`) from Netlify's `URL` at build time.
  */
-export function canonicalUrl(url: URL | string): string {
+export function canonicalUrl(url: Pick<URL, "origin" | "pathname"> | string): string {
   const u = typeof url === "string" ? new URL(url) : url;
   let path = u.pathname;
   if (path === "/preview" || path === "/preview/") {

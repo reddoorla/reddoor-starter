@@ -19,7 +19,7 @@
     imageAlt?: string;
     /** The live page URL (page.url). Canonical + og:url are derived from it
      *  with the query string and /preview segment stripped. */
-    url: URL | string;
+    url: Pick<URL, "origin" | "pathname"> | string;
     /** og:type — "website" (default) for most pages, "article" for posts. */
     type?: string;
     siteName?: string;

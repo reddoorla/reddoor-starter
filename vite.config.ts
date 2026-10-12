@@ -4,9 +4,13 @@ import { imagetools } from "@zerodevx/svelte-img/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { privacyServices } from "./scripts/privacy-services.ts";
 import { prismicBarrel } from "./scripts/prismic-barrel.ts";
+import kitConfig from "./sveltekit.config.js";
 
 export default defineConfig({
-  plugins: [sveltekit(), imagetools(), tailwindcss(), privacyServices(), prismicBarrel()],
+  // SvelteKit 3 takes its configuration here, not from svelte.config.js
+  // (which it refuses to start beside). The object lives in sveltekit.config.js
+  // so eslint, the privacy-services plugin and the tests read the same one.
+  plugins: [sveltekit(kitConfig), imagetools(), tailwindcss(), privacyServices(), prismicBarrel()],
   server: {
     fs: {
       // Allow access to files from the project root.
