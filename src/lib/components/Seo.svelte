@@ -4,6 +4,7 @@
     SITE_LOCALE,
     DEFAULT_DESCRIPTION,
     canonicalUrl,
+    siteOrigin,
     resolveOgImage,
     jsonLdScript,
   } from "$lib/seo";
@@ -43,7 +44,7 @@
   }: Props = $props();
 
   const canonical = $derived(canonicalUrl(url));
-  const origin = $derived(typeof url === "string" ? new URL(url).origin : url.origin);
+  const origin = $derived(siteOrigin(url));
   const og = $derived(resolveOgImage(image, origin));
   const jsonLdNodes = $derived(jsonLd == null ? [] : Array.isArray(jsonLd) ? jsonLd : [jsonLd]);
 </script>
