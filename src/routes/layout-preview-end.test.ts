@@ -9,7 +9,7 @@ vi.mock("$app/navigation", () => ({
   afterNavigate: vi.fn(),
   beforeNavigate: vi.fn(),
   goto: vi.fn(() => Promise.resolve()),
-  invalidateAll: vi.fn(() => Promise.resolve()),
+  refreshAll: vi.fn(() => Promise.resolve()),
 }));
 vi.mock("$app/state", () => ({
   page: { data: {}, url: new URL("https://example.com/"), params: {}, status: 200 },
