@@ -1,0 +1,9 @@
+{
+  "lockFileMaintenance": { "schedule": ["at any time"], "automerge": false },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "major", "digest", "pin", "pinDigest", "rollback", "bump", "replacement", "lockFileMaintenance"],
+      "automerge": false
+    }
+  ]
+}

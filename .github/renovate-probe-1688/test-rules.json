@@ -1,0 +1,12 @@
+{
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major", "digest"],
+      "prCreation": "immediate"
+    },
+    {
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "prPriority": 1
+    }
+  ]
+}

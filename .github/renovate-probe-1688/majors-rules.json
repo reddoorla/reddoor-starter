@@ -1,0 +1,13 @@
+{
+  "lockFileMaintenance": { "enabled": false },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest", "rollback", "bump", "replacement"],
+      "enabled": false
+    },
+    {
+      "matchUpdateTypes": ["major", "digest"],
+      "automerge": false
+    }
+  ]
+}
