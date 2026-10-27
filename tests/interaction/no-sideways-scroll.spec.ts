@@ -20,15 +20,15 @@ for (const width of [1440, 390]) {
       const probe = document.createElement("div");
       probe.style.cssText = "width: calc(100vw + 200px); height: 1px";
       document.body.append(probe);
-      window.scrollTo(10_000, 0);
+      window.scrollTo({ left: 10_000, behavior: "instant" });
       const x = window.scrollX;
       probe.remove();
-      window.scrollTo(0, 0);
+      window.scrollTo({ left: 0, behavior: "instant" });
       return x;
     });
     expect(control).toBeGreaterThan(0);
     const scrolled = await page.evaluate(() => {
-      window.scrollTo(10_000, 0);
+      window.scrollTo({ left: 10_000, behavior: "instant" });
       return window.scrollX;
     });
     expect(scrolled).toBe(0);
