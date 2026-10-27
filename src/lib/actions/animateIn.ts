@@ -60,11 +60,11 @@ function resolveConfig(param: AnimateInParam): ResolvedConfig {
   };
 }
 
-/** app.css's `--ease-fast-slow` (src/theme-utilities.test.ts holds the two
- *  equal), as the fallback: a site whose own `@theme`
- *  still names it `--transition-fast-slow` (its v3 name) keeps the curve
- *  instead of a `0s ease` reveal that snaps. */
-const EASE_FAST_SLOW = "cubic-bezier(0.5, 0, 0, 1)";
+/** app.css's `--ease-fast-slow`, falling back to the v3 name a site's own
+ *  `@theme` may still carry, so the site keeps its own curve; failing both,
+ *  `ease-out` rather than an undefined var(), which makes the whole transition
+ *  `0s` and snaps the reveal. */
+const EASE = "var(--ease-fast-slow, var(--transition-fast-slow, ease-out))";
 
 function applyHidden(node: HTMLElement, cfg: ResolvedConfig) {
   // The attribute is the declarative twin of the two style writes below:
@@ -90,8 +90,7 @@ function applyHidden(node: HTMLElement, cfg: ResolvedConfig) {
   node.style.opacity = "0";
   node.style.transform = `translateY(${cfg.translateY})`;
   node.style.transition =
-    `opacity ${cfg.duration}ms var(--ease-fast-slow, ${EASE_FAST_SLOW}), ` +
-    `transform ${cfg.duration}ms var(--ease-fast-slow, ${EASE_FAST_SLOW})`;
+    `opacity ${cfg.duration}ms ${EASE}, ` + `transform ${cfg.duration}ms ${EASE}`;
 }
 
 function reveal(node: HTMLElement) {
