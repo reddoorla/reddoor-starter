@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { Menu, X, ChevronDown } from "@lucide/svelte";
+  import ChevronDown from "@lucide/svelte/icons/chevron-down";
+  import Menu from "@lucide/svelte/icons/menu";
+  import X from "@lucide/svelte/icons/x";
   import { trapFocus } from "$lib/actions/trapFocus";
   import { fade } from "$lib/transitions";
   import type { NavItem } from "$lib/site-config";
