@@ -41,6 +41,12 @@ describe("the specs build axe in one place", () => {
     expect(offenders(/new AxeBuilder\(/, [HELPER, CONTROL])).toEqual([]);
   });
 
+  it("imports axe's package nowhere else, under any name", () => {
+    // `import Axe from "@axe-core/playwright"` builds the default preload
+    // under a name the check above does not know.
+    expect(offenders(/["']@axe-core\/playwright["']/, [HELPER, CONTROL])).toEqual([]);
+  });
+
   it("never re-sets axe's options after the helper", () => {
     expect(offenders(/\.options\(/, [HELPER])).toEqual([]);
   });

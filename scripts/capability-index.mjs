@@ -95,7 +95,7 @@ export function surfaceOf(source, file) {
   const names = new Set();
   if (extname(file) === ".svelte") {
     for (const m of source.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g))
-      if (/\bmodule\b/.test(m[1])) exportsOf(m[2], names, true);
+      if (/(?:^|\s)module(?=[\s=]|$)/.test(m[1])) exportsOf(m[2], names, true);
     for (const m of source.matchAll(/interface\s+\w*Props\b[^{]*\{([\s\S]*?)\n\s*\}/g))
       for (const p of m[1].matchAll(/^\s*(?:\/\*[\s\S]*?\*\/\s*)?([a-zA-Z_$][\w$]*)\??\s*:/gm))
         names.add(p[1]);
@@ -128,11 +128,11 @@ export function summaryOf(source) {
   const block = /^\s*\/\*\*?([\s\S]*?)\*\//.exec(body);
   const run = /^((?:\s*\/\/.*\n)+)/.exec(body);
   const prop = /interface\s+\w*Props\b[^{]*\{[\s\S]*?\/\*\*([\s\S]*?)\*\//.exec(body);
-  const raw = block ? block[1] : run ? run[1].replace(/^\s*\/\/ ?/gm, "") : prop ? prop[1] : "";
+  const raw = block ? block[1] : run ? run[1].replace(/^[ \t]*\/\/ ?/gm, "") : prop ? prop[1] : "";
   const paragraph =
     raw
       .replace(/^\s*\*ipsum?/gm, "")
-      .replace(/^\s*\* ?/gm, "")
+      .replace(/^[ \t]*\* ?/gm, "")
       .split(/\n\s*\n/)
       .find((p) => p.trim()) ?? "";
   return paragraph.replace(/\s+/g, " ").trim().replace(/\.$/, "");

@@ -147,6 +147,9 @@ describe("surfaceOf", () => {
     expect(surfaceOf(a, "X.svelte")).toEqual(["buttonBase", "tone", "href"]);
     const b = `<script lang="ts" module>\n  export const MAP_TONES = {};\n</script>`;
     expect(surfaceOf(b, "X.svelte")).toEqual(["MAP_TONES"]);
+    // An attribute that merely contains the word is not the module script.
+    const c = `<script lang="ts" data-module>\n  export const NOPE = 1;\n</script>`;
+    expect(surfaceOf(c, "X.svelte")).toEqual([]);
     // The real rows: every `export const` in a module script.
     const rows = readFileSync(join(ROOT, OUT), "utf8").split("\n");
     const surface = (file: string) =>
@@ -212,6 +215,11 @@ describe("summaryOf", () => {
     expect(summaryOf("/**\n * Lead. Second.\n *\n * Later paragraph.\n */\nexport {};")).toBe(
       "Lead. Second",
     );
+    // A blank line between two `//` comments is a paragraph break too: the
+    // second is not part of the summary.
+    expect(
+      summaryOf('// Lead.\n\n// eslint-disable-next-line no-console\nimport x from "y";\n'),
+    ).toBe("Lead");
   });
 
   it("is empty when the module documented nothing", () => {
