@@ -111,12 +111,12 @@ describe("animateIn — viewport mode", () => {
       value: 1000,
       configurable: true,
     });
-    const placed = () => {
+    const placed = (left = 500) => {
       const el = document.createElement("div");
       document.body.appendChild(el);
       el.getBoundingClientRect = () =>
         ({
-          left: 500,
+          left,
           top: 0,
           right: 0,
           bottom: 0,
@@ -138,6 +138,15 @@ describe("animateIn — viewport mode", () => {
     const bounded = placed();
     animateIn(bounded, { delayMax: 100 });
     expect(parseFloat(bounded.style.transitionDelay)).toBeLessThanOrEqual(100);
+
+    // The delay follows position: further right reveals later.
+    const near = placed(200);
+    animateIn(near, { delayMax: 800 });
+    const far = placed(800);
+    animateIn(far, { delayMax: 800 });
+    expect(parseFloat(far.style.transitionDelay)).toBeGreaterThan(
+      parseFloat(near.style.transitionDelay),
+    );
   });
 
   it("staggers by index x step when `stagger` is set", () => {
