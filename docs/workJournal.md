@@ -735,3 +735,43 @@ v3 (published 10-27, peer `@sveltejs/kit ^3`) rewrites `SliceSimulator` as a Sve
 Nothing renders `/slice-simulator` inside Prismic's builder, so the evidence that the page works on v3 is the type check and the build, not a test.
 
 Not done here: `src/lib/components/PrismicPreview.svelte` is the local kit 3 copy from the 2026-10-14 entry, kept until "upstream ships a kit 3 release". 3.0.0 is that release, but its `kit/PrismicPreview.svelte` is not the same file (it adds route-prefix handling), so swapping the import back is its own change with its own check against `layout-preview-end.test.ts`, filed as an issue rather than folded in.
+
+## 2026-10-27 — roalson-interests' starter fixes come home: four PRs, eight items (#229, #230, #233, #234; reddoor-maintenance#947)
+
+roalson-interests' 2026-09-29 triage fixed defects in files it inherited from this template, and nothing went back upstream, so every new site still started with them. This session sent them back. Two of the eight items were already here: the hydration marker (#184) and the preview route's `linkResolver` (#164). The other six landed in four PRs. Item by item, the answers are in reddoor-maintenance#947's closing comment. This entry covers what cost something.
+
+**The capability index was wrong about this repo, not only about roalson's.** It counted one test file per module, so `animateIn.ts` read 21 with 34 behind it and `transitions.ts` read 10 with 17. It could not see `<script module>` exports, so `DefaultButton`'s row offered `href` and hid the three class strings a caller rendering its own element needs. CodeQL flagged the new `<script>` regex twice before it passed: once for case, once for `</script\t\n bar>`. The regex feeds a docs index and sanitizes nothing, but a tag it cannot see is a surface the index drops, so it got the fix.
+
+**The Lucide barrel cost this repo too.** Measured with one full `vitest run` each: transform went from 54.80s to 7.35s, and wall time from 67.2s to 39.2s. Nav had the same import, which roalson's Nav has no icons to show. The guard found it.
+
+**axe's preload was latent here, and proving that took a control.** On `/dev/a11y-fixtures` the default builder made no request at all, because the starter ships system fonts. That green is the absence of an error, which this file says never grants a pass. With a Google Fonts sheet added to the page, the same builder logged the `connect-src` refusal and posted `/api/csp-report`. So the control spec adds that sheet itself, answered by `page.route`. Roalson's guard checked that axe was built in one place, but not that the place turned preload off: restoring the default left its three checks green. It now checks the builder's options, and that nothing else imports the package under another name.
+
+**Item 7 was not what the brief said.** The brief said to take VimeoBanner and ScreenWidthMedia off `w-screen`. Roalson never did. It clipped the two sections on its fixture page and kept the components as they were. Here the fixture page scrolled 376px at 1440 and 47px at 390 under `scrollTo`, and 0 with either section clipped or hidden. `body`'s `overflow-x: clip` computes to `hidden` beside `overflow-y: auto`, which stops a wheel and not a script. Taking the components to `w-full` would have shrunk them on any fleet site that places one in a column. The operator chose the call-site clip (reddoor-workspace `decisions/2026-10-27-1421-p1-82-947-full-width-components.md`).
+
+**The dead-class test took five review rounds, and every finding was in the instrument.** The product half of #230 (`--ease-fast-slow`, `bg-surface` dropped, the reveal wording) drew no finding after round 1. The test that proves it drew 14 majors across five rounds, each a false pass or a false fail:
+
+- `2xl:` read as dead, because Tailwind escapes a leading digit as `\32 `.
+- Comments, JS strings and other components' scoped `<style>` blocks exempted dead classes.
+- A fallback-equality check pinned the easing curve, a design value, into the gate.
+- `@plugin` crashed it.
+- Block-level `:global` was found by string match.
+- Regex-read markup missed `class=x` and read comparison operands.
+- `:global()` inside `:is()` was treated as scoped.
+- A class prop handed to a child counted as defined by the parent's pruned `<style>`.
+
+What ended the cycle was reading markup and CSS from `svelte/compiler`'s `parse()` rather than a better regex. On this repo the AST reader sees the same 274 classes the regex did, plus `w-3` from Slider's template literal. Round 5 still found five defects, on input neither this repo nor roalson writes. At the five-round stop the operator chose to land 92f91c1, with all of them fixed and 34 probes passing, and no sixth review (reddoor-workspace `decisions/2026-10-27-1532-p1-82-947-pr230-review-stop.md`).
+
+**Beliefs corrected on contact.**
+
+- "Roalson measured that un-marked content fades out at hydration" was half true. It measured an element 1.14 viewports below the fold. Above the fold, the observer reverses the hide once it reports, so the dip lasts as long as the main thread is busy. The prose says that now.
+- `ease-fast-slow` was a valid class the moment the token was renamed. So the brief's mutation 2 ("re-add `ease-fast-slow`") could not go red. A dead v3 name (`ease-in-expo`) and the token back at its v3 name stood in for it.
+
+**Honest accounting.**
+
+- This container has Node 22; CI runs 24.22.1, so CI was the only Node 24 evidence.
+- I emptied the test's `HOOKS` list believing `mt-copy` was roalson-only, because a `grep … | head -4` cut off the starter's own MediaText hit. The next run went red, and the entry came back.
+- A `pnpm exec` in a worktree that borrowed this checkout's `node_modules` silently re-linked `@prismicio/svelte`, and the `$app/tsconfig` kit 3 writes into `node_modules` points at whichever tree generated it. Worktrees here need their own install for `svelte-check`.
+
+Filed, not fixed: #231 (`exportsOf` export forms), #232 (guards anchored on starter files, which matters for the fleet rollout), #235 (`--screen-*` breakpoints are dead in v4, and fixing them moves `sm:` and `xl:` on every site). `reddoor-starter-blux` shares Modal, Accordion, Nav, `app.css`, `animateIn.ts` and both full-width components, and was out of scope.
+
+Usage: $27.00, 816/321710 tokens, 72807811/957185 cache, rate limit allowed_warning
