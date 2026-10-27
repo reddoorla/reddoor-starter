@@ -718,7 +718,7 @@ The fix is a local copy, `src/lib/components/PrismicPreview.svelte`, that passes
 
 `src/routes/layout-preview-end.test.ts` renders the root layout with a preview session and fires `prismicPreviewEnd`. It asserts that `goto` gets `reset: false` and gets no `noScroll` or `keepFocus`. It went red against the upstream component (`{ invalidateAll: true, noScroll: true }`). It also goes red when `noScroll: true` is put back in the copy, and when `reset: false` is dropped.
 
-## 2026-10-27 — Two duration and timer-count pins become behaviour, and the /dev guard check is marked a GUARD (#TBD)
+## 2026-10-27 — Two duration and timer-count pins become behaviour, and the /dev guard check is marked a GUARD (#225)
 
 The fleet test audit (reddoorla/reddoor-workspace `audits/2026-10-26-fleet-test-audit/report.md`, batch C) found three tests here that break this file's own rule. Two were pins. `animateIn`'s "honors a custom delayMax" asserted `transitionDelay` was exactly `400ms` for an element halfway across a 1000px viewport at `delayMax: 800`; it now asserts that `delayMax: 0` reveals the element with no delay and that `delayMax: 100` keeps the delay at or under 100. ScreenWidthMedia's soft-cap test counted timers (two armed, then none); it now advances to one millisecond short of the hard cap and asserts the iframe has revealed, which only the soft cap can have done. To say "short of the hard cap" without restating 6000, the component exports the number from a module script as `VIDEO_REVEAL_HARD_CAP_MS`.
 
