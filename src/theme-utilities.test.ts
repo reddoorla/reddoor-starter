@@ -1,6 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { readFileSync, readdirSync } from "node:fs";
-import { createRequire } from "node:module";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parse } from "svelte/compiler";
@@ -14,11 +13,12 @@ import { animateIn } from "$lib/actions/animateIn";
 // defect for breakpoints there, #171). So this compiles app.css with Tailwind itself and asks
 // it about every class the markup spells.
 //
-// What it reads: the static text of `class=` / `*Class=` attribute values in
-// src/**/*.svelte, the '…' and "…" literals inside their `{…}` expressions,
-// and `class:` directives. It does not read class strings kept in script
-// constants or prop defaults, or inside template literals, so a dead class
-// there passes.
+// What it reads, from the Svelte AST: the text of `class=` / `*Class=`
+// attributes, the string literals in class position inside their `{…}` (both
+// branches of a ternary, the right of `&&`, array items, object keys, call
+// arguments; never a comparison operand), and `class:` directives. It does not
+// read class strings kept in script constants or prop defaults, template
+// literals, or `+` concatenations, so a dead class there passes.
 //
 // Resolved from the project root: under jsdom `import.meta.url` is not a file:
 // URL (see reduced-motion-reset.test.ts).
@@ -39,110 +39,139 @@ function* files(dir: string, re: RegExp): Generator<string> {
   }
 }
 
-/** The attribute value that starts at `s[i]` — quoted or a bare `{…}`. */
-function valueAt(s: string, i: number): string {
-  const open = s[i];
-  const close = open === "{" ? "}" : open;
-  if (open !== '"' && open !== "'" && open !== "{") return "";
-  let depth = open === "{" ? 1 : 0;
-  for (let j = i + 1; j < s.length; j++) {
-    if (s[j] === "{") depth++;
-    else if (s[j] === "}" && open !== "{") depth--;
-    else if (s[j] === "}" && --depth === 0) return `{${s.slice(i + 1, j)}}`;
-    else if (s[j] === close && depth === 0) return s.slice(i + 1, j);
-  }
-  return "";
-}
+type Node = { type?: string; [key: string]: unknown };
 
-/** Static text outside braces, plus '…' and "…" literals inside them. */
-function classTokens(value: string): string[] {
-  const parts: string[] = [];
-  let depth = 0;
-  let text = "";
-  for (let i = 0; i < value.length; i++) {
-    const ch = value[i]!;
-    if (ch === "{") depth++;
-    else if (ch === "}") depth--;
-    else if (depth === 0) text += ch;
-    else if (ch === "'" || ch === '"' || ch === "`") {
-      const end = value.indexOf(ch, i + 1);
-      if (end === -1) break;
-      if (ch !== "`") parts.push(value.slice(i + 1, end));
-      i = end;
+const parsedCache = new Map<string, ReturnType<typeof parse>>();
+/** One file's Svelte AST, parsed once; a parse error names the file. */
+const parsed = (rel: string) => {
+  if (!parsedCache.has(rel)) {
+    try {
+      parsedCache.set(
+        rel,
+        parse(readFileSync(join(ROOT, rel), "utf8"), { modern: true, filename: rel }),
+      );
+    } catch (err) {
+      throw new Error(`${rel} does not parse: ${(err as Error).message}`, { cause: err });
     }
-    if (ch === "{" || ch === "}") text += " ";
   }
-  parts.push(text);
-  return parts
-    .join(" ")
-    .split(/\s+/)
-    .filter((t) => t && !/[`${}]/.test(t));
+  return parsedCache.get(rel)!;
+};
+
+/** The class strings an expression can put in a class attribute. */
+function classLiterals(e: Node | null | undefined): string[] {
+  if (!e) return [];
+  switch (e.type) {
+    case "Literal":
+      return typeof e.value === "string" ? [e.value] : [];
+    case "ConditionalExpression":
+      return [...classLiterals(e.consequent as Node), ...classLiterals(e.alternate as Node)];
+    case "LogicalExpression":
+      return e.operator === "&&"
+        ? classLiterals(e.right as Node)
+        : [...classLiterals(e.left as Node), ...classLiterals(e.right as Node)];
+    case "ArrayExpression":
+      return (e.elements as Node[]).flatMap(classLiterals);
+    case "ObjectExpression":
+      return (e.properties as Node[]).flatMap((p) => {
+        const key = p.key as Node | undefined;
+        if (p.type !== "Property" || p.computed || !key) return [];
+        return key.type === "Identifier" ? [key.name as string] : classLiterals(key);
+      });
+    case "CallExpression":
+      return (e.arguments as Node[]).flatMap(classLiterals);
+    default:
+      return [];
+  }
 }
 
 /** Every class the markup spells, and the files that spell it. */
 function spelledClasses(): Map<string, string[]> {
   const found = new Map<string, string[]>();
-  const add = (t: string, rel: string) => {
-    const at = found.get(t) ?? [];
-    if (!at.includes(rel)) at.push(rel);
-    found.set(t, at);
-  };
   for (const rel of files("src", /\.svelte$/)) {
-    const src = readFileSync(join(ROOT, rel), "utf8");
-    for (const m of src.matchAll(/\s(?:class|[a-z][A-Za-z]*Class)=/g)) {
-      for (const t of classTokens(valueAt(src, m.index + m[0].length))) add(t, rel);
-    }
-    for (const m of src.matchAll(/\sclass:([^\s=>]+)/g)) add(m[1]!, rel);
+    const add = (text: string) => {
+      for (const t of text.split(/\s+/).filter(Boolean)) {
+        const at = found.get(t) ?? [];
+        if (!at.includes(rel)) at.push(rel);
+        found.set(t, at);
+      }
+    };
+    const walk = (n: unknown): void => {
+      if (Array.isArray(n)) return n.forEach(walk);
+      if (!n || typeof n !== "object") return;
+      const node = n as Node;
+      if (node.type === "ClassDirective") add(node.name as string);
+      if (
+        node.type === "Attribute" &&
+        /^(?:class|[a-z][A-Za-z]*Class)$/.test(node.name as string)
+      ) {
+        const value = node.value;
+        for (const part of (Array.isArray(value) ? value : [value]) as Node[]) {
+          if (part?.type === "Text") add(part.data as string);
+          if (part?.type === "ExpressionTag") classLiterals(part.expression as Node).forEach(add);
+        }
+      }
+      for (const [k, v] of Object.entries(node)) if (k !== "parent" && k !== "metadata") walk(v);
+    };
+    walk(parsed(rel).fragment);
   }
   return found;
 }
 
 type CssNode = { type?: string; name?: string; args?: unknown; [key: string]: unknown };
 
-/** The classes a component's own <style> defines, as Svelte parses it — so a
- *  comment, a string, or a <style> inside a script or an HTML comment defines
- *  nothing. A scoped rule defines the class for its own file only; a
- *  `:global(.x)`, a `:global .x` or a `:global { … }` block, for every file. */
-function componentClasses(src: string): { own: Set<string>; global: Set<string> } {
+/** The classes a component's own <style> defines, from the AST Svelte parses —
+ *  so a comment, a string, or a <style> inside a script or an HTML comment
+ *  defines nothing. A scoped rule defines the class for its own file only.
+ *  For every file: `:global(.x)`, everything after a bare `:global` in a
+ *  selector (`div :global .x`), and every rule inside a block whose selector
+ *  ends in a bare `:global` (`:global { … }`, `.card :global { … }`). A
+ *  `:global(…)` nested in `:is()`, `:where()`, `:not()` or `:has()` still
+ *  applies only inside its file, so it stays scoped. */
+function componentClasses(rel: string): { own: Set<string>; global: Set<string> } {
   const own = new Set<string>();
   const global = new Set<string>();
-  const css = parse(src, { modern: true }).css as CssNode | null;
+  const css = parsed(rel).css as CssNode | null;
   const bareGlobal = (n: CssNode) =>
     n.type === "PseudoClassSelector" && n.name === "global" && !n.args;
-  const walk = (n: unknown, inGlobal: boolean): void => {
-    if (Array.isArray(n)) return n.forEach((c) => walk(c, inGlobal));
+  /** Whether a complex selector's last simple selector is a bare :global. */
+  const endsBare = (c: CssNode) => {
+    const rels = c.children as CssNode[];
+    const last = (rels.at(-1)?.selectors as CssNode[] | undefined)?.at(-1);
+    return !!last && bareGlobal(last);
+  };
+  const walk = (n: unknown, inGlobal: boolean, nested: boolean): void => {
+    if (Array.isArray(n)) return n.forEach((c) => walk(c, inGlobal, nested));
     if (!n || typeof n !== "object") return;
     const node = n as CssNode;
-    if (node.type === "ClassSelector") {
-      (inGlobal ? global : own).add(node.name!);
-      return;
-    }
-    if (node.type === "ComplexSelector") {
-      // `:global .x`: every selector after a bare :global is global.
-      let after = inGlobal;
-      for (const rel of node.children as CssNode[]) {
-        for (const sel of rel.selectors as CssNode[]) {
-          if (bareGlobal(sel)) after = true;
-          else walk(sel, after);
+    switch (node.type) {
+      case "ClassSelector":
+        (inGlobal ? global : own).add(node.name!);
+        return;
+      case "ComplexSelector": {
+        let after = inGlobal;
+        for (const r of node.children as CssNode[]) {
+          for (const sel of r.selectors as CssNode[]) {
+            if (bareGlobal(sel) && !nested) after = true;
+            else walk(sel, after, nested);
+          }
         }
+        return;
       }
-      return;
+      case "PseudoClassSelector":
+        if (node.name === "global") walk(node.args, inGlobal || !nested, nested);
+        else
+          walk(node.args, inGlobal, nested || ["is", "where", "not", "has"].includes(node.name!));
+        return;
+      case "Rule": {
+        const list = (node.prelude as CssNode).children as CssNode[];
+        walk(node.prelude, inGlobal, nested);
+        walk(node.block, inGlobal || list.some(endsBare), nested);
+        return;
+      }
     }
-    if (node.type === "PseudoClassSelector" && node.name === "global") {
-      walk(node.args, true); // `:global(.x)`
-      return;
-    }
-    if (node.type === "Rule") {
-      // `:global { … }`: a rule whose whole prelude is a bare :global.
-      const prelude = JSON.stringify(node.prelude);
-      const blockGlobal = !prelude.includes('"ClassSelector"') && prelude.includes('"global"');
-      walk(node.prelude, inGlobal);
-      walk(node.block, inGlobal || blockGlobal);
-      return;
-    }
-    for (const [k, v] of Object.entries(node)) if (k !== "parent") walk(v, inGlobal);
+    for (const [k, v] of Object.entries(node)) if (k !== "parent") walk(v, inGlobal, nested);
   };
-  if (css) walk(css.children, false);
+  if (css) walk(css.children, false, false);
   return { own, global };
 }
 
@@ -158,16 +187,31 @@ beforeAll(async () => {
   const index = resolve(ROOT, "node_modules/tailwindcss/index.css");
   tailwind = await compile(CSS, {
     base: resolve(ROOT, "src"),
-    // `@plugin "…"`: resolved from where app.css would resolve it.
+    // `@plugin "…"`, loaded as the bundler would: a relative path against
+    // src, with Tailwind's extensions (`.ts` too); a package through import(),
+    // so an ESM-only `exports` resolves.
     loadModule: async (id, base) => {
-      let path: string;
-      try {
-        path = createRequire(join(base, "app.css")).resolve(id);
-      } catch {
-        throw new Error(`app.css loads the plugin ${id}, which does not resolve; teach this test`);
+      const relative = id.startsWith(".") || id.startsWith("/");
+      const candidates = relative
+        ? ["", ".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", "/index.js", "/index.ts"]
+            .map((ext) => resolve(base, id + ext))
+            .filter((path) => existsSync(path) && statSync(path).isFile())
+        : [id];
+      for (const path of candidates) {
+        try {
+          const mod = (await import(relative ? pathToFileURL(path).href : path)) as {
+            default?: unknown;
+          };
+          return {
+            path,
+            base: relative ? dirname(path) : base,
+            module: (mod.default ?? mod) as never,
+          };
+        } catch {
+          // fall through to the refusal below
+        }
       }
-      const module = ((await import(pathToFileURL(path).href)) as { default: unknown }).default;
-      return { path, base: dirname(path), module: module as never };
+      throw new Error(`app.css loads the plugin ${id}, which does not resolve; teach this test`);
     },
     loadStylesheet: async (id) => {
       if (id !== "tailwindcss")
@@ -204,7 +248,7 @@ describe("classes the markup spells", () => {
     const own = new Map<string, Set<string>>();
     const global = new Set<string>();
     for (const rel of files("src", /\.svelte$/)) {
-      const defined = componentClasses(readFileSync(join(ROOT, rel), "utf8"));
+      const defined = componentClasses(rel);
       own.set(rel, defined.own);
       for (const cls of defined.global) global.add(cls);
     }
