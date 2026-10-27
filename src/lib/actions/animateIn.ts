@@ -60,7 +60,8 @@ function resolveConfig(param: AnimateInParam): ResolvedConfig {
   };
 }
 
-/** app.css's `--ease-fast-slow`, as the fallback: a site whose own `@theme`
+/** app.css's `--ease-fast-slow` (src/theme-utilities.test.ts holds the two
+ *  equal), as the fallback: a site whose own `@theme`
  *  still names it `--transition-fast-slow` (its v3 name) keeps the curve
  *  instead of a `0s ease` reveal that snaps. */
 const EASE_FAST_SLOW = "cubic-bezier(0.5, 0, 0, 1)";
@@ -72,8 +73,9 @@ function applyHidden(node: HTMLElement, cfg: ResolvedConfig) {
   // attribute FROM THE SERVER is already hidden at first paint and this call
   // re-writes byte-identical values instead of yanking a painted element out
   // from under the reader. Without it content paints in final position, sits
-  // there, and at hydration STARTS fading out and sliding down over `duration`
-  // — the transition is written in the same block, so it runs on the hide too.
+  // there, and at hydration starts fading out and sliding down over `duration`,
+  // after its stagger delay — the transition is written in the same block, so
+  // it runs on the hide too.
   // Below the fold it fades all the way (measured, roalson-interests#101);
   // above it, the observer reverses it the moment it reports, so the dip is as
   // deep as the main thread is busy after hydration. Either reads as the page

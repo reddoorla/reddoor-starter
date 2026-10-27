@@ -130,11 +130,16 @@ describe("classes the markup spells", () => {
   it("never names a theme key Tailwind does not have", () => {
     const spelled = spelledClasses();
     const css = tailwind.build([...spelled.keys()]);
-    // Comments stripped: a comment that names `.bg-surface` defines nothing.
+    // A class may also be defined by a real stylesheet: a .css file, or a
+    // <style> block. Only those, comments stripped, so a `.bg-surface` in a
+    // comment, a querySelector string or a script defines nothing.
     const styles = [...files("src", /\.(svelte|css)$/)]
-      .map((rel) =>
-        readFileSync(join(ROOT, rel), "utf8").replace(/\/\*[\s\S]*?\*\/|<!--[\s\S]*?-->/g, ""),
-      )
+      .flatMap((rel) => {
+        const text = readFileSync(join(ROOT, rel), "utf8");
+        if (rel.endsWith(".css")) return [text];
+        return [...text.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/g)].map((m) => m[1]!);
+      })
+      .map((sheet) => sheet.replace(/\/\*[\s\S]*?\*\//g, ""))
       .join("\n");
     /** Whether Tailwind has a utility by this root: `root-(--x)` compiles. */
     const knownRoot = (cls: string) => {
@@ -164,5 +169,12 @@ describe("the easing animateIn writes", () => {
     expect(reads, "animateIn's transition reads no token").not.toEqual([]);
     const theme = CSS.slice(CSS.indexOf("@theme {"), CSS.indexOf("\n}\n", CSS.indexOf("@theme {")));
     for (const name of reads) expect(theme).toMatch(new RegExp(`^\\s*${name}:`, "m"));
+    // A fallback in the var() is the token's own value, so the two cannot drift.
+    for (const [, name, fallback] of transition.matchAll(
+      /var\((--[\w-]+),\s*([^()]*\([^()]*\))\)/g,
+    )) {
+      const declared = new RegExp(`^\\s*${name}:\\s*([^;]+);`, "m").exec(theme)?.[1];
+      expect(fallback!.replace(/\s/g, ""), `${name}'s fallback`).toBe(declared?.replace(/\s/g, ""));
+    }
   });
 });
