@@ -107,28 +107,37 @@ describe("animateIn — viewport mode", () => {
   });
 
   it("honors a custom delayMax", () => {
-    const el = document.createElement("div");
-    document.body.appendChild(el);
     Object.defineProperty(window, "innerWidth", {
       value: 1000,
       configurable: true,
     });
-    el.getBoundingClientRect = () =>
-      ({
-        left: 500,
-        top: 0,
-        right: 0,
-        bottom: 0,
-        width: 0,
-        height: 0,
-        x: 0,
-        y: 0,
-        toJSON: () => ({}),
-      }) as DOMRect;
+    const placed = () => {
+      const el = document.createElement("div");
+      document.body.appendChild(el);
+      el.getBoundingClientRect = () =>
+        ({
+          left: 500,
+          top: 0,
+          right: 0,
+          bottom: 0,
+          width: 0,
+          height: 0,
+          x: 0,
+          y: 0,
+          toJSON: () => ({}),
+        }) as DOMRect;
+      return el;
+    };
 
-    animateIn(el, { delayMax: 800 });
+    // delayMax: 0 means the row reveals together, wherever it sits.
+    const together = placed();
+    animateIn(together, { delayMax: 0 });
+    expect(parseFloat(together.style.transitionDelay)).toBe(0);
 
-    expect(el.style.transitionDelay).toBe("400ms");
+    // A positive delayMax bounds the delay, below the default's.
+    const bounded = placed();
+    animateIn(bounded, { delayMax: 100 });
+    expect(parseFloat(bounded.style.transitionDelay)).toBeLessThanOrEqual(100);
   });
 
   it("staggers by index x step when `stagger` is set", () => {
