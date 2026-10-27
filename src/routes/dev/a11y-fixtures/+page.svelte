@@ -331,14 +331,18 @@
     <Img src={runImport} alt="Placeholder progressive image" />
   </section>
 
-  <section aria-labelledby="vimeo-banner-heading" class="space-y-4">
+  <!-- Both primitives are `w-screen` and full-bleed by design, so inside this
+       max-w-3xl column they reach past the viewport: asked to scroll right,
+       the page went 376px at 1440 and 47px at 390. Clipped here, on their own
+       sections and nowhere else, as roalson-interests#87 did. -->
+  <section aria-labelledby="vimeo-banner-heading" class="space-y-4 overflow-x-clip">
     <h2 id="vimeo-banner-heading" class="text-xl font-semibold">Vimeo banner</h2>
     <!-- No real video plays in CI: the iframe mounts only after genuine input,
          so axe sees the poster-only state. -->
     <VimeoBanner vimeoId="1" poster={runImport} alt="Placeholder banner reel" />
   </section>
 
-  <section aria-labelledby="screen-width-media-heading" class="space-y-4">
+  <section aria-labelledby="screen-width-media-heading" class="space-y-4 overflow-x-clip">
     <h2 id="screen-width-media-heading" class="text-xl font-semibold">Screen-width media</h2>
     <!-- Poster-only (no vimeoId) so the fixture makes no external requests:
          the video iframe needs a live player.vimeo.com src, so its a11y
