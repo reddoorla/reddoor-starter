@@ -150,8 +150,9 @@ describe("surfaceOf", () => {
     // An attribute that merely contains the word is not the module script.
     const c = `<script lang="ts" data-module>\n  export const NOPE = 1;\n</script>`;
     expect(surfaceOf(c, "X.svelte")).toEqual([]);
-    // HTML tag names are case-blind, and so is the closing tag's whitespace.
-    const d = `<SCRIPT module>\n  export const LOUD = 1;\n</SCRIPT >`;
+    // HTML tag names are case-blind, and an end tag may carry whitespace and
+    // junk before its `>` (CodeQL js/bad-tag-filter's own example).
+    const d = `<SCRIPT module>\n  export const LOUD = 1;\n</SCRIPT\t\n bar>`;
     expect(surfaceOf(d, "X.svelte")).toEqual(["LOUD"]);
     // The real rows: every `export const` in a module script.
     const rows = readFileSync(join(ROOT, OUT), "utf8").split("\n");
