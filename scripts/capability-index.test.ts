@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import {
   SOURCES,
@@ -8,6 +9,8 @@ import {
   listModules,
   surfaceOf,
   summaryOf,
+  testFilesFor,
+  testCountFor,
   buildIndex,
   renderIndex,
 } from "./capability-index.mjs";
@@ -57,7 +60,11 @@ describe("the capability index", () => {
     // …and the surface is what makes them recognisable at a glance. A row that
     // says only "Slider.svelte" is a filename; one that says `autoplay` is an
     // answer.
-    const slider = index.split("\n").find((l) => l.includes("Slider.svelte"))!;
+    // Slider's OWN row, by its module cell. `includes("Slider.svelte")` took the
+    // first row that merely MENTIONED it — carousel.svelte.ts's summary says
+    // what Slider's layout cannot hold, sorts earlier, and was read as Slider.
+    const slider = index.split("\n").find((l) => l.startsWith("| [`Slider.svelte`]"))!;
+    expect(slider, "no row whose module is Slider.svelte").toBeTruthy();
     for (const prop of ["autoplay", "showDots", "showArrows", "loop"])
       expect(slider, `Slider row missing \`${prop}\``).toContain(prop);
   });
@@ -125,16 +132,98 @@ describe("surfaceOf", () => {
     const src = `export const trapFocus = () => {};\nexport function helper() {}\n`;
     expect(surfaceOf(src, "x.ts")).toEqual(["trapFocus", "helper"]);
   });
+
+  it("reads a component's <script module> exports, in either attribute order", () => {
+    // DefaultButton exports its classes so a <button> can wear them, and the
+    // index could not see them: a caller looking for "the button classes" found
+    // a component that takes `href` (roalson-interests#59, its BrandButton).
+    const a = `<script module lang="ts">
+  export const buttonBase = "x";
+  export function tone() {}
+</script>
+<script lang="ts">
+  let { href } = $props();
+</script>`;
+    expect(surfaceOf(a, "X.svelte")).toEqual(["buttonBase", "tone", "href"]);
+    const b = `<script lang="ts" module>\n  export const MAP_TONES = {};\n</script>`;
+    expect(surfaceOf(b, "X.svelte")).toEqual(["MAP_TONES"]);
+    // An attribute that merely contains the word is not the module script.
+    const c = `<script lang="ts" data-module>\n  export const NOPE = 1;\n</script>`;
+    expect(surfaceOf(c, "X.svelte")).toEqual([]);
+    // HTML tag names are case-blind, and an end tag may carry whitespace and
+    // junk before its `>` (CodeQL js/bad-tag-filter's own example).
+    const d = `<SCRIPT module>\n  export const LOUD = 1;\n</SCRIPT\t\n bar>`;
+    expect(surfaceOf(d, "X.svelte")).toEqual(["LOUD"]);
+    // The real rows: every `export const` in a module script.
+    const rows = readFileSync(join(ROOT, OUT), "utf8").split("\n");
+    const surface = (file: string) =>
+      rows.find((l) => l.startsWith(`| [\`${file}\`]`))?.split(" | ")[1];
+    for (const name of ["buttonBaseClasses", "buttonSkinClasses", "buttonSkinInverseClasses"])
+      expect(surface("DefaultButton.svelte")).toContain(`\`${name}\``);
+    expect(surface("ScreenWidthMedia.svelte")).toContain("`VIDEO_REVEAL_HARD_CAP_MS`");
+  });
+});
+
+describe("testCountFor", () => {
+  it("sums every co-located suite a module has, split by concern or not", () => {
+    // On roalson-interests, Nav.premount.test.ts held 10 of Nav's tests and the
+    // row said 33, not 43 (roalson-interests#46).
+    const dir = mkdtempSync(join(tmpdir(), "capability-index-"));
+    try {
+      const put = (name: string, body = "") => writeFileSync(join(dir, name), body);
+      const its = (n: number) => Array.from({ length: n }, () => `it("x", () => {});`).join("\n");
+      put("Nav.svelte");
+      put("Nav.test.ts", its(3));
+      put("Nav.premount.test.ts", its(2));
+      put("Nav.drawer.svelte.test.ts", its(1));
+      put("Navigation.svelte");
+      put("Navigation.test.ts", its(7)); // a longer name, not a Nav suite
+      put("carousel.ts");
+      put("carousel.svelte.ts");
+      put("carousel.svelte.test.ts", its(4)); // the longest stem owns it
+      expect(testFilesFor("Nav.svelte", dir)).toEqual([
+        "./Nav.drawer.svelte.test.ts",
+        "./Nav.premount.test.ts",
+        "./Nav.test.ts",
+      ]);
+      expect(testCountFor("Nav.svelte", dir)).toBe(6);
+      expect(testCountFor("Navigation.svelte", dir)).toBe(7);
+      expect(testCountFor("carousel.svelte.ts", dir)).toBe(4);
+      expect(testCountFor("carousel.ts", dir)).toBe(0);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("finds animateIn's split suite in this repo", () => {
+    expect(testFilesFor("src/lib/actions/animateIn.ts")).toEqual([
+      "src/lib/actions/animateIn.marker.test.ts",
+      "src/lib/actions/animateIn.test.ts",
+    ]);
+  });
 });
 
 describe("summaryOf", () => {
-  it("takes the module's own first sentence, never inventing one", () => {
+  it("takes the module's own first paragraph, never inventing one", () => {
+    // A paragraph, not a sentence (roalson-interests#59): a second sentence
+    // naming exports was dropped from the row while an issue described it as
+    // indexed.
     expect(summaryOf("// Focus management for overlays. More text here.\nexport {};")).toBe(
-      "Focus management for overlays",
+      "Focus management for overlays. More text here",
     );
-    expect(summaryOf(`<script lang="ts">\n  // Progressive wrapper. Details.\n</script>`)).toBe(
-      "Progressive wrapper",
+    expect(
+      summaryOf(
+        `<script lang="ts">\n  // Progressive wrapper.\n  // Details.\n  //\n  // Aside.\n</script>`,
+      ),
+    ).toBe("Progressive wrapper. Details");
+    expect(summaryOf("/**\n * Lead. Second.\n *\n * Later paragraph.\n */\nexport {};")).toBe(
+      "Lead. Second",
     );
+    // A blank line between two `//` comments is a paragraph break too: the
+    // second is not part of the summary.
+    expect(
+      summaryOf('// Lead.\n\n// eslint-disable-next-line no-console\nimport x from "y";\n'),
+    ).toBe("Lead");
   });
 
   it("is empty when the module documented nothing", () => {
