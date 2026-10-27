@@ -60,6 +60,12 @@ function resolveConfig(param: AnimateInParam): ResolvedConfig {
   };
 }
 
+/** app.css's `--ease-fast-slow`, falling back to the v3 name a site's own
+ *  `@theme` may still carry, so the site keeps its own curve; failing both,
+ *  `ease-out` rather than an undefined var(), which makes the whole transition
+ *  `0s` and snaps the reveal. */
+const EASE = "var(--ease-fast-slow, var(--transition-fast-slow, ease-out))";
+
 function applyHidden(node: HTMLElement, cfg: ResolvedConfig) {
   // The attribute is the declarative twin of the two style writes below:
   // app.css hides `[data-reveal]` under `prefers-reduced-motion: no-preference`
@@ -67,7 +73,13 @@ function applyHidden(node: HTMLElement, cfg: ResolvedConfig) {
   // attribute FROM THE SERVER is already hidden at first paint and this call
   // re-writes byte-identical values instead of yanking a painted element out
   // from under the reader. Without it content paints in final position, sits
-  // there, and vanishes at hydration — which reads as the page breaking.
+  // there, and at hydration starts fading out and sliding down over `duration`,
+  // after its stagger delay — the transition is written in the same block, so
+  // it runs on the hide too.
+  // Below the fold it fades all the way (measured, roalson-interests#101);
+  // above it, the observer reverses it the moment it reports, so the dip is as
+  // deep as the main thread is busy after hydration. Either reads as the page
+  // breaking.
   //
   // Only true for the DEFAULT travel, which is what the CSS rule hard-codes
   // (src/reveal-hidden-state.test.ts asserts the two agree). A call site
@@ -78,8 +90,7 @@ function applyHidden(node: HTMLElement, cfg: ResolvedConfig) {
   node.style.opacity = "0";
   node.style.transform = `translateY(${cfg.translateY})`;
   node.style.transition =
-    `opacity ${cfg.duration}ms var(--transition-fast-slow), ` +
-    `transform ${cfg.duration}ms var(--transition-fast-slow)`;
+    `opacity ${cfg.duration}ms ${EASE}, ` + `transform ${cfg.duration}ms ${EASE}`;
 }
 
 function reveal(node: HTMLElement) {
