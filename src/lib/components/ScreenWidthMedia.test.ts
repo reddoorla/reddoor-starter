@@ -182,7 +182,12 @@ describe("ScreenWidthMedia quality reveal", () => {
 
   it("hard cap: reveals even if setQuality never settles", async () => {
     const { iframe } = await renderWithPlayer();
-    vi.runOnlyPendingTimers();
+    // Still hidden just short of the exported cap, and shown at it: that is
+    // what proves VIDEO_REVEAL_HARD_CAP_MS is the delay the hard cap uses.
+    await vi.advanceTimersByTimeAsync(VIDEO_REVEAL_HARD_CAP_MS - 1);
+    await tick();
+    expect(iframe.className).toContain("opacity-0");
+    await vi.advanceTimersByTimeAsync(1);
     await tick();
     expect(iframe.className).not.toContain("opacity-0");
   });

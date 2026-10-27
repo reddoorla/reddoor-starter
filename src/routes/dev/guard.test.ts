@@ -53,8 +53,8 @@ describe("/dev guard", () => {
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
 
-// GUARD, kept on purpose despite "Never assert on source as text": maintenance's carriesGuard (src/recipes/launch.ts:355) reads this literal.
-// reddoor-maintenance's launch pre-flight (`carriesGuard`) recognises this
+// GUARD, kept on purpose despite "Never assert on source as text":
+// reddoor-maintenance's launch pre-flight (`carriesGuard`, src/recipes/launch.ts:355) recognises this
 // guard only as a literal `if (!dev)` whose own branch refuses. A flattened
 // `if (!dev && …)` behaves the same and blocks launch.
 describe("/dev guard shape", () => {
