@@ -12,8 +12,10 @@ import { animateIn } from "$lib/actions/animateIn";
 // it about every class the markup spells.
 //
 // What it reads: the static text of `class=` / `*Class=` attribute values in
-// src/**/*.svelte, the string literals inside their `{…}` expressions, and
-// `class:` directives. Class strings kept in script constants are not read.
+// src/**/*.svelte, the '…' and "…" literals inside their `{…}` expressions,
+// and `class:` directives. It does not read class strings kept in script
+// constants or prop defaults, or inside template literals, so a dead class
+// there passes.
 //
 // Resolved from the project root: under jsdom `import.meta.url` is not a file:
 // URL (see reduced-motion-reset.test.ts).
@@ -78,7 +80,7 @@ function spelledClasses(): Map<string, string> {
   const found = new Map<string, string>();
   for (const rel of files("src", /\.svelte$/)) {
     const src = readFileSync(join(ROOT, rel), "utf8");
-    for (const m of src.matchAll(/\s(?:class|[a-z]+Class)=/g)) {
+    for (const m of src.matchAll(/\s(?:class|[a-z][A-Za-z]*Class)=/g)) {
       for (const t of classTokens(valueAt(src, m.index + m[0].length))) {
         if (!found.has(t)) found.set(t, rel);
       }
@@ -90,8 +92,10 @@ function spelledClasses(): Map<string, string> {
   return found;
 }
 
-/** A selector for `cls` as Tailwind escapes it. */
-const selector = (cls: string) => `.${cls.replace(/[^\w-]/g, (ch) => `\\${ch}`)}`;
+/** A selector for `cls` as Tailwind escapes it: a leading digit (`2xl:`)
+ *  becomes a code point, `\32 xl`, as CSS.escape writes it. */
+const selector = (cls: string) =>
+  `.${cls.replace(/[^\w-]/g, (ch) => `\\${ch}`).replace(/^\d/, (d) => `\\3${d} `)}`;
 const literally = (s: string) =>
   new RegExp(`${s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w-])`);
 
@@ -117,6 +121,8 @@ describe("classes the markup spells", () => {
       "no class the markup spells compiles",
     ).toBeGreaterThan(0);
     expect(tailwind.build(["ease-out"])).toContain("transition-timing-function: var(--ease-out)");
+    // A class that opens with a digit is escaped to a code point; it compiles.
+    expect(tailwind.build(["2xl:text-lg"])).toMatch(literally(selector("2xl:text-lg")));
     // Its answer for a key the theme lacks is nothing, which is the whole test.
     expect(tailwind.build(["ease-not-a-token"])).not.toContain(selector("ease-not-a-token"));
   });
@@ -124,8 +130,11 @@ describe("classes the markup spells", () => {
   it("never names a theme key Tailwind does not have", () => {
     const spelled = spelledClasses();
     const css = tailwind.build([...spelled.keys()]);
+    // Comments stripped: a comment that names `.bg-surface` defines nothing.
     const styles = [...files("src", /\.(svelte|css)$/)]
-      .map((rel) => readFileSync(join(ROOT, rel), "utf8"))
+      .map((rel) =>
+        readFileSync(join(ROOT, rel), "utf8").replace(/\/\*[\s\S]*?\*\/|<!--[\s\S]*?-->/g, ""),
+      )
       .join("\n");
     /** Whether Tailwind has a utility by this root: `root-(--x)` compiles. */
     const knownRoot = (cls: string) => {
@@ -151,7 +160,8 @@ describe("the easing animateIn writes", () => {
     const transition = node.style.transition;
     destroy();
     expect(transition, "animateIn wrote no transition to read").not.toBe("");
-    const reads = [...new Set([...transition.matchAll(/var\((--[\w-]+)\)/g)].map((m) => m[1]!))];
+    const reads = [...new Set([...transition.matchAll(/var\((--[\w-]+)[,)]/g)].map((m) => m[1]!))];
+    expect(reads, "animateIn's transition reads no token").not.toEqual([]);
     const theme = CSS.slice(CSS.indexOf("@theme {"), CSS.indexOf("\n}\n", CSS.indexOf("@theme {")));
     for (const name of reads) expect(theme).toMatch(new RegExp(`^\\s*${name}:`, "m"));
   });

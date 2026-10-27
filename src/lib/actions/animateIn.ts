@@ -60,6 +60,11 @@ function resolveConfig(param: AnimateInParam): ResolvedConfig {
   };
 }
 
+/** app.css's `--ease-fast-slow`, as the fallback: a site whose own `@theme`
+ *  still names it `--transition-fast-slow` (its v3 name) keeps the curve
+ *  instead of a `0s ease` reveal that snaps. */
+const EASE_FAST_SLOW = "cubic-bezier(0.5, 0, 0, 1)";
+
 function applyHidden(node: HTMLElement, cfg: ResolvedConfig) {
   // The attribute is the declarative twin of the two style writes below:
   // app.css hides `[data-reveal]` under `prefers-reduced-motion: no-preference`
@@ -67,10 +72,12 @@ function applyHidden(node: HTMLElement, cfg: ResolvedConfig) {
   // attribute FROM THE SERVER is already hidden at first paint and this call
   // re-writes byte-identical values instead of yanking a painted element out
   // from under the reader. Without it content paints in final position, sits
-  // there, and at hydration FADES OUT and slides away over `duration` — the
-  // transition is written in the same block, so it runs on the hide too — and,
-  // above the fold, fades straight back in. That reads as the page breaking
-  // (measured, roalson-interests#101).
+  // there, and at hydration STARTS fading out and sliding down over `duration`
+  // — the transition is written in the same block, so it runs on the hide too.
+  // Below the fold it fades all the way (measured, roalson-interests#101);
+  // above it, the observer reverses it the moment it reports, so the dip is as
+  // deep as the main thread is busy after hydration. Either reads as the page
+  // breaking.
   //
   // Only true for the DEFAULT travel, which is what the CSS rule hard-codes
   // (src/reveal-hidden-state.test.ts asserts the two agree). A call site
@@ -81,8 +88,8 @@ function applyHidden(node: HTMLElement, cfg: ResolvedConfig) {
   node.style.opacity = "0";
   node.style.transform = `translateY(${cfg.translateY})`;
   node.style.transition =
-    `opacity ${cfg.duration}ms var(--ease-fast-slow), ` +
-    `transform ${cfg.duration}ms var(--ease-fast-slow)`;
+    `opacity ${cfg.duration}ms var(--ease-fast-slow, ${EASE_FAST_SLOW}), ` +
+    `transform ${cfg.duration}ms var(--ease-fast-slow, ${EASE_FAST_SLOW})`;
 }
 
 function reveal(node: HTMLElement) {

@@ -61,7 +61,7 @@ A Svelte action that attaches fade-up reveal behavior to any element. Defaults t
 
 #### Revealing without the flash — `data-reveal`
 
-The action can only hide its target once JS runs, which is well after the browser has painted it: content arrives in final position, sits there, then fades out over the reveal's duration as it slides half its height down, before floating back. For an **above-the-fold** element that is worth fixing, and the fix is to ship the hidden state in the server markup:
+The action can only hide its target once JS runs, which is well after the browser has painted it: content arrives in final position, sits there, then starts fading out and sliding down over the reveal's duration until the observer turns it back — a dip as deep as the main thread is busy after hydration. For an **above-the-fold** element that is worth fixing, and the fix is to ship the hidden state in the server markup:
 
 ```svelte
 <div data-reveal use:animateIn={{ failSafe: 2500 }}>…</div>
