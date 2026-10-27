@@ -15,61 +15,62 @@ make after reading the module, not instead of reading it.
 The **surface** column is the module's real prop/export names, extracted from the
 source. It is the fastest way to recognise what a thing does.
 
-| module | surface | tests | its own first line |
+| module | surface | tests | its own first paragraph |
 | --- | --- | --- | --- |
-| [`animateIn.ts`](../src/lib/actions/animateIn.ts) | `animateIn` | 21 |  |
-| [`trapFocus.ts`](../src/lib/actions/trapFocus.ts) | `trapFocus` | 24 | Focus management for modal overlays (WCAG 2.4.3 focus order + 2.1.2 no keyboard trap) |
+| [`animateIn.ts`](../src/lib/actions/animateIn.ts) | `animateIn` | 34 |  |
+| [`trapFocus.ts`](../src/lib/actions/trapFocus.ts) | `trapFocus` | 24 | Focus management for modal overlays (WCAG 2.4.3 focus order + 2.1.2 no keyboard trap). Apply with `use:trapFocus` to an overlay element that is gated by an `{#if}` block, so the action's mount/destroy lifecycle matches open/close |
+| [`cms-href.ts`](../src/lib/cms-href.ts) | `withDocumentLinks` | 2 | Document links as the hrefs the routes-free client cannot fill |
 | [`Accordion.svelte`](../src/lib/components/Accordion.svelte) | `items`, `allowMultiple` | 4 |  |
 | [`AnimateInTriggered.svelte`](../src/lib/components/Animation/AnimateInTriggered.svelte) | `trigger`, `style`, `transitionDuration`, `children` | — |  |
 | [`AnimateOutTriggered.svelte`](../src/lib/components/Animation/AnimateOutTriggered.svelte) | `trigger`, `style`, `transitionDuration`, `children` | — |  |
 | [`TriggerTransitionOnMount.svelte`](../src/lib/components/Animation/TriggerTransitionOnMount.svelte) | `children` | — |  |
-| [`BrandIcon.svelte`](../src/lib/components/BrandIcon.svelte) | `platform` | 5 | Brand glyphs from simple-icons (CC0 / public domain) — facebook/x/reddit/ instagram from v16, linkedin from v10 (pre brand-removal) |
+| [`BrandIcon.svelte`](../src/lib/components/BrandIcon.svelte) | `platform` | 5 | Brand glyphs from simple-icons (CC0 / public domain) — facebook/x/reddit/ instagram from v16, linkedin from v10 (pre brand-removal). 24x24 viewBox, fill=currentColor so colour follows the surrounding text colour (e.g. text-white on dark overlays). "twitter" is aliased to the X glyph; an unknown platform renders nothing rather than a broken glyph. The icon is decorative (aria-hidden) — the wrapping link/button must carry the accessible name |
 | [`ContentBand.svelte`](../src/lib/components/ContentBand.svelte) | `sliceType`, `variation`, `sectionClass`, `contentClass`, `fallbackHeight`, `background`, `children` | — |  |
 | [`ContentWidth.svelte`](../src/lib/components/ContentWidth.svelte) | `reveals`, `style`, `children`, `edgeFadeColor` | 2 |  |
 | [`CountUp.svelte`](../src/lib/components/CountUp.svelte) | `value`, `startValue`, `duration`, `startOnVisible`, `once`, `label`, `decimals`, `prefix`, `suffix`, `useGrouping`, `locale` | 12 | The number to count up to |
-| [`DefaultButton.svelte`](../src/lib/components/DefaultButton.svelte) | `href`, `onclick`, `children` | — | Shape and skin of the shared button, split so callers that must render a different element can still wear it |
+| [`DefaultButton.svelte`](../src/lib/components/DefaultButton.svelte) | `buttonBaseClasses`, `buttonSkinClasses`, `buttonSkinInverseClasses`, `href`, `onclick`, `children` | — | Shape and skin of the shared button, split so callers that must render a different element can still wear it. `PrismicLink` (used by the slices) emits its own <a> with href/target/rel, so it can't be wrapped in this component — it takes `buttonBaseClasses` and picks a skin instead. Keep the two apart: a caller on a dark ground swaps ONLY the skin, and two competing `border-*`/`hover:bg-*` sets in one class attribute would resolve by stylesheet order, not by the order they were written |
 | [`DelayedLink.svelte`](../src/lib/components/DelayedLink.svelte) | `href`, `delay`, `children`, `beforeNavigate`, `onclick` | 5 |  |
-| [`Field.svelte`](../src/lib/components/Field.svelte) | `name`, `label`, `type`, `value`, `description`, `error`, `required`, `autocomplete`, `placeholder`, `minlength`, `maxlength`, `pattern`, `inputmode`, `rows`, `autofocus` | 10 | Marks this control as the one a containing dialog should open onto |
-| [`Footer.svelte`](../src/lib/components/Footer.svelte) | `columns`, `socials`, `text`, `owner` | 16 | Optional per-route override of the `$lib/site-config.json` footer (no route in the bare template supplies this) |
+| [`Field.svelte`](../src/lib/components/Field.svelte) | `name`, `label`, `type`, `value`, `description`, `error`, `required`, `autocomplete`, `placeholder`, `minlength`, `maxlength`, `pattern`, `inputmode`, `rows`, `autofocus` | 10 | Marks this control as the one a containing dialog should open onto. Modal.svelte looks for `[autofocus]` after showModal(); without it the native dialog-focusing steps land on the first focusable child, which is the ✕ — the exit. Only ever set it on ONE field per dialog, and only inside a dialog: on a plain page an autofocused control steals focus on load and skips whatever precedes it |
+| [`Footer.svelte`](../src/lib/components/Footer.svelte) | `columns`, `socials`, `text`, `owner` | 16 | Optional per-route override of the `$lib/site-config.json` footer (no route in the bare template supplies this). When present they take precedence over the site-config socials/text chrome |
 | [`Form.svelte`](../src/lib/components/Form.svelte) | `errors`, `errorSummaryTitle`, `children` | 3 |  |
-| [`HeroBackgroundImage.svelte`](../src/lib/components/HeroBackgroundImage.svelte) | `image`, `altFallback`, `preload` | 8 | LCP-optimized hero image |
-| [`Img.svelte`](../src/lib/components/Img.svelte) | `src` | 5 | Progressive-loading wrapper around @zerodevx/svelte-img: the image renders blurred (`.progressive-img` in app.css) and sharpens once the underlying <img> finishes — or fails — loading |
+| [`HeroBackgroundImage.svelte`](../src/lib/components/HeroBackgroundImage.svelte) | `image`, `altFallback`, `preload` | 8 | LCP-optimized hero image. Two constraints drive the markup: the browser must discover the image before hydration (hence the <link rel="preload"> in <svelte:head> — fixes Lighthouse "LCP request discovery"), and it must never download the full-resolution master (hence the imgix srcset ladder) |
+| [`Img.svelte`](../src/lib/components/Img.svelte) | `src` | 5 | Progressive-loading wrapper around @zerodevx/svelte-img: the image renders blurred (`.progressive-img` in app.css) and sharpens once the underlying <img> finishes — or fails — loading. `src` must be a vite-imagetools `?as=run` import; SvelteImg renders nothing for plain string URLs |
 | [`LandscapeModal.svelte`](../src/lib/components/LandscapeModal.svelte) | — | 3 | Orientation lockout — a primitive the template deliberately does NOT mount (tests/smoke/landscape.spec.ts fails if it is re-mounted), because an undismissable landscape overlay fails WCAG 2.1 SC 1.3.4 (Orientation) |
-| [`Modal.svelte`](../src/lib/components/Modal.svelte) | `open`, `onclose`, `label`, `labelledby`, `children` | 15 | Accessible name for the dialog |
-| [`Nav.svelte`](../src/lib/components/Nav.svelte) | `navLinks`, `items`, `logo` | 17 | Optional per-route override of the `$lib/site-config.json` nav (no route in the bare template supplies this) |
+| [`Modal.svelte`](../src/lib/components/Modal.svelte) | `open`, `onclose`, `label`, `labelledby`, `children` | 15 | Accessible name for the dialog. Children arrive as an opaque snippet, so the component cannot derive one — pass `label` or `labelledby` |
+| [`Nav.svelte`](../src/lib/components/Nav.svelte) | `navLinks`, `items`, `logo` | 17 | Optional per-route override of the `$lib/site-config.json` nav (no route in the bare template supplies this). When non-empty they take precedence — inline links on desktop, a focus-trapped full-screen menu on mobile |
 | [`PreNavTransition.svelte`](../src/lib/components/PreNavTransition.svelte) | `duration`, `holdDuration` | 10 | ms the overlay fades in before the deferred navigation is issued |
 | [`PrismicPreview.svelte`](../src/lib/components/PrismicPreview.svelte) | — | — |  |
 | [`PrivacyNotice.svelte`](../src/lib/components/PrivacyNotice.svelte) | — | 1 |  |
 | [`RichTextBody.svelte`](../src/lib/components/RichTextBody.svelte) | `field` | 4 |  |
 | [`RichTextHeading.svelte`](../src/lib/components/RichTextHeading.svelte) | `node`, `children` | — |  |
 | [`ScaleTextToContainer.svelte`](../src/lib/components/ScaleTextToContainer.svelte) | `children` | — |  |
-| [`ScreenWidthMedia.svelte`](../src/lib/components/ScreenWidthMedia.svelte) | `src`, `field`, `altText`, `vimeoId`, `darken`, `backdrop`, `percentHeight`, `children` | 11 |  |
-| [`Seo.svelte`](../src/lib/components/Seo.svelte) | `title`, `description`, `image`, `imageAlt`, `url`, `type`, `siteName`, `locale`, `noindex`, `jsonLd` | 14 | The page title — used verbatim for <title> and og/twitter:title |
+| [`ScreenWidthMedia.svelte`](../src/lib/components/ScreenWidthMedia.svelte) | `VIDEO_REVEAL_HARD_CAP_MS`, `src`, `field`, `altText`, `vimeoId`, `darken`, `backdrop`, `percentHeight`, `children` | 11 |  |
+| [`Seo.svelte`](../src/lib/components/Seo.svelte) | `title`, `description`, `image`, `imageAlt`, `url`, `type`, `siteName`, `locale`, `noindex`, `jsonLd` | 15 | The page title — used verbatim for <title> and og/twitter:title. Compose any "\| Site" suffix before passing it in |
 | [`SkeletonLoader.svelte`](../src/lib/components/SkeletonLoader.svelte) | `lines`, `circle`, `height`, `width` | — |  |
 | [`Slider.svelte`](../src/lib/components/Slider.svelte) | `itemCount`, `label`, `children`, `cardsPerView`, `gap`, `mobileGap`, `mode`, `loop`, `autoplay`, `showDots`, `showArrows`, `transitionClass`, `navigationClass`, `arrowClass`, `pauseClass`, `dotClass`, `activeDotClass` | 23 | Accessible name for the carousel region — say what's inside ("Customer testimonials"), not "Slider" |
 | [`TransitionOverlay.svelte`](../src/lib/components/TransitionOverlay.svelte) | `visibleDuration`, `fadeInDuration`, `fadeOutDuration`, `so` | 9 | ms the cover holds once the incoming route has arrived |
 | [`TurnstileWidget.svelte`](../src/lib/components/TurnstileWidget.svelte) | — | 6 |  |
-| [`VimeoBanner.svelte`](../src/lib/components/VimeoBanner.svelte) | `vimeoId`, `poster`, `alt` | 7 | Full-bleed background-video banner |
+| [`VimeoBanner.svelte`](../src/lib/components/VimeoBanner.svelte) | `vimeoId`, `poster`, `alt` | 7 | Full-bleed background-video banner. A static poster sits underneath; the muted/looping Vimeo iframe is layered on top and only revealed while playback is actually progressing. iOS/iPadOS suspends muted background autoplay after firing an initial play, so we gate the reveal on a continuous playback-progress heartbeat (not a one-shot) and fall back to the poster if the beat stops. The iframe is created only after the visitor first engages with the page AND the banner nears the viewport, and never under prefers-reduced-motion (see the mount effect for why) |
 | [`index.ts`](../src/lib/index.ts) | — | — | place files you want to import through the `$lib` alias in this folder |
 | [`indexability.ts`](../src/lib/indexability.ts) | `MIRROR_ROBOTS_TAG`, `isNetlifyMirrorHost` | 6 | Which HOST a request arrived on decides whether it may be indexed (#140) |
-| [`page-load.ts`](../src/lib/page-load.ts) | `loadPage` | 4 |  |
+| [`page-load.ts`](../src/lib/page-load.ts) | `loadPage` | 5 |  |
 | [`page-meta.ts`](../src/lib/page-meta.ts) | `pageMeta` | 2 |  |
 | [`prismicio.ts`](../src/lib/prismicio.ts) | `repositoryName`, `isPlaceholderRepo`, `linkResolver`, `createClient` | 4 |  |
 | [`policy.ts`](../src/lib/privacy/policy.ts) | `PRIVACY_POLICY_DRAFT`, `PRIVACY_PATH`, `formatEffectiveDate` | 2 |  |
 | [`services.ts`](../src/lib/privacy/services.ts) | `SERVICE_HOSTS`, `maskComments`, `startsAnalytics`, `CSP_FALLBACK`, `cspAdmits`, `deriveBuildServices`, `withRuntime` | 26 |  |
-| [`cms-framing.ts`](../src/lib/security/cms-framing.ts) | `CMS_FRAMED_ROUTES`, `CMS_FRAME_ANCESTORS`, `isCmsFramedRoute`, `widenFrameAncestors` | — | Routes the CMS loads in an iframe from another origin |
-| [`seo.ts`](../src/lib/seo.ts) | `SITE_NAME`, `SITE_LOCALE`, `DEFAULT_DESCRIPTION`, `DEFAULT_OG_IMAGE`, `OG_IMAGE_WIDTH`, `OG_IMAGE_HEIGHT`, `NOINDEX_PREFIXES`, `isNoindexPath`, `isNoindexPage`, `NOINDEX_ENFORCED`, `composeTitle`, `jsonLdScript`, `PRERENDER_PLACEHOLDER_ORIGIN`, `siteOrigin`, `canonicalUrl`, `resolveOgImage`, `organizationJsonLd` | 29 | Site-wide SEO configuration + helpers |
+| [`cms-framing.ts`](../src/lib/security/cms-framing.ts) | `CMS_FRAMED_ROUTES`, `CMS_FRAME_ANCESTORS`, `isCmsFramedRoute`, `widenFrameAncestors` | — | Routes the CMS loads in an iframe from another origin. The Prismic Type Builder and Page Builder (https://*.prismic.io) frame /slice-simulator to render slice previews, and a local simulator URL (http://localhost:*) does the same while developing. Every other response is SAMEORIGIN with `frame-ancestors 'self'`, which made each preview read "Error". X-Frame-Options has no multi-origin form, so these routes carry none and name their framers in the CSP instead. The page renders nothing but the slices it is handed, so there is nothing on it to clickjack. Ported from reddoor-website, where it has been live since 2026-08-19 (src/lib/security/headers.ts there) |
+| [`seo.ts`](../src/lib/seo.ts) | `SITE_NAME`, `SITE_LOCALE`, `DEFAULT_DESCRIPTION`, `DEFAULT_OG_IMAGE`, `OG_IMAGE_WIDTH`, `OG_IMAGE_HEIGHT`, `NOINDEX_PREFIXES`, `isNoindexPath`, `isNoindexPage`, `NOINDEX_ENFORCED`, `composeTitle`, `jsonLdScript`, `PRERENDER_PLACEHOLDER_ORIGIN`, `siteOrigin`, `canonicalUrl`, `resolveOgImage`, `organizationJsonLd` | 29 | Site-wide SEO configuration + helpers. PER-SITE: `/new-site` sets SITE_NAME, SITE_LOCALE and DEFAULT_OG_IMAGE (and sites with a social presence fill in organizationJsonLd in the layout) |
 | [`reply-copy.ts`](../src/lib/server/reply-copy.ts) | `replyCopyFor` | — |  |
-| [`site-config.ts`](../src/lib/site-config.ts) | `loadSiteConfig`, `footerColumns` | 4 | Site chrome (navigation + footer) from a checked-in JSON stub |
+| [`site-config.ts`](../src/lib/site-config.ts) | `loadSiteConfig`, `footerColumns` | 4 | Site chrome (navigation + footer) from a checked-in JSON stub. The starter ships it empty, so a fresh site renders the logo-only Nav + placeholder Footer; a site fills it in, or swaps this module for a Prismic `settings`-document loader behind the same exports |
 | [`viewport.svelte.ts`](../src/lib/stores/viewport.svelte.ts) | `viewport` | — |  |
-| [`transitions.ts`](../src/lib/transitions.ts) | `prefersReducedMotion`, `reducedMotion`, `fade`, `fly`, `slide` | 10 |  |
+| [`transitions.ts`](../src/lib/transitions.ts) | `prefersReducedMotion`, `reducedMotion`, `fade`, `fly`, `slide` | 17 |  |
 | [`turnstile.ts`](../src/lib/turnstile.ts) | `loadTurnstile` | — | Cloudflare Turnstile explicit-render helper |
 | [`countup.ts`](../src/lib/utils/countup.ts) | `formatCount` | 6 |  |
 | [`createUniqueId.ts`](../src/lib/utils/createUniqueId.ts) | `createUniqueId` | 2 |  |
 | [`image.ts`](../src/lib/utils/image.ts) | `DEFAULT_IMAGE_WIDTHS`, `isPrismicImageUrl`, `imgix`, `srcset` | 17 | Helpers for serving responsively-sized Prismic (imgix) images |
 | [`instantNavScroll.ts`](../src/lib/utils/instantNavScroll.ts) | `disableSmoothScroll`, `restoreSmoothScroll` | 5 |  |
 | [`preNavIntercept.ts`](../src/lib/utils/preNavIntercept.ts) | `shouldIntercept` | 11 |  |
-| [`richTextHeadings.ts`](../src/lib/utils/richTextHeadings.ts) | `RT_HEADING_CTX`, `defaultLevel`, `buildHeadingLevelMap` | 9 | Editors author arbitrary heading levels inside Prismic rich-text bodies (heading1–6 are all enabled in the slice models) |
+| [`richTextHeadings.ts`](../src/lib/utils/richTextHeadings.ts) | `RT_HEADING_CTX`, `defaultLevel`, `buildHeadingLevelMap` | 9 | Editors author arbitrary heading levels inside Prismic rich-text bodies (heading1–6 are all enabled in the slice models). Rendered verbatim, those break the page's heading-order — e.g. a page <h1> title followed by an editor <h3>, or an editor who skips from <h3> to <h5>. axe/Lighthouse flag both |
 | [`vimeo.ts`](../src/lib/utils/vimeo.ts) | `checkVimeoVideo` | 5 | True when the Vimeo video exists and is embeddable (oEmbed responds 200) |
 
-54 modules, 377 tests behind them.
+55 modules, 401 tests behind them.
