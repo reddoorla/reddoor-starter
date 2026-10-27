@@ -19,6 +19,7 @@ source. It is the fastest way to recognise what a thing does.
 | --- | --- | --- | --- |
 | [`animateIn.ts`](../src/lib/actions/animateIn.ts) | `animateIn` | 21 |  |
 | [`trapFocus.ts`](../src/lib/actions/trapFocus.ts) | `trapFocus` | 24 | Focus management for modal overlays (WCAG 2.4.3 focus order + 2.1.2 no keyboard trap) |
+| [`cms-href.ts`](../src/lib/cms-href.ts) | `withDocumentLinks` | 2 | Document links as the hrefs the routes-free client cannot fill |
 | [`Accordion.svelte`](../src/lib/components/Accordion.svelte) | `items`, `allowMultiple` | 4 |  |
 | [`AnimateInTriggered.svelte`](../src/lib/components/Animation/AnimateInTriggered.svelte) | `trigger`, `style`, `transitionDuration`, `children` | — |  |
 | [`AnimateOutTriggered.svelte`](../src/lib/components/Animation/AnimateOutTriggered.svelte) | `trigger`, `style`, `transitionDuration`, `children` | — |  |
@@ -52,7 +53,7 @@ source. It is the fastest way to recognise what a thing does.
 | [`VimeoBanner.svelte`](../src/lib/components/VimeoBanner.svelte) | `vimeoId`, `poster`, `alt` | 7 | Full-bleed background-video banner |
 | [`index.ts`](../src/lib/index.ts) | — | — | place files you want to import through the `$lib` alias in this folder |
 | [`indexability.ts`](../src/lib/indexability.ts) | `MIRROR_ROBOTS_TAG`, `isNetlifyMirrorHost` | 6 | Which HOST a request arrived on decides whether it may be indexed (#140) |
-| [`page-load.ts`](../src/lib/page-load.ts) | `loadPage` | 4 |  |
+| [`page-load.ts`](../src/lib/page-load.ts) | `loadPage` | 5 |  |
 | [`page-meta.ts`](../src/lib/page-meta.ts) | `pageMeta` | 2 |  |
 | [`prismicio.ts`](../src/lib/prismicio.ts) | `repositoryName`, `isPlaceholderRepo`, `linkResolver`, `createClient` | 4 |  |
 | [`policy.ts`](../src/lib/privacy/policy.ts) | `PRIVACY_POLICY_DRAFT`, `PRIVACY_PATH`, `formatEffectiveDate` | 2 |  |
@@ -72,4 +73,4 @@ source. It is the fastest way to recognise what a thing does.
 | [`richTextHeadings.ts`](../src/lib/utils/richTextHeadings.ts) | `RT_HEADING_CTX`, `defaultLevel`, `buildHeadingLevelMap` | 9 | Editors author arbitrary heading levels inside Prismic rich-text bodies (heading1–6 are all enabled in the slice models) |
 | [`vimeo.ts`](../src/lib/utils/vimeo.ts) | `checkVimeoVideo` | 5 | True when the Vimeo video exists and is embeddable (oEmbed responds 200) |
 
-54 modules, 377 tests behind them.
+55 modules, 380 tests behind them.

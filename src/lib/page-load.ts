@@ -2,7 +2,9 @@ import { error } from "@sveltejs/kit";
 import { NotFoundError, RepositoryNotFoundError } from "@prismicio/client";
 
 import type { PageDocument } from "../../prismicio-types";
+import { withDocumentLinks } from "$lib/cms-href";
 import { pageMeta } from "$lib/page-meta";
+import { linkResolver } from "$lib/prismicio";
 
 /** The minimal client surface the loader needs — method syntax keeps the real
  *  `createClient()` return type assignable, and lets tests pass a stub. */
@@ -10,7 +12,8 @@ export type PageClient = {
   getByUID(type: "page", uid: string): Promise<PageDocument>;
 };
 
-/** Load one `page` document and the layout's head payload for it.
+/** Load one `page` document and the layout's head payload for it, with its
+ *  document links resolved (see withDocumentLinks).
  *
  *  Only a genuine miss (Prismic's NotFoundError: no document with that uid)
  *  becomes a 404. Everything else — an outage, a bad access token, a wrong
@@ -22,7 +25,7 @@ export type PageClient = {
  *  calling this, so an unconfigured clone still builds.) */
 export async function loadPage(client: PageClient, uid: string) {
   try {
-    const page = await client.getByUID("page", uid);
+    const page = withDocumentLinks(await client.getByUID("page", uid), linkResolver);
     return { page, ...pageMeta(page) };
   } catch (err) {
     // RepositoryNotFoundError extends NotFoundError but means "wrong repository
