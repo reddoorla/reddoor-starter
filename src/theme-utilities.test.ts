@@ -15,10 +15,12 @@ import { animateIn } from "$lib/actions/animateIn";
 //
 // What it reads, from the Svelte AST: the text of `class=` / `*Class=`
 // attributes, the string literals in class position inside their `{…}` (both
-// branches of a ternary, the right of `&&`, array items, object keys, call
-// arguments; never a comparison operand), and `class:` directives. It does not
-// read class strings kept in script constants or prop defaults, template
-// literals, or `+` concatenations, so a dead class there passes.
+// branches of a ternary, the right of `&&`, array items, object keys, a
+// helper's arguments, the array a `.join()` is called on, the values of a
+// `{…}[key]` lookup, and a template literal's static tokens; never a
+// comparison operand), and `class:` directives. It does not read class strings
+// kept in script constants or prop defaults, or `+` concatenations, so a dead
+// class there passes.
 //
 // Resolved from the project root: under jsdom `import.meta.url` is not a file:
 // URL (see reduced-motion-reset.test.ts).
@@ -77,21 +79,55 @@ function classLiterals(e: Node | null | undefined): string[] {
         if (p.type !== "Property" || p.computed || !key) return [];
         return key.type === "Identifier" ? [key.name as string] : classLiterals(key);
       });
-    case "CallExpression":
-      return (e.arguments as Node[]).flatMap(classLiterals);
+    case "CallExpression": {
+      const callee = e.callee as Node;
+      // cn(…), clsx(…): the arguments. ["a", c && "b"].join(" "): the array the
+      // method is called on. Never a method's arguments: x.replace("a-", "b-").
+      if (callee.type === "Identifier") return (e.arguments as Node[]).flatMap(classLiterals);
+      if (callee.type === "MemberExpression") return classLiterals(callee.object as Node);
+      return [];
+    }
+    case "MemberExpression": {
+      // { sm: "a", lg: "b" }[size] and ["a", "b"][i]: the values looked up.
+      const object = e.object as Node;
+      if (object.type === "ObjectExpression")
+        return (object.properties as Node[]).flatMap((p) => classLiterals(p.value as Node));
+      if (object.type === "ArrayExpression") return classLiterals(object);
+      return [];
+    }
+    case "TemplateLiteral":
+      // The static text, less any token that touches a ${…}: `w-8 ${x}` reads
+      // w-8, and `bg-${tone}` reads nothing.
+      return (e.quasis as Node[]).map((q, i, all) => {
+        const tokens = ((q.value as { cooked: string }).cooked ?? "").split(/(\s+)/);
+        if (i > 0 && !/^\s/.test(tokens[0] ?? "")) tokens[0] = "";
+        if (i < all.length - 1 && !/\s$/.test(tokens.at(-1) ?? "")) tokens[tokens.length - 1] = "";
+        return tokens.join("");
+      });
+    case "TSAsExpression":
+    case "TSNonNullExpression":
+    case "TSSatisfiesExpression":
+      return classLiterals(e.expression as Node);
     default:
       return [];
   }
 }
 
-/** Every class the markup spells, and the files that spell it. */
-function spelledClasses(): Map<string, string[]> {
-  const found = new Map<string, string[]>();
+/** A component's tag: a class prop on it reaches the child, not this file's
+ *  own <style>, which Svelte prunes for it. */
+const COMPONENT = new Set(["Component", "SvelteComponent", "SvelteSelf"]);
+
+/** Every class the markup spells: per class, each file that spells it, and
+ *  whether it does so on an element of its own (true) or only as a prop it
+ *  hands to a child component (false). */
+function spelledClasses(): Map<string, Map<string, boolean>> {
+  const found = new Map<string, Map<string, boolean>>();
   for (const rel of files("src", /\.svelte$/)) {
+    let onElement = true;
     const add = (text: string) => {
       for (const t of text.split(/\s+/).filter(Boolean)) {
-        const at = found.get(t) ?? [];
-        if (!at.includes(rel)) at.push(rel);
+        const at = found.get(t) ?? new Map<string, boolean>();
+        at.set(rel, (at.get(rel) ?? false) || onElement);
         found.set(t, at);
       }
     };
@@ -99,6 +135,14 @@ function spelledClasses(): Map<string, string[]> {
       if (Array.isArray(n)) return n.forEach(walk);
       if (!n || typeof n !== "object") return;
       const node = n as Node;
+      if (COMPONENT.has(node.type!)) {
+        const outer = onElement;
+        onElement = false;
+        walk(node.attributes);
+        onElement = outer;
+        walk(node.fragment);
+        return;
+      }
       if (node.type === "ClassDirective") add(node.name as string);
       if (
         node.type === "Attribute" &&
@@ -124,9 +168,9 @@ type CssNode = { type?: string; name?: string; args?: unknown; [key: string]: un
  *  defines nothing. A scoped rule defines the class for its own file only.
  *  For every file: `:global(.x)`, everything after a bare `:global` in a
  *  selector (`div :global .x`), and every rule inside a block whose selector
- *  ends in a bare `:global` (`:global { … }`, `.card :global { … }`). A
- *  `:global(…)` nested in `:is()`, `:where()`, `:not()` or `:has()` still
- *  applies only inside its file, so it stays scoped. */
+ *  ends in a bare `:global` (`:global { … }`, `.card :global { … }`), and a
+ *  `:global(…)` inside `:is()` or `:where()`, which Svelte emits unhashed. One
+ *  nested in `:not()` or `:has()` stays scoped. */
 function componentClasses(rel: string): { own: Set<string>; global: Set<string> } {
   const own = new Set<string>();
   const global = new Set<string>();
@@ -159,8 +203,7 @@ function componentClasses(rel: string): { own: Set<string>; global: Set<string> 
       }
       case "PseudoClassSelector":
         if (node.name === "global") walk(node.args, inGlobal || !nested, nested);
-        else
-          walk(node.args, inGlobal, nested || ["is", "where", "not", "has"].includes(node.name!));
+        else walk(node.args, inGlobal, nested || ["not", "has"].includes(node.name!));
         return;
       case "Rule": {
         const list = (node.prelude as CssNode).children as CssNode[];
@@ -188,12 +231,13 @@ beforeAll(async () => {
   tailwind = await compile(CSS, {
     base: resolve(ROOT, "src"),
     // `@plugin "…"`, loaded as the bundler would: a relative path against
-    // src, with Tailwind's extensions (`.ts` too); a package through import(),
-    // so an ESM-only `exports` resolves.
+    // src, with the extensions @tailwindcss/node resolves (.js, .ts, and their
+    // /index); a package through import(), so an ESM-only `exports` resolves.
+    // A plugin that resolves and then throws is reported as itself.
     loadModule: async (id, base) => {
       const relative = id.startsWith(".") || id.startsWith("/");
       const candidates = relative
-        ? ["", ".js", ".mjs", ".cjs", ".ts", ".mts", ".cts", "/index.js", "/index.ts"]
+        ? ["", ".js", ".ts", "/index.js", "/index.ts"]
             .map((ext) => resolve(base, id + ext))
             .filter((path) => existsSync(path) && statSync(path).isFile())
         : [id];
@@ -207,8 +251,13 @@ beforeAll(async () => {
             base: relative ? dirname(path) : base,
             module: (mod.default ?? mod) as never,
           };
-        } catch {
-          // fall through to the refusal below
+        } catch (err) {
+          const code = (err as { code?: string }).code;
+          const missing =
+            !relative &&
+            (code === "ERR_MODULE_NOT_FOUND" ||
+              new RegExp(`(Cannot find|Failed to (load|resolve)).*${id}`).test(String(err)));
+          if (!missing) throw new Error(`app.css's plugin ${id} throws on load`, { cause: err });
         }
       }
       throw new Error(`app.css loads the plugin ${id}, which does not resolve; teach this test`);
@@ -264,8 +313,10 @@ describe("classes the markup spells", () => {
       .filter(([cls]) => !literally(selector(cls)).test(css))
       .filter(([cls]) => !literally(selector(cls)).test(sheets) && !global.has(cls))
       .filter(([cls]) => !(cls in HOOKS) && knownRoot(cls))
-      .flatMap(([cls, rels]) =>
-        rels.filter((rel) => !own.get(rel)?.has(cls)).map((rel) => `${cls} (${rel})`),
+      .flatMap(([cls, at]) =>
+        [...at]
+          .filter(([rel, onElement]) => !(onElement && own.get(rel)?.has(cls)))
+          .map(([rel]) => `${cls} (${rel})`),
       );
     expect(dead).toEqual([]);
   });
