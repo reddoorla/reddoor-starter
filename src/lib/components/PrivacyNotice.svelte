@@ -5,6 +5,8 @@
 <p data-testid="privacy-notice" class="text-sm text-secondary">
   We use what you send to reply to you and to filter spam. See our <a
     href={PRIVACY_PATH}
-    class="underline">Privacy Policy</a
-  >.
+    class="underline"
+  >
+    Privacy Policy
+  </a>.
 </p>
